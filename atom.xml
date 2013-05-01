@@ -4,7 +4,7 @@
   <title>Vaggland</title>
  
   <link href="http://r.va.gg" />
-  <updated>2013-05-01T06:16:58.483Z</updated>
+  <updated>2013-05-01T06:30:33.933Z</updated>
   <id>http://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
@@ -13,9 +13,27 @@
 
   
     <entry>
+      <title>LevelDB and Node: What is LevelDB Anyway?</title>
+      <link href="http://r.va.gg/2013/05/undefined.html" />
+      <updated>2013-05-01T06:30:00.000Z</updated>
+      <id>http://r.va.gg/2013/05/undefined.html</id>
+      <content type="html">
+        &lt;p&gt;This is the first article in a three-part series on LevelDB and how it can be used in Node.&lt;/p&gt;
+&lt;p&gt;This article will cover the LevelDB basics and internals to provide a foundation for the next two articles. The second and third articles will cover the core LevelDB Node libraries: &lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt;, &lt;a href=&quot;https://github.com/rvagg/node-leveldown&quot;&gt;LevelDOWN&lt;/a&gt; and the rest of the LevelDB ecosystem that&#39;s appearing in Node-land.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://dailyjs.com/images/posts/leveldb.png&quot; alt=&quot;LevelDB&quot;&gt;&lt;/p&gt;
+&lt;h3&gt;What is LevelDB?&lt;/h3&gt;
+&lt;p&gt;LevelDB is an &lt;em&gt;open-source&lt;/em&gt;, &lt;em&gt;dependency-free&lt;/em&gt;, &lt;em&gt;embedded key/value data store&lt;/em&gt;. It was developed in 2011 by Jeff Dean and Sanjay Ghemawat, researchers from Google. It&#39;s written in C++ although it has third-party bindings for most common programming languages. Including JavaScript / Node.js of course.&lt;/p&gt;
+&lt;p&gt;LevelDB is based on ideas in Google&#39;s BigTable but does not share code with BigTable, this allows it to be licensed for open source release. Dean and Ghemawat developed LevelDB as a replacement for SQLite as the backing-store for Chrome&#39;s IndexedDB implementation.&lt;/p&gt;
+&lt;p&gt;It has since seen very wide adoption across the industry and serves as the back-end to a number of new databases and is now the recommended storage back-end for Riak.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Continue reading this article on &lt;a href=&quot;http://dailyjs.com/2013/04/19/leveldb-and-node-1/&quot;&gt;DailyJS.com&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+      </content>
+    </entry>
+  
+    <entry>
       <title>Node.js Dublin Presentation - LevelDB</title>
       <link href="http://r.va.gg/2013/05/undefined.html" />
-      <updated>2013-05-01T00:00:00.000Z</updated>
+      <updated>2013-05-01T06:00:00.000Z</updated>
       <id>http://r.va.gg/2013/05/undefined.html</id>
       <content type="html">
         &lt;p&gt;I visited lovely Dublin last month to attend &lt;a href=&quot;http://peerconf.com/&quot;&gt;PeerConf&lt;/a&gt;. While there I got to meet a great bunch of Irish programmers at &lt;a href=&quot;http://www.nodejsdublin.com/&quot;&gt;Node.js Dublin&lt;/a&gt;, a semi-regular Node.js meet-up that happens in the &lt;a href=&quot;https://www.engineyard.com/&quot;&gt;Engine Yard&lt;/a&gt; office in Dublin.&lt;/p&gt;
