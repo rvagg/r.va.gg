@@ -1,6 +1,6 @@
 ```json
 {
-    "date"   : "2013-05-01"
+    "date"   : "2013-05-01 16:00:00"
   , "title"  : "Node.js Dublin Presentation - LevelDB"
   , "author" : "Rod Vagg"
 }
