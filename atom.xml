@@ -4,7 +4,7 @@
   <title>Rod Vagg</title>
  
   <link href="http://r.va.gg" />
-  <updated>2013-05-01T06:34:50.889Z</updated>
+  <updated>2013-05-01T06:38:44.458Z</updated>
   <id>http://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
@@ -14,9 +14,9 @@
   
     <entry>
       <title>LevelDB and Node: What is LevelDB Anyway?</title>
-      <link href="http://r.va.gg/2013/05/undefined.html" />
+      <link href="http://r.va.gg/2013/05/leveldb-and-node-what-is-leveldb-anyway.html" />
       <updated>2013-05-01T06:30:00.000Z</updated>
-      <id>http://r.va.gg/2013/05/undefined.html</id>
+      <id>http://r.va.gg/2013/05/leveldb-and-node-what-is-leveldb-anyway.html</id>
       <content type="html">
         &lt;p&gt;This is the first article in a three-part series on LevelDB and how it can be used in Node.&lt;/p&gt;
 &lt;p&gt;This article will cover the LevelDB basics and internals to provide a foundation for the next two articles. The second and third articles will cover the core LevelDB Node libraries: &lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt;, &lt;a href=&quot;https://github.com/rvagg/node-leveldown&quot;&gt;LevelDOWN&lt;/a&gt; and the rest of the LevelDB ecosystem that&#39;s appearing in Node-land.&lt;/p&gt;
@@ -32,9 +32,9 @@
   
     <entry>
       <title>Node.js Dublin Presentation - LevelDB</title>
-      <link href="http://r.va.gg/2013/05/undefined.html" />
+      <link href="http://r.va.gg/2013/05/node.js-dublin-presentation-leveldb.html" />
       <updated>2013-05-01T06:00:00.000Z</updated>
-      <id>http://r.va.gg/2013/05/undefined.html</id>
+      <id>http://r.va.gg/2013/05/node.js-dublin-presentation-leveldb.html</id>
       <content type="html">
         &lt;p&gt;I visited lovely Dublin last month to attend &lt;a href=&quot;http://peerconf.com/&quot;&gt;PeerConf&lt;/a&gt;. While there I got to meet a great bunch of Irish programmers at &lt;a href=&quot;http://www.nodejsdublin.com/&quot;&gt;Node.js Dublin&lt;/a&gt;, a semi-regular Node.js meet-up that happens in the &lt;a href=&quot;https://www.engineyard.com/&quot;&gt;Engine Yard&lt;/a&gt; office in Dublin.&lt;/p&gt;
 &lt;p&gt;I was invited to give a presentation on LevelDB and the work that I&#39;ve been doing on it in Node.js. I was followed by &lt;a href=&quot;https://github.com/dominictarr&quot;&gt;Dominic Tarr&lt;/a&gt; who&#39;s doing some amazing work on top of LevelDB.&lt;/p&gt;

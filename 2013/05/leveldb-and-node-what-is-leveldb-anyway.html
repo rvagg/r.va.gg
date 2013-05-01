@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>
-  [Rod Vagg] Node.js Dublin Presentation - LevelDB
+  [Rod Vagg] LevelDB and Node: What is LevelDB Anyway?
 </title>
     <link rel="stylesheet" href="/style.css" type="text/css">
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://r.va.gg/atom.xml" />
@@ -43,11 +43,11 @@
           <ul>
             
  
-                <li><a href="/2013/05/undefined.html">LevelDB and Node: What is LevelDB Anyway?</a></li>
+                <li><a href="/2013/05/leveldb-and-node-what-is-leveldb-anyway.html">LevelDB and Node: What is LevelDB Anyway?</a></li>
               
  
  
-                <li><a href="/2013/05/undefined.html">Node.js Dublin Presentation - LevelDB</a></li>
+                <li><a href="/2013/05/node.js-dublin-presentation-leveldb.html">Node.js Dublin Presentation - LevelDB</a></li>
               
  
  
@@ -81,16 +81,21 @@
 
   <section class="post-content">
 
-    <h2><a href="/2013/05/undefined.html">Node.js Dublin Presentation - LevelDB</a></h2>
+    <h2><a href="/2013/05/leveldb-and-node-what-is-leveldb-anyway.html">LevelDB and Node: What is LevelDB Anyway?</a></h2>
 
     <div class="post-meta">
       <p class="byline">by Rod Vagg on May 1, 2013</p>
     </div>
 
     <section class="post-body">
-      <p>I visited lovely Dublin last month to attend <a href="http://peerconf.com/">PeerConf</a>. While there I got to meet a great bunch of Irish programmers at <a href="http://www.nodejsdublin.com/">Node.js Dublin</a>, a semi-regular Node.js meet-up that happens in the <a href="https://www.engineyard.com/">Engine Yard</a> office in Dublin.</p>
-<p>I was invited to give a presentation on LevelDB and the work that I&#39;ve been doing on it in Node.js. I was followed by <a href="https://github.com/dominictarr">Dominic Tarr</a> who&#39;s doing some amazing work on top of LevelDB.</p>
-<p>You can view my slides <a href="http://r.va.gg/presentations/nodejsdub/">here</a> but a written version is currently being spread over 3 parts on <a href="http://dailyjs.com">DailyJS</a>. More about that soon!</p>
+      <p>This is the first article in a three-part series on LevelDB and how it can be used in Node.</p>
+<p>This article will cover the LevelDB basics and internals to provide a foundation for the next two articles. The second and third articles will cover the core LevelDB Node libraries: <a href="https://github.com/rvagg/node-levelup">LevelUP</a>, <a href="https://github.com/rvagg/node-leveldown">LevelDOWN</a> and the rest of the LevelDB ecosystem that&#39;s appearing in Node-land.</p>
+<p><img src="http://dailyjs.com/images/posts/leveldb.png" alt="LevelDB"></p>
+<h3>What is LevelDB?</h3>
+<p>LevelDB is an <em>open-source</em>, <em>dependency-free</em>, <em>embedded key/value data store</em>. It was developed in 2011 by Jeff Dean and Sanjay Ghemawat, researchers from Google. It&#39;s written in C++ although it has third-party bindings for most common programming languages. Including JavaScript / Node.js of course.</p>
+<p>LevelDB is based on ideas in Google&#39;s BigTable but does not share code with BigTable, this allows it to be licensed for open source release. Dean and Ghemawat developed LevelDB as a replacement for SQLite as the backing-store for Chrome&#39;s IndexedDB implementation.</p>
+<p>It has since seen very wide adoption across the industry and serves as the back-end to a number of new databases and is now the recommended storage back-end for Riak.</p>
+<p><strong>Continue reading this article on <a href="http://dailyjs.com/2013/04/19/leveldb-and-node-1/">DailyJS.com</a></strong></p>
 
     </section>
 
@@ -98,33 +103,9 @@
       <div id="disqus_thread"></div>
       <script type="text/javascript">
         var disqus_shortname  = 'rvagg'
-          , disqus_identifier = '/2013/05/undefined.html'
-          , disqus_title      = 'Node.js Dublin Presentation - LevelDB'
-          , disqus_url        = 'http://r.va.gg/2013/05/undefined.html'
-
-        !(function() {
-          var dsq = document.createElement('script')
-          dsq.type = 'text/javascript'
-          dsq.async = true
-          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
-          !(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
-        })()
-      </script>
-      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>
-    </section>
-
-  </section>
-
-
-
-      <section class="footer">
-        &copy; Rod Vagg 2013, powered by <a href="https://github.com/rvagg/blorg">Blorg</a>
-      </section>
-
-    </section>
-
-  </body>
-</html> 'http://r.va.gg/2013/05/undefined.html'
+          , disqus_identifier = '/2013/05/leveldb-and-node-what-is-leveldb-anyway.html'
+          , disqus_title      = 'LevelDB and Node: What is LevelDB Anyway?'
+          , disqus_url        = 'http://r.va.gg/2013/05/leveldb-and-node-what-is-leveldb-anyway.html'
 
         !(function() {
           var dsq = document.createElement('script')
