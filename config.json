@@ -1,9 +1,64 @@
 {
-    "templateRoot" : "templates"
-  , "postRoot"     : "posts"
-  , "outputRoot"   : "../rvagg.github.com_gh-pages"
-  , "postPath"     : "{year}/{month}/{title}.html"
-  , "indexFile"    : "index.html"
-  , "archivePath"  : "page{number}.html"
-  , "feedFile"     : "atom.xml"
+    "templateRoot" : "./templates/"
+  , "outputRoot"   : "../rvagg.github.com_gh-pages/"
+
+  , "data" : [
+        {
+            "id"       : "blogPosts"
+          , "type"     : "markdown-posts"
+          , "postRoot" : "./posts/"
+          , "path"     : "/{year}/{month}/{title}.html"
+          , "comment"  : "This plugin loads and provides all markdown files in a directory by using the 'ssbl' package"
+        }
+      , {
+            "id"       : "postSpecs"
+          , "type"     : "post-specs"
+          , "blogData" : "blogPosts"
+          , "comment"  : "This plugin provides just the 'spec' part of every post, for summary purposes"
+        }
+      , {
+            "id"       : "postTemplate"
+          , "type"     : "swig-template"
+          , "file"     : "post.html"
+          , "comment"  : "This plugin loads a swig template named 'file' from the directory 'templateRoot'"
+        }
+      , {
+            "id"       : "indexTemplate"
+          , "type"     : "swig-template"
+          , "file"     : "index.html"
+        }
+      , {
+            "id"       : "feedTemplate"
+          , "type"     : "swig-template"
+          , "file"     : "feed.xml"
+        }
+    ]
+
+  , "output" : [
+        {
+            "id"       : "feed"
+          , "type"     : "single-file"
+          , "output"   : "atom.xml"
+          , "template" : "feedTemplate"
+          , "data"     : [ "date", "blogPosts" ]
+          , "comment"  : "This output plugin takes a template, a bunch of data and merges to a single file"
+        }
+      , {
+            "id"       : "posts"
+          , "type"     : "post-files"
+          , "template" : "postTemplate"
+          , "data"     : [ "date", "blogPosts", "postSpecs" ]
+          , "comment"  : "This output plugin takes the list of posts and merges with a template for individual files"
+        }
+      , {
+            "id"       : "index"
+          , "type"     : "index-files"
+          , "postsPerPage" : 5
+          , "indexFile"    : "index.html"
+          , "archiveFile"  : "page{number}.html"
+          , "template" : "indexTemplate"
+          , "data"     : [ "date", "blogPosts", "postSpecs" ]
+          , "comment"  : "This output plugin takes the list of posts and merges with an index template to write the index & archive files"
+        }
+    ]
 }

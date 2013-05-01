@@ -39,7 +39,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            {% for post in allPosts %}
+            {% for post in postSpecs %}
               {% if loop.index < 4 %}
                 <li><a href="{{ post.path }}">{{ post.title }}</a></li>
               {% endif %}
