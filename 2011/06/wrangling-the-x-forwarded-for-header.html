@@ -80,7 +80,9 @@
 
     <h2><a href="/2011/06/wrangling-the-x-forwarded-for-header.html">Wrangling the X-Forwarded-For Header</a></h2>
 
-    <p class="byline">by Rod Vagg on July 29, 2011</p>
+    <div class="post-meta">
+      <p class="byline">by Rod Vagg on July 29, 2011</p>
+    </div>
 
     <section class="post-body">
       <p>Until recently, we&#39;ve served pages directly from the server for <a title="FeedXL D. I. Y. Horse Nutrition" href="http://feedxl.com/">FeedXL.com</a> but we&#39;ve since moved to a load balancing situation with multiple servers behind a load balancer.</p>
@@ -147,6 +149,25 @@ I&#39;ve just stumbled upon <a title="X-Forwarded-For Spoofer" href="https://add
 <p><em>With this add-on, you can assign an arbitrary IP address to the X-Forwarded-For field, attempt to perform XSS by including HTML in this field, or even attempt SQL injection.</em></blockquote>
 May be useful for testing and debugging your web application.</p>
 
+    </section>
+
+    <section class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname  = 'rvagg'
+          , disqus_identifier = '/2011/06/wrangling-the-x-forwarded-for-header.html'
+          , disqus_title      = 'Wrangling the X-Forwarded-For Header'
+          , disqus_url        = 'http://r.va.gg/2011/06/wrangling-the-x-forwarded-for-header.html'
+
+        (function() {
+          var dsq = document.createElement('script')
+          dsq.type = 'text/javascript'
+          dsq.async = true
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+        })()
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>
     </section>
 
   </section>

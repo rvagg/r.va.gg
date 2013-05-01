@@ -80,7 +80,9 @@
 
     <h2><a href="/2012/04/data-uri-svg.html">Data URI + SVG</a></h2>
 
-    <p class="byline">by Rod Vagg on May 23, 2012</p>
+    <div class="post-meta">
+      <p class="byline">by Rod Vagg on May 23, 2012</p>
+    </div>
 
     <section class="post-body">
       <p>Data URIs are great when you want to serve small resources that there&#39;s no point serving up in a combined sprite. Consider <a href="http://microjs.com">microjs.com</a> which serves up an HTML file plus a single JavaScript file containing the latest data used to build the site. The build logic is in an embedded script, the CSS is also embedded, so it&#39;s pretty lean considering what you see and the amount of data displayed. But, notice the 3 icons for each project, 2 GitHub icons and a Twitter icon. They are PNG images, combined as a sprite but to avoid an additional HTTP request to fetch them they are simply embedded in the CSS which is embedded on the page:</p>
@@ -109,6 +111,25 @@ And IE doesn&#39;t let you have it any other way. So you either encode your SVG 
 <p><strong>Update 17th Sept 2012</strong></p>
 <p>Below in the comments, Ben reports on his (much more rigorous) research into browser support; refer to that if you&#39;re serious about using SVG in Data URIs. An interesting result of his work comes from the <a href="https://code.google.com/p/chromium/issues/detail?id=137277">issue</a> he filed with Chromium (I don&#39;t know if this is a generic WebKit thing or not but you could easily test if you&#39;re interested). It turns out that Chromium/WebKit requires Base64 Data URIs to be multiples of 4 characters, so you just need to pad with <code>==</code>.</p>
 
+    </section>
+
+    <section class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname  = 'rvagg'
+          , disqus_identifier = '/2012/04/data-uri-svg.html'
+          , disqus_title      = 'Data URI + SVG'
+          , disqus_url        = 'http://r.va.gg/2012/04/data-uri-svg.html'
+
+        (function() {
+          var dsq = document.createElement('script')
+          dsq.type = 'text/javascript'
+          dsq.async = true
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+        })()
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>
     </section>
 
   </section>

@@ -80,7 +80,9 @@
 
     <h2><a href="/2012/03/a-mod_geoip2-that-properly-handles-x-forwarded-for.html">A mod_geoip2 that properly handles X-Forwarded-For</a></h2>
 
-    <p class="byline">by Rod Vagg on April 22, 2012</p>
+    <div class="post-meta">
+      <p class="byline">by Rod Vagg on April 22, 2012</p>
+    </div>
 
     <section class="post-body">
       <p>This is just a short follow-up to my original post on<em> <a title="Wrangling the X-Forwarded-For Header" href="http://rod.vagg.org/2011/07/wrangling-the-x-forwarded-for-header/">Wrangling the X-Forwarded-For Header</a></em> where I promised that one of the things I would follow up with was how to get MaxMind&#39;s mod_geoip2 to handle the X-Forwarded-For according to the rule:</p>
@@ -93,6 +95,25 @@ I&#39;m maintaining a <em>maxmind</em> branch that contains the original code fr
 <p>If anyone wants to hassle MaxMind on my behalf then feel free, I sent them an email a couple of months ago about this but received no answer.</p>
 <p><strong><strong>Update 6-July-2012</strong></strong>: A new release with some changes, details <a href="http://rod.vagg.org/2012/07/mod_geoip2_xff-update/">here</a>.</p>
 
+    </section>
+
+    <section class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname  = 'rvagg'
+          , disqus_identifier = '/2012/03/a-mod_geoip2-that-properly-handles-x-forwarded-for.html'
+          , disqus_title      = 'A mod_geoip2 that properly handles X-Forwarded-For'
+          , disqus_url        = 'http://r.va.gg/2012/03/a-mod_geoip2-that-properly-handles-x-forwarded-for.html'
+
+        (function() {
+          var dsq = document.createElement('script')
+          dsq.type = 'text/javascript'
+          dsq.async = true
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+        })()
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>
     </section>
 
   </section>

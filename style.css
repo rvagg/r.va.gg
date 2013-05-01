@@ -79,10 +79,14 @@ h2 a {
   margin: 1em 0 4em 0;
 }
 
-.byline {
+.post-meta .byline, .post-meta .commentcount {
   font-size: 0.7em;
   color: #777;
-  margin: 0 0 1em 0;
+  margin: 0;
+}
+
+.post-meta{
+  margin-bottom: 1.5em;
 }
 
 pre, code {

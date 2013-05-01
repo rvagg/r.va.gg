@@ -80,7 +80,9 @@
 
     <h2><a href="/2011/06/handling-x-forwarded-for-in-java-and-tomcat.html">Handling X-Forwarded-For in Java and Tomcat</a></h2>
 
-    <p class="byline">by Rod Vagg on July 30, 2011</p>
+    <div class="post-meta">
+      <p class="byline">by Rod Vagg on July 30, 2011</p>
+    </div>
 
     <section class="post-body">
       <p>This is the first follow-up to my <a title="Wrangling the X-Forwarded-For Header" href="http://rod.vagg.org/2011/07/wrangling-the-x-forwarded-for-header/">post on X-Forwarded-For</a>, I&#39;ll assume you&#39;ve at least scanned that article.</p>
@@ -203,6 +205,25 @@ You enable request logging in Tomcat by attaching an AccessLogValve to your cont
 <p>Simply compile, place together in a JAR, put it in your Tomcat lib directory then make sure you use the right class name when building your AccessLogValve descriptor. The lazy can find a JAR (including source) <a href="http://src.vagg.org/java/xprime_accesslogvalve.jar">here</a>.</p>
 <p>Next I&#39;ll be getting dirty with C and hack mod_geoip to do something similar.</p>
 
+    </section>
+
+    <section class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname  = 'rvagg'
+          , disqus_identifier = '/2011/06/handling-x-forwarded-for-in-java-and-tomcat.html'
+          , disqus_title      = 'Handling X-Forwarded-For in Java and Tomcat'
+          , disqus_url        = 'http://r.va.gg/2011/06/handling-x-forwarded-for-in-java-and-tomcat.html'
+
+        (function() {
+          var dsq = document.createElement('script')
+          dsq.type = 'text/javascript'
+          dsq.async = true
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+        })()
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>
     </section>
 
   </section>

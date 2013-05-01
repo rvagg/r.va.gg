@@ -80,11 +80,32 @@
 
     <h2><a href="/2012/07/ender-bundling.html">How Ender bundles libraries for the browser</a></h2>
 
-    <p class="byline">by Rod Vagg on August 24, 2012</p>
+    <div class="post-meta">
+      <p class="byline">by Rod Vagg on August 24, 2012</p>
+    </div>
 
     <section class="post-body">
       <p>I was asked an interesting Ender question on IRC (#enderjs on Freenode) and as I was answering it, it occurred to me that the subject would be an ideal way to explain how Ender&#39;s multi-library bundling works. So here is that explanation!</p><p>The original question went something like this:</p><blockquote><p>When a browser first visits my page, they only get served Bonzo (a DOM manipulation library) as a stand-alone library, but on returning visits they are also served Qwery (a selector engine), Bean (an event manager) and a few other modules in an Ender build. Can I integrate Bonzo into the Ender build on the browser for repeat visitors?</p></blockquote><h3>Wait, what&#39;s Ender?</h3><p>Let&#39;s step back a bit and start with some basics. The way I generally explain Ender to people is that it&#39;s two different things:</p><ol><li>It&#39;s a build tool, for bundling JavaScript libraries together into a single file. The resulting file constitutes a new &quot;framework&quot; based around the jQuery-style DOM element collection pattern: <code>$(&#39;selector&#39;).method()</code>. The constituent libraries provide the functionality for the <em>methods</em> and may also provide the selector engine functionality.</li><li>It&#39;s an <em>ecosystem</em> of JavaScript libraries. Ender promotes a small collection of libraries as a base, called <strong>The Jeesh</strong>, which together provide a large portion of the functionality normally required of a JavaScript framework, but there are many more libraries compatible with Ender that add extra functionality. Many of the libraries available for Ender are also usable outside of Ender as stand-alone libraries.</li></ol><p><em><strong>Continue reading this article on <a href="http://dailyjs.com/2012/08/23/ender-tutorial/">DailyJS.com</a></strong></em></p>
 
+    </section>
+
+    <section class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname  = 'rvagg'
+          , disqus_identifier = '/2012/07/ender-bundling.html'
+          , disqus_title      = 'How Ender bundles libraries for the browser'
+          , disqus_url        = 'http://r.va.gg/2012/07/ender-bundling.html'
+
+        (function() {
+          var dsq = document.createElement('script')
+          dsq.type = 'text/javascript'
+          dsq.async = true
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+        })()
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>
     </section>
 
   </section>

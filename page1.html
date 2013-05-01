@@ -81,7 +81,10 @@
 
       <h2 id="a-mod_geoip2-that-properly-handles-x-forwarded-for"><a href="/2012/03/a-mod_geoip2-that-properly-handles-x-forwarded-for.html">A mod_geoip2 that properly handles X-Forwarded-For</a></h2>
 
-      <p class="byline">by Rod Vagg on April 22, 2012</p>
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on April 22, 2012</p>
+        <p class="commentcount"><a href="/2012/03/a-mod_geoip2-that-properly-handles-x-forwarded-for.html#disqus_thread">Comments</a></p>
+      </div>
 
       <section class="post-body">
         <p>This is just a short follow-up to my original post on<em> <a title="Wrangling the X-Forwarded-For Header" href="http://rod.vagg.org/2011/07/wrangling-the-x-forwarded-for-header/">Wrangling the X-Forwarded-For Header</a></em> where I promised that one of the things I would follow up with was how to get MaxMind&#39;s mod_geoip2 to handle the X-Forwarded-For according to the rule:</p>
@@ -104,7 +107,10 @@ I&#39;m maintaining a <em>maxmind</em> branch that contains the original code fr
 
       <h2 id="javascript-and-semicolons"><a href="/2012/03/javascript-and-semicolons.html">JavaScript and Semicolons</a></h2>
 
-      <p class="byline">by Rod Vagg on April 20, 2012</p>
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on April 20, 2012</p>
+        <p class="commentcount"><a href="/2012/03/javascript-and-semicolons.html#disqus_thread">Comments</a></p>
+      </div>
 
       <section class="post-body">
         <p>In syntax terms, JavaScript is in the broad C-family of languages. The C-family is diverse and includes languages such as C (obviously), C++, Objective-C, Perl, Java, C# and the newer Go from Google and Rust from Mozilla. Common themes in these languages include:</p>
@@ -130,7 +136,10 @@ The general C-family rules for semicolons can be found in most teaching material
 
       <h2 id="minifying-html-in-the-servlet-container"><a href="/2011/10/minifying-html-in-the-servlet-container.html">Minifying HTML in the Servlet container</a></h2>
 
-      <p class="byline">by Rod Vagg on November 23, 2011</p>
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on November 23, 2011</p>
+        <p class="commentcount"><a href="/2011/10/minifying-html-in-the-servlet-container.html#disqus_thread">Comments</a></p>
+      </div>
 
       <section class="post-body">
         <p>Google&#39;s <a title="mod_pagespeed" href="http://code.google.com/speed/page-speed/docs/module.html">mod_pagespeed</a> is great. I&#39;ve been using it for a while now on <a title="FeedXL Horse Nutrition" href="http://feedxl.com">feedxl.com</a> but the only filter that I actually find really useful is <a href="http://code.google.com/speed/page-speed/docs/filter-whitespace-collapse.html">Collapse Whitespace</a>; the rest of the filters I either already do myself as part of the site build process or I don&#39;t want applied. But, I imagine that there are a lot of admins out there that would really benefit from all of the clever things it can do.</p>
@@ -258,7 +267,10 @@ You simply put the filter into your classpath somewhere and wire it up in web.xm
 
       <h2 id="handling-x-forwarded-for-in-java-and-tomcat"><a href="/2011/06/handling-x-forwarded-for-in-java-and-tomcat.html">Handling X-Forwarded-For in Java and Tomcat</a></h2>
 
-      <p class="byline">by Rod Vagg on July 30, 2011</p>
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on July 30, 2011</p>
+        <p class="commentcount"><a href="/2011/06/handling-x-forwarded-for-in-java-and-tomcat.html#disqus_thread">Comments</a></p>
+      </div>
 
       <section class="post-body">
         <p>This is the first follow-up to my <a title="Wrangling the X-Forwarded-For Header" href="http://rod.vagg.org/2011/07/wrangling-the-x-forwarded-for-header/">post on X-Forwarded-For</a>, I&#39;ll assume you&#39;ve at least scanned that article.</p>
@@ -391,7 +403,10 @@ You enable request logging in Tomcat by attaching an AccessLogValve to your cont
 
       <h2 id="wrangling-the-x-forwarded-for-header"><a href="/2011/06/wrangling-the-x-forwarded-for-header.html">Wrangling the X-Forwarded-For Header</a></h2>
 
-      <p class="byline">by Rod Vagg on July 29, 2011</p>
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on July 29, 2011</p>
+        <p class="commentcount"><a href="/2011/06/wrangling-the-x-forwarded-for-header.html#disqus_thread">Comments</a></p>
+      </div>
 
       <section class="post-body">
         <p>Until recently, we&#39;ve served pages directly from the server for <a title="FeedXL D. I. Y. Horse Nutrition" href="http://feedxl.com/">FeedXL.com</a> but we&#39;ve since moved to a load balancing situation with multiple servers behind a load balancer.</p>
@@ -476,6 +491,18 @@ May be useful for testing and debugging your web application.</p>
  
   </section>
   <div style="clear: both;"></div>
+
+  <script type="text/javascript">
+    var disqus_shortname = 'rvagg'
+
+    (function () {
+      var s = document.createElement('script')
+      s.async = true
+      s.type = 'text/javascript'
+      s.src = 'http://' + disqus_shortname + '.disqus.com/count.js'
+      (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s)
+    }())
+  </script> 
 
 
 

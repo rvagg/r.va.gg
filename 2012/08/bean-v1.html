@@ -80,7 +80,9 @@
 
     <h2><a href="/2012/08/bean-v1.html">Announcing Bean v1.0.0</a></h2>
 
-    <p class="byline">by Rod Vagg on September 8, 2012</p>
+    <div class="post-meta">
+      <p class="byline">by Rod Vagg on September 8, 2012</p>
+    </div>
 
     <section class="post-body">
       <p>In my <a href="http://rod.vagg.org/2012/08/bean_v1/" title="Towards Bean v1.0 (or: How event managers do their thing)">previous post</a> about Bean I discussed in detail the work that has gone in to a v1 release and how it will differ from the v0.4 branch.</p>
@@ -100,6 +102,25 @@
 <p>There was one remaining question to be resolved&mdash;whether <code>Event.stop()</code> would also trigger <code>Event.stopImmediatePropagation()</code>. I&#39;ve decided to <b>not</b> include it and leave it to the user to decide whether they want to prevent triggering of other listeners on the same event/element.</p>
 <p>And that&#39;s it! Please give it a spin and open an issue on GitHub if you have any bugs to report or questions to be answered.</p>
 
+    </section>
+
+    <section class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname  = 'rvagg'
+          , disqus_identifier = '/2012/08/bean-v1.html'
+          , disqus_title      = 'Announcing Bean v1.0.0'
+          , disqus_url        = 'http://r.va.gg/2012/08/bean-v1.html'
+
+        (function() {
+          var dsq = document.createElement('script')
+          dsq.type = 'text/javascript'
+          dsq.async = true
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+        })()
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>
     </section>
 
   </section>
