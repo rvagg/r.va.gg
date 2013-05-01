@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+  [Vaggland] {{ spec.title }}
+{% endblock %}
+
+{% block content %}
+
+  <section class="post-content">
+
+    <h2><a href="{{ spec.path }}">{{ spec.title }}</a></h2>
+
+    <p class="byline">by {{ spec.author }} on {{ spec.date|date("F j, Y") }}</p>
+
+    <section class="post-body">
+      {{ page|raw }}
+    </section>
+
+  </section>
+
+{% endblock %}

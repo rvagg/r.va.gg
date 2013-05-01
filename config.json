@@ -1,0 +1,9 @@
+{
+    "templateRoot" : "templates"
+  , "postRoot"     : "posts"
+  , "outputRoot"   : "../rvagg.github.com_gh-pages"
+  , "postPath"     : "{year}/{month}/{title}.html"
+  , "indexFile"    : "index.html"
+  , "archivePath"  : "page{number}.html"
+  , "feedFile"     : "atom.xml"
+}

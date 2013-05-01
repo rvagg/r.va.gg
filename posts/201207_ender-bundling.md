@@ -1,0 +1,10 @@
+```json
+{
+    "date"   : "Fri Aug 24 2012 13:21:38 GMT+1000 (EST)"
+  , "title"  : "How Ender bundles libraries for the browser"
+  , "base"   : "ender-bundling"
+  , "author" : "Rod Vagg"
+}
+```
+
+<p>I was asked an interesting Ender question on IRC (#enderjs on Freenode) and as I was answering it, it occurred to me that the subject would be an ideal way to explain how Ender's multi-library bundling works. So here is that explanation!</p><p>The original question went something like this:</p><blockquote><p>When a browser first visits my page, they only get served Bonzo (a DOM manipulation library) as a stand-alone library, but on returning visits they are also served Qwery (a selector engine), Bean (an event manager) and a few other modules in an Ender build. Can I integrate Bonzo into the Ender build on the browser for repeat visitors?</p></blockquote><h3>Wait, what's Ender?</h3><p>Let's step back a bit and start with some basics. The way I generally explain Ender to people is that it's two different things:</p><ol><li>It's a build tool, for bundling JavaScript libraries together into a single file. The resulting file constitutes a new "framework" based around the jQuery-style DOM element collection pattern: <code>$('selector').method()</code>. The constituent libraries provide the functionality for the <em>methods</em> and may also provide the selector engine functionality.</li><li>It's an <em>ecosystem</em> of JavaScript libraries. Ender promotes a small collection of libraries as a base, called <strong>The Jeesh</strong>, which together provide a large portion of the functionality normally required of a JavaScript framework, but there are many more libraries compatible with Ender that add extra functionality. Many of the libraries available for Ender are also usable outside of Ender as stand-alone libraries.</li></ol><p><em><strong>Continue reading this article on <a href="http://dailyjs.com/2012/08/23/ender-tutorial/">DailyJS.com</a></strong></em></p>

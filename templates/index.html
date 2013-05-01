@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div id="for">
+  {% for post in posts %}
+
+    <section class="post-content">
+
+      <h2 id="{{ post.spec.base }}"><a href="{{ post.spec.path }}">{{ post.spec.title }}</a></h2>
+
+      <p class="byline">by {{ post.spec.author }} on {{ post.spec.date|date("F j, Y") }}</p>
+
+      <section class="post-body">
+        {{ post.page|raw }}
+      </section>
+
+    </section>
+
+  {% endfor %}
+</div>
+
+  <section class="pager">
+    {% if prevPage != null %}
+
+      <div class="prev">
+        <a href="/{% if prevPage == 0 %}index.html{% else %}page{{ prevPage }}.html{% endif %}">Newer posts &raquo;</a>
+      </div>
+
+    {% endif %}
+
+    {% if nextPage != null %}
+
+      <div class="next">
+        <a href="/page{{ nextPage }}.html">&laquo; Older posts</a>
+      </div>
+
+    {% endif %}
+  </section>
+  <div style="clear: both;"></div>
+
+{% endblock %}
