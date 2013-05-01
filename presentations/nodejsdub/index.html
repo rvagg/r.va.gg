@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>LevelDB - The Node.js of Databases</title>
+
+    <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+    <meta name="author" content="Hakim El Hattab">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="leveldb-theme/style.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <img src="leveldb-theme/leveldb.png" id="leveldb">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+
+        <section>
+          <h1>LevelDB</h1>
+          <h4><i>"The Node.js of Databases"&mdash;<a href="https://twitter.com/dominictarr/status/271159496510955520">@dominictarr</a></i></h4>
+          <p style="text-align: center;">
+            <small>Presentation by <a href="http://rod.vagg.org">Rod Vagg</a> / tw:<a href="https://twitter.com/rvagg">@rvagg</a> / gh:<a href="https://github.com/rvagg">rvagg</a></small>
+          </p>
+        </section>
+
+        <section>
+          <h2>What?</h2>
+          <ul>
+            <li>Open-source, dependency-free, embedded key/value datastore</li>
+            <li>Developed in 2011 by Jeff Dean and Sanjay Ghemawat from Google</li>
+            <li>Based on ideas in Google's BigTable</li>
+            <li>Initially designed for Chrome</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Features</h2>
+          <ul>
+            <li>Arbitrary byte arrays</li>
+            <li>Sorted by keys</li>
+            <li>Values are compressed with Snappy</li>
+            <li>Basic perations: <code>Get(), Put(), Del(), Batch()</code></li>
+            <li>Bi-directional iterators</li>
+            <li>Snapshots</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Basic architecture</h2>
+          <h3>LSM-tree</h3>
+          <ul>
+            <li>Writes go straight into a <b>log</b></li>
+            <img style="float: right; width: 50%; margin: 0 -1em 0 0.5em;" src="img/leveldb_simple.svg">
+            <li>Log is <b>flushed</b> to sorted table files (SST)</li>
+            <li>Reads <b>merge</b> the log and the table files</li>
+            <li>Cache speeds up common reads</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Basic architecture</h2>
+          <h3>Sorted table files (SST)</h3>
+          <ul>
+            <li>Limited to ~2MB each</li>
+            <li>Divided into 4K <b>blocks</b></li>
+            <li>Final block is an <b>index</b></li>
+            <li><b>Bloom filter</b> used for lookups</li>
+            <li>Keys can have <b>shared prefixes</b> within blocks</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Table file hierarchy</h2>
+          <h3>The <i>"Level"</i> in LevelDB</h3>
+          <table>
+            <tbody>
+              <tr>
+                <th style="text-align: right; font-weight: bold;">Log:</th>
+                <td style="padding-left: 0.5em;">Max size of 4MB then flushed into a set of Level 0 SST files</td>
+              </tr>
+              <tr>
+                <th style="text-align: right; font-weight: bold;">Level&nbsp;0:</th>
+                <td style="padding-left: 0.5em;">Max of 4 SST files then one file compacted into Level 1</td>
+              </tr>
+              <tr>
+                <th style="text-align: right; font-weight: bold;">Level&nbsp;1:</th>
+                <td style="padding-left: 0.5em;">Max total size of 10MB then one file compacted into Level 2</td>
+              </tr>
+              <tr>
+                <th style="text-align: right; font-weight: bold;">Level&nbsp;2:</th>
+                <td style="padding-left: 0.5em;">Max total size of 100MB then one file compacted into Level 3</td>
+              </tr>
+              <tr>
+                <th style="text-align: right; font-weight: bold;">Level&nbsp;3+:</th>
+                <td style="padding-left: 0.5em;">Max total size of 10 x previous level then one file compacted into next level</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="margin-top: 1em; text-align: center;"><small>0 &Rarr; 4 SST, 1 &Rarr; 10M, 2 &Rarr; 100M, 3 &Rarr; 1G, 4 &Rarr; 10G, 5 &Rarr; 100G, 6 &Rarr; 1T, 7 &Rarr; 10T</small></p>
+
+          <p class="fragment" style="position: absolute; top: 3.2em; width: 100%; height: 100%; text-align: center;">
+            <img style="width: 68%;" src="img/leveldb_levels.svg">
+          </p>
+        </section>
+
+        <!-- Example of nested vertical slides -->
+        <section>
+          <h2>Advanced features</h2>
+          <p>
+            <b><code>Batch</code></b>: <code>Put</code> and/or <code>Del</code>, are <b>atomic</b>.
+          </p>
+          <p><b><code>Iterator</code></b>: navigate forward and backward, starting and ending at any key.</p>
+          <p><b><code>Snapshot</code></b>: consistent view of the whole data store. Iterators create an implicit snapshot.</p>
+        </section>
+
+        <section>
+          <h2>LevelUP &amp; LevelDOWN</h2>
+          <h4 style="margin-top: 1em;">LevelDOWN</h4>
+          <p>C++ interface between Node.js and LevelDB:</p>
+          <ul>
+            <li>Limited <i>sugar</i></li>
+            <li>Async</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>LevelUP &amp; LevelDOWN</h2>
+          <h4 style="margin-top: 1em;">LevelUP</h4>
+          <p>Wrap LevelDOWN to provide a Node.js-style interface:</p>
+          <ul>
+            <li>Sugar: optional args, deferred-till-open</li>
+            <li>Safety: less <i>foot-gun</i></li>
+            <li>Streams!</li>
+            <li>JSON &amp; other encoding types</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>LevelUP: Simple example</h2>
+          <pre><code contenteditable>var levelup = require('levelup')
+
+levelup('/tmp/dprk.db', function (err, db) {
+  db.put('name', 'Kim Jong-un', function (err) {
+    db.batch([
+        { type: 'put', key: 'spouse', value: 'Ri Sol-ju' }
+      , { type: 'put', key: 'dob', value: '8 January 1983' }
+      , { type: 'put', key: 'occupation', value: 'Clown' }
+    ], function (err) {
+      db.createReadStream()
+        .on('data', console.log)
+        .on('close', function () {
+          db.close()
+        })
+    })
+  })
+})
+</code></pre>
+        </section>
+
+        <section>
+          <h2>LevelUP: basic operations</h2>
+          <h4 style="margin-top: 1em;">create / open / close</h4>
+          <pre><code contenteditable>levelup('/path/to/database', function (err, db) {
+  /* use `db` */
+})
+
+// or
+
+var db = levelup('/path/to/database')
+// use `db`, operations are queued till `open` is complete
+
+// close to clean up
+
+db.close(function (err) { /* ... */ })
+</code></pre>
+        </section>
+
+        <section>
+          <h2>LevelUP: basic operations</h2>
+          <h4 style="margin-top: 1em;">put / delete / get</h4>
+          <pre><code contenteditable>db.put('key', 'value', function (err) { /* ... */ })
+
+db.del('key', function (err) { /* ... */ })
+
+db.get('key', function (err, value) { /* ... */ })
+</code></pre>
+        </section>
+
+        <section>
+          <h2>LevelUP: basic operations</h2>
+          <h4 style="margin-top: 1em;">batch</h4>
+          <pre><code style="font-size: 1em;" contenteditable>var operations = [
+    { type: 'put', key: 'Franciscus', value: 'Jorge Mario Bergoglio' }
+  , { type: 'del', key: 'Benedictus XVI' }
+]
+
+db.batch(operations, function (err) { /* ... */ })
+</code></pre>
+        </section>
+
+        <section>
+          <h2>LevelUP: Streams</h2>
+          <pre><code contenteditable>var rs = db.createReadStream()
+rs.on('error', function (err) { /* handle err */ })
+rs.on('data' , function (data) { /* data.key &amp; data.value */ })
+rs.on('close', function () { /* stream finished */ })
+</code></pre>
+
+          <h3 style="margin-top: 0.5em;">Options! Oh my!</h3>
+          <pre><code contenteditable>db.createReadStream({
+    start     : 'somewheretostart'
+  , end       : 'endkey'
+  , limit     : 100
+  , reverse   : true
+  , keys      : true // see db.createKeyStream()
+  , values    : true // see db.createValueStream()
+  , fillCache : false
+})
+</code></pre>
+        </section>
+
+        <section>
+          <h2>LevelUP: Streams</h2>
+
+          <p>Standard readable stream operations are also supported:</p>
+
+       <pre><code contenteditable>function copy (srcdb, destdb, callback) {
+  srcdb.createReadStream()
+    .pipe(destdb.createWriteStream())
+    .on('error', callback)
+    .on('close', callback)
+}
+</code></pre>
+
+        </section>
+
+        <section>
+          <h2>Encoding</h2>
+       <pre><code contenteditable>var db = levelup('/path/to/db', { valueEncoding: 'json' })
+
+db.put(
+    'dprk'
+  , {
+        name       : 'Kim Jong-un'
+      , spouse     : 'Ri Sol-ju'
+      , dob        : '8 January 1983'
+      , occupation : 'Clown'
+    }
+  , function (err) {
+      db.get('dprk', function (err, value) {
+        console.log('dprk:', value)
+        db.close()
+      })
+    }
+)
+</code></pre>
+
+          <p><code>keyEncoding</code> and <code>valueEncoding</code>: utf8 (default), JSON, <code>Buffer</code> encoding types.</p>
+        </section>
+
+        <section>
+          <h2>The End. Questions?</h2>
+
+          <pre><code contenteditable>function variance (db, prefix, callback) {
+  var n = 0, m2 = 0
+
+  db.createReadStream({
+        start : prefix + ':'
+      , end   : prefix + ':\xFF'
+    })
+    .on('data', function (data) {
+      var delta = data.value - mean
+      mean += delta / ++n
+      m2 = m2 + delta * delta
+    })
+    .on('error', callback)
+    .on('close', function () {
+      callback(null, m2 / (n - 1))
+    })
+}
+</code></pre>
+          <p style="text-align: center;">
+            <small>
+              <a href="http://rod.vagg.org">Rod Vagg</a> / tw:<a href="https://twitter.com/rvagg">@rvagg</a> / gh:<a href="https://github.com/rvagg">rvagg</a>
+            </small>
+          </p>
+          <p style="text-align: center;">
+            <small>
+              <b>LevelUP</b> &Rarr; <a href="https://github.com/rvagg/node-levelup">github.com/rvagg/node-levelup</a>
+              <br>
+              <b>LevelDOWN</b> &Rarr; <a href="https://github.com/rvagg/node-leveldown">github.com/rvagg/node-leveldown</a>
+              <br>
+              <b>Modules</b> &Rarr; <a href="https://github.com/rvagg/node-levelup/wiki/Modules">github.com/rvagg/node-levelup/wiki/Modules</a>
+              <br>
+              <b>Applications</b> &Rarr; <a href="https://github.com/rvagg/node-levelup/wiki/Applications">github.com/rvagg/node-levelup/wiki/Applications</a>
+            </small>
+          </p>
+
+        </section>
+      </div>
+
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: false,
+        progress: true,
+        history: true,
+        center: true,
+        rollingLinks: false,
+        transition: 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          //{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+          //{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          //{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+          // { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+          // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
