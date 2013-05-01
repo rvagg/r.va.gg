@@ -1,0 +1,293 @@
+@font-face {
+  font-family: 'Century Schoolbook Monospace';
+  src: url('/fonts/Century-Schoolbook-Monospace-BT.eot');
+  src: url('/fonts/Century-Schoolbook-Monospace-BT.eot?#iefix') format('embedded-opentype'), url('/fonts/Century-Schoolbook-Monospace-BT.woff') format('woff'), url('/fonts/Century-Schoolbook-Monospace-BT.ttf') format('truetype'), url('/fonts/Century-Schoolbook-Monospace-BT.svg#CenturySchoolbookMonospaceBT') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  background: transparent url(images/bg.gif) repeat top left;
+  color: #444;
+}
+
+section.content {
+  width: 900px;
+  margin: 0 auto;
+  margin-top: 0px;
+  margin-bottom: 40px;
+}
+
+section.post-content {
+  font-size: 1.25em;
+}
+
+a {
+  color: #21759B;
+  border-bottom: 1px dotted #ccc;
+  text-decoration: none;
+}
+
+.nav > section {
+  width: 450px;
+  float: left;
+  font-size: 0.8em;
+  color: #777;
+}
+
+.nav > section > span {
+  float: left;
+  font-weight: bold;
+}
+
+.nav > section a {
+  color: #777;
+  border: 0;
+}
+
+.nav > section ul {
+  margin-top: 0;
+}
+
+.nav > section li {
+  list-style: none;
+  margin-left: 55px;
+}
+
+h1 {
+  margin: 2em 0 0em 0;
+  font-size: 3.6em;
+  font-weight: 300;
+}
+
+h1 a, h2 a {
+  border: 0;
+}
+
+h2 {
+  font-size: 1.8em;
+  font-weight: normal;
+  color: #333;
+  margin: 0 0 0 0;
+}
+
+h2 a {
+  color: #333;
+}
+
+.post-content {
+  margin: 1em 0 4em 0;
+}
+
+.byline {
+  font-size: 0.7em;
+  color: #777;
+  margin: 0 0 1em 0;
+}
+
+pre, code {
+  font-family: 'Century Schoolbook Monospace', monospace;
+  white-space: nowrap;
+  margin: 0 2px;
+  padding: 0px 5px;
+  border: 1px solid #e0e0e0;
+  background-color: #f1f1f1;
+  border-radius: 3px;
+  font-size: 18px;
+}
+
+pre {
+  border-color: #c0c0c0;
+  overflow-x: auto;
+  font-size: 16px;
+  white-space: pre;
+  padding: 10px;
+  line-height: 150%;
+}
+
+pre code, pre tt {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+}
+
+.pager .prev {
+  float: right;
+}
+
+.footer::before {
+  content: " ";
+  border-top: solid 2px #ccc;
+  display: block;
+  position: absolute;
+  width: 40px;
+  margin-top: -10px;
+}
+
+.footer {
+  margin-top: 4em;
+  font-size: 0.8em;
+}
+
+  .highlight .c
+, .highlight .cm
+, .highlight .cp
+, .highlight .c1 {
+    color:#999988;
+    font-style:italic;
+}
+
+.highlight .err {
+  color:#a61717;
+  background-color:#e3d2d2
+}
+
+  .highlight .o
+, .highlight .gs
+, .highlight .kc
+, .highlight .kd
+, .highlight .kn
+, .highlight .kp
+, .highlight .kr {
+    font-weight:bold
+}
+
+.highlight .cs {
+  color:#999999;
+  font-weight:bold;
+  font-style:italic
+}
+
+.highlight .gd {
+  color:#000000;
+  background-color:#ffdddd
+}
+
+.highlight .gd .x {
+  color:#000000;
+  background-color:#ffaaaa
+}
+
+.highlight .ge {
+  font-style:italic
+}
+
+  .highlight .gr
+, .highlight .gt {
+    color:#aa0000
+}
+
+  .highlight .gh
+, .highlight .bp {
+    color:#999999
+}
+
+.highlight .gi {
+  color:#000000;
+  background-color:#ddffdd
+}
+
+.highlight .gi .x {
+  color:#000000;
+  background-color:#aaffaa
+}
+
+.highlight .go {
+  color:#888888
+}
+
+  .highlight .gp
+, .highlight .nn {
+    color:#555555
+}
+
+
+.highlight .gu {
+  color:#800080;
+  font-weight:bold
+}
+
+
+.highlight .kt {
+  color:#445588;
+  font-weight:bold
+}
+
+  .highlight .m
+, .highlight .mf
+, .highlight .mh
+, .highlight .mi
+, .highlight .mo
+, .highlight .il {
+    color:#009999
+}
+
+  .highlight .s
+, .highlight .sb
+, .highlight .sc
+, .highlight .sd
+, .highlight .s2
+, .highlight .se
+, .highlight .sh
+, .highlight .si
+, .highlight .sx
+, .highlight .s1 {
+    color:#d14
+}
+
+.highlight .n {
+  color:#333333
+}
+
+  .highlight .na
+, .highlight .no
+, .highlight .nv
+, .highlight .vc
+, .highlight .vg
+, .highlight .vi
+, .highlight .nb {
+    color:#0086B3
+}
+
+.highlight .nc {
+  color:#445588;
+  font-weight:bold
+}
+
+.highlight .ni {
+  color:#800080
+}
+
+  .highlight .ne
+, .highlight .nf {
+    color:#990000;
+    font-weight:bold
+}
+
+.highlight .nt {
+  color:#000080
+}
+
+.highlight .ow {
+  font-weight:bold
+}
+
+.highlight .w {
+  color:#bbbbbb
+}
+
+.highlight .sr {
+  color:#009926
+}
+
+.highlight .ss {
+  color:#990073
+}
+
+.highlight .gc {
+  color:#999;
+  background-color:#EAF2F5
+}

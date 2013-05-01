@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html lang="en-us">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>
+  [Vaggland] Announcing Bean v1.0.0
+</title>
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    <script type="text/javascript" src="http://use.typekit.com/swo4snt.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>  
+    <script type="text/javascript">
+    /*
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-139519-10']);
+              _gaq.push(['_trackPageview']);
+      (function () {
+          var ga = document.createElement('script');
+          ga.type = 'text/javascript';
+          ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(ga, s);
+      }())
+    */
+    </script>
+  </head>
+  <body>
+
+    <section class="content">
+      <h1>
+        <a href="/">Vaggland</a>
+      </h1>
+
+      <section class="nav">
+        <section class="me">
+          <span>Find me</span>
+          <ul>
+            <li>on <a href="https://twitter.com/rvagg">Twitter / @rvagg</a></li>
+            <li>on <a href="https://twitter.com/github">GitHub / @rvagg</a></li>
+          </ul>
+        </section>
+        <section class="recent">
+          <span>Recent posts</span>
+          <ul>
+            
+ 
+                <li><a href="/2012/08/bean-v1.html">Announcing Bean v1.0.0</a></li>
+              
+ 
+ 
+                <li><a href="/2012/07/ender-bundling.html">How Ender bundles libraries for the browser</a></li>
+              
+ 
+ 
+                <li><a href="/2012/07/bean_v1.html">Towards Bean v1.0 (or: How event managers do their thing)</a></li>
+              
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+          </ul>
+        </section>
+      </section>
+      <div style="clear: both;"></div>
+
+      
+
+  <section class="post-content">
+
+    <h2><a href="/2012/08/bean-v1.html">Announcing Bean v1.0.0</a></h2>
+
+    <p class="byline">by Rod Vagg on September 8, 2012</p>
+
+    <section class="post-body">
+      <p>In my <a href="http://rod.vagg.org/2012/08/bean_v1/" title="Towards Bean v1.0 (or: How event managers do their thing)">previous post</a> about Bean I discussed in detail the work that has gone in to a v1 release and how it will differ from the v0.4 branch.</p>
+<p>Bean version 1.0.0 has now been released, you can download it from the <a href="https://github.com/fat/bean">GitHub repository</a> or you can fetch it from <a href="https://npmjs.org/package/bean">npm</a> for your Ender builds.</p>
+<p>Here&#39;s a quick summary of the changes, but for a more in-depth look you should refer to my <a href="http://rod.vagg.org/2012/08/bean_v1/" title="Towards Bean v1.0 (or: How event managers do their thing)">previous post</a>.</p>
+<blockquote>
+<p><b><code>on()</code> argument ordering</b>: the new signature is now <code>.on(events[, selector], handlerFn)</code>, which will work on both Bean as a standalone library and when bundled in Ender. In Ender, the following aliases also pass through <code>on()</code> so the same arguments work: <code>addListener()</code>, <code>bind()</code>, <code>listen()</code> and <code>one()</code> (which of course will only trigger once). Plus all the specific shortcuts such as <code>click()</code>, <code>keyup()</code> etc. although these methods have the first argument hardwired.</p>
+<p><code>add()</code> is left intact with the same argument ordering for standalone Bean and <code>delegate()</code> has the same signature, the same as jQuery&#39;s equivalent.</p>
+<p><b><code>off()</code> is the new <code>remove()</code></b>: although <code>remove()</code> is still available in standalone Bean.</p>
+<p><b>Bean attaches a single handler to the DOM for each event type on each element</b>: as outlined above, Bean will iterate over all handlers for each triggered and (mostly) reuse the same Event object for each call.</p>
+<p><b><code>Event.stopImmediatePropagation()</code>:</b> is available across all supported browsers, it will stop the processing of all handlers for the current event at the current element (i.e. the event will still bubble).</p>
+<p><b>The selector engine argument to <code>add()</code> is now completely removed</b>: you used to have to pass a selector engine in as the last argument for delegated events. Now you must set it once at start-up with <code>setSelectorEngine()</code>. This is automatically taken care of for you in an Ender build.</p>
+<p><b>A duplicate-handler check is no longer performed when you <i>add</i></b>: performance testing showed that this was a massive slow-down and is simply not something that Bean should be responsible for. If you want to add the same handler twice then that&#39;s your business and responsibility.</p>
+<p><b>Namespace matching for event <code>fire()</code>ing now matches namespaces using an <i>and</i> instead of an <code>or</code>:</b> so for example, firing namespaces &#39;a.b&#39; will fire any event with <i>both</i> &#39;a&#39; and &#39;b&#39; rather than <i>either</i> &#39;a&#39; or &#39;b&#39;. This is compatible with jQuery and is arguably a much more sensible and helpful way to deal with namespaces. You can find some discussion on this <a href="https://github.com/fat/bean/pull/68">on GitHub</a>.</p>
+<p><b>Lots of internal improvements for speed, code size, etc.</b>.</p>
+</blockquote>
+<p>There was one remaining question to be resolved&mdash;whether <code>Event.stop()</code> would also trigger <code>Event.stopImmediatePropagation()</code>. I&#39;ve decided to <b>not</b> include it and leave it to the user to decide whether they want to prevent triggering of other listeners on the same event/element.</p>
+<p>And that&#39;s it! Please give it a spin and open an issue on GitHub if you have any bugs to report or questions to be answered.</p>
+
+    </section>
+
+  </section>
+
+
+
+      <section class="footer">
+        &copy; Rod Vagg 2013, powered by <a href="https://github.com/rvagg/blorg">Blorg</a>
+      </section>
+
+    </section>
+
+  </body>
+</html>
