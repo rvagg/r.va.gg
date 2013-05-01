@@ -9,7 +9,10 @@
 
       <h2 id="{{ post.spec.base }}"><a href="{{ post.spec.path }}">{{ post.spec.title }}</a></h2>
 
-      <p class="byline">by {{ post.spec.author }} on {{ post.spec.date|date("F j, Y") }}</p>
+      <div class="post-meta">
+        <p class="byline">by {{ post.spec.author }} on {{ post.spec.date|date("F j, Y") }}</p>
+        <p class="commentcount"><a href="{{ post.spec.path }}#disqus_thread">Comments</a></p>
+      </div>
 
       <section class="post-body">
         {{ post.page|raw }}
@@ -38,5 +41,17 @@
     {% endif %}
   </section>
   <div style="clear: both;"></div>
+
+  <script type="text/javascript">
+    var disqus_shortname = 'rvagg'
+
+    (function () {
+      var s = document.createElement('script')
+      s.async = true
+      s.type = 'text/javascript'
+      s.src = 'http://' + disqus_shortname + '.disqus.com/count.js'
+      (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s)
+    }())
+  </script> 
 
 {% endblock %}
