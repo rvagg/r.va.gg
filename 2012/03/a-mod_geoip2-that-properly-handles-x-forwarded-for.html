@@ -105,12 +105,12 @@ I&#39;m maintaining a <em>maxmind</em> branch that contains the original code fr
           , disqus_title      = 'A mod_geoip2 that properly handles X-Forwarded-For'
           , disqus_url        = 'http://r.va.gg/2012/03/a-mod_geoip2-that-properly-handles-x-forwarded-for.html'
 
-        (function() {
+        !(function() {
           var dsq = document.createElement('script')
           dsq.type = 'text/javascript'
           dsq.async = true
           dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+          !(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
         })()
       </script>
       <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>

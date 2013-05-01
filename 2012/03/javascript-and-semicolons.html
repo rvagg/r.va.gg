@@ -108,12 +108,12 @@ The general C-family rules for semicolons can be found in most teaching material
           , disqus_title      = 'JavaScript and Semicolons'
           , disqus_url        = 'http://r.va.gg/2012/03/javascript-and-semicolons.html'
 
-        (function() {
+        !(function() {
           var dsq = document.createElement('script')
           dsq.type = 'text/javascript'
           dsq.async = true
           dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+          !(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
         })()
       </script>
       <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>

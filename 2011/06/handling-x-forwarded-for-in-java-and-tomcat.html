@@ -215,12 +215,12 @@ You enable request logging in Tomcat by attaching an AccessLogValve to your cont
           , disqus_title      = 'Handling X-Forwarded-For in Java and Tomcat'
           , disqus_url        = 'http://r.va.gg/2011/06/handling-x-forwarded-for-in-java-and-tomcat.html'
 
-        (function() {
+        !(function() {
           var dsq = document.createElement('script')
           dsq.type = 'text/javascript'
           dsq.async = true
           dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+          !(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
         })()
       </script>
       <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>

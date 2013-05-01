@@ -210,12 +210,12 @@ You simply put the filter into your classpath somewhere and wire it up in web.xm
           , disqus_title      = 'Minifying HTML in the Servlet container'
           , disqus_url        = 'http://r.va.gg/2011/10/minifying-html-in-the-servlet-container.html'
 
-        (function() {
+        !(function() {
           var dsq = document.createElement('script')
           dsq.type = 'text/javascript'
           dsq.async = true
           dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+          !(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
         })()
       </script>
       <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>
