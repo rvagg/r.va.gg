@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>
-  [Vaggland] JavaScript and Semicolons
+  [Vaggland] Node.js Dublin Presentation - LevelDB
 </title>
     <link rel="stylesheet" href="/style.css" type="text/css">
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://r.va.gg/atom.xml" />
@@ -79,25 +79,16 @@
 
   <section class="post-content">
 
-    <h2><a href="/2012/04/javascript-and-semicolons.html">JavaScript and Semicolons</a></h2>
+    <h2><a href="/2013/05/undefined.html">Node.js Dublin Presentation - LevelDB</a></h2>
 
     <div class="post-meta">
-      <p class="byline">by Rod Vagg on April 20, 2012</p>
+      <p class="byline">by Rod Vagg on May 1, 2013</p>
     </div>
 
     <section class="post-body">
-      <p>In syntax terms, JavaScript is in the broad C-family of languages. The C-family is diverse and includes languages such as C (obviously), C++, Objective-C, Perl, Java, C# and the newer Go from Google and Rust from Mozilla. Common themes in these languages include:</p>
-<p><ul>
-    <li>The use of curly braces to surround blocks.</li>
-    <li>The general insignificance of white space (spaces, tabs, new lines) except in very limited cases. Indentation is optional and is therefore a matter of style and preference, plus programs can be written on as few or as many lines as you want.</li>
-    <li>The use of semicolons to end statements, expressions and other constructs. Semicolons become the delimiter that the new line character is in white-space-significant languages.</li>
-</ul>
-JavaScript’s rules for curly braces, white space and semicolons are consistent with the C-family and its formal specification, known as the ECMAScript Language Specification makes this clear:</p>
-<p><blockquote>Certain ECMAScript statements (empty statement, variable statement, expression statement, do-while statement, continue statement, break statement, return statement, and throw statement) must be terminated with semicolons.</blockquote>
-But it doesn’t end there–JavaScript introduces what’s known as <strong>Automatic Semicolon Insertion (ASI)</strong>. The specification continues:</p>
-<p><blockquote>Such semicolons may always appear explicitly in the source text. For convenience, however, such semicolons may be omitted from the source text in certain situations. These situations are described by saying that semicolons are automatically inserted into the source code token stream in those situations.</blockquote>
-The general C-family rules for semicolons can be found in most teaching material for JavaScript and has been advocated by most of the prominent JavaScript personalities since 1995. In a <a href="https://brendaneich.com/2012/04/the-infernal-semicolon/">recent post</a>, JavaScript’s inventor, Brendan Eich, described ASI as “a syntactic error correction procedure”, (as in “<a href="https://brendaneich.com/2012/04/the-infernal-semicolon/#comment-12268">parsing error</a>”, rather than “user error”).</p>
-<p><strong><em>The rest of this article about semicolons in JavaScript can be found on <a title="JavaScript and Semicolons" href="dailyjs.com/2012/04/19/semicolons/">DailyJS</a>.</em></strong></p>
+      <p>I visited lovely Dublin last month to attend <a href="http://peerconf.com/">PeerConf</a>. While there I got to meet a great bunch of Irish programmers at <a href="http://www.nodejsdublin.com/">Node.js Dublin</a>, a semi-regular Node.js meet-up that happens in the <a href="https://www.engineyard.com/">Engine Yard</a> office in Dublin.</p>
+<p>I was invited to give a presentation on LevelDB and the work that I&#39;ve been doing on it in Node.js. I was followed by <a href="https://github.com/dominictarr">Dominic Tarr</a> who&#39;s doing some amazing work on top of LevelDB.</p>
+<p>You can view my slides <a href="http://r.va.gg/presentations/nodejsdub/">here</a> but a written version is currently being spread over 3 parts on <a href="http://dailyjs.com">DailyJS</a>. More about that soon!</p>
 
     </section>
 
@@ -105,9 +96,9 @@ The general C-family rules for semicolons can be found in most teaching material
       <div id="disqus_thread"></div>
       <script type="text/javascript">
         var disqus_shortname  = 'rvagg'
-          , disqus_identifier = '/2012/04/javascript-and-semicolons.html'
-          , disqus_title      = 'JavaScript and Semicolons'
-          , disqus_url        = 'http://r.va.gg/2012/04/javascript-and-semicolons.html'
+          , disqus_identifier = '/2013/05/undefined.html'
+          , disqus_title      = 'Node.js Dublin Presentation - LevelDB'
+          , disqus_url        = 'http://r.va.gg/2013/05/undefined.html'
 
         !(function() {
           var dsq = document.createElement('script')

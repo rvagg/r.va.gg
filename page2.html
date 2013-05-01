@@ -2,9 +2,7 @@
 <html lang="en-us">
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <title>
-  [Vaggland] Wrangling the X-Forwarded-For Header
-</title>
+    <title>Vaggland</title>
     <link rel="stylesheet" href="/style.css" type="text/css">
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://r.va.gg/atom.xml" />
     <script type="text/javascript" src="http://use.typekit.com/swo4snt.js"></script>
@@ -77,16 +75,20 @@
 
       
 
-  <section class="post-content">
+<div id="for">
+  
 
-    <h2><a href="/2011/07/wrangling-the-x-forwarded-for-header.html">Wrangling the X-Forwarded-For Header</a></h2>
+    <section class="post-content">
 
-    <div class="post-meta">
-      <p class="byline">by Rod Vagg on July 29, 2011</p>
-    </div>
+      <h2 id="wrangling-the-x-forwarded-for-header"><a href="/2011/07/wrangling-the-x-forwarded-for-header.html">Wrangling the X-Forwarded-For Header</a></h2>
 
-    <section class="post-body">
-      <p>Until recently, we&#39;ve served pages directly from the server for <a title="FeedXL D. I. Y. Horse Nutrition" href="http://feedxl.com/">FeedXL.com</a> but we&#39;ve since moved to a load balancing situation with multiple servers behind a load balancer.</p>
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on July 29, 2011</p>
+        <p class="commentcount"><a href="/2011/07/wrangling-the-x-forwarded-for-header.html#disqus_thread">Comments</a></p>
+      </div>
+
+      <section class="post-body">
+        <p>Until recently, we&#39;ve served pages directly from the server for <a title="FeedXL D. I. Y. Horse Nutrition" href="http://feedxl.com/">FeedXL.com</a> but we&#39;ve since moved to a load balancing situation with multiple servers behind a load balancer.</p>
 <p><h3><strong>AWS &amp; ELB</strong></h3>
 We use <a title="Amazon Web Services" href="http://aws.amazon.com">Amazon Web Services</a> to host FeedXL and are now using their <strong><a title="AWS Elastic Load Balancing" href="http://aws.amazon.com/elasticloadbalancing/">Elastic Load Balancing</a> (ELB)</strong> service to spread the load across 3 <em>Availability Zones</em> in the main datacentre we operate from. We&#39;re doing this primarily for high availability purposes rather than to handle heavy load but the added benefit is that it lets us scale up really easily if we have any sudden spikes in our traffic. We&#39;re using some small instances at the front using <a href="http://httpd.apache.org/">Apache</a> to handle the main traffic. The dynamic content is passed on to larger back-end instances running our webapp in <a href="http://tomcat.apache.org/">Tomcat</a>.</p>
 <p>A couple of our important <a href="http://aws.amazon.com/ebs/">EBS</a> volumes were among the last to be restored during <a href="http://alestic.com/2011/04/ec2-outage">Judgement Day</a>, April 2011 and while we had regular snapshots we hesitated for too long before rebuilding our service in a different Availability Zone (or Region), partly because of lack of clear information about the outage from Amazon (we were continually given the impression that it wouldn&#39;t be long before things were back online, so why not wait just a tiny bit longer to restore to normal service than restore from slightly older snapshots?). Probably like many AWS customers impacted by the outage, we&#39;ve increased our spend to boost our redundancy to better handler outages of this kind. We now span multiple Availability Zones and have increased the quality of our off-Region backups. I&#39;m pretty sure that in the end Amazon has ended up doing very well from their rather embarrassing incident with many customers keen to avoid their own embarrassment the next time it happens.</p>
@@ -150,28 +152,36 @@ I&#39;ve just stumbled upon <a title="X-Forwarded-For Spoofer" href="https://add
 <p><em>With this add-on, you can assign an arbitrary IP address to the X-Forwarded-For field, attempt to perform XSS by including HTML in this field, or even attempt SQL injection.</em></blockquote>
 May be useful for testing and debugging your web application.</p>
 
+      </section>
+
     </section>
 
-    <section class="comments">
-      <div id="disqus_thread"></div>
-      <script type="text/javascript">
-        var disqus_shortname  = 'rvagg'
-          , disqus_identifier = '/2011/07/wrangling-the-x-forwarded-for-header.html'
-          , disqus_title      = 'Wrangling the X-Forwarded-For Header'
-          , disqus_url        = 'http://r.va.gg/2011/07/wrangling-the-x-forwarded-for-header.html'
+  
+</div>
 
-        !(function() {
-          var dsq = document.createElement('script')
-          dsq.type = 'text/javascript'
-          dsq.async = true
-          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
-          !(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
-        })()
-      </script>
-      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>
-    </section>
+  <section class="pager">
+    
 
+      <div class="prev">
+        <a href="/page1.html">Newer posts &raquo;</a>
+      </div>
+
+    
+ 
   </section>
+  <div style="clear: both;"></div>
+
+  <script type="text/javascript">
+    var disqus_shortname = 'rvagg'
+
+    !(function () {
+      var s = document.createElement('script')
+      s.async = true
+      s.type = 'text/javascript'
+      s.src = 'http://' + disqus_shortname + '.disqus.com/count.js'
+      !(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s)
+    }())
+  </script> 
 
 
 
