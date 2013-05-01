@@ -4,7 +4,7 @@
   <title>Vaggland</title>
  
   <link href="http://r.va.gg" />
-  <updated>2013-05-01T05:10:59.767Z</updated>
+  <updated>2013-05-01T05:13:55.483Z</updated>
   <id>http://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
@@ -14,9 +14,9 @@
   
     <entry>
       <title>Announcing Bean v1.0.0</title>
-      <link href="http://r.va.gg/2012/08/bean-v1.html" />
+      <link href="http://r.va.gg/2012/09/bean-v1.html" />
       <updated>2012-09-08T12:41:12.000Z</updated>
-      <id>http://r.va.gg/2012/08/bean-v1.html</id>
+      <id>http://r.va.gg/2012/09/bean-v1.html</id>
       <content type="html">
         &lt;p&gt;In my &lt;a href=&quot;http://rod.vagg.org/2012/08/bean_v1/&quot; title=&quot;Towards Bean v1.0 (or: How event managers do their thing)&quot;&gt;previous post&lt;/a&gt; about Bean I discussed in detail the work that has gone in to a v1 release and how it will differ from the v0.4 branch.&lt;/p&gt;
 &lt;p&gt;Bean version 1.0.0 has now been released, you can download it from the &lt;a href=&quot;https://github.com/fat/bean&quot;&gt;GitHub repository&lt;/a&gt; or you can fetch it from &lt;a href=&quot;https://npmjs.org/package/bean&quot;&gt;npm&lt;/a&gt; for your Ender builds.&lt;/p&gt;
@@ -40,9 +40,9 @@
   
     <entry>
       <title>How Ender bundles libraries for the browser</title>
-      <link href="http://r.va.gg/2012/07/ender-bundling.html" />
+      <link href="http://r.va.gg/2012/08/ender-bundling.html" />
       <updated>2012-08-24T03:21:38.000Z</updated>
-      <id>http://r.va.gg/2012/07/ender-bundling.html</id>
+      <id>http://r.va.gg/2012/08/ender-bundling.html</id>
       <content type="html">
         &lt;p&gt;I was asked an interesting Ender question on IRC (#enderjs on Freenode) and as I was answering it, it occurred to me that the subject would be an ideal way to explain how Ender&#39;s multi-library bundling works. So here is that explanation!&lt;/p&gt;&lt;p&gt;The original question went something like this:&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;When a browser first visits my page, they only get served Bonzo (a DOM manipulation library) as a stand-alone library, but on returning visits they are also served Qwery (a selector engine), Bean (an event manager) and a few other modules in an Ender build. Can I integrate Bonzo into the Ender build on the browser for repeat visitors?&lt;/p&gt;&lt;/blockquote&gt;&lt;h3&gt;Wait, what&#39;s Ender?&lt;/h3&gt;&lt;p&gt;Let&#39;s step back a bit and start with some basics. The way I generally explain Ender to people is that it&#39;s two different things:&lt;/p&gt;&lt;ol&gt;&lt;li&gt;It&#39;s a build tool, for bundling JavaScript libraries together into a single file. The resulting file constitutes a new &quot;framework&quot; based around the jQuery-style DOM element collection pattern: &lt;code&gt;$(&#39;selector&#39;).method()&lt;/code&gt;. The constituent libraries provide the functionality for the &lt;em&gt;methods&lt;/em&gt; and may also provide the selector engine functionality.&lt;/li&gt;&lt;li&gt;It&#39;s an &lt;em&gt;ecosystem&lt;/em&gt; of JavaScript libraries. Ender promotes a small collection of libraries as a base, called &lt;strong&gt;The Jeesh&lt;/strong&gt;, which together provide a large portion of the functionality normally required of a JavaScript framework, but there are many more libraries compatible with Ender that add extra functionality. Many of the libraries available for Ender are also usable outside of Ender as stand-alone libraries.&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;&lt;em&gt;&lt;strong&gt;Continue reading this article on &lt;a href=&quot;http://dailyjs.com/2012/08/23/ender-tutorial/&quot;&gt;DailyJS.com&lt;/a&gt;&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
 
@@ -51,9 +51,9 @@
   
     <entry>
       <title>Towards Bean v1.0 (or: How event managers do their thing)</title>
-      <link href="http://r.va.gg/2012/07/bean_v1.html" />
+      <link href="http://r.va.gg/2012/08/bean_v1.html" />
       <updated>2012-08-10T13:20:56.000Z</updated>
-      <id>http://r.va.gg/2012/07/bean_v1.html</id>
+      <id>http://r.va.gg/2012/08/bean_v1.html</id>
       <content type="html">
         &lt;p&gt;&lt;b&gt;&lt;a href=&quot;https://github.com/fat/bean&quot;&gt;Bean&lt;/a&gt;&lt;/b&gt; is the event manager included in &lt;b&gt;&lt;a href=&quot;http://ender.no.de/&quot;&gt;Ender&#39;s&lt;/a&gt;&lt;/b&gt; starter pack, &lt;i&gt;The Jeesh&lt;/i&gt;. If you want to do jQuery-style &lt;code&gt;bind()&lt;/code&gt;, &lt;code&gt;on()&lt;/code&gt; etc. with Ender, then use Bean.&lt;/p&gt;
 &lt;p&gt;At the time of writing, we&#39;re on version &lt;i&gt;0.4.11&lt;/i&gt;. There&#39;s also been a &lt;i&gt;0.5-wip&lt;/i&gt; (&quot;work in progress&quot;) branch for a while now that&#39;s included some improvements I&#39;ve been holding off for a major release. I also put together a &lt;a href=&quot;https://github.com/fat/bean/issues/milestones&quot;&gt;0.5 milestone&lt;/a&gt; on GitHub with some ideas. The major item impacting on the external API is a switch to the &lt;code&gt;on()&lt;/code&gt; argument order found in &lt;a href=&quot;http://api.prototypejs.org/dom/Event/on/&quot;&gt;Prototype&lt;/a&gt;, &lt;a href=&quot;http://api.jquery.com/on/&quot;&gt;jQuery&lt;/a&gt; and &lt;a href=&quot;https://github.com/madrobby/zepto/blob/753e80114f0618bd7ce865508e0ff2085d0bfb5f/src/event.js#L166&quot;&gt;Zepto&lt;/a&gt;. Considering the significance of the changes in the new branch, I think that perhaps a &lt;b&gt;1.0&lt;/b&gt; release would be warranted.&lt;/p&gt;
@@ -255,9 +255,9 @@ table.results tr &gt; * { padding: 0 3px; }
   
     <entry>
       <title>mod_geoip2_xff update</title>
-      <link href="http://r.va.gg/2012/06/mod_geoip2_xff-update.html" />
+      <link href="http://r.va.gg/2012/07/mod_geoip2_xff-update.html" />
       <updated>2012-07-06T02:47:17.000Z</updated>
-      <id>http://r.va.gg/2012/06/mod_geoip2_xff-update.html</id>
+      <id>http://r.va.gg/2012/07/mod_geoip2_xff-update.html</id>
       <content type="html">
         &lt;p&gt;Thanks to a contribution from &lt;a href=&quot;https://plus.google.com/105599514712357912650/posts&quot;&gt;Kevin Gaudin&lt;/a&gt;, I have a new release of my &lt;a href=&quot;http://www.maxmind.com/app/mod_geoip&quot;&gt;mod_geoip2&lt;/a&gt; fork. (The history starts &lt;a href=&quot;http://rod.vagg.org/2012/04/a-mod_geoip2-that-properly-handles-x-forwarded-for/&quot;&gt;here&lt;/a&gt;.)&lt;/p&gt;
 &lt;p&gt;You can find the source here: &lt;a href=&quot;https://github.com/rvagg/mod_geoip2_xff&quot;&gt;&lt;a href=&quot;https://github.com/rvagg/mod_geoip2_xff&quot;&gt;https://github.com/rvagg/mod_geoip2_xff&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;
@@ -272,9 +272,9 @@ table.results tr &gt; * { padding: 0 3px; }
   
     <entry>
       <title>Data URI + SVG</title>
-      <link href="http://r.va.gg/2012/04/data-uri-svg.html" />
+      <link href="http://r.va.gg/2012/05/data-uri-svg.html" />
       <updated>2012-05-23T05:16:22.000Z</updated>
-      <id>http://r.va.gg/2012/04/data-uri-svg.html</id>
+      <id>http://r.va.gg/2012/05/data-uri-svg.html</id>
       <content type="html">
         &lt;p&gt;Data URIs are great when you want to serve small resources that there&#39;s no point serving up in a combined sprite. Consider &lt;a href=&quot;http://microjs.com&quot;&gt;microjs.com&lt;/a&gt; which serves up an HTML file plus a single JavaScript file containing the latest data used to build the site. The build logic is in an embedded script, the CSS is also embedded, so it&#39;s pretty lean considering what you see and the amount of data displayed. But, notice the 3 icons for each project, 2 GitHub icons and a Twitter icon. They are PNG images, combined as a sprite but to avoid an additional HTTP request to fetch them they are simply embedded in the CSS which is embedded on the page:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nc&quot;&gt;.title&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;.stat&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;span&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -307,9 +307,9 @@ And IE doesn&#39;t let you have it any other way. So you either encode your SVG 
   
     <entry>
       <title>A mod_geoip2 that properly handles X-Forwarded-For</title>
-      <link href="http://r.va.gg/2012/03/a-mod_geoip2-that-properly-handles-x-forwarded-for.html" />
+      <link href="http://r.va.gg/2012/04/a-mod_geoip2-that-properly-handles-x-forwarded-for.html" />
       <updated>2012-04-22T04:55:42.000Z</updated>
-      <id>http://r.va.gg/2012/03/a-mod_geoip2-that-properly-handles-x-forwarded-for.html</id>
+      <id>http://r.va.gg/2012/04/a-mod_geoip2-that-properly-handles-x-forwarded-for.html</id>
       <content type="html">
         &lt;p&gt;This is just a short follow-up to my original post on&lt;em&gt; &lt;a title=&quot;Wrangling the X-Forwarded-For Header&quot; href=&quot;http://rod.vagg.org/2011/07/wrangling-the-x-forwarded-for-header/&quot;&gt;Wrangling the X-Forwarded-For Header&lt;/a&gt;&lt;/em&gt; where I promised that one of the things I would follow up with was how to get MaxMind&#39;s mod_geoip2 to handle the X-Forwarded-For according to the rule:&lt;/p&gt;
 &lt;p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;&lt;em&gt;Always use the leftmost non-private address&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
@@ -326,9 +326,9 @@ I&#39;m maintaining a &lt;em&gt;maxmind&lt;/em&gt; branch that contains the orig
   
     <entry>
       <title>JavaScript and Semicolons</title>
-      <link href="http://r.va.gg/2012/03/javascript-and-semicolons.html" />
+      <link href="http://r.va.gg/2012/04/javascript-and-semicolons.html" />
       <updated>2012-04-20T06:10:16.000Z</updated>
-      <id>http://r.va.gg/2012/03/javascript-and-semicolons.html</id>
+      <id>http://r.va.gg/2012/04/javascript-and-semicolons.html</id>
       <content type="html">
         &lt;p&gt;In syntax terms, JavaScript is in the broad C-family of languages. The C-family is diverse and includes languages such as C (obviously), C++, Objective-C, Perl, Java, C# and the newer Go from Google and Rust from Mozilla. Common themes in these languages include:&lt;/p&gt;
 &lt;p&gt;&lt;ul&gt;
@@ -348,9 +348,9 @@ The general C-family rules for semicolons can be found in most teaching material
   
     <entry>
       <title>Minifying HTML in the Servlet container</title>
-      <link href="http://r.va.gg/2011/10/minifying-html-in-the-servlet-container.html" />
+      <link href="http://r.va.gg/2011/11/minifying-html-in-the-servlet-container.html" />
       <updated>2011-11-23T04:38:44.000Z</updated>
-      <id>http://r.va.gg/2011/10/minifying-html-in-the-servlet-container.html</id>
+      <id>http://r.va.gg/2011/11/minifying-html-in-the-servlet-container.html</id>
       <content type="html">
         &lt;p&gt;Google&#39;s &lt;a title=&quot;mod_pagespeed&quot; href=&quot;http://code.google.com/speed/page-speed/docs/module.html&quot;&gt;mod_pagespeed&lt;/a&gt; is great. I&#39;ve been using it for a while now on &lt;a title=&quot;FeedXL Horse Nutrition&quot; href=&quot;http://feedxl.com&quot;&gt;feedxl.com&lt;/a&gt; but the only filter that I actually find really useful is &lt;a href=&quot;http://code.google.com/speed/page-speed/docs/filter-whitespace-collapse.html&quot;&gt;Collapse Whitespace&lt;/a&gt;; the rest of the filters I either already do myself as part of the site build process or I don&#39;t want applied. But, I imagine that there are a lot of admins out there that would really benefit from all of the clever things it can do.&lt;/p&gt;
 &lt;p&gt;Unfortunately it&#39;s just an Apache2 module so it&#39;s a bit difficult to use the cleverness elsewhere. I recently launched a new service that serves content directly from Apache Tomcat without passing through an Apache2 web server like I would normally do (because there was just no need!). Having got used to the nice whitespace optimisations you can get from mod_pagespeed I decided to implement a simple version of my own for Tomcat. Dynamic content is somewhere that you&#39;re better off trying not to optimise your whitespace during generation, leave it for post-processing so your logic can be clear.&lt;/p&gt;
@@ -472,9 +472,9 @@ You simply put the filter into your classpath somewhere and wire it up in web.xm
   
     <entry>
       <title>Handling X-Forwarded-For in Java and Tomcat</title>
-      <link href="http://r.va.gg/2011/06/handling-x-forwarded-for-in-java-and-tomcat.html" />
+      <link href="http://r.va.gg/2011/07/handling-x-forwarded-for-in-java-and-tomcat.html" />
       <updated>2011-07-30T04:49:50.000Z</updated>
-      <id>http://r.va.gg/2011/06/handling-x-forwarded-for-in-java-and-tomcat.html</id>
+      <id>http://r.va.gg/2011/07/handling-x-forwarded-for-in-java-and-tomcat.html</id>
       <content type="html">
         &lt;p&gt;This is the first follow-up to my &lt;a title=&quot;Wrangling the X-Forwarded-For Header&quot; href=&quot;http://rod.vagg.org/2011/07/wrangling-the-x-forwarded-for-header/&quot;&gt;post on X-Forwarded-For&lt;/a&gt;, I&#39;ll assume you&#39;ve at least scanned that article.&lt;/p&gt;
 &lt;p&gt;&lt;h3&gt;Revision of the security issues&lt;/h3&gt;
@@ -601,9 +601,9 @@ You enable request logging in Tomcat by attaching an AccessLogValve to your cont
   
     <entry>
       <title>Wrangling the X-Forwarded-For Header</title>
-      <link href="http://r.va.gg/2011/06/wrangling-the-x-forwarded-for-header.html" />
+      <link href="http://r.va.gg/2011/07/wrangling-the-x-forwarded-for-header.html" />
       <updated>2011-07-29T06:15:36.000Z</updated>
-      <id>http://r.va.gg/2011/06/wrangling-the-x-forwarded-for-header.html</id>
+      <id>http://r.va.gg/2011/07/wrangling-the-x-forwarded-for-header.html</id>
       <content type="html">
         &lt;p&gt;Until recently, we&#39;ve served pages directly from the server for &lt;a title=&quot;FeedXL D. I. Y. Horse Nutrition&quot; href=&quot;http://feedxl.com/&quot;&gt;FeedXL.com&lt;/a&gt; but we&#39;ve since moved to a load balancing situation with multiple servers behind a load balancer.&lt;/p&gt;
 &lt;p&gt;&lt;h3&gt;&lt;strong&gt;AWS &amp; ELB&lt;/strong&gt;&lt;/h3&gt;
