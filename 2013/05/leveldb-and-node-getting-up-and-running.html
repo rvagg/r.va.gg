@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html lang="en-us">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>
+  [r.va.gg] LevelDB and Node: Getting Up and Running
+</title>
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://r.va.gg/atom.xml" />
+    <script type="text/javascript" src="http://use.typekit.com/swo4snt.js"></script>
+    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>  
+    <script type="text/javascript">
+      var _gaq = _gaq || []
+      _gaq.push(['_setAccount', 'UA-139519-10'])
+      _gaq.push(['_trackPageview'])
+      !(function () {
+        var ga = document.createElement('script')
+        ga.type = 'text/javascript'
+        ga.async = true
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'
+        var s = document.getElementsByTagName('script')[0]
+        s.parentNode.insertBefore(ga, s)
+      }())
+    </script>
+  </head>
+  <body>
+
+    <section class="content">
+      <h1>
+        <a href="/">r.va.gg</a>
+      </h1>
+
+      <section class="nav">
+        <section class="me">
+          <span>Find me</span>
+          <ul>
+            <li>on <a href="https://twitter.com/rvagg">Twitter / @rvagg</a></li>
+            <li>on <a href="https://twitter.com/github">GitHub / @rvagg</a></li>
+          </ul>
+        </section>
+        <section class="recent">
+          <span>Recent posts</span>
+          <ul>
+            
+ 
+                <li><a href="/2013/05/leveldb-and-node-getting-up-and-running.html">LevelDB and Node: Getting Up and Running</a></li>
+              
+ 
+ 
+                <li><a href="/2013/05/leveldb-and-node-what-is-leveldb-anyway.html">LevelDB and Node: What is LevelDB Anyway?</a></li>
+              
+ 
+ 
+                <li><a href="/2013/05/node.js-dublin-presentation-leveldb.html">Node.js Dublin Presentation - LevelDB</a></li>
+              
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+          </ul>
+        </section>
+      </section>
+      <div style="clear: both;"></div>
+
+      
+
+  <section class="post-content">
+
+    <h2><a href="/2013/05/leveldb-and-node-getting-up-and-running.html">LevelDB and Node: Getting Up and Running</a></h2>
+
+    <div class="post-meta">
+      <p class="byline">by Rod Vagg on May 4, 2013</p>
+    </div>
+
+    <section class="post-body">
+      <p>This is the second article in a three-part series on LevelDB and how it can be used in Node.</p>
+<ul class="parts">
+  <li><a href="http://dailyjs.com/2013/04/19/leveldb-and-node-1/">Part 1: What is LevelDB Anyway?</a></li>
+  <li><a href="http://dailyjs.com/2013/05/03/leveldb-and-node-2/"><strong>Part 2: Getting Up and Running</strong></a></li>
+</ul>
+
+<p>Our first article covered the basics of LevelDB and its internals. If you haven&#39;t already read it you are encouraged to do so as we will be building upon this knowledge as we introduce the Node interface in this article.</p>
+<p><img src="http://dailyjs.com/images/posts/leveldb.png" alt="LevelDB"></p>
+<p>There are two primary libraries for using LevelDB in Node, <strong><a href="https://github.com/rvagg/node-leveldown">LevelDOWN</a></strong> and <strong><a href="https://github.com/rvagg/node-levelup">LevelUP</a></strong>.</p>
+<p><strong>LevelDOWN</strong> is a pure C++ interface between Node.js and LevelDB. Its API provides limited <em>sugar</em> and is mostly a straight-forward mapping of LevelDB&#39;s operations into JavaScript. All I/O operations in LevelDOWN are asynchronous and take advantage of LevelDB&#39;s thread-safe nature to parallelise reads and writes.</p>
+<p><strong>LevelUP</strong> is the library that the majority of people will use to interface with LevelDB in Node. It wraps LevelDOWN to provide a more Node.js-style interface. Its API provides more <em>sugar</em> than LevelDOWN, with features such as optional arguments.</p>
+<p>LevelUP exposes iterators as Node.js-style object streams. A LevelUP <strong>ReadStream</strong> can be used to read sequential entries, forward or reverse, to and from any key.</p>
+<p>LevelUP handles JSON and other encoding types for you. For example, when operating on a LevelUP instance with JSON value-encoding, you simply pass in your objects for writes and they are serialised for you. Likewise, when you read them, they are deserialised and passed back in their original form.</p>
+<p><strong>Continue reading this article on <a href="http://dailyjs.com/2013/05/03/leveldb-and-node-2/">DailyJS.com</a></strong></p>
+
+    </section>
+
+    <section class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname  = 'rvagg'
+          , disqus_identifier = '/2013/05/leveldb-and-node-getting-up-and-running.html'
+          , disqus_title      = 'LevelDB and Node: Getting Up and Running'
+          , disqus_url        = 'http://r.va.gg/2013/05/leveldb-and-node-getting-up-and-running.html'
+
+        !(function() {
+          var dsq = document.createElement('script')
+          dsq.type = 'text/javascript'
+          dsq.async = true
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
+          !(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+        })()
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>
+    </section>
+
+  </section>
+
+
+
+      <section class="footer">
+        &copy; Rod Vagg 2013, powered by <a href="https://github.com/rvagg/blorg">Blorg</a>
+        <br><a href="http://r.va.gg/atom.xml">Atom / RSS feed</a>
+      </section>
+
+    </section>
+
+  </body>
+</html>

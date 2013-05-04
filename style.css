@@ -79,13 +79,17 @@ h2 a {
   margin: 1em 0 4em 0;
 }
 
-.post-meta .byline, .post-meta .commentcount {
+.post-meta p {
   font-size: 0.7em;
   color: #777;
   margin: 0;
 }
 
-.post-meta{
+.post-meta .link {
+  font-style: italic;
+}
+
+.post-meta {
   margin-bottom: 1.5em;
 }
 
