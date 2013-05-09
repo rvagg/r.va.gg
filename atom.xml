@@ -4,13 +4,40 @@
   <title>r.va.gg</title>
  
   <link href="http://r.va.gg" />
-  <updated>2013-05-04T02:41:25.295Z</updated>
+  <updated>2013-05-09T03:37:38.748Z</updated>
   <id>http://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
   </author>
   <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/atom+xml" href="http://r.va.gg/feed.xml" />
 
+  
+    <entry>
+      <title>Node.ninjas Presentation - LevelDB and Node Sitting in a Tree</title>
+      <link href="http://r.va.gg/2013/05/node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree.html" />
+      <updated>2013-05-09T00:00:00.000Z</updated>
+      <id>http://r.va.gg/2013/05/node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree.html</id>
+      <content type="html">
+        &lt;p&gt;I&#39;m giving a presentation at &lt;a href=&quot;http://www.meetup.com/sydney-node-ninjas/&quot;&gt;Node.ninjas&lt;/a&gt; tonight in Sydney. I&#39;ve put together a talk about LevelDB and Node that covers:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;What LevelDB &lt;em&gt;is&lt;/em&gt; and the basics of how it works&lt;/li&gt;
+&lt;li&gt;A quick introduction to the core LevelDB libraries in Node: &lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt; and &lt;a href=&quot;https://github.com/rvagg/node-leveldown/&quot;&gt;LevelDOWN&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Some preaching about the awesomeness of modularity around a small, extensible core; including a whirlwind tour of the current, flourishing, LevelDB+Node ecosystem&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;It&#39;s this last point that excites me the most. There&#39;s some very smart people building some very clever pieces to the &lt;em&gt;Node Database&lt;/em&gt; puzzle. What&#39;s more, people are actually building functional databases in Node now, I&#39;ve just collected a list from npm of what looks like functional databases that use LevelDB:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Rumours&lt;/li&gt;
+&lt;li&gt;LevelGraph&lt;/li&gt;
+&lt;li&gt;PushDB&lt;/li&gt;
+&lt;li&gt;NeutrinoDB&lt;/li&gt;
+&lt;li&gt;PlumbDB&lt;/li&gt;
+&lt;li&gt;Syncstore&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And a few more that look like a work in progress. Plus, I&#39;m sure there&#39;s more people out there we&#39;ve never even heard of who are cooking up some amazing things using the LevelDB+Node combination!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The slides to my talk are &lt;a href=&quot;http://r.va.gg/presentations/node.ninjas/&quot;&gt;here&lt;/a&gt;.&lt;/strong&gt;&lt;/p&gt;
+
+      </content>
+    </entry>
   
     <entry>
       <title>LevelDB and Node: Getting Up and Running</title>
