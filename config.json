@@ -1,6 +1,6 @@
 {
     "templateRoot" : "./templates/"
-  , "outputRoot"   : "../rvagg.github.com_gh-pages/"
+  , "outputRoot"   : "./master/"
 
   , "data" : [
         {
