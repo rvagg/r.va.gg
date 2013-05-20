@@ -2,7 +2,9 @@
 <html lang="en-us">
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <title>r.va.gg</title>
+    <title>
+  [r.va.gg] LevelUP v0.9 - Some Major Changes
+</title>
     <link rel="stylesheet" href="/style.css" type="text/css">
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://r.va.gg/atom.xml" />
     <script type="text/javascript" src="http://use.typekit.com/swo4snt.js"></script>
@@ -83,21 +85,16 @@
 
       
 
-<div id="for">
-  
+  <section class="post-content">
 
-    <section class="post-content">
+    <h2><a href="/2013/05/levelup-v0.9-some-major-changes.html">LevelUP v0.9 - Some Major Changes</a></h2>
 
-      <h2 id="levelup-v0.9-some-major-changes"><a href="/2013/05/levelup-v0.9-some-major-changes.html">LevelUP v0.9 - Some Major Changes</a></h2>
+    <div class="post-meta">
+      <p class="byline">by Rod Vagg on May 20, 2013</p>
+    </div>
 
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on May 20, 2013</p>
-        <p class="link"><a href="/2013/05/levelup-v0.9-some-major-changes.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2013/05/levelup-v0.9-some-major-changes.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p><img src="https://twimg0-a.akamaihd.net/profile_images/3360574989/92fc472928b444980408147e5e5db2fa_bigger.png" alt="LevelDB"></p>
+    <section class="post-body">
+      <p><img src="https://twimg0-a.akamaihd.net/profile_images/3360574989/92fc472928b444980408147e5e5db2fa_bigger.png" alt="LevelDB"></p>
 <p><a href="https://github.com/rvagg/node-levelupf">LevelUP</a> is still quite young and bound to go through some major shifts. It&#39;s best to not be too tied to immature APIs early in a project&#39;s lifetime.</p>
 <p>That said, we&#39;re very interested in stability so we try to keep breaking changes to a minimum. However, we&#39;re about to publish version 0.9 and there&#39;s one change that&#39;s not exactly a &quot;breaking&quot; change in the normal sense, but it is something that I need to explain because it will impact on almost everyone currently using LevelUP.</p>
 <h3>Severing the dependency on LevelDOWN</h3>
@@ -148,152 +145,28 @@
 <hr>
 <p>Stay tuned! This is just one step in the quest for a truly modular database system that lets you build a database that suits your applications and not the other way around.</p>
 
-      </section>
-
     </section>
 
-  
+    <section class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname  = 'rvagg'
+          , disqus_identifier = '/2013/05/levelup-v0.9-some-major-changes.html'
+          , disqus_title      = 'LevelUP v0.9 - Some Major Changes'
+          , disqus_url        = 'http://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html'
 
-    <section class="post-content">
-
-      <h2 id="node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree"><a href="/2013/05/node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree.html">Node.ninjas Presentation - LevelDB and Node Sitting in a Tree</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on May 9, 2013</p>
-        <p class="link"><a href="/2013/05/node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2013/05/node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p>I&#39;m giving a presentation at <a href="http://www.meetup.com/sydney-node-ninjas/">Node.ninjas</a> tonight in Sydney. I&#39;ve put together a talk about LevelDB and Node that covers:</p>
-<ol>
-<li>What LevelDB <em>is</em> and the basics of how it works</li>
-<li>A quick introduction to the core LevelDB libraries in Node: <a href="https://github.com/rvagg/node-levelup">LevelUP</a> and <a href="https://github.com/rvagg/node-leveldown/">LevelDOWN</a></li>
-<li>Some preaching about the awesomeness of modularity around a small, extensible core; including a whirlwind tour of the current, flourishing, LevelDB+Node ecosystem</li>
-</ol>
-<p>It&#39;s this last point that excites me the most. There&#39;s some very smart people building some very clever pieces to the <em>Node Database</em> puzzle. What&#39;s more, people are actually building functional databases in Node now, I&#39;ve just collected a list from npm of what looks like functional databases that use LevelDB:</p>
-<ul>
-<li>Rumours</li>
-<li>LevelGraph</li>
-<li>PushDB</li>
-<li>NeutrinoDB</li>
-<li>PlumbDB</li>
-<li>Syncstore</li>
-</ul>
-<p>And a few more that look like a work in progress. Plus, I&#39;m sure there&#39;s more people out there we&#39;ve never even heard of who are cooking up some amazing things using the LevelDB+Node combination!</p>
-<p><strong>The slides to my talk are <a href="http://r.va.gg/presentations/node.ninjas/">here</a>.</strong></p>
-
-      </section>
-
+        !(function() {
+          var dsq = document.createElement('script')
+          dsq.type = 'text/javascript'
+          dsq.async = true
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
+          !(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+        })()
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>
     </section>
 
-  
-
-    <section class="post-content">
-
-      <h2 id="leveldb-and-node-getting-up-and-running"><a href="/2013/05/leveldb-and-node-getting-up-and-running.html">LevelDB and Node: Getting Up and Running</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on May 4, 2013</p>
-        <p class="link"><a href="/2013/05/leveldb-and-node-getting-up-and-running.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2013/05/leveldb-and-node-getting-up-and-running.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p>This is the second article in a three-part series on LevelDB and how it can be used in Node.</p>
-<ul class="parts">
-  <li><a href="http://dailyjs.com/2013/04/19/leveldb-and-node-1/">Part 1: What is LevelDB Anyway?</a></li>
-  <li><a href="http://dailyjs.com/2013/05/03/leveldb-and-node-2/"><strong>Part 2: Getting Up and Running</strong></a></li>
-</ul>
-
-<p>Our first article covered the basics of LevelDB and its internals. If you haven&#39;t already read it you are encouraged to do so as we will be building upon this knowledge as we introduce the Node interface in this article.</p>
-<p><img src="http://dailyjs.com/images/posts/leveldb.png" alt="LevelDB"></p>
-<p>There are two primary libraries for using LevelDB in Node, <strong><a href="https://github.com/rvagg/node-leveldown">LevelDOWN</a></strong> and <strong><a href="https://github.com/rvagg/node-levelup">LevelUP</a></strong>.</p>
-<p><strong>LevelDOWN</strong> is a pure C++ interface between Node.js and LevelDB. Its API provides limited <em>sugar</em> and is mostly a straight-forward mapping of LevelDB&#39;s operations into JavaScript. All I/O operations in LevelDOWN are asynchronous and take advantage of LevelDB&#39;s thread-safe nature to parallelise reads and writes.</p>
-<p><strong>LevelUP</strong> is the library that the majority of people will use to interface with LevelDB in Node. It wraps LevelDOWN to provide a more Node.js-style interface. Its API provides more <em>sugar</em> than LevelDOWN, with features such as optional arguments.</p>
-<p>LevelUP exposes iterators as Node.js-style object streams. A LevelUP <strong>ReadStream</strong> can be used to read sequential entries, forward or reverse, to and from any key.</p>
-<p>LevelUP handles JSON and other encoding types for you. For example, when operating on a LevelUP instance with JSON value-encoding, you simply pass in your objects for writes and they are serialised for you. Likewise, when you read them, they are deserialised and passed back in their original form.</p>
-<p><strong>Continue reading this article on <a href="http://dailyjs.com/2013/05/03/leveldb-and-node-2/">DailyJS.com</a></strong></p>
-
-      </section>
-
-    </section>
-
-  
-
-    <section class="post-content">
-
-      <h2 id="leveldb-and-node-what-is-leveldb-anyway"><a href="/2013/05/leveldb-and-node-what-is-leveldb-anyway.html">LevelDB and Node: What is LevelDB Anyway?</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on May 1, 2013</p>
-        <p class="link"><a href="/2013/05/leveldb-and-node-what-is-leveldb-anyway.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2013/05/leveldb-and-node-what-is-leveldb-anyway.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p>This is the first article in a three-part series on LevelDB and how it can be used in Node.</p>
-<p>This article will cover the LevelDB basics and internals to provide a foundation for the next two articles. The second and third articles will cover the core LevelDB Node libraries: <a href="https://github.com/rvagg/node-levelup">LevelUP</a>, <a href="https://github.com/rvagg/node-leveldown">LevelDOWN</a> and the rest of the LevelDB ecosystem that&#39;s appearing in Node-land.</p>
-<p><img src="http://dailyjs.com/images/posts/leveldb.png" alt="LevelDB"></p>
-<h3>What is LevelDB?</h3>
-<p>LevelDB is an <em>open-source</em>, <em>dependency-free</em>, <em>embedded key/value data store</em>. It was developed in 2011 by Jeff Dean and Sanjay Ghemawat, researchers from Google. It&#39;s written in C++ although it has third-party bindings for most common programming languages. Including JavaScript / Node.js of course.</p>
-<p>LevelDB is based on ideas in Google&#39;s BigTable but does not share code with BigTable, this allows it to be licensed for open source release. Dean and Ghemawat developed LevelDB as a replacement for SQLite as the backing-store for Chrome&#39;s IndexedDB implementation.</p>
-<p>It has since seen very wide adoption across the industry and serves as the back-end to a number of new databases and is now the recommended storage back-end for Riak.</p>
-<p><strong>Continue reading this article on <a href="http://dailyjs.com/2013/04/19/leveldb-and-node-1/">DailyJS.com</a></strong></p>
-
-      </section>
-
-    </section>
-
-  
-
-    <section class="post-content">
-
-      <h2 id="node.js-dublin-presentation-leveldb"><a href="/2013/05/node.js-dublin-presentation-leveldb.html">Node.js Dublin Presentation - LevelDB</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on May 1, 2013</p>
-        <p class="link"><a href="/2013/05/node.js-dublin-presentation-leveldb.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2013/05/node.js-dublin-presentation-leveldb.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p>I visited lovely Dublin last month to attend <a href="http://peerconf.com/">PeerConf</a>. While there I got to meet a great bunch of Irish programmers at <a href="http://www.nodejsdublin.com/">Node.js Dublin</a>, a semi-regular Node.js meet-up that happens in the <a href="https://www.engineyard.com/">Engine Yard</a> office in Dublin.</p>
-<p>I was invited to give a presentation on LevelDB and the work that I&#39;ve been doing on it in Node.js. I was followed by <a href="https://github.com/dominictarr">Dominic Tarr</a> who&#39;s doing some amazing work on top of LevelDB.</p>
-<p>You can view my slides <a href="http://r.va.gg/presentations/nodejsdub/">here</a> but a written version is currently being spread over 3 parts on <a href="http://dailyjs.com">DailyJS</a>. More about that soon!</p>
-
-      </section>
-
-    </section>
-
-  
-</div>
-
-  <section class="pager">
-    
- 
-
-      <div class="next">
-        <a href="/page1.html">&laquo; Older posts</a>
-      </div>
-
-    
   </section>
-  <div style="clear: both;"></div>
-
-  <!--
-  <script type="text/javascript">
-    var disqus_shortname = 'rvagg'
-
-    !(function () {
-      var s = document.createElement('script')
-      s.async = true
-      s.type = 'text/javascript'
-      s.src = 'http://' + disqus_shortname + '.disqus.com/count.js'
-      !(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s)
-    }())
-  </script>
-  -->
 
 
 
