@@ -101,7 +101,7 @@
 <p><a href="https://github.com/rvagg/node-levelupf">LevelUP</a> is still quite young and bound to go through some major shifts. It&#39;s best to not be too tied to immature APIs early in a project&#39;s lifetime.</p>
 <p>That said, we&#39;re very interested in stability so we try to keep breaking changes to a minimum. However, we&#39;re about to publish version 0.9 and there&#39;s one change that&#39;s not exactly a &quot;breaking&quot; change in the normal sense, but it is something that I need to explain because it will impact on almost everyone currently using LevelUP.</p>
 <h3>Severing the dependency on LevelDOWN</h3>
-<p>LevelUP depends on <a href="https://github.com/rvagg/node-leveldown/">LevelDOWN</a> to do it&#39;s <em>LevelDB thing</em>. LevelDOWN was once part of LevelUP until we split it off to a discrete project that focuses entirely on acting as a direct C++ bridge between LevelDB and Node. We get to focus on making LevelUP an awesome LevelDB-ish interface without being tied directly to LevelDB implementation details (e.g. Iterators vs Streams).</p>
+<p>LevelUP depends on <a href="https://github.com/rvagg/node-leveldown/">LevelDOWN</a> to do its <em>LevelDB thing</em>. LevelDOWN was once part of LevelUP until we split it off to a discrete project that focuses entirely on acting as a direct C++ bridge between LevelDB and Node. We get to focus on making LevelUP an awesome LevelDB-ish interface without being tied directly to LevelDB implementation details (e.g. Iterators vs Streams).</p>
 <p>In fact, a new project was spawned to define the LevelDOWN interface that LevelUP requires. <a href="https://github.com/rvagg/node-abstract-leveldown">AbstractLevelDOWN</a> is a set of strict tests for the functionality that LevelUP uses and it also implements a basic abstract shell that can be extended to create additional back-ends for LevelUP.</p>
 <p>So far, there are 3 projects worth mentioning that extend AbstractLevelDOWN:</p>
 <ul>
@@ -114,7 +114,7 @@
 </ul>
 <p>Plus some other efforts to adapt other embedded and non-embedded data stores to the LevelDOWN interface. Additionally, there are other versions of LevelDB that can be used, including the fork that <a href="http://basho.com/">Basho</a> maintains for use in <a href="http://basho.com/riak/">Riak</a>. (I have a branch of LevelDOWN that uses this version of LevelDB that I&#39;ll release as soon as I can explain and demonstrate the performance differences to vanilla LevelDB for Node users).</p>
 <p>In short, LevelUP doesn&#39;t <em>need</em> LevelDOWN in the way it once did and LevelUP is turning into a more generic interface to sorted key/value storage systems, albeit with a distinct LevelDB-flavour.</p>
-<p>Since version 0.8 we&#39;ve supported a <code>&#39;db&#39;</code> option when you create a LevelUP instance. This option can be used to provide an alternative LevelDOWN-compatible back-end. Unfortunately, with LevelDOWN defined as a strict dependency of LevelUP means that each time you install it you have to compile LevelDOWN, even if you don&#39;t want it. So, we&#39;ve removed it as a dependency but it&#39;s still <em>wired up</em> so that that the only thing you need to do is actually install LevelDOWN alongside LevelUP and it&#39;ll take care of the rest.</p>
+<p>Since version 0.8 we&#39;ve supported a <code>&#39;db&#39;</code> option when you create a LevelUP instance. This option can be used to provide an alternative LevelDOWN-compatible back-end. Unfortunately, LevelDOWN being defined as a strict dependency of LevelUP means that each time you install it you have to compile LevelDOWN, even if you don&#39;t want it. So, we&#39;ve removed it as a dependency but it&#39;s still <em>wired up</em> so that that the only thing you need to do is actually install LevelDOWN alongside LevelUP and it&#39;ll take care of the rest.</p>
 <div class="highlight"><pre><span class="nv">$ </span>npm install levelup leveldown
 </pre></div>
 
@@ -144,7 +144,7 @@
 <span class="p">})</span>
 </pre></div>
 
-<p>Yep, that&#39;s browser code. Simply <code>npm install levelup leveljs</code> and run the module through <a href="http://browserify.org/">Browserify</a> and you get the full LevelUP API in your browser!</p>
+<p>Yep, that&#39;s browser code. Simply <code>npm install levelup level-js</code> and run the module through <a href="http://browserify.org/">Browserify</a> and you get the full LevelUP API in your browser!</p>
 <hr>
 <p>Stay tuned! This is just one step in the quest for a truly modular database system that lets you build a database that suits your applications and not the other way around.</p>
 

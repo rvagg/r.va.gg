@@ -4,7 +4,7 @@
   <title>r.va.gg</title>
  
   <link href="http://r.va.gg" />
-  <updated>2013-05-20T09:49:35.433Z</updated>
+  <updated>2013-05-20T09:56:51.335Z</updated>
   <id>http://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
@@ -22,7 +22,7 @@
 &lt;p&gt;&lt;a href=&quot;https://github.com/rvagg/node-levelupf&quot;&gt;LevelUP&lt;/a&gt; is still quite young and bound to go through some major shifts. It&#39;s best to not be too tied to immature APIs early in a project&#39;s lifetime.&lt;/p&gt;
 &lt;p&gt;That said, we&#39;re very interested in stability so we try to keep breaking changes to a minimum. However, we&#39;re about to publish version 0.9 and there&#39;s one change that&#39;s not exactly a &quot;breaking&quot; change in the normal sense, but it is something that I need to explain because it will impact on almost everyone currently using LevelUP.&lt;/p&gt;
 &lt;h3&gt;Severing the dependency on LevelDOWN&lt;/h3&gt;
-&lt;p&gt;LevelUP depends on &lt;a href=&quot;https://github.com/rvagg/node-leveldown/&quot;&gt;LevelDOWN&lt;/a&gt; to do it&#39;s &lt;em&gt;LevelDB thing&lt;/em&gt;. LevelDOWN was once part of LevelUP until we split it off to a discrete project that focuses entirely on acting as a direct C++ bridge between LevelDB and Node. We get to focus on making LevelUP an awesome LevelDB-ish interface without being tied directly to LevelDB implementation details (e.g. Iterators vs Streams).&lt;/p&gt;
+&lt;p&gt;LevelUP depends on &lt;a href=&quot;https://github.com/rvagg/node-leveldown/&quot;&gt;LevelDOWN&lt;/a&gt; to do its &lt;em&gt;LevelDB thing&lt;/em&gt;. LevelDOWN was once part of LevelUP until we split it off to a discrete project that focuses entirely on acting as a direct C++ bridge between LevelDB and Node. We get to focus on making LevelUP an awesome LevelDB-ish interface without being tied directly to LevelDB implementation details (e.g. Iterators vs Streams).&lt;/p&gt;
 &lt;p&gt;In fact, a new project was spawned to define the LevelDOWN interface that LevelUP requires. &lt;a href=&quot;https://github.com/rvagg/node-abstract-leveldown&quot;&gt;AbstractLevelDOWN&lt;/a&gt; is a set of strict tests for the functionality that LevelUP uses and it also implements a basic abstract shell that can be extended to create additional back-ends for LevelUP.&lt;/p&gt;
 &lt;p&gt;So far, there are 3 projects worth mentioning that extend AbstractLevelDOWN:&lt;/p&gt;
 &lt;ul&gt;
@@ -35,7 +35,7 @@
 &lt;/ul&gt;
 &lt;p&gt;Plus some other efforts to adapt other embedded and non-embedded data stores to the LevelDOWN interface. Additionally, there are other versions of LevelDB that can be used, including the fork that &lt;a href=&quot;http://basho.com/&quot;&gt;Basho&lt;/a&gt; maintains for use in &lt;a href=&quot;http://basho.com/riak/&quot;&gt;Riak&lt;/a&gt;. (I have a branch of LevelDOWN that uses this version of LevelDB that I&#39;ll release as soon as I can explain and demonstrate the performance differences to vanilla LevelDB for Node users).&lt;/p&gt;
 &lt;p&gt;In short, LevelUP doesn&#39;t &lt;em&gt;need&lt;/em&gt; LevelDOWN in the way it once did and LevelUP is turning into a more generic interface to sorted key/value storage systems, albeit with a distinct LevelDB-flavour.&lt;/p&gt;
-&lt;p&gt;Since version 0.8 we&#39;ve supported a &lt;code&gt;&#39;db&#39;&lt;/code&gt; option when you create a LevelUP instance. This option can be used to provide an alternative LevelDOWN-compatible back-end. Unfortunately, with LevelDOWN defined as a strict dependency of LevelUP means that each time you install it you have to compile LevelDOWN, even if you don&#39;t want it. So, we&#39;ve removed it as a dependency but it&#39;s still &lt;em&gt;wired up&lt;/em&gt; so that that the only thing you need to do is actually install LevelDOWN alongside LevelUP and it&#39;ll take care of the rest.&lt;/p&gt;
+&lt;p&gt;Since version 0.8 we&#39;ve supported a &lt;code&gt;&#39;db&#39;&lt;/code&gt; option when you create a LevelUP instance. This option can be used to provide an alternative LevelDOWN-compatible back-end. Unfortunately, LevelDOWN being defined as a strict dependency of LevelUP means that each time you install it you have to compile LevelDOWN, even if you don&#39;t want it. So, we&#39;ve removed it as a dependency but it&#39;s still &lt;em&gt;wired up&lt;/em&gt; so that that the only thing you need to do is actually install LevelDOWN alongside LevelUP and it&#39;ll take care of the rest.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;npm install levelup leveldown
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -65,7 +65,7 @@
 &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Yep, that&#39;s browser code. Simply &lt;code&gt;npm install levelup leveljs&lt;/code&gt; and run the module through &lt;a href=&quot;http://browserify.org/&quot;&gt;Browserify&lt;/a&gt; and you get the full LevelUP API in your browser!&lt;/p&gt;
+&lt;p&gt;Yep, that&#39;s browser code. Simply &lt;code&gt;npm install levelup level-js&lt;/code&gt; and run the module through &lt;a href=&quot;http://browserify.org/&quot;&gt;Browserify&lt;/a&gt; and you get the full LevelUP API in your browser!&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;Stay tuned! This is just one step in the quest for a truly modular database system that lets you build a database that suits your applications and not the other way around.&lt;/p&gt;
 
