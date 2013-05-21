@@ -43,6 +43,10 @@
           <ul>
             
  
+                <li><a href="/2013/05/levelup-v0.9-released.html">LevelUP v0.9 Released</a></li>
+              
+ 
+ 
                 <li><a href="/2013/05/levelup-v0.9-some-major-changes.html">LevelUP v0.9 - Some Major Changes</a></li>
               
  
@@ -51,8 +55,6 @@
               
  
  
-                <li><a href="/2013/05/leveldb-and-node-getting-up-and-running.html">LevelDB and Node: Getting Up and Running</a></li>
-              
  
  
  
@@ -95,7 +97,7 @@
 
     <section class="post-body">
       <p><img src="https://twimg0-a.akamaihd.net/profile_images/3360574989/92fc472928b444980408147e5e5db2fa_bigger.png" alt="LevelDB"></p>
-<p><a href="https://github.com/rvagg/node-levelupf">LevelUP</a> is still quite young and bound to go through some major shifts. It&#39;s best to not be too tied to immature APIs early in a project&#39;s lifetime.</p>
+<p><a href="https://github.com/rvagg/node-levelup">LevelUP</a> is still quite young and bound to go through some major shifts. It&#39;s best to not be too tied to immature APIs early in a project&#39;s lifetime.</p>
 <p>That said, we&#39;re very interested in stability so we try to keep breaking changes to a minimum. However, we&#39;re about to publish version 0.9 and there&#39;s one change that&#39;s not exactly a &quot;breaking&quot; change in the normal sense, but it is something that I need to explain because it will impact on almost everyone currently using LevelUP.</p>
 <h3>Severing the dependency on LevelDOWN</h3>
 <p>LevelUP depends on <a href="https://github.com/rvagg/node-leveldown/">LevelDOWN</a> to do its <em>LevelDB thing</em>. LevelDOWN was once part of LevelUP until we split it off to a discrete project that focuses entirely on acting as a direct C++ bridge between LevelDB and Node. We get to focus on making LevelUP an awesome LevelDB-ish interface without being tied directly to LevelDB implementation details (e.g. Iterators vs Streams).</p>

@@ -4,7 +4,7 @@
   <title>r.va.gg</title>
  
   <link href="http://r.va.gg" />
-  <updated>2013-05-21T01:37:09.012Z</updated>
+  <updated>2013-05-21T10:05:20.187Z</updated>
   <id>http://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
@@ -13,13 +13,79 @@
 
   
     <entry>
+      <title>LevelUP v0.9 Released</title>
+      <link href="http://r.va.gg/2013/05/levelup-v0.9-released.html" />
+      <updated>2013-05-21T00:00:00.000Z</updated>
+      <id>http://r.va.gg/2013/05/levelup-v0.9-released.html</id>
+      <content type="html">
+        &lt;p&gt;&lt;img src=&quot;https://twimg0-a.akamaihd.net/profile_images/3360574989/92fc472928b444980408147e5e5db2fa_bigger.png&quot; alt=&quot;LevelDB&quot;&gt;&lt;/p&gt;
+&lt;p&gt;As per my &lt;a href=&quot;http://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html&quot;&gt;previous post&lt;/a&gt;, &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt; v0.9 has been released&lt;/strong&gt;!&lt;/p&gt;
+&lt;p&gt;I&#39;m doing a quick post about this release because it&#39;s got more changes in it than we normally see, including some things worth explaining.&lt;/p&gt;
+&lt;h3&gt;Relationship to LevelDOWN&lt;/h3&gt;
+&lt;p&gt;The biggest change is the removal of &lt;a href=&quot;https://github.com/rvagg/node-leveldown/&quot;&gt;LevelDOWN&lt;/a&gt; as a dependency, you should &lt;a href=&quot;http://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html&quot;&gt;review what I&#39;ve already said about this&lt;/a&gt; as this will impact you if you&#39;re currently using LevelUP. In short, you&#39;ll either need to explicitly &lt;code&gt;npm install leveldown&lt;/code&gt; or switch to using the new &lt;a href=&quot;https://github.com/level/level&quot;&gt;Level&lt;/a&gt; package which bundles them both.&lt;/p&gt;
+&lt;p&gt;Along with this change, we also get better &lt;a href=&quot;http://browserify.org/&quot;&gt;Browserify&lt;/a&gt; support. See &lt;a href=&quot;https://github.com/maxogden/level.js&quot;&gt;level.js&lt;/a&gt; for more information on this.&lt;/p&gt;
+&lt;h3&gt;Chained batch&lt;/h3&gt;
+&lt;p&gt;The other major change is the introduction of a new &lt;strong&gt;chained batch&lt;/strong&gt; syntax, additional to the existing batch syntax. This method of creating and writing batch operations is much closer to the way LevelDB does batches and under certain circumstances you may find improved performance from using this method.&lt;/p&gt;
+&lt;p&gt;If you call &lt;code&gt;db.batch()&lt;/code&gt; with no arguments, you&#39;ll get a &lt;code&gt;Batch&lt;/code&gt; object back which has the following operations: &lt;code&gt;put()&lt;/code&gt;, &lt;code&gt;del()&lt;/code&gt;, &lt;code&gt;clear()&lt;/code&gt; and &lt;code&gt;write()&lt;/code&gt;. The first three are chainable so you can call them one after the other to build your batch. &lt;code&gt;write()&lt;/code&gt; is the only method that takes a callback because it submits the batch. Until you call &lt;code&gt;write()&lt;/code&gt;, the batch is transient and can be discarded.&lt;/p&gt;
+&lt;p&gt;Example from the &lt;a href=&quot;https://github.com/rvagg/node-levelup#readme&quot;&gt;README&lt;/a&gt;:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nx&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;batch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;del&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;father&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;name&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Yuri Irsenovich Kim&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;dob&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;16 February 1941&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;spouse&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Kim Young-sook&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;occupation&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Clown&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Done!&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Some love for WriteStream&lt;/h3&gt;
+&lt;p&gt;WriteStream got some attention in this release. On the main &lt;code&gt;createWriteStream()&lt;/code&gt; method and on individual &lt;code&gt;write()&lt;/code&gt; calls, you can now pass some new options:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&#39;type&#39;&lt;/code&gt; can switch from the default &lt;code&gt;&#39;put&#39;&lt;/code&gt; to &lt;code&gt;&#39;del&#39;&lt;/code&gt; so you can make a WriteStream that only deletes when you &lt;code&gt;write({ key: &#39;foo&#39; })&lt;/code&gt;, or you can make individual writes delete: &lt;code&gt;write({ type: &#39;del&#39;, key: &#39;foo&#39; })&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&#39;keyEncoding&#39;&lt;/code&gt; and &lt;code&gt;&#39;valueEncoding&#39;&lt;/code&gt; will switch from default encodings for the current LevelUP instance. Again, you can specify them on the main &lt;code&gt;createWriteStream()&lt;/code&gt; or on individual &lt;code&gt;write()&lt;/code&gt; calls.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Other changes&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;A &lt;a href=&quot;https://github.com/rvagg/node-levelup/pull/128&quot;&gt;race condition&lt;/a&gt; was fixed that allowed a &lt;code&gt;put()&lt;/code&gt; to write to the store before an iterator was obtained when calling `createReadStream().&lt;/li&gt;
+&lt;li&gt;ReadStream no longer emits a &lt;code&gt;&#39;ready&#39;&lt;/code&gt; event.&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;db&lt;/code&gt; property on LevelUP instances can be used to get access to LevelDOWN or whatever LevelDOWN-substitute you are using (this was &lt;code&gt;_db&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Some very LevelDB-specific methods have been deprecated on LevelUP and the documentation now recommends either directly using LevelDOWN or calling via the &lt;code&gt;db&lt;/code&gt; property. Specifically:&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;db.db.approximateSize()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;leveldown.repair()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;leveldown.destroy()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;LevelDOWN got a new LevelDB method: &lt;code&gt;getProperty()&lt;/code&gt; that currently understands 3 properties:&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;db.db.getProperty(&#39;leveldb.num-files-at-levelN&#39;)&lt;/code&gt;: returns the number of files at level &lt;em&gt;N&lt;/em&gt;, where N is an integer representing a valid level (e.g. &quot;0&quot;)&#39;).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;db.db.getProperty(&#39;leveldb.stats&#39;)&lt;/code&gt;: returns a multi-line string describing statistics about LevelDB&#39;s internal operation.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;db.db.getProperty(&#39;leveldb.sstables&#39;)&lt;/code&gt;: returns a multi-line string describing all of the &lt;em&gt;sstables&lt;/em&gt; that make up contents of the current database.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Significantly improved ReadStream performance improvements (up to 50% faster).&lt;/li&gt;
+&lt;li&gt;Some LevelDOWN memory leaks discovered and fixed.&lt;/li&gt;
+&lt;li&gt;LevelDOWN upgraded to LevelDB@1.10.0, &lt;a href=&quot;https://groups.google.com/forum/#!topic/node-levelup/bly-MiUzrZw&quot;&gt;details here&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Who you should thank&lt;/h3&gt;
+&lt;p&gt;A lot of people put in work to this release. There&#39;s a &lt;a href=&quot;https://github.com/rvagg/node-levelup#contributors&quot;&gt;team of people&lt;/a&gt; that can claim ownership of LevelUP, LevelDOWN and related projects and most of them have been involved in this release. You should follow these people on Twitter and GitHub!&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Dominic Tarr&lt;/strong&gt; (&lt;a href=&quot;https://github.com/dominictarr&quot;&gt;GitHub/dominictarr&lt;/a&gt; / &lt;a href=&quot;http://twitter.com/dominictarr&quot;&gt;Twitter/@dominictarr&lt;/a&gt;) contributed to the ReadStream fixes and is just a generally valuable &amp; awesome sage in the LevelDB + Node community.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Julian Gruber&lt;/strong&gt; (&lt;a href=&quot;https://github.com/juliangruber&quot;&gt;GitHub/juliangruber&lt;/a&gt; / &lt;a href=&quot;http://twitter.com/juliangruber&quot;&gt;Twitter/@juliangruber&lt;/a&gt;) contributed the encoding options for WriteStreams and most of the work on the new chained &lt;code&gt;batch()&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Matteo Collina&lt;/strong&gt; (&lt;a href=&quot;https://github.com/mcollina&quot;&gt;GitHub/mcollina&lt;/a&gt; / &lt;a href=&quot;https://twitter.com/matteocollina&quot;&gt;Twitter/@matteocollina&lt;/a&gt;) contributed the &lt;code&gt;&#39;type&#39;&lt;/code&gt; options for WriteStreams and most of the work on performance improvements to ReadStreams.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;David Björklund&lt;/strong&gt; (&lt;a href=&quot;https://github.com/kesla&quot;&gt;GitHub/kesla&lt;/a&gt; / &lt;a href=&quot;http://twitter.com/david_bjorklund&quot;&gt;Twitter/@david_bjorklund&lt;/a&gt;) also contributed work on ReadStream performance.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Max Ogden&lt;/strong&gt; (&lt;a href=&quot;https://github.com/maxogden&quot;&gt;GitHub/maxogden&lt;/a&gt; / &lt;a href=&quot;http://twitter.com/maxogden&quot;&gt;Twitter/@maxogden&lt;/a&gt;) and &lt;strong&gt;Anton Whalley&lt;/strong&gt; (&lt;a href=&quot;https://github.com/No9&quot;&gt;GitHub/No9&lt;/a&gt; / &lt;a href=&quot;https://twitter.com/antonwhalley&quot;&gt;Twitter/@antonwhalley&lt;/a&gt;) both worked on extracting most of the LevelDOWN test suite into &lt;a href=&quot;https://github.com/rvagg/node-abstract-leveldown&quot;&gt;AbstractLevelDOWN&lt;/a&gt; to form a LevelDOWN-spec that&#39;s also runnable in browser environments.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And others, who you can find in &lt;a href=&quot;https://github.com/rvagg/node-levelup/pull/129&quot;&gt;this 0.9 WIP thread&lt;/a&gt;, plus additional users who reported &amp; found issues.&lt;/p&gt;
+
+      </content>
+    </entry>
+  
+    <entry>
       <title>LevelUP v0.9 - Some Major Changes</title>
       <link href="http://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html" />
       <updated>2013-05-20T00:00:00.000Z</updated>
       <id>http://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html</id>
       <content type="html">
         &lt;p&gt;&lt;img src=&quot;https://twimg0-a.akamaihd.net/profile_images/3360574989/92fc472928b444980408147e5e5db2fa_bigger.png&quot; alt=&quot;LevelDB&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/rvagg/node-levelupf&quot;&gt;LevelUP&lt;/a&gt; is still quite young and bound to go through some major shifts. It&#39;s best to not be too tied to immature APIs early in a project&#39;s lifetime.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt; is still quite young and bound to go through some major shifts. It&#39;s best to not be too tied to immature APIs early in a project&#39;s lifetime.&lt;/p&gt;
 &lt;p&gt;That said, we&#39;re very interested in stability so we try to keep breaking changes to a minimum. However, we&#39;re about to publish version 0.9 and there&#39;s one change that&#39;s not exactly a &quot;breaking&quot; change in the normal sense, but it is something that I need to explain because it will impact on almost everyone currently using LevelUP.&lt;/p&gt;
 &lt;h3&gt;Severing the dependency on LevelDOWN&lt;/h3&gt;
 &lt;p&gt;LevelUP depends on &lt;a href=&quot;https://github.com/rvagg/node-leveldown/&quot;&gt;LevelDOWN&lt;/a&gt; to do its &lt;em&gt;LevelDB thing&lt;/em&gt;. LevelDOWN was once part of LevelUP until we split it off to a discrete project that focuses entirely on acting as a direct C++ bridge between LevelDB and Node. We get to focus on making LevelUP an awesome LevelDB-ish interface without being tied directly to LevelDB implementation details (e.g. Iterators vs Streams).&lt;/p&gt;
