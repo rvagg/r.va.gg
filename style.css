@@ -93,6 +93,10 @@ h2 a {
   margin-bottom: 1.5em;
 }
 
+.post-body p {
+  text-align: justify;
+}
+
 pre, code {
   font-family: 'Century Schoolbook Monospace', monospace;
   white-space: nowrap;
