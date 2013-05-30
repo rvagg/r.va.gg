@@ -1,0 +1,6 @@
+{
+  "name": "rvagg.github.com",
+  "version": "0.0.0",
+  "main": "build.js",
+  "dependencies": { "blorg": "*" }
+}
