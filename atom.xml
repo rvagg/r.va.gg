@@ -4,13 +4,73 @@
   <title>r.va.gg</title>
  
   <link href="http://r.va.gg" />
-  <updated>2013-05-27T01:05:58.470Z</updated>
+  <updated>2013-06-07T12:16:51.434Z</updated>
   <id>http://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
   </author>
   <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/atom+xml" href="http://r.va.gg/feed.xml" />
 
+  
+    <entry>
+      <title>LevelDOWN Alternatives</title>
+      <link href="http://r.va.gg/2013/06/leveldown-alternatives.html" />
+      <updated>2013-06-07T00:00:00.000Z</updated>
+      <id>http://r.va.gg/2013/06/leveldown-alternatives.html</id>
+      <content type="html">
+        &lt;p&gt;Since &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt;&lt;/strong&gt; v0.9, &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/node-leveldown/&quot;&gt;LevelDOWN&lt;/a&gt;&lt;/strong&gt; has been an optional dependency, allowing you to switch in alternative back-ends.&lt;/p&gt;
+&lt;p&gt;We have &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/node-memdown&quot;&gt;MemDOWN&lt;/a&gt;&lt;/strong&gt;, a pure in-memory data-store, allowing you to run LevelUP against transient, and very fast storage.&lt;/p&gt;
+&lt;p&gt;We also have &lt;strong&gt;&lt;a href=&quot;https://github.com/maxogden/level.js&quot;&gt;level.js&lt;/a&gt;&lt;/strong&gt; which works against &lt;strong&gt;IndexedDB&lt;/strong&gt;, allowing you to run LevelUP in the browser!&lt;/p&gt;
+&lt;p&gt;Since LevelUP just needs some basic primitives and a sorted bi-directional iterator, we can swap out the back-end with numerous alternatives.&lt;/p&gt;
+&lt;p&gt;The easy targets are the forks of LevelDB that purport to &lt;em&gt;fix&lt;/em&gt; or &lt;em&gt;improve&lt;/em&gt; LevelDB in some way. I have another post brewing on what I think about the claims made in this area and how we ought to approach them, but that can come later. For now I have some packages in npm for you to try for yourself!&lt;/p&gt;
+&lt;h2&gt;Basho&lt;/h2&gt;
+&lt;p&gt;First of all we have &lt;strong&gt;leveldown-basho&lt;/strong&gt; which bundles the &lt;a href=&quot;https://github.com/basho/leveldb&quot;&gt;Basho LevelDB fork&lt;/a&gt; into LevelDOWN. See Matthew Von-Maszewski&#39;s &lt;a href=&quot;https://speakerdeck.com/basho/optimizing-leveldb-for-performance-and-scale-ricon-east-2013&quot;&gt;slides&lt;/a&gt; from the recent Ricon East 2013 for more information on what they&#39;ve tried to do with LevelDB.&lt;/p&gt;
+&lt;p&gt;In summary, Basho&#39;s aim is to optimise LevelDB &quot;for the server&quot;, particularly for high write throughput. They use &gt;1 compaction threads and relax the rules a little on overlapping keys for the lower levels. Plus a few other things that I won&#39;t get in to here.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;npm install levelup leveldown-basho
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;levelup&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;levelup&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;leveldown&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;leveldown-basho&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;db&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;levelup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;/path/to/db&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;leveldown&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;  
+&lt;span class=&quot;c1&quot;&gt;// go to work on `db`&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;Disclaimer: some of the LevelDOWN and LevelUP tests are failing on the current build for this release, although I don&#39;t believe they should impact on standard usage but your mileage may vary...&lt;/em&gt;&lt;/p&gt;
+&lt;h2&gt;HyperDex&lt;/h2&gt;
+&lt;p&gt;Next, we have &lt;strong&gt;leveldown-hyper&lt;/strong&gt;, which bundles a fork by the people behind &lt;a href=&quot;http://hyperdex.org/&quot;&gt;HyperDex&lt;/a&gt;, a key-value store. Again their aim is to optimise LevelDB for a server environment. You can see some of their claims about performance &lt;a href=&quot;http://hyperdex.org/performance/leveldb/&quot;&gt;here&lt;/a&gt;. I don&#39;t know as much about this fork, I&#39;ll investigate further when I have time, but they are also using multiple compaction threads to do the background work.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;npm install levelup leveldown-hyper
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;levelup&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;levelup&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;leveldown&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;leveldown-hyper&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;db&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;levelup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;/path/to/db&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;leveldown&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;  
+&lt;span class=&quot;c1&quot;&gt;// go to work on `db`&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;&lt;i&gt;&lt;strike&gt;Lies!&lt;/strike&gt;&lt;/i&gt; Benchmarks!&lt;/h2&gt;
+&lt;p&gt;OK, benchmarks kind of suck, particularly microbenchmarks. It&#39;s really hard to test something that&#39;s meaningful for everyone&#39;s use-case. But you can make pretty pictures with them and they can tell something of a story, even if it&#39;s just the first page of a novel.&lt;/p&gt;
+&lt;p&gt;So here we go. I&#39;ve put together a simplistic benchmark that tries to test the kind of situation that these two forks are aiming to optimise for. In particular, high-throughput writes. There&#39;s a common claim that LevelDB has problems with writes because the compaction thread can hold up levels 0 and 1 while it&#39;s working on higher levels; and you really want to be flushing the new data as soon as possible so you can get more in. (Again, I have more to say on this &amp; the claims about &quot;fixing&quot; the problem in a later post).&lt;/p&gt;
+&lt;p&gt;I have a sorted-write benchmark in the &lt;a href=&quot;https://github.com/rvagg/node-leveldown/tree/master/bench&quot;&gt;LevelDOWN repo&lt;/a&gt; that tries to push in 10M pre-sorted entries as fast as possible, fully utilising Node&#39;s worker-threads for the job. So this isn&#39;t your typical browser scenario. An important point here is that &lt;strong&gt;Node is a unique environment when looking at LevelDB performance&lt;/strong&gt;. It&#39;s not going to be a straightforward mapping of benchmark results obtained with other LevelDB bindings onto what we can achieve in Node.&lt;/p&gt;
+&lt;p&gt;Because there are so many entries, instead of recording the time for individual writes, I&#39;ve recorded average time for batches of 1000 writes. Below you can see what the write-times look like when plotted over time. There are a bunch of outliers that are above the maximum Y of 0.6ms, but not enough to warrant distracting from the interesting behaviour below 0.6ms so I chopped it off there.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;It is important to note that I&#39;m using the default options&lt;/strong&gt; here and this is where I&#39;ll probably cop some flak. Basho in particular advocate a healthy amount of &quot;tuning&quot; to achieve appropriate performance. In particular the write-buffer defaults to only 4M and you can push data in faster (at the cost of compactions later on) by increasing this. I think the forks may even have additional tunables of their own that you can fiddle with. But, this whole tuning thing is a rabbit hole I don&#39;t dare go down right now!&lt;/p&gt;
+&lt;p&gt;I&#39;m running this on an i7-2630QM CPU, plenty of RAM and an SSD.&lt;/p&gt;
+&lt;p&gt;You can see that we managed to push in the 10M entries in just over 95 seconds with the plain &lt;strong&gt;Google LevelDB (v1.10.0)&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://r.va.gg/images/2013/06/write_sorted_times_g.png&quot; height=500 width=800 align=&quot;center&quot; /&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Next up we have the HyperDex fork. The main difference here is that we have it working slightly faster in total and the write-times have been trimmed down a bit to be more consistent. Not a bad effort with default settings, quite a nice picture.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://r.va.gg/images/2013/06/write_sorted_times_h.png&quot; height=500 width=800 align=&quot;center&quot; /&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Lastly we can see what Basho have done. They&#39;ve been on this case for a lot longer than HyperDex have and their fork, internally at least, diverges quite a bit from Google&#39;s LevelDB.&lt;/p&gt;
+&lt;p&gt;We can see that the write-time has been considerably flattened; which is in line with what Basho claim and are aiming for, the consistency here is &lt;strong&gt;very&lt;/strong&gt; impressive. Unfortunately we&#39;ve ended up with a total time that is &lt;strong&gt;double&lt;/strong&gt; what it took Google&#39;s LevelDB to get the 10M entries in!&lt;/p&gt;
+&lt;p&gt;No doubt this is probably something to do with the tunables, or perhaps I&#39;ve messed something up, anything&#39;s possible!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://r.va.gg/images/2013/06/write_sorted_times_b.png&quot; height=500 width=800 align=&quot;center&quot; /&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2&gt;So?&lt;/h2&gt;
+&lt;p&gt;If you take anything away from this, here&#39;s what I think it should be: &lt;strong&gt;Do your own benchmarks if performance &lt;em&gt;really&lt;/em&gt; is an issue for you&lt;/strong&gt;. You&#39;re going to need some kind of benchmark suite that is tailored to your particular application. This will not only let you choose the appropriate storage system but it will give you something to work with when you start to get in to the mire that is &quot;tunables&quot;.&lt;/p&gt;
+&lt;p&gt;It&#39;s likely I won&#39;t be able to leave this alone and will be posting more benchmarks with some tweaking and tuning. I&#39;d love to have input from others on this too of course! The code for this is all in the LevelDOWN repo with both of these forks under appropriately named branches.&lt;/p&gt;
+
+      </content>
+    </entry>
   
     <entry>
       <title>LevelUP v0.9 Released</title>
