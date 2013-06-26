@@ -123,7 +123,11 @@
             AbstractLevelDOWN
             <small><a href="http://ghub.io/abstract-leveldown">http://ghub.io/abstract-leveldown</a></small>
           </h4>
-          <p>A set of classes implementing the LevelDOWN API</p>
+          <p>A set of classes for implementing the LevelDOWN API</p>
+          <h4 style="text-align: left; margin-top: 1em;">
+            Level
+            <small><a href="http://ghub.io/level">http://ghub.io/level</a></small>
+          </h4>
         </section>
 
         <section>
@@ -224,149 +228,17 @@ db.put('dprk', data, function (err) {
         <section>
           <h2>Modularity FTW!</h2>
 
-          <p>Swappable storage back-end:</p>
-          <ul>
-            <li><b>MemDOWN</b>: a pure in-memory store</li>
-            <li><b>level.js</b>: backed by IndexedDB for use in the browser</li>
-            <li><b>leveldown-gap</b>: in the browser and in PhoneGap apps</li>
-            <li><i>Basho and HyperDex LevelDB forks also available</i></li>
-          </ul>
+          <img style="border: none; box-shadow: none; xwidth: 50%; margin: 0;" src="ecosystem.png">
 
         </section>
 
         <section>
-          <h2>Modularity FTW!</h2>
-
-          <p>Small, extensible core with a thriving ecosystem</p>
-
-          <p><b>level-live-stream</b></p>
-          <pre><code contenteditable class="javascript">db.liveStream().on('data', console.log)
-</code></pre>
-
-          <p><b>Level-Multiply</b></p>
-          <pre><code contenteditable class="javascript">db.put({ boom: 'bang', whoa: 'dude' }, function (err) { })
-db.get([ 'boom', 'whoa' ], function (err, data) { })
-db.del([ 'boom', 'whoa' ], function (err) { })
-</code></pre>
-
-          <p><b>Level TTL</b></p>
-          <pre><code contenteditable class="javascript">db.put('foo', 'bar', { ttl: 3600000 }, function (err) { })
-</code></pre>
+          <a target="_new" href="leveldown_write_random_g+h+b_100M.png">Some pretty benchmark graphing</a>
+          <p style="text-align: center; font-size: 0.8em"><i>To be taken with a few large grains of salt</i></p>
         </section>
 
         <section>
-          <h2>Modularity FTW!</h2>
-
-          <p><b>level-delete-range</b></p>
-          <pre><code contenteditable class="javascript">deleteRange(db, {
-    start: "foo~"
-  , end: "foo~\xff"
-}, cb)
-</code></pre>
-
-          <p><b>level-store</b></p>
-          <pre><code contenteditable class="javascript">fs.createReadStream('foo.dat')
-  .pipe(store.createWriteStream('foo'))
-
-store.createReadStream('whoa').pipe(response);
-</code></pre>
-        </section>
-
-        <section>
-          <h2>Modularity FTW!</h2>
-
-          <p><b>Map Reduce</b></p>
-          <pre><code contenteditable class="javascript">var mapdb = MapReduce(
-    db
-  , 'example'
-  , function (key, value, emit) {
-      var obj = JSON.parse(value)
-      emit([ 'all', obj.group ], String(obj.lines.length))
-    }
-  , function (acc, value, key) {
-      return String(acc + value)
-    }
-  , '0'
-})
-
-mapDb.createReadStream({ range: [ 'all', group ]})
-</code></pre>
-        </section>
-
-        <section>
-          <h2>Modularity FTW!</h2>
-
-          <p><b>level-mapped-index</b></p>
-          <pre><code contenteditable class="javascript">db.registerIndex('id', function (key, value, emit) {
-    value = JSON.parse(value)
-    if (value.id) emit(value.id)
-})
-
-db.put('foo1', JSON.stringify({ one: 'ONE', id : '1' }))
-db.put('foo2', JSON.stringify({ two: 'TWO', id : '2' }))
-
-db.getBy('id', '1', function (err, data) {
-  // [{ key: 'foo1', value: '{"one":"ONE","key":"1"}' }]
-})
-</code></pre>
-        </section>
-
-        <section>
-          <h2>Modularity</h2>
-
-          <h3>Getting ambitious</h3>
-
-          <p><b>multilevel</b>: expose the LevelUP API over the network to multiple end-points</p>
-          <p><b>level-master</b>: master / slave replication&mdash;multi-slave or aggregated multi-master</p>
-          <p><b>level-replicate</b>: Dominic Tarr Scuttlebutt replication wizardry</p>
-
-        </section>
-
-        <section>
-          <h2>Sublevel</h2>
-
-          <p><b>level-sublevel</b> uses namespacing to divide a LevelUP instance into multiple sub-instances.</p>
-
-<pre><code contenteditable class="javascript">var db = levelup('/tmp/store.db')
-sublevel(db)
-
-var foodb = db.sublevel('foo')
-var bardb = db.sublevel('bar')
-</code></pre>
-
-          <ul>
-            <li>Same API on each sub-instance</li>
-            <li>Operate on independent partitions of the store</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2>"Node Databases"</h2>
-
-          <ul>
-            <li>LevelGraph</li>
-            <li>TacoDB</li>
-            <li>PushDB</li>
-            <li>CouchUp</li>
-            <li>NeutrinoDB</li>
-            <li>PlumbDB</li>
-            <li>Syncstore</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2>LevelDB tools</h2>
-
-          <ul>
-            <li><b>lev</b>: A LevelDB REPL</li>
-            <li><b>levelweb</b>: A LevelDB web interface, with visualisation tools</li>
-          </ul>
-          <img style="height: 11em; display: inline-block; box-shadow: none;" src="https://github.com/hij1nx/levelweb/raw/master//screenshots/screenshot.png">
-          <img style="height: 11em; display: inline-block; box-shadow: none;" src="https://github.com/hij1nx/levelweb/raw/master//screenshots/screenshot3.png">
-        </section>
-
-        <section>
-          <h2>The End. Questions?</h2>
+          <h2>The End!</h2>
 
           <p style="text-align: center;">
             <small>
@@ -401,10 +273,6 @@ var bardb = db.sublevel('bar')
             </small>
           </p>
 
-        </section>
-
-        <section>
-          <a href="leveldown_write_random_g+h+b_100M.png">Some pretty benchmark graphing</a>
         </section>
       </div>
 
