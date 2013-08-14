@@ -4,13 +4,55 @@
   <title>r.va.gg</title>
  
   <link href="http://r.va.gg" />
-  <updated>2013-06-07T12:16:51.434Z</updated>
+  <updated>2013-08-14T07:34:31.982Z</updated>
   <id>http://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
   </author>
   <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/atom+xml" href="http://r.va.gg/feed.xml" />
 
+  
+    <entry>
+      <title>Learn You The Node.js</title>
+      <link href="http://r.va.gg/2013/08/learn-you-the-node.js.html" />
+      <updated>2013-08-14T00:00:00.000Z</updated>
+      <id>http://r.va.gg/2013/08/learn-you-the-node.js.html</id>
+      <content type="html">
+        &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;http://campjs.com/&quot;&gt;CampJS&lt;/a&gt;&lt;/strong&gt; has just finished, with a bigger crowd than last time around. It was lots of fun, and as usual, these events are more about meeting the people I collaborate, and socialise with online than anything else. There was a particularly large turn-out of the hackers on #polyhack, our Australian programmers channel on Freenode. Even &lt;a href=&quot;https://twitter.com/mwotton&quot;&gt;@mwotton&lt;/a&gt;, our resident Haskell-troll was there! Lots of photos and news can be found on &lt;a href=&quot;http://storify.com/campjs/campjs-ii&quot;&gt;Storify&lt;/a&gt;. The next one will likely be near Melbourne in February some time and I highly recommend it if you can get there.&lt;/p&gt;
+&lt;h3&gt;Learn You The Node.js For Much Win (presentation)&lt;/h3&gt;
+&lt;p&gt;I was struck last CampJS how many JavaScript newbies were there, or at least people who deal with JavaScript as a secondary language and therefore only have a cursory understanding of it. And by extension, there were not many people who had much understanding of Node.js, or even what it is. So I wanted to present some intro-to-Node.js style material.&lt;/p&gt;
+&lt;p&gt;I gave a 30 minute talk covering the very basics of &lt;em&gt;what Node.js &lt;strong&gt;is&lt;/strong&gt;&lt;/em&gt;, called &lt;strong&gt;Learn You The Node.js For Much Win&lt;/strong&gt;. Obviously the title is inspired by &lt;em&gt;&lt;a href=&quot;http://learnyouahaskell.com/&quot;&gt;Learn You a Haskell For Great Good&lt;/a&gt;&lt;/em&gt; and &lt;em&gt;&lt;a href=&quot;http://learnyousomeerlang.com/&quot;&gt;Learn You Some Erlang For Great Good&lt;/a&gt;&lt;/em&gt;. You can find my slides &lt;a href=&quot;http://r.va.gg/presentations/campjs-learn-you-node/&quot;&gt;here&lt;/a&gt; (feel free to rip them off if you need to give a similar talk somewhere!). The video may be online at some point in the future.&lt;/p&gt;
+&lt;h3&gt;Learn You The Node.js For Much Win (workshop)&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;https://pbs.twimg.com/media/BRWaBeeCcAA9R7v.jpg&quot; style=&quot;border-radius:4px; border: solid 2px white; box-shadow: 1px 1px 15px rgba(0,0,0,0.4);&quot;&gt;&lt;/p&gt;
+&lt;p&gt;The next morning, I gave a workshop on the same topic but it was much more hands-on. The inspiration for my workshop came from &lt;a href=&quot;http://www.nodeconf.com/&quot;&gt;NodeConf&lt;/a&gt;, a couple of months earlier. &lt;a href=&quot;https://twitter.com/substack&quot;&gt;@substack&lt;/a&gt; and &lt;a href=&quot;https://twitter.com/maxogden&quot;&gt;@maxogden&lt;/a&gt; presented a workshop titled &lt;strong&gt;stream adventure&lt;/strong&gt; which was a self-guided, interactive workshop for the terminal, build on Node.js. You can find it &lt;a href=&quot;https://github.com/substack/stream-adventure&quot;&gt;here&lt;/a&gt; and install it from npm with &lt;code&gt;npm install stream-adventure -g&lt;/code&gt;, I highly recommend it.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://nodei.co/npm/stream-adventure/&quot;&gt;&lt;img src=&quot;https://nodei.co/npm/stream-adventure.png?downloads=true&amp;stars=true&quot; alt=&quot;NPM&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I was so inspired that I stole their code and made my own workshop application! &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/learnyounode/&quot;&gt;learnyounode&lt;/a&gt;&lt;/strong&gt;. You can download and install it with &lt;code&gt;npm install learnyounode -g&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://nodei.co/npm/learnyounode/&quot;&gt;&lt;img src=&quot;https://nodei.co/npm/learnyounode.png?downloads=true&amp;stars=true&quot; alt=&quot;NPM&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The application itself is/was a series of 13 separate workshops. Starting off with a simple &lt;em&gt;HELLO WORLD&lt;/em&gt; and ending with a JSON API HTTP server (contributed by the very clever &lt;a href=&quot;https://twitter.com/sidorares&quot;&gt;@sidorares&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.github.com/rvagg/learnyounode/master/learnyounode.png&quot; alt=&quot;learnyounode&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Nobody actually managed to finish the workshops in the allotted 60 minutes, although &lt;a href=&quot;http://twitter.com/alexdickson&quot;&gt;@alexdickson&lt;/a&gt;, an expert JavaScripter but Node.js-n00b was the first one I heard of finishing it not long after.&lt;/p&gt;
+&lt;p&gt;The workshops attempt to focus on some of the core concepts of Node.js. There&#39;s lots of console output because that&#39;s easiest to validate but it introduces filesystem I/O, both synchronous and asynchronous and moves straight on to networking because that&#39;s what Node is so good at. An &lt;em&gt;HTTP CLIENT&lt;/em&gt; example, introduces HTTP and is expanded on in &lt;em&gt;HTTP COLLECT&lt;/em&gt; which introduces streams. &lt;em&gt;JUGGLING ASYNC&lt;/em&gt; builds on &lt;em&gt;HTTP COLLECT&lt;/em&gt; to introduce the complexities of managing parallel asynchronous activities. From there, it switches from network clients to network servers, first a simple TCP server in &lt;em&gt;TIME SERVER&lt;/em&gt; and then using streams to serve files in &lt;em&gt;HTTP FILE SERVER&lt;/em&gt; and transforming data with &lt;em&gt;HTTP UPPERCASERER&lt;/em&gt;. The final exercise presents you with a more complex, closer-to-real-world example, an HTTP API server with multiple end-points.&lt;/p&gt;
+&lt;p&gt;The entire workshop is designed to take longer than 1-hour, the idea is that it&#39;s suitable for complete n00bs and also people with some experience, it ought to make a fun challenge for anyone already experience with Node to see how quickly they can complete the examples (I believe I earned the honour of being the first person at NodeConf to finish stream-adventure in the allotted time!).&lt;/p&gt;
+&lt;p&gt;The Node-experts at CampJS were thankfully helping out during the workshop so there wasn&#39;t much competition going on there.&lt;/p&gt;
+&lt;p&gt;Many thanks to these expert Node.js nerds who hovered and helped people during the workshop and also did some test-driving of the workshop prior to the event:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://twitter.com/nicholasf&quot;&gt;Nicholas Faiz&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://twitter.com/cgiffard&quot;&gt;Christopher Giffard&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://twitter.com/secoif&quot;&gt;Tim Oxley&lt;/a&gt; (who also poured his heart and soul into organised CampJS)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://twitter.com/deoxxa&quot;&gt;Conrad Pankoff&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://twitter.com/sidorares&quot;&gt;Andrey Sidorov&lt;/a&gt; (who also contributed the final exercise of the workshop)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://twitter.com/EugeneWare&quot;&gt;Eugene Ware&lt;/a&gt; (who was also brilliant all weekend, running the local &lt;a href=&quot;http://en.wikipedia.org/wiki/Sneakernet&quot;&gt;sneakernet&lt;/a&gt; because the network was so flakey)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;(I really hope I haven&#39;t missed anyone out there; so many quality nerds at CampJS!)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://lh5.googleusercontent.com/-tKp0U1N7XNw/UgngKk01qqI/AAAAAAAAAoc/xxAOCTqMCZ0/w600-h800-no/campJS+%252870+of+118%2529.jpg&quot; style=&quot;border-radius:4px; border: solid 2px white; box-shadow: 1px 1px 15px rgba(0,0,0,0.4);&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Tim Oxley making a contribution during the workshop, along with Christopher Giffard (left) and Eugene Ware (right)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;I had the &lt;a href=&quot;http://r.va.gg/presentations/campjs-learn-you-node/workshop.html&quot;&gt;solutions&lt;/a&gt; to the workshop ready on the big-screen and walked through some of the early solutions and talked through what was going on. I didn&#39;t expect many people to listen to those bits and the workshop was designed so you could totally zone-out and do it at your own pace if that suited.&lt;/p&gt;
+&lt;p&gt;If anyone wants to run a similar style workshop for their local meet-up, using the same content, I&#39;d love to receive contributions to &lt;strong&gt;learnyounode&lt;/strong&gt;. Alternatively, make your own! I extracted the core framework from &lt;strong&gt;learnyounode&lt;/strong&gt; and it now lives separately as &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/workshopper&quot;&gt;workshopper&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://nodei.co/npm/workshopper/&quot;&gt;&lt;img src=&quot;https://nodei.co/npm/workshopper.png?downloads=true&amp;stars=true&quot; alt=&quot;NPM&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I would love feedback from anyone in attendance or anyone that uses this tool to run their own workshops! &lt;strong&gt;learnyounode&lt;/strong&gt; is already listed in Max Ogden&#39;s excellent &lt;strong&gt;&lt;a href=&quot;https://github.com/maxogden/art-of-node&quot;&gt;The Art of Node&lt;/a&gt;&lt;/strong&gt;, so I&#39;m looking forward to contributions to help turn this into a really useful teaching tool.&lt;/p&gt;
+
+      </content>
+    </entry>
   
     <entry>
       <title>LevelDOWN Alternatives</title>
