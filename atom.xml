@@ -4,7 +4,7 @@
   <title>r.va.gg</title>
  
   <link href="http://r.va.gg" />
-  <updated>2013-08-14T08:02:29.272Z</updated>
+  <updated>2013-08-16T03:59:11.794Z</updated>
   <id>http://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
@@ -651,7 +651,7 @@ JavaScript’s rules for curly braces, white space and semicolons are consistent
 But it doesn’t end there–JavaScript introduces what’s known as &lt;strong&gt;Automatic Semicolon Insertion (ASI)&lt;/strong&gt;. The specification continues:&lt;/p&gt;
 &lt;p&gt;&lt;blockquote&gt;Such semicolons may always appear explicitly in the source text. For convenience, however, such semicolons may be omitted from the source text in certain situations. These situations are described by saying that semicolons are automatically inserted into the source code token stream in those situations.&lt;/blockquote&gt;
 The general C-family rules for semicolons can be found in most teaching material for JavaScript and has been advocated by most of the prominent JavaScript personalities since 1995. In a &lt;a href=&quot;https://brendaneich.com/2012/04/the-infernal-semicolon/&quot;&gt;recent post&lt;/a&gt;, JavaScript’s inventor, Brendan Eich, described ASI as “a syntactic error correction procedure”, (as in “&lt;a href=&quot;https://brendaneich.com/2012/04/the-infernal-semicolon/#comment-12268&quot;&gt;parsing error&lt;/a&gt;”, rather than “user error”).&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;The rest of this article about semicolons in JavaScript can be found on &lt;a title=&quot;JavaScript and Semicolons&quot; href=&quot;dailyjs.com/2012/04/19/semicolons/&quot;&gt;DailyJS&lt;/a&gt;.&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;The rest of this article about semicolons in JavaScript can be found on &lt;a title=&quot;JavaScript and Semicolons&quot; href=&quot;http://dailyjs.com/2012/04/19/semicolons/&quot;&gt;DailyJS&lt;/a&gt;.&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
       </content>
     </entry>
