@@ -93,10 +93,6 @@ And sometimes...
  <li>Pulling in many aspects of database *practice* &amp; *theory*</li>
 </ul>
 
-<p>
-(internal data relationships, data relationship with the application, storage technology, distributed methodologies)
-</p>
-
 </div>
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -204,7 +200,7 @@ And sometimes...
 
 ## LevelUP
 
-Inspired by LevelDB, but not necessarily dependent upon it
+Inspired by LevelDB
 
 <i>Backed</i> by a key/value store for arbitrary data, sorted by key
 
