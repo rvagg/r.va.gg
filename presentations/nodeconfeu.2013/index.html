@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <title>A Real Database Rethink</title>
+    <link rel="stylesheet" type="text/css" href="style/markbase.css">
+    <link rel="stylesheet" type="text/css" href="style/markthemes.css">
+    <link rel="stylesheet" type="text/css" href="style/highlight.css">
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+  </head>
+  <body class="classic rv">
+
+    <div id="main">
+      <header></header>
+
+      <div class="nodeconfeu-scroll">
+        <div class="left"></div><div class="right"></div>
+      </div>
+
+      <article>
+
+      
+        <section>
+          <h1>A Real Database Rethink</h1>
+<p style="margin-top: 120px; text-align: center; font-size: 21px; font-style: italic;"><i>@rvagg</i></p>
+
+
+        </section>
+      
+        <section>
+          <h1>&quot;NodeBase&quot;<br><i>(or)</i> &quot;Level*&quot;</h1>
+
+        </section>
+      
+        <section>
+          <h2 data-bespoke-bullet>Databases: a short history</h2>
+
+<p data-bespoke-bullet>
+<strong><em>1960s</em></strong>: From tapes and batch to disks, shared access and interactivity
+</p>
+
+<p class="tape-loading-img">
+  <img src="img/fig127b.jpg">
+  <span>...not a &quot;database&quot;</span>
+</p>
+
+<p data-bespoke-bullet>
+<strong><em>Late 1960s</em></strong>: Navigational databases: <em>links</em>
+</p>
+
+<p data-bespoke-bullet>
+<strong><em>Early 1970s</em></strong>: The relational model: <em>content</em>
+</p>
+
+<p data-bespoke-bullet>
+<strong><em>Late 1970s</em></strong>: SQL
+</p>
+
+<p data-bespoke-bullet>
+<strong><em>Early 1980s</em></strong>: A database on my desktop (dBASE and its ilk)
+</p>
+
+<p data-bespoke-bullet>
+<strong><em>Late 1980s</em></strong>: Object Orient ALL THE THINGS!
+</p>
+
+<p data-bespoke-bullet>
+<strong><em>2000s</em></strong>: Speed and scale: NoSQL
+<br><span data-bespoke-bullet>
+<em>&quot;NewSQL&quot;: never let a beautiful abstraction go to waste</em>
+</span>
+</p>
+
+
+        </section>
+      
+        <section>
+          <h2>The tyranny of a beautiful abstraction</h2>
+<p>An abstraction that fits many problems very well will be made to fit all related problems</p>
+<p>Programmers take <em>Maslow&#39;s hammer</em> to the next level</p>
+
+        </section>
+      
+        <section>
+          <h2>So what is a Database?</h2>
+<p><strong>A tool for interacting with structured data, externalised from the core of our application</strong></p>
+<ul>
+<li>Persistence</li>
+<li>Performance</li>
+<li>Simplify access to complex data</li>
+</ul>
+<p>And sometimes...</p>
+<ul>
+<li>Shared access</li>
+<li>Scalability</li>
+</ul>
+
+        </section>
+      
+        <section>
+          <h2>The Node approach</h2>
+<div data-bespoke-bullet>
+
+<ul>
+ <li>Small core, vibrant user-land</li>
+ <li>Extreme modularity</li>
+ <li>Reimplement everything in JavaScript!</li>
+</ul>
+
+</div>
+<div data-bespoke-bullet>
+
+<p>Applied to databases?</p>
+
+<ul>
+ <li>Small core: LevelUP</li>
+ <li>Everything as a module</li>
+ <li>Pulling in many aspects of database <em>practice</em> &amp; <em>theory</em></li>
+</ul>
+
+<p>
+(internal data relationships, data relationship with the application, storage technology, distributed methodologies)
+</p>
+
+</div>
+
+
+        </section>
+      
+        <section>
+          <table class="ecosystem">
+  <tr class="tools">
+    <td class="section"><span>Tools</span></td>
+    <td><table><tr>
+      <td>lev</td>
+      <td>levelweb</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></table></td>
+  </tr>
+  <tr class="packages">
+    <td class="section"><span>Packages</span></td>
+    <td><table><tr>
+      <td>tacodb</td>
+      <td>couchup</td>
+      <td>LevelGraph</td>
+      <td>firedup</td>
+      <td>level-assoc</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>level-static</td>
+      <td>level-store</td>
+      <td>level-session</td>
+      <td>level-fs</td>
+      <td>LevelTTLCache</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></table></td>
+  </tr>
+  <tr class="extensions">
+    <td class="section"><span>Extensions</span></td>
+    <td><table><tr>
+      <td>level-live-stream</td>
+      <td>map-reduce</td>
+      <td>level-queryengine</td>
+      <td>Level-Multiply</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>multilevel</td>
+      <td>level-replicate</td>
+      <td>level-master</td>
+      <td>Level TTL</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></table></td>
+  </tr>
+  <tr class="pluggability">
+    <td class="section"><span>Pluggability</span></td>
+    <td><table><tr>
+      <td>sublevel</td>
+      <td>level-hooks</td>
+      <td>level-mutex</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></table></td>
+  </tr>
+  <tr class="core">
+    <td class="section"><span>Core</span></td>
+    <td colspan="10">
+      <table><tr><td>
+        LevelUP
+      </td></tr></table>
+    </td>
+  </tr>
+  <tr class="storage">
+    <td class="section"><span>Storage</span></td>
+    <td colspan="10"><table><tr>
+      <td class="rotate"><span><b>LevelDOWN</b></span></td>
+      <td class="rotate"><span>LevelDOWN (Hyper)</span></td>
+      <td class="rotate"><span>LevelDOWN (Basho)</span></td>
+      <td class="rotate"><span>MemDOWN</span></td>
+      <td class="rotate"><span>level.js</span></td>
+      <td class="rotate"><span>leveldown-gap</span></td>
+      <td class="rotate"><span>LMDB</span></td>
+      <td class="rotate"><span>mysqlDOWN</span></td>
+    </tr></table>
+    </td>
+  </tr>
+</table>
+
+
+        </section>
+      
+        <section>
+          <h2>LevelDB</h2>
+<ul>
+<li>Open-source, embedded key/value store by Google</li>
+<li>Sorted by keys</li>
+<li>Values are compressed with Snappy</li>
+<li>Basic operations: <code>Get()</code>, <code>Put()</code>, <code>Del()</code></li>
+<li>Atomic <code>Batch()</code></li>
+<li>Bi-directional iterators</li>
+</ul>
+
+        </section>
+      
+        <section>
+          <h2>LevelUP</h2>
+<p>Inspired by LevelDB, but not necessarily dependent upon it</p>
+<p><i>Backed</i> by a key/value store for arbitrary data, sorted by key</p>
+<ul>
+<li>Core operations: <code>put()</code>, <code>get()</code>, <code>del()</code></li>
+<li>Atomic batch writes</li>
+<li>ReadStream: <em>the secret sauce</em></li>
+<li>WriteStream: <em>for convenience</em></li>
+</ul>
+
+        </section>
+      
+        <section>
+          <h2>ReadStream</h2>
+<p>An essential primitive for building complex features</p>
+<p>The core query mechanism to access sorted data</p>
+<p>Arbitrary <em>start</em> and <em>end</em></p>
+<div class="highlight"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">({</span> <span class="nx">start</span><span class="o">:</span> <span class="s1">&#39;Water&#39;</span><span class="p">,</span> <span class="nx">end</span><span class="o">:</span> <span class="s1">&#39;Water\xff&#39;</span> <span class="p">})</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">entry</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">entry</span><span class="p">.</span><span class="nx">key</span><span class="p">)</span>
+  <span class="p">})</span>
+
+<span class="c1">// → Waterford</span>
+<span class="c1">// → Watergrasshill</span>
+<span class="c1">// → Waterville</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Key structure</h2>
+<p>Key-based sorting and querying requires good key <em>design</em></p>
+<p>Keys as hierarchical descriptors of content:</p>
+<div class="highlight"><pre><span class="s1">&#39;countries~Ireland&#39;</span>
+<span class="s1">&#39;countries~Israel&#39;</span>
+<span class="p">...</span>
+<span class="s1">&#39;towns~Ireland~Waterford&#39;</span>
+<span class="s1">&#39;towns~Ireland~Watergrasshill&#39;</span>
+<span class="p">...</span>
+<span class="s1">&#39;streets~Ireland~Waterford~Dunmore Road&#39;</span>
+<span class="s1">&#39;streets~Ireland~Waterford~Derrynane Close&#39;</span>
+<span class="p">...</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          
+        </section>
+      
+
+      </article>
+
+      <footer>
+        A Real Database Rethink
+        <img src="img/helmet1.png">
+      </footer>
+
+    </div>
+
+    <script src="js/bespoke.min.js"></script>
+    <script src="js/bespoke-hash.min.js"></script>
+    <script src="js/bespoke-bullets.min.js"></script>
+    <script>
+      bespoke.horizontal.from('article', { hash: true, bullets: true })
+    </script>
+  </body>
+</script>
+</body>

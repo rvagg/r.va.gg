@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <title>A Real Database Rethink</title>
+    <link rel="stylesheet" type="text/css" href="style/markbase.css">
+    <link rel="stylesheet" type="text/css" href="style/markthemes.css">
+    <link rel="stylesheet" type="text/css" href="style/highlight.css">
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+
+<style>
+
+table {
+  padding: 0;
+  margin: 0;
+  border-collapse: collapse;
+}
+.ecosystem {
+  font-family: 'Ubuntu';
+  font-size: 15px;
+  text-shadow: 0px 0px 4px white;
+}
+.ecosystem .section {
+  text-align: right;
+  vertical-align: top
+}
+.ecosystem td {
+  padding: 5px;
+}
+.ecosystem > tbody > tr > td:nth-child(2) {
+  padding: 0;
+}
+.ecosystem > tbody > tr > td:first-child {
+  padding: 0;
+  xborder: solid 1px white;
+  font-weight: bold;
+}
+.ecosystem > tbody > tr > td:first-child span {
+  display: block;
+  padding: 5px;
+}
+.ecosystem table td {
+  border: solid 1px transparent;
+}
+.ecosystem .tools > td:first-child {
+  background-color: rgba(49, 190, 164, 0.1);
+  color: rgb(36, 138, 119);
+  border: solid 1px transparent;
+}
+.ecosystem .tools table td {
+  border-color: rgb(49, 190, 164);
+  background-color: rgba(49, 190, 164, 0.3);
+}
+.ecosystem .packages > td:first-child {
+  background-color: rgba(55, 134, 177, 0.1);
+  color: rgb(18, 43, 57);
+  border: solid 1px transparent;
+}
+.ecosystem .packages table td {
+  border-color: rgb(55, 134, 177);
+  background-color: rgba(55, 134, 177, 0.3);
+}
+.ecosystem .extensions > td:first-child {
+  background-color: rgba(232, 142, 12, 0.1);
+  color: rgb(158, 96, 8);
+  border: solid 1px transparent;
+}
+.ecosystem .extensions table td {
+  border-color: rgb(232, 142, 12);
+  background-color: rgba(232, 142, 12, 0.3);
+}
+.ecosystem .pluggability > td:first-child {
+  background-color: rgba(108, 12, 232, 0.1);
+  color: rgb(74, 8, 158);
+  border: solid 1px transparent;
+}
+.ecosystem .pluggability table td {
+  border-color: rgb(108, 12, 232);
+  background-color: rgba(108, 12, 232, 0.3);
+}
+.ecosystem .core table {
+  width: 100%;
+}
+.ecosystem .core > td:first-child {
+  background-color: rgba(255, 0, 0, 0.1);
+  color: rgb(134, 0, 0);
+  border: solid 1px transparent;
+}
+.ecosystem .core table td {
+  border-color: rgb(255, 0, 0);
+  background-color: rgba(255, 0, 0, 0.3);
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+}
+.ecosystem > tbody > tr.core > td:first-child span {
+  padding: 10px;
+}
+.ecosystem .storage > td:first-child {
+  background-color: rgba(255, 244, 13, 0.1);
+  color: rgb(148, 148, 6);
+}
+.ecosystem .storage table td {
+  border-color: rgb(255, 255, 13);
+  background-color: rgba(255, 255, 13, 0.3);
+}
+.ecosystem .rotate {
+  width: 40px;
+  height: 170px;
+}
+.ecosystem .rotate span {
+  position: absolute;
+  display: block;
+  width: 170px;
+  text-align: left;
+  -webkit-transform-origin: 52px -23px;
+  -moz-transform-origin:    52px -23px;
+  -ms-transform-origin:     52px -23px;
+  -o-transform-origin:      52px -23px;
+  -webkit-transform: rotate(90deg);
+  -moz-transform:    rotate(90deg);
+  -ms-transform:     rotate(90deg);
+  -o-transform:      rotate(90deg);
+}
+</style>
+  </head>
+  <body class="classic rv">
+
+<table class="ecosystem">
+  <tr class="tools">
+    <td class="section"><span>Tools</span></td>
+    <td><table><tr>
+      <td>lev</td>
+      <td>levelweb</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></table></td>
+  </tr>
+  <tr class="packages">
+    <td class="section"><span>Packages</span></td>
+    <td><table><tr>
+      <td>tacodb</td>
+      <td>couchup</td>
+      <td>level-graph</td>
+      <td>firedup</td>
+      <td>level-assoc</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>level-static</td>
+      <td>level-store</td>
+      <td>level-session</td>
+      <td>level-fs</td>
+      <td>LevelTTLCache</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></table></td>
+  </tr>
+  <tr class="extensions">
+    <td class="section"><span>Extensions</span></td>
+    <td><table><tr>
+      <td>level-live-stream</td>
+      <td>map-reduce</td>
+      <td>level-queryengine</td>
+      <td>Level-Multiply</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>multilevel</td>
+      <td>level-replicate</td>
+      <td>level-master</td>
+      <td>Level TTL</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></table></td>
+  </tr>
+  <tr class="pluggability">
+    <td class="section"><span>Pluggability</span></td>
+    <td><table><tr>
+      <td>sublevel</td>
+      <td>level-hooks</td>
+      <td>level-mutex</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></table></td>
+  </tr>
+  <tr class="core">
+    <td class="section"><span>Core</span></td>
+    <td colspan="10">
+      <table><tr><td>
+        LevelUP
+      </td></tr></table>
+    </td>
+  </tr>
+  <tr class="storage">
+    <td class="section"><span>Storage</span></td>
+    <td colspan="10"><table><tr>
+      <td class="rotate"><span><b>LevelDOWN</b></span></td>
+      <td class="rotate"><span>LevelDOWN (Hyper)</span></td>
+      <td class="rotate"><span>LevelDOWN (Basho)</span></td>
+      <td class="rotate"><span>MemDOWN</span></td>
+      <td class="rotate"><span>level.js</span></td>
+      <td class="rotate"><span>leveldown-gap</span></td>
+      <td class="rotate"><span>LMDB</span></td>
+      <td class="rotate"><span>mysqlDOWN</span></td>
+    </tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
