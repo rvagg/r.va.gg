@@ -155,7 +155,7 @@ And sometimes...
     </tr></table></td>
   </tr>
   <tr class="pluggability">
-    <td class="section"><span>Pluggability</span></td>
+    <td class="section"><span>Extensibility</span></td>
     <td><table><tr>
       <td>sublevel</td>
       <td>level-hooks</td>
@@ -256,3 +256,17 @@ Keys as hierarchical descriptors of content:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+## Building-blocks
+
+**From:** a 1-dimensional storage array
+
+**To:** a multi-dimensional data tool for customised solutions
+
+The Level\* ecosystem: A menu of *beautiful*, but *small* abstractions
+
+<p data-bespoke-bullet></p>
+
+<p data-bespoke-bullet style="text-align: center; font-style: italic; padding-top: 50px; color: #444;">
+  end / deireadh
+  <br><img src="img/helmet1.png" style="width: 100px; margin-top: 20px;">
+</p>
