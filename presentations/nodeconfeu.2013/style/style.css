@@ -188,7 +188,7 @@ body, section.bespoke-slide {
   clear: both;
   background: none;
   font-size: 15px;
-  padding: 0.2em;
+  padding: 0.2em 0.2em 0.2em 0.5em;
   color: rgba(255, 255, 255, 0.9);
   text-shadow: rgba(255, 255, 255, 0.33) -1px 1px 5px;
   height: 26px;
@@ -274,6 +274,27 @@ body, section.bespoke-slide {
 
 .bespoke-bullet-inactive {
   display: none;
+}
+
+.contribs {
+  margin: 0 auto 10px auto;
+}
+
+.contribs td {
+  text-align: center;
+  width: 50px;
+}
+
+.contribs img {
+  max-width: 25px;
+  max-height: 25px;
+  border: solid white 1px;
+  border-radius: 2px;
+}
+
+.contribs span {
+  font-size: 7px;
+  display: block;
 }
 
 .highlight {
@@ -399,7 +420,7 @@ table {
   padding: 13px;
 }
 .ecosystem > tbody > tr.core > td:first-child span {
-  padding: 10px;
+  padding: 13px;
 }
 .ecosystem .storage > td:first-child {
   background-color: rgba(255, 244, 13, 0.1);

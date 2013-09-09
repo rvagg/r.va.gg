@@ -93,6 +93,8 @@ And sometimes...
  <li>Pulling in many aspects of database *practice* &amp; *theory*</li>
 </ul>
 
+<p>Targeted solutions</p>
+
 </div>
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -208,6 +210,33 @@ Inspired by LevelDB
  * Atomic batch writes
  * ReadStream: *the secret sauce*
  * WriteStream: *for convenience*
+
+
+<p data-bespoke-bullet></p>
+
+<div data-bespoke-bullet>
+<table class="contribs">
+  <tr>
+  <td><img src="img/u_chesles.jpg"><span>@chesles</span></td>
+  <td><img src="img/u_raynos.jpg"><span>@raynos</span></td>
+  <td><img src="img/u_dominictarr.jpg"><span>@dominictarr</span></td>
+  <td><img src="img/u_maxogden.png"><span>@maxogden</span></td>
+  <td><img src="img/u_ralph.jpg"><span>@ralphtheninja</span></td>
+  <td><img src="img/u_kesla.jpg"><span>@kesla</span></td>
+  <td><img src="img/u_juliangruber.png"><span>@juliangruber</span></td>
+</tr>
+</table>
+<table class="contribs">
+<tr>
+  <td><img src="img/u_hij1nx.png"><span>@hij1nx</span></td>
+  <td><img src="img/u_no9.jpg"><span>@no9</span></td>
+  <td><img src="img/u_mcollina.jpg"><span>@mcollina</span></td>
+  <td><img src="img/u_pgte.jpg"><span>@pgte</span></td>
+  <td><img src="img/u_substack.jpg"><span>@substack</span></td>
+  <td><img src="img/u_rvagg.png"><span>@rvagg</span></td>
+  </tr>
+</table>
+</div>
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
