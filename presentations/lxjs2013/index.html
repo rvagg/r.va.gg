@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <title>JavaScript Databases II</title>
+    <link rel="stylesheet" type="text/css" href="style/markbase.css">
+    <link rel="stylesheet" type="text/css" href="style/markthemes.css">
+    <link rel="stylesheet" type="text/css" href="style/highlight.css">
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+  </head>
+  <body class="coverflow rv">
+
+    <div id="main">
+      <header>
+        JavaScript Databases II
+      </header>
+
+      <article>
+
+      
+        <section>
+          <h1>JavaScript Databases II</h1>
+
+        </section>
+      
+        <section>
+          <div style="margin-top: 0.5em; text-align: center">
+  <img src="img/ogden_lxjs2013.png" style="width: 450px; border: solid white 2px; border-radius: 5px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);">
+</div>
+
+<p style="text-align: center; font-size: 12px;"><strong>Max Ogden</strong> - <em>&quot;JavaScript Databases&quot;</em> - LXJS 2012</p>
+
+<p>&quot;I want to see a time where I can write a persistence function that can run in Node, the browser and anywhere else JavaScript runs.&quot;</p>
+
+
+        </section>
+      
+        <section>
+          <h2>So what is a Database?</h2>
+<p><strong>A tool for interacting with structured data, externalised from the core of our application</strong></p>
+<ul>
+<li>Persistence</li>
+<li>Performance</li>
+<li>Simplify access to complex data</li>
+</ul>
+<p>Optional extras...</p>
+<ul>
+<li>Shared access</li>
+<li>Scalability</li>
+</ul>
+
+        </section>
+      
+        <section>
+          <h2>The Node Way&trade;</h2>
+<div class="nodeapproach">
+<div data-bespoke-bullet></div>
+<div data-bespoke-bullet class="second"></div>
+
+<p class="nodedb"><b>Applied to databases?</b></p>
+
+<p>Small core, vibrant user-land</p>
+<p class="nodedb item">Small core: LevelUP</p>
+
+<p>Extreme modularity</p>
+<p class="nodedb item">Everything as a module</p>
+
+<p>Everything in JavaScript!</p>
+<p class="nodedb item">Reimplementing database <em>practice</em> &amp; <em>theory</em></p>
+
+<p></div></p>
+
+        </section>
+      
+        <section>
+          <h2>Inspired by LevelDB</h2>
+<ul>
+<li>Open-source, embedded key/value store by Google</li>
+<li>Entries sorted by keys</li>
+<li>Basic operations: <code>Get(), Put(), Del()</code></li>
+<li>Atomic <code>Batch()</code></li>
+<li>Bi-directional iterators</li>
+</ul>
+
+        </section>
+      
+        <section>
+          <h2>LevelDB: basic architecture</h2>
+<div data-bespoke-bullet></div>
+
+<p data-bespoke-bullet>
+  <b>Log Structured Merge Tree (LSM)</b>
+  <img style="float: right; width: 50%; margin: 0 -1em 0 0.5em;" src="img/leveldb_simple.svg">
+</p>
+
+<ul>
+  <li data-bespoke-bullet>Writes go straight into a <b>log</b></li>
+  <li data-bespoke-bullet>Log is <b>flushed</b> <i>string sorted table</i> (SST) files</li>
+  <li data-bespoke-bullet>SST files grow into a hierarchy of overlapping &quot;<b>levels</b>&quot;</li>
+  <li data-bespoke-bullet>Reads <b>merge</b> the log and the level / SST data</li>
+  <li data-bespoke-bullet>Cache speeds up common reads</li>
+</ul>
+
+
+        </section>
+      
+        <section>
+          <h2>LevelUP: Database primitives</h2>
+<p><br></p>
+<ul>
+<li>Open / Close</li>
+<li>Get</li>
+<li>Put</li>
+<li>Del</li>
+<li>Batch</li>
+<li>ReadStream</li>
+</ul>
+
+        </section>
+      
+        <section>
+          <h2>Primitives: ReadStream</h2>
+<p>The simplest form of a query mechanism</p>
+<p>Basic range query:</p>
+<div class="highlight"><pre>| a | b | e | f1 | f2 | g | h | i | o | p | q | r | v |
+          ↑    <span class="s1">&#39;e&#39;</span> → <span class="s1">&#39;h&#39;</span>    ↑
+          ╰─────────────────╯
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Primitives: ReadStream</h2>
+<p>The simplest form of a query mechanism</p>
+<p>Basic range query:</p>
+<div class="highlight"><pre>| a | b | e | f1 | f2 | g | h | i | o | p | q | r | v |
+          ↑    <span class="s1">&#39;e&#39;</span> → <span class="s1">&#39;h&#39;</span>    ↑
+          ╰─────────────────╯
+</pre></div>
+
+<div class="highlight"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">({</span> <span class="nx">start</span><span class="o">:</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="nx">end</span><span class="o">:</span> <span class="s1">&#39;h&#39;</span> <span class="p">})</span>
+
+<span class="c1">// &#39;e&#39;, &#39;f1&#39;, &#39;f2&#39;, &#39;g&#39;, &#39;h&#39;</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Primitives: ReadStream</h2>
+<p>Stab in the dark:</p>
+<div class="highlight"><pre>| a | b | e | f1 | f2 | g | h | i | o | p | q | r | v |
+              ↑     ↑
+              ╰─────╯
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Primitives: ReadStream</h2>
+<p>Stab in the dark:</p>
+<div class="highlight"><pre>| a | b | e | f1 | f2 | g | h | i | o | p | q | r | v |
+              ↑     ↑
+              ╰─────╯
+</pre></div>
+
+<p>Bytewise comparison to the rescue!</p>
+<div class="highlight"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">({</span> <span class="nx">start</span><span class="o">:</span> <span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="nx">end</span><span class="o">:</span> <span class="s1">&#39;f~&#39;</span> <span class="p">})</span>
+
+<span class="c1">// &#39;f1&#39;, &#39;f2&#39;</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Primitives: Batch</h2>
+<p>Atomic operations for sophisticated behaviour</p>
+<p>Example: Indexes</p>
+<div class="highlight"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;bar&#39;</span> <span class="p">})</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;boom&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;bang&#39;</span> <span class="p">})</span>
+
+<span class="c1">// ?? db.getBy(&#39;name&#39;, &#39;bar&#39;)</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Primitives: Batch</h2>
+<div class="highlight"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;bar&#39;</span> <span class="p">})</span>         <span class="c1">// primary entry</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;index~name~bar~foo&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>      <span class="c1">// index entry</span>
+
+<span class="nx">getBy</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">keys</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">return</span> <span class="nx">db</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">({</span>
+      <span class="nx">start</span> <span class="o">:</span> <span class="s1">&#39;index~&#39;</span> <span class="o">+</span> <span class="nx">index</span> <span class="o">+</span> <span class="s1">&#39;~&#39;</span> <span class="o">+</span> <span class="nx">value</span> <span class="o">+</span> <span class="s1">&#39;~&#39;</span>
+    <span class="p">,</span> <span class="nx">end</span>   <span class="o">:</span> <span class="s1">&#39;index~&#39;</span> <span class="o">+</span> <span class="nx">index</span> <span class="o">+</span> <span class="s1">&#39;~&#39;</span> <span class="o">+</span> <span class="nx">value</span> <span class="o">+</span> <span class="s1">&#39;~~&#39;</span>
+  <span class="p">}).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">entry</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">keys</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">entry</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span>
+  <span class="p">}).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">keys</span><span class="p">)</span>
+  <span class="p">})</span>
+<span class="p">}</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Primitives: Batch</h2>
+<div class="highlight"><pre><span class="nx">put</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">batch</span><span class="p">().</span><span class="nx">put</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>            <span class="c1">// primary entry</span>
+    <span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;index~name~&#39;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;~&#39;</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="c1">// index</span>
+    <span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span>                          <span class="c1">// atomic!</span>
+<span class="p">}</span>
+
+<span class="nx">put</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;bar&#39;</span> <span class="p">},</span> <span class="p">...)</span>
+
+<span class="c1">//  db.createReadStream({</span>
+<span class="c1">//      start : &#39;index~&#39; + index + &#39;~&#39; + value + &#39;~&#39;</span>
+<span class="c1">//    , end   : &#39;index~&#39; + index + &#39;~&#39; + value + &#39;~~&#39;</span>
+<span class="c1">//  })</span>
+</pre></div>
+
+<p>Automated with <strong>level-hooks</strong></p>
+
+        </section>
+      
+        <section>
+          <h2>Primitives: Batch</h2>
+<p style="margin: 0;">Example: Async work that <em>must</em> be performed for each entry</p>
+
+<div class="highlight"><pre><span class="nx">put</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">batch</span><span class="p">().</span><span class="nx">put</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>            <span class="c1">// primary entry</span>
+    <span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;pending~&#39;</span> <span class="o">+</span> <span class="nx">key</span> <span class="o">+</span> <span class="s1">&#39;~&#39;</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>          <span class="c1">// marker</span>
+    <span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span>                          <span class="c1">// atomic!</span>
+  <span class="nx">work</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nx">work</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// do some async work...</span>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">del</span><span class="p">(</span><span class="s1">&#39;pending~&#39;</span> <span class="o">+</span> <span class="nx">key</span> <span class="o">+</span> <span class="s1">&#39;~&#39;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// on restart:</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">({</span> <span class="nx">start</span><span class="o">:</span> <span class="s1">&#39;pending~&#39;</span> <span class="p">})</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="nx">work</span><span class="p">)</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Primitives: Buckets</h2>
+<p>Like <em>tables</em>, for organising data and separating types of data</p>
+<div class="highlight"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;~countries~Morocco&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">capital</span><span class="o">:</span> <span class="s1">&#39;Rabat&#39;</span> <span class="p">})</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;~countries~Portugal&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">capital</span><span class="o">:</span> <span class="s1">&#39;Lisbon&#39;</span> <span class="p">})</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;~countries~Spain&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">capital</span><span class="o">:</span> <span class="s1">&#39;Madrid&#39;</span> <span class="p">})</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;~cities~Leiria&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">population</span><span class="o">:</span> <span class="mi">50264</span> <span class="p">})</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;~cities~Lisbon&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">population</span><span class="o">:</span> <span class="mi">547631</span> <span class="p">})</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;~cities~Lixa&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">population</span><span class="o">:</span> <span class="mi">5500</span> <span class="p">})</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Primitives: Buckets</h2>
+<p>Automated with <strong>level-sublevel</strong></p>
+<div class="highlight"><pre><span class="nx">db</span> <span class="o">=</span> <span class="nx">sublevel</span><span class="p">(</span><span class="nx">db</span><span class="p">)</span>
+<span class="nx">countriesDb</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">sublevel</span><span class="p">(</span><span class="s1">&#39;countries&#39;</span><span class="p">)</span>
+<span class="nx">citiesDb</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">sublevel</span><span class="p">(</span><span class="s1">&#39;cities&#39;</span><span class="p">)</span>
+
+<span class="nx">countriesDb</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;Morocco&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">capital</span><span class="o">:</span> <span class="s1">&#39;Rabat&#39;</span> <span class="p">})</span>
+<span class="nx">countriesDb</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;Portugal&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">capital</span><span class="o">:</span> <span class="s1">&#39;Lisbon&#39;</span> <span class="p">})</span>
+<span class="nx">countriesDb</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;Spain&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">capital</span><span class="o">:</span> <span class="s1">&#39;Madrid&#39;</span> <span class="p">})</span>
+<span class="nx">citiesDb</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;Leiria&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">population</span><span class="o">:</span> <span class="mi">50264</span> <span class="p">})</span>
+<span class="nx">citiesDb</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;Lisbon&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">population</span><span class="o">:</span> <span class="mi">547631</span> <span class="p">})</span>
+<span class="nx">citiesDb</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;Lixa&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">population</span><span class="o">:</span> <span class="mi">5500</span> <span class="p">})</span>
+
+<span class="nx">countriesDb</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">().</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>LevelDOWN: Storage flexibility</h2>
+<div data-bespoke-bullet>
+  <ul>
+    <li>LevelDB (Google)</li>
+    <li>LevelDB (Basho)</li>
+    <li>HyperLevelDB (HyperDex)</li>
+    <li>LMDB</li>
+    <li>MemDOWN</li>
+    <li>mysqlDOWN</li>
+    <li><i>more under development...</i></li>
+  </ul>
+</div>
+<div data-bespoke-bullet>
+
+<p>...and <strong>level.js</strong></p>
+
+<p>The Level* ecosystem in the browser!</p>
+
+</div>
+
+
+        </section>
+      
+        <section>
+          <table class="ecosystem">
+  <tr class="tools">
+    <td class="section"><span>Tools</span></td>
+    <td><table><tr>
+      <td>lev</td>
+      <td>levelweb</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></table></td>
+  </tr>
+  <tr class="packages">
+    <td class="section"><span>Packages</span></td>
+    <td><table><tr>
+      <td>tacodb</td>
+      <td>couchup</td>
+      <td>LevelGraph</td>
+      <td>firedup</td>
+      <td>level-assoc</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>level-static</td>
+      <td>level-store</td>
+      <td>level-session</td>
+      <td>level-fs</td>
+      <td>LevelTTLCache</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></table></td>
+  </tr>
+  <tr class="extensions">
+    <td class="section"><span>Extensions</span></td>
+    <td><table><tr>
+      <td>level-live-stream</td>
+      <td>map-reduce</td>
+      <td>level-queryengine</td>
+      <td>Level-Multiply</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>multilevel</td>
+      <td>level-replicate</td>
+      <td>level-master</td>
+      <td>Level TTL</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></table></td>
+  </tr>
+  <tr class="pluggability">
+    <td class="section"><span>Extensibility</span></td>
+    <td><table><tr>
+      <td>sublevel</td>
+      <td>level-hooks</td>
+      <td>level-mutex</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></table></td>
+  </tr>
+  <tr class="core">
+    <td class="section"><span>Core</span></td>
+    <td colspan="10">
+      <table><tr><td>
+        LevelUP
+      </td></tr></table>
+    </td>
+  </tr>
+  <tr class="storage">
+    <td class="section"><span>Storage</span></td>
+    <td colspan="10"><table><tr>
+      <td class="rotate"><span><b>LevelDOWN</b></span></td>
+      <td class="rotate"><span>LevelDOWN (Hyper)</span></td>
+      <td class="rotate"><span>LevelDOWN (Basho)</span></td>
+      <td class="rotate"><span>MemDOWN</span></td>
+      <td class="rotate"><span>level.js</span></td>
+      <td class="rotate"><span>leveldown-gap</span></td>
+      <td class="rotate"><span>LMDB</span></td>
+      <td class="rotate"><span>mysqlDOWN</span></td>
+    </tr></table>
+    </td>
+  </tr>
+</table>
+
+
+        </section>
+      
+        <section>
+          
+        </section>
+      
+
+      </article>
+
+      <footer>
+      <!--
+        <img src="img/nodelogo.png">
+      -->
+      </footer>
+
+    </div>
+
+    <script src="js/bespoke.min.js"></script>
+    <script src="js/bespoke-hash.min.js"></script>
+    <script src="js/bespoke-bullets.min.js"></script>
+    <script src="js/script.js"></script>
+  </body>
+</script>
+</body>
