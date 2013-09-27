@@ -42,6 +42,10 @@
           <ul>
             
  
+                <li><a href="/2013/09/nodeconf.eu.html">NodeConf.eu</a></li>
+              
+ 
+ 
                 <li><a href="/2013/08/learn-you-the-node.js.html">Learn You The Node.js</a></li>
               
  
@@ -50,8 +54,6 @@
               
  
  
-                <li><a href="/2013/05/levelup-v0.9-released.html">LevelUP v0.9 Released</a></li>
-              
  
  
  
@@ -91,6 +93,41 @@
       
 
 <div id="for">
+  
+
+    <section class="post-content">
+
+      <h2 id="node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree"><a href="/2013/05/node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree.html">Node.ninjas Presentation - LevelDB and Node Sitting in a Tree</a></h2>
+
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on May 9, 2013</p>
+        <p class="link"><a href="/2013/05/node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree.html">Permalink &amp; Comments</a></p>
+        <!-- <p class="commentcount"><a href="/2013/05/node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree.html#disqus_thread">Comments</a></p> -->
+      </div>
+
+      <section class="post-body">
+        <p>I&#39;m giving a presentation at <a href="http://www.meetup.com/sydney-node-ninjas/">Node.ninjas</a> tonight in Sydney. I&#39;ve put together a talk about LevelDB and Node that covers:</p>
+<ol>
+<li>What LevelDB <em>is</em> and the basics of how it works</li>
+<li>A quick introduction to the core LevelDB libraries in Node: <a href="https://github.com/rvagg/node-levelup">LevelUP</a> and <a href="https://github.com/rvagg/node-leveldown/">LevelDOWN</a></li>
+<li>Some preaching about the awesomeness of modularity around a small, extensible core; including a whirlwind tour of the current, flourishing, LevelDB+Node ecosystem</li>
+</ol>
+<p>It&#39;s this last point that excites me the most. There&#39;s some very smart people building some very clever pieces to the <em>Node Database</em> puzzle. What&#39;s more, people are actually building functional databases in Node now, I&#39;ve just collected a list from npm of what looks like functional databases that use LevelDB:</p>
+<ul>
+<li>Rumours</li>
+<li>LevelGraph</li>
+<li>PushDB</li>
+<li>NeutrinoDB</li>
+<li>PlumbDB</li>
+<li>Syncstore</li>
+</ul>
+<p>And a few more that look like a work in progress. Plus, I&#39;m sure there&#39;s more people out there we&#39;ve never even heard of who are cooking up some amazing things using the LevelDB+Node combination!</p>
+<p><strong>The slides to my talk are <a href="http://r.va.gg/presentations/node.ninjas/">here</a>.</strong></p>
+
+      </section>
+
+    </section>
+
   
 
     <section class="post-content">
@@ -199,25 +236,6 @@
 </blockquote>
 <p>There was one remaining question to be resolved&mdash;whether <code>Event.stop()</code> would also trigger <code>Event.stopImmediatePropagation()</code>. I&#39;ve decided to <b>not</b> include it and leave it to the user to decide whether they want to prevent triggering of other listeners on the same event/element.</p>
 <p>And that&#39;s it! Please give it a spin and open an issue on GitHub if you have any bugs to report or questions to be answered.</p>
-
-      </section>
-
-    </section>
-
-  
-
-    <section class="post-content">
-
-      <h2 id="ender-bundling"><a href="/2012/08/ender-bundling.html">How Ender bundles libraries for the browser</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on August 24, 2012</p>
-        <p class="link"><a href="/2012/08/ender-bundling.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2012/08/ender-bundling.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p>I was asked an interesting Ender question on IRC (#enderjs on Freenode) and as I was answering it, it occurred to me that the subject would be an ideal way to explain how Ender&#39;s multi-library bundling works. So here is that explanation!</p><p>The original question went something like this:</p><blockquote><p>When a browser first visits my page, they only get served Bonzo (a DOM manipulation library) as a stand-alone library, but on returning visits they are also served Qwery (a selector engine), Bean (an event manager) and a few other modules in an Ender build. Can I integrate Bonzo into the Ender build on the browser for repeat visitors?</p></blockquote><h3>Wait, what&#39;s Ender?</h3><p>Let&#39;s step back a bit and start with some basics. The way I generally explain Ender to people is that it&#39;s two different things:</p><ol><li>It&#39;s a build tool, for bundling JavaScript libraries together into a single file. The resulting file constitutes a new &quot;framework&quot; based around the jQuery-style DOM element collection pattern: <code>$(&#39;selector&#39;).method()</code>. The constituent libraries provide the functionality for the <em>methods</em> and may also provide the selector engine functionality.</li><li>It&#39;s an <em>ecosystem</em> of JavaScript libraries. Ender promotes a small collection of libraries as a base, called <strong>The Jeesh</strong>, which together provide a large portion of the functionality normally required of a JavaScript framework, but there are many more libraries compatible with Ender that add extra functionality. Many of the libraries available for Ender are also usable outside of Ender as stand-alone libraries.</li></ol><p><em><strong>Continue reading this article on <a href="http://dailyjs.com/2012/08/23/ender-tutorial/">DailyJS.com</a></strong></em></p>
 
       </section>
 

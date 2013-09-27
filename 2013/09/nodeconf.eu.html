@@ -1,0 +1,226 @@
+<!DOCTYPE HTML>
+<html lang="en-us">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>
+  [r.va.gg] NodeConf.eu
+</title>
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://r.va.gg/atom.xml" />
+    <script type="text/javascript" src="http://use.typekit.com/swo4snt.js"></script>
+    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>  
+    <script type="text/javascript">
+      var _gaq = _gaq || []
+      _gaq.push(['_setAccount', 'UA-21373682-1'])
+      _gaq.push(['_trackPageview'])
+      setTimeout('_gaq.push(["_trackEvent", "15_seconds", "read"])', 15000)
+      !(function () {
+        var ga = document.createElement('script')
+        ga.type = 'text/javascript'
+        ga.async = true
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'
+        var s = document.getElementsByTagName('script')[0]
+        s.parentNode.insertBefore(ga, s)
+      }())
+    </script>
+  </head>
+  <body>
+
+    <section class="content">
+      <h1>
+        <a href="/">r.va.gg</a>
+      </h1>
+
+      <section class="nav">
+        <section class="me">
+          <span>Find me</span>
+          <ul>
+            <li>on <a href="https://twitter.com/rvagg">Twitter / @rvagg</a></li>
+            <li>on <a href="https://github.com/rvagg">GitHub / @rvagg</a></li>
+          </ul>
+        </section>
+        <section class="recent">
+          <span>Recent posts</span>
+          <ul>
+            
+ 
+                <li><a href="/2013/09/nodeconf.eu.html">NodeConf.eu</a></li>
+              
+ 
+ 
+                <li><a href="/2013/08/learn-you-the-node.js.html">Learn You The Node.js</a></li>
+              
+ 
+ 
+                <li><a href="/2013/06/leveldown-alternatives.html">LevelDOWN Alternatives</a></li>
+              
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+          </ul>
+        </section>
+      </section>
+      <div style="clear: both;"></div>
+
+      
+
+  <section class="post-content">
+
+    <h2><a href="/2013/09/nodeconf.eu.html">NodeConf.eu</a></h2>
+
+    <div class="post-meta">
+      <p class="byline">by Rod Vagg on September 27, 2013</p>
+    </div>
+
+    <section class="post-body">
+      <p>Wow, <strong><a href="http://nodeconf.eu/">NodeConf.eu</a></strong> was certainly a once-in-a-lifetime event ... although there&#39;s talk of a repeat performance next year (don&#39;t miss the chance when it comes around!).</p>
+<div style="text-align: center;">
+<img src="http://r.va.gg/images/2013/09/nodeconfeu_raiseflag.jpg" alt="Raise that flag">
+<p style="text-align: center;">Dominic Tarr, @substack and Julian Gruber raising the NodeConf.eu flag</p>
+</div>
+
+
+<p>NodeConf.eu was held in Waterford, Ireland, on an <strong>Island</strong>, in a <strong>Castle</strong> and was organised by the Node lovin&#39; company, <a href="http://nearform.com/">nearForm</a>, in particular <a href="http://cianomaidin.com/">Cian O&#39;Maidin</a> and his amazing assistant Catherine Bradley. Of course <a href="http://futurealoof.com/">Mikeal Rogers</a> had a significant role in organising the event too.</p>
+<div style="text-align: center;">
+<img src="http://r.va.gg/images/2013/09/nodeconfeu_castle.jpg" alt="Waterford Castle">
+<p style="text-align: center;"><a href="http://waterfordcastle.com/">Waterford Castle</a></p>
+</div>
+
+<div style="text-align: center;">
+<img src="http://r.va.gg/images/2013/09/nodeconfeu_pig.jpg" alt="Pig">
+<p style="text-align: center;">The welcome banquet ... yep</p>
+</div>
+
+<p>Instead of describing the talks, I&#39;ll defer to the <a href="http://clock.co.uk/tech-blogs/nodeconfeu-2013-part-one">excellent</a> <a href="http://clock.co.uk/tech-blogs/nodeconfeu-2013-part-two">four</a> <a href="http://clock.co.uk/tech-blogs/nodeconfeu-2013-part-three">part</a> <a href="http://clock.co.uk/tech-blogs/nodeconfeu-reflection">series</a> by Paul, Adam, Luke and Ben of <a href="http://clock.co.uk/">Clock</a> where you&#39;ll find a great summary of the talks and events of the conference.</p>
+<p>For my part, I was deeply honoured to be involved in the <em>&quot;Node Databases&quot;</em> track of the conference. We started off the NodeConf.eu talks with a 3-part show. My talk was titled &quot;A Real Database Rethink&quot; and was followed by <a href="https://twitter.com/dominictarr">Dominic Tarr</a> who talked more about the Level* ecosystem and the various pieces of the Node Databases puzzle that&#39;s being built. <a href="http://juliangruber.com/">Julian Gruber</a> then closed us off with some amazing live-coding of some browser/server streaming LevelUP/multilevel <a href="https://github.com/juliangruber/nodeconfeu-13">wizardry</a>.</p>
+<h3>A Real Database Rethink</h3>
+<p>The slides of my talk are <a href="http://r.va.gg/presentations/nodeconfeu.2013/">online</a>. I attempted to break down the definition of the term <em>&quot;database&quot;</em> by looking at where the concept comes from historically. It&#39;s actually a difficult thing to define and I don&#39;t believe there is any one agreed upon meaning. What I came up with is:</p>
+<blockquote>
+<p>A tool for interacting with structured data, externalised from the core of our application</p>
+<ul>
+<li>Persistence</li>
+<li>Performance</li>
+<li>Simplify access to complex data</li>
+</ul>
+<p>And sometimes...</p>
+<ul>
+<li>Shared access</li>
+<li>Scalability</li>
+</ul>
+</blockquote>
+<p>But even that&#39;s pretty rough.</p>
+<p>Taking that definition, we can apply Node philosophy of small-core and vibrant user-land, along with the culture of extreme modularity afforded us by npm, and build a new kind of database; or at least apply new thinking to the &quot;database&quot;.</p>
+<p>The bulk of my talk was taken up with talking about LevelUP and the basics of the Level<em> ecosystem. There&#39;s a table on slide #7 that I&#39;m going to try and refine over time to help describe what the Level</em> / NodeBase world is all about.</p>
+<h3>Level Me Up Scotty!</h3>
+<p>One of the three workshops available at NodeConf.eu was all about Node Databases. I took the same approach as at <a href="http://campjs.com/">CampJS</a> recently where I built <a href="http://r.va.gg/2013/08/learn-you-the-node.js.html">Learn You The Node.js For Much Win!</a>, a tool that owes a debt to <a href="https://github.com/substack/stream-adventure">stream-adventure</a>, a self-guided workshop-in-your-terminal application by <a href="https://twitter.com/substack">@substack</a> and <a href="https://twitter.com/maxogden">Max Ogden</a> written for NodeConf (US).</p>
+<p>This time around, I received some great help from both @substack and Julian Gruber who helped write some exercises, I also received help from <a href="http://twitter.com/eugeneware">Eugene Ware</a> who wasn&#39;t even at the conference but was assisting with development from Australia. <a href="http://twitter.com/raynos2">Raynos</a> was also a great help in getting the application working well.</p>
+<p>We ended up with <strong><em>Level Me Up Scotty!</em></strong>, or just <strong>levelmeup</strong>.</p>
+<div style="text-align: center;">
+<img src="https://raw.github.com/rvagg/levelmeup/master/levelmeup.png" alt="levelmeup">
+</div>
+
+<p>Dominic Tarr, <a href="https://twitter.com/thlorenz">Thorsten Lorenz</a>, <a href="https://twitter.com/hij1nx">Paolo Fragomeni</a>, <a href="http://www.matteocollina.com/">Matteo Collina</a>, <a href="https://twitter.com/ralphtheninja">Magnus Skog</a>, Max Ogden and other experienced <em>Levelers</em> helped on and off while the workshops were happening; so we had plenty of expertise at hand whenever there were questions.</p>
+<p>Workshops were unstructured and the organisers of each workshop all ended up agreeing that we should just let people come and go as they pleased. This suited us as the workshop was open-ended and designed not to be finished by most people within the originally planned hour <em>(I think that was the original plan)</em>.</p>
+<p><strong><a href="https://github.com/rvagg/levelmeup">levelmeup</a></strong> is installed from npm (<code>npm install levelmeup -g</code>) and is fully self-guided. You run the <code>levelmeup</code> application and it steps you through some exercises designed to:</p>
+<ul>
+<li>introduce you to the format of the workshops with a simple &quot;Hello World&quot; style exercise</li>
+<li>introduce you to LevelUP and its basic operations</li>
+<li>help you understand ReadStream and the range-queries it makes possible</li>
+<li>encourage creative thought regarding key structure</li>
+<li>introduce <a href="https://github.com/dominictarr/level-sublevel">sublevel</a></li>
+<li>introduce <a href="https://github.com/juliangruber/multilevel">multilevel</a></li>
+</ul>
+<p>There&#39;s more planned for the future of this workshop application too, Matteo even has an a <a href="https://github.com/rvagg/levelmeup/pull/19">work-in-progress exercise</a> that should be merged fairly soon.</p>
+<p><strong><a href="http://nodeschool.io/">nodeschool.io</a></strong> was hatched from NodeConf.eu and pulls together the three workshop applications currently available in npm. I believe this was an initiative of <a href="https://twitter.com/brianloveswords">Brian J. Brennan</a> and other Mozillans on the <a href="http://openbadges.org/">Open Badges</a> project. <strong><a href="https://github.com/rvagg/workshopper">workshopper</a></strong> is the engine that runs both learnyounode and levelmeup and we&#39;re trying to make it even easier for others to author their own workshop applications. There is already a <a href="https://github.com/timoxley/functional-javascript-workshop/">Functional Javacript Workshop</a> by <a href="https://twitter.com/secoif">Tim Oxley</a> and there are more in development. Exciting times!</p>
+<div style="text-align: center;">
+<img src="http://r.va.gg/images/2013/09/nodeconfeu_levelmeup.jpg" alt="Level Me Up Workshoppers">
+<p style="text-align: center;">Workshoppers stretching their brains with <strong>levelmeup</strong></p>
+</div>
+
+<p>My experience with <strong>stream-adventure</strong> and <strong>learnyounode</strong> suggested that this format should prove to be relatively successful but ultimately I think we had most of the attendees come through at some point and sit down to have a crack at the workshop. This is particularly impressive given that <a href="http://nexxylove.tumblr.com/">Emily Rose</a>, <a href="http://tmpvar.com/">Elijah Insua</a> and Matteo were running a NodeBots workshop which included Arduino and NodeCopter hacking (always popular!). And <a href="https://twitter.com/mrbruning">Max Bruning</a> and <a href="https://twitter.com/tjfontaine">TJ Fontaine</a> were running a Manta / MDB / DTrace / SmartOS-magic workshop and their material was some of my favourite from NodeConf (US) so I&#39;m sure people really enjoyed what they had to present.</p>
+<p>Unfortunately I didn&#39;t get to attend these other workshops, I also missed out on some skeet!</p>
+<div style="text-align: center;">
+<img src="http://farm6.staticflickr.com/5338/9726258926_e3ea4a656f_z.jpg" alt="Skeet">
+<p style="text-align: center;">Karolina <em>&quot;don&#39;t mess with me&quot;</em> Szczur, photo by <a href="http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/">Matthew Bergman</a></p>
+</div>
+
+<p>But there was plenty of other <em>experience</em> to be had. It was also fantastic to meet so many people I only knew from IRC / Twitter / GitHub. For someone who lives in regional Australia and doesn&#39;t get a chance to socialise much with other nerds, this was a particularly special opportunity.</p>
+<div style="text-align: center;">
+<img src="http://farm8.staticflickr.com/7392/9783982165_43ca4edef2_z.jpg" alt="Shenanigans">
+<p style="text-align: center;">Final night banquet shenanigans with <a href="https://twitter.com/Av1anFlu">Charlie McConnell</a> and @substack ... the napkin hat thing is a story in itself, blame <a href="https://twitter.com/jllord">Jessica Lord</a>, photo by <a href="http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/">Matthew Bergman</a></p>
+</div>
+
+<h3>The Level* Gang</h3>
+<p>As an aside, NodeConf.eu had the largest concentration of LevelUP contributors and active Level* developers of any event that I&#39;m aware of so far. So we took the opportunity to have our own little meeting. We even took minutes, <a href="https://github.com/karolinaszczur/leveldb.org/blob/master/meetup-nodeland">of sorts</a>.</p>
+<p>There has been a long-standing plan to make a Level* / NodeBase website but being the disorganised rabble we are, it hasn&#39;t got off the ground. Karolina (and Jessica too I believe) are keen to help out on the design end but just need the content. So that&#39;s what we planned. There&#39;s a bunch of issues that form a TODO in the <a href="https://github.com/karolinaszczur/leveldb.org/issues">repo</a> for this project. Hopefully we can all get on top of it sooner rather than later. We&#39;re also open to assistance from anyone else that would like to contribute.</p>
+<p>Besides getting stuff done, it was just a pleasure to hang out with these people and talk <em>shop</em>.</p>
+<div style="text-align: center;">
+<img src="http://r.va.gg/images/2013/09/nodeconfeu_levelgang.jpg" alt="A momentus event">
+<p style="text-align: center;"><strong>The Level* Gang</strong>: Paolo, Dominic, @substack, Karolina, Magnus, Mikeal, Julian, Max, Matteo and <a href="https://twitter.com/paulfryzel">Paul Fryzel</a>. Raynos was around but missed this particular <em>event</em>, Thorsten was inside demoing his guitar-typing software.</p>
+</div>
+
+
+    </section>
+
+    <section class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname  = 'rvagg'
+          , disqus_identifier = '/2013/09/nodeconf.eu.html'
+          , disqus_title      = 'NodeConf.eu'
+          , disqus_url        = 'http://r.va.gg/2013/09/nodeconf.eu.html'
+
+        !(function() {
+          var dsq = document.createElement('script')
+          dsq.type = 'text/javascript'
+          dsq.async = true
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
+          !(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+        })()
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>
+    </section>
+
+  </section>
+
+
+
+      <section class="footer">
+        &copy; Rod Vagg 2013, powered by <a href="https://github.com/rvagg/blorg">Blorg</a>
+        <br><a href="http://r.va.gg/atom.xml">Atom / RSS feed</a>
+      </section>
+
+    </section>
+
+  </body>
+</html>
