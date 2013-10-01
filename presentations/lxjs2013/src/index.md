@@ -9,53 +9,23 @@
 
 <p style="text-align: center; font-size: 12px;">**Max Ogden** - *"JavaScript Databases"* - LXJS 2012</p>
 
-<p>"I want to see a time where I can write a persistence function that can run in Node, the browser and anywhere else JavaScript runs."</p>
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-## So what is a Database?
-
-**A tool for interacting with structured data, externalised from the core of our application**
-
- * Persistence
- * Performance
- * Simplify access to complex data
-
-Optional extras...
-
- * Shared access
- * Scalability
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-## The Node Way&trade;
-
-<div class="nodeapproach">
 <div data-bespoke-bullet></div>
-<div data-bespoke-bullet class="second"></div>
 
-<p class="nodedb"><b>Applied to databases?</b></p>
-
-<p>Small core, vibrant user-land</p>
-<p class="nodedb item">Small core: LevelUP</p>
-
-<p>Extreme modularity</p>
-<p class="nodedb item">Everything as a module</p>
-
-<p>Everything in JavaScript!</p>
-<p class="nodedb item">Reimplementing database *practice* &amp; *theory*</p>
-
-</div>
+<p data-bespoke-bullet style="text-align: center; font-style: italic;">"I want to see a time where I can write a persistence function that can run in Node, the browser and anywhere else JavaScript runs."</p>
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Inspired by LevelDB
+## LevelDB?
 
-* Open-source, embedded key/value store by Google
-* Entries sorted by keys
-* Basic operations: <code>Get(), Put(), Del()</code>
-* Atomic <code>Batch()</code>
-* Bi-directional iterators
+<div data-bespoke-bullet></div>
+
+<ul data-bespoke-bullet>
+  <li>Open-source, embedded key/value store by Google</li>
+  <li>Basic operations: `Get()`, `Put()`, `Del()`</li>
+  <li>Atomic <code>Batch()</code></li>
+  <li>Entries **sorted** by keys</li>
+  <li>Bi-directional iterators</li>
+</ul>
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -78,20 +48,20 @@ Optional extras...
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## LevelUP: Database primitives
+## Database Primitives for Node.js
 
-<br>
+**LevelUP:**
 
 * Open / Close
 * Get
 * Put
 * Del
-* Batch
+* Atomic batch
 * ReadStream
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Primitives: ReadStream
+## Primitives: *ReadStream*
 
 The simplest form of a query mechanism
 
@@ -105,7 +75,7 @@ Basic range query:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Primitives: ReadStream
+## Primitives: *ReadStream*
 
 The simplest form of a query mechanism
 
@@ -125,7 +95,7 @@ db.createReadStream({ start: 'e', end: 'h' })
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Primitives: ReadStream
+## Primitives: *ReadStream*
 
 Stab in the dark:
 
@@ -137,7 +107,7 @@ Stab in the dark:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Primitives: ReadStream
+## Primitives: *ReadStream*
 
 Stab in the dark:
 
@@ -157,30 +127,41 @@ db.createReadStream({ start: 'f', end: 'f~' })
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Primitives: Batch
+## Primitives: *Batch*
 
 Atomic operations for sophisticated behaviour
 
 Example: Indexes
 
 ```js
-db.put('foo', { name: 'bar' })
-db.put('boom', { name: 'bang' })
+db.put('foo', { name: 'bar', x: 100 })
+db.put('boom', { name: 'bang', x: 222 })
 
 // ?? db.getBy('name', 'bar')
 ```
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Primitives: Batch
+## Primitives: *Batch*
 
 ```js
-db.put('foo', { name: 'bar' })         // primary entry
-db.put('index~name~bar~foo', 'foo')      // index entry
+db.put('foo', { name: 'bar', x: 100 }) // primary
+db.put('index~name~bar~foo', 'foo') // index
+```
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Primitives: *Batch*
+
+```js
+db.put('foo', { name: 'bar', x: 100 }) // primary
+db.put('index~name~bar~foo', 'foo') // index
+```
+
+```js
 getBy = function (index, value, callback) {
   var keys = []
-  return db.createReadStream({
+  db.createReadStream({
       start : 'index~' + index + '~' + value + '~'
     , end   : 'index~' + index + '~' + value + '~~'
   }).on('data', function (entry) {
@@ -193,7 +174,18 @@ getBy = function (index, value, callback) {
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Primitives: Batch
+## Primitives: *Batch*
+
+But what about consistency?
+
+```js
+db.put('foo', { name: 'bar', x: 100 }) // primary
+db.put('index~name~bar~foo', 'foo') // index
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Primitives: *Batch*
 
 ```js
 put = function (key, value, callback) {
@@ -202,7 +194,7 @@ put = function (key, value, callback) {
     .write(callback)                          // atomic!
 }
 
-put('foo', { name: 'bar' }, ...)
+put('foo', { name: 'bar', x: 100 }, ...)
 
 //  db.createReadStream({
 //      start : 'index~' + index + '~' + value + '~'
@@ -214,20 +206,20 @@ Automated with **level-hooks**
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Primitives: Batch
+## Primitives: *Batch*
 
-<p style="margin: 0;">Example: Async work that *must* be performed for each entry</p>
+<p style="margin: 0;">Example: Async work that *must* be done for each entry</p>
 
 ```js
 put = function (key, value, callback) {
   db.batch().put(key, value)            // primary entry
     .put('pending~' + key + '~', key)          // marker
     .write(callback)                          // atomic!
-  work(key, value)
+  work({ key: key, value: value })
 }
-work = function (key, value) {
+work = function (entry) {
   // do some async work...
-  db.del('pending~' + key + '~')
+  db.del('pending~' + entry.key + '~')
 }
 // on restart:
 db.createReadStream({ start: 'pending~' })
@@ -236,7 +228,7 @@ db.createReadStream({ start: 'pending~' })
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Primitives: Buckets
+## Primitives: *Buckets*
 
 Like *tables*, for organising data and separating types of data
 
@@ -251,7 +243,7 @@ db.put('~cities~Lixa', { population: 5500 })
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Primitives: Buckets
+## Primitives: *Buckets*
 
 Automated with **level-sublevel**
 
