@@ -273,3 +273,31 @@ table {
   -ms-transform:     rotate(90deg);
   -o-transform:      rotate(90deg);
 }
+.contribs {
+  margin: 40px auto;
+}
+
+.contribs td {
+  text-align: center;
+  width: 80px;
+}
+
+.rvagg img, .contribs img {
+  max-width: 50px;
+  max-height: 50px;
+  border: solid white 2px;
+  border-radius: 3px;
+  -webkit-border-radius: 2x;
+  box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.5);
+}
+
+.rvagg span, .contribs span {
+  font-size: 10px;
+  font-weight: bold;
+  display: block;
+}
+
+.rvagg {
+  margin-top: 100px;
+  text-align: center;
+}

@@ -1,6 +1,11 @@
 
 # JavaScript Databases II
 
+<div class="rvagg">
+  <img src="img/u_rvagg.png">
+  <span>@rvagg</span>
+</td>
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 <div style="margin-top: 0.5em; text-align: center">
@@ -40,7 +45,7 @@
 
 <ul>
   <li data-bespoke-bullet>Writes go straight into a <b>log</b></li>
-  <li data-bespoke-bullet>Log is <b>flushed</b> <i>string sorted table</i> (SST) files</li>
+  <li data-bespoke-bullet>Log is <b>flushed</b> to <i>string sorted table</i> (SST) files</li>
   <li data-bespoke-bullet>SST files grow into a hierarchy of overlapping "<b>levels</b>"</li>
   <li data-bespoke-bullet>Reads <b>merge</b> the log and the level / SST data</li>
   <li data-bespoke-bullet>Cache speeds up common reads</li>
@@ -48,7 +53,7 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Database Primitives for Node.js
+## Database Primitives for JS
 
 **LevelUP:**
 
@@ -58,6 +63,8 @@
 * Del
 * Atomic batch
 * ReadStream
+
+*For arbitrary data*
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -230,6 +237,8 @@ db.createReadStream({ start: 'pending~' })
 
 ## Primitives: *Buckets*
 
+Or *"namespaces"*
+
 Like *tables*, for organising data and separating types of data
 
 ```js
@@ -266,17 +275,18 @@ countriesDb.createReadStream().on('data', console.log)
 
 ## LevelDOWN: Storage flexibility
 
-<div data-bespoke-bullet>
-  <ul>
-    <li>LevelDB (Google)</li>
-    <li>LevelDB (Basho)</li>
-    <li>HyperLevelDB (HyperDex)</li>
-    <li>LMDB</li>
-    <li>MemDOWN</li>
-    <li>mysqlDOWN</li>
-    <li><i>more under development...</i></li>
-  </ul>
-</div>
+<div data-bespoke-bullet></div>
+
+<ul data-bespoke-bullet>
+  <li>LevelDB (Google)</li>
+  <li>LevelDB (Basho)</li>
+  <li>HyperLevelDB (HyperDex)</li>
+  <li>LMDB</li>
+  <li>MemDOWN</li>
+  <li>mysqlDOWN</li>
+  <li><i>more under development...</i></li>
+</ul>
+
 <div data-bespoke-bullet>
 
 <p>...and **level.js**</p>
@@ -284,6 +294,7 @@ countriesDb.createReadStream().on('data', console.log)
 <p>The Level* ecosystem in the browser!</p>
 
 </div>
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 <table class="ecosystem">
@@ -375,3 +386,31 @@ countriesDb.createReadStream().on('data', console.log)
 </table>
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+<table class="contribs">
+  <tr>
+    <td><img src="img/u_chesles.jpg"><span>@chesles</span></td>
+    <td><img src="img/u_raynos.jpg"><span>@raynos</span></td>
+    <td><img src="img/u_dominictarr.jpg"><span>@dominictarr</span></td>
+    <td><img src="img/u_maxogden.png"><span>@maxogden</span></td>
+  </tr>
+</table>
+<table class="contribs">
+  <tr>
+    <td><img src="img/u_ralph.jpg"><span>@ralphtheninja</span></td>
+    <td><img src="img/u_kesla.jpg"><span>@kesla</span></td>
+    <td><img src="img/u_juliangruber.png"><span>@juliangruber</span></td>
+    <td><img src="img/u_hij1nx.png"><span>@hij1nx</span></td>
+    <td><img src="img/u_no9.jpg"><span>@no9</span></td>
+  </tr>
+</table>
+<table class="contribs">
+  <tr>
+    <td><img src="img/u_mcollina.jpg"><span>@mcollina</span></td>
+    <td><img src="img/u_pgte.jpg"><span>@pgte</span></td>
+    <td><img src="img/u_substack.jpg"><span>@substack</span></td>
+    <td><img src="img/u_rvagg.png"><span>@rvagg</span></td>
+  </tr>
+</table>
+
+<p style="text-align: center; font-weight: bold; font-size: 15px; font-style: italic; margin-top: -20px;">LevelUP Core Team</p>

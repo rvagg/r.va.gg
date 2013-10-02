@@ -21,6 +21,10 @@
       
         <section>
           <h1>JavaScript Databases II</h1>
+<p><div class="rvagg">
+  <img src="img/u_rvagg.png">
+  <span>@rvagg</span>
+</td></p>
 
         </section>
       
@@ -64,7 +68,7 @@
 
 <ul>
   <li data-bespoke-bullet>Writes go straight into a <b>log</b></li>
-  <li data-bespoke-bullet>Log is <b>flushed</b> <i>string sorted table</i> (SST) files</li>
+  <li data-bespoke-bullet>Log is <b>flushed</b> to <i>string sorted table</i> (SST) files</li>
   <li data-bespoke-bullet>SST files grow into a hierarchy of overlapping &quot;<b>levels</b>&quot;</li>
   <li data-bespoke-bullet>Reads <b>merge</b> the log and the level / SST data</li>
   <li data-bespoke-bullet>Cache speeds up common reads</li>
@@ -74,7 +78,7 @@
         </section>
       
         <section>
-          <h2>Database Primitives for Node.js</h2>
+          <h2>Database Primitives for JS</h2>
 <p><strong>LevelUP:</strong></p>
 <ul>
 <li>Open / Close</li>
@@ -84,6 +88,7 @@
 <li>Atomic batch</li>
 <li>ReadStream</li>
 </ul>
+<p><em>For arbitrary data</em></p>
 
         </section>
       
@@ -242,6 +247,7 @@
       
         <section>
           <h2>Primitives: <em>Buckets</em></h2>
+<p>Or <em>&quot;namespaces&quot;</em></p>
 <p>Like <em>tables</em>, for organising data and separating types of data</p>
 <div class="highlight"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;~countries~Morocco&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">capital</span><span class="o">:</span> <span class="s1">&#39;Rabat&#39;</span> <span class="p">})</span>
 <span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;~countries~Portugal&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">capital</span><span class="o">:</span> <span class="s1">&#39;Lisbon&#39;</span> <span class="p">})</span>
@@ -276,17 +282,18 @@
       
         <section>
           <h2>LevelDOWN: Storage flexibility</h2>
-<div data-bespoke-bullet>
-  <ul>
-    <li>LevelDB (Google)</li>
-    <li>LevelDB (Basho)</li>
-    <li>HyperLevelDB (HyperDex)</li>
-    <li>LMDB</li>
-    <li>MemDOWN</li>
-    <li>mysqlDOWN</li>
-    <li><i>more under development...</i></li>
-  </ul>
-</div>
+<div data-bespoke-bullet></div>
+
+<ul data-bespoke-bullet>
+  <li>LevelDB (Google)</li>
+  <li>LevelDB (Basho)</li>
+  <li>HyperLevelDB (HyperDex)</li>
+  <li>LMDB</li>
+  <li>MemDOWN</li>
+  <li>mysqlDOWN</li>
+  <li><i>more under development...</i></li>
+</ul>
+
 <div data-bespoke-bullet>
 
 <p>...and <strong>level.js</strong></p>
@@ -391,7 +398,35 @@
         </section>
       
         <section>
-          
+          <table class="contribs">
+  <tr>
+    <td><img src="img/u_chesles.jpg"><span>@chesles</span></td>
+    <td><img src="img/u_raynos.jpg"><span>@raynos</span></td>
+    <td><img src="img/u_dominictarr.jpg"><span>@dominictarr</span></td>
+    <td><img src="img/u_maxogden.png"><span>@maxogden</span></td>
+  </tr>
+</table>
+<table class="contribs">
+  <tr>
+    <td><img src="img/u_ralph.jpg"><span>@ralphtheninja</span></td>
+    <td><img src="img/u_kesla.jpg"><span>@kesla</span></td>
+    <td><img src="img/u_juliangruber.png"><span>@juliangruber</span></td>
+    <td><img src="img/u_hij1nx.png"><span>@hij1nx</span></td>
+    <td><img src="img/u_no9.jpg"><span>@no9</span></td>
+  </tr>
+</table>
+<table class="contribs">
+  <tr>
+    <td><img src="img/u_mcollina.jpg"><span>@mcollina</span></td>
+    <td><img src="img/u_pgte.jpg"><span>@pgte</span></td>
+    <td><img src="img/u_substack.jpg"><span>@substack</span></td>
+    <td><img src="img/u_rvagg.png"><span>@rvagg</span></td>
+  </tr>
+</table>
+
+<p style="text-align: center; font-weight: bold; font-size: 15px; font-style: italic; margin-top: -20px;">LevelUP Core Team</p>
+
+
         </section>
       
 
