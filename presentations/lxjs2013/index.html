@@ -98,7 +98,7 @@
 <p>Basic range query:</p>
 <div class="highlight"><pre>| a | b | e | f1 | f2 | g | h | i | o | p | q | r | v |
           ↑    <span class="s1">&#39;e&#39;</span> → <span class="s1">&#39;h&#39;</span>    ↑
-          ╰─────────────────╯
+          ╰-----------------╯
 </pre></div>
 
 
@@ -110,7 +110,7 @@
 <p>Basic range query:</p>
 <div class="highlight"><pre>| a | b | e | f1 | f2 | g | h | i | o | p | q | r | v |
           ↑    <span class="s1">&#39;e&#39;</span> → <span class="s1">&#39;h&#39;</span>    ↑
-          ╰─────────────────╯
+          ╰-----------------╯
 </pre></div>
 
 <div class="highlight"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">({</span> <span class="nx">start</span><span class="o">:</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="nx">end</span><span class="o">:</span> <span class="s1">&#39;h&#39;</span> <span class="p">})</span>
@@ -126,7 +126,7 @@
 <p>Stab in the dark:</p>
 <div class="highlight"><pre>| a | b | e | f1 | f2 | g | h | i | o | p | q | r | v |
               ↑     ↑
-              ╰─────╯
+              ╰-----╯
 </pre></div>
 
 
@@ -137,7 +137,7 @@
 <p>Stab in the dark:</p>
 <div class="highlight"><pre>| a | b | e | f1 | f2 | g | h | i | o | p | q | r | v |
               ↑     ↑
-              ╰─────╯
+              ╰-----╯
 </pre></div>
 
 <p>Bytewise comparison to the rescue!</p>
