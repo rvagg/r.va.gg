@@ -42,6 +42,10 @@
           <ul>
             
  
+                <li><a href="/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html">Should I use a single LevelDB or many to hold my data?</a></li>
+              
+ 
+ 
                 <li><a href="/2013/10/primitives-for-js-databases-an-lxjs-adventure.html">Primitives for JS Databases (an LXJS adventure)</a></li>
               
  
@@ -50,8 +54,6 @@
               
  
  
-                <li><a href="/2013/08/learn-you-the-node.js.html">Learn You The Node.js</a></li>
-              
  
  
  
@@ -95,6 +97,53 @@
       
 
 <div id="for">
+  
+
+    <section class="post-content">
+
+      <h2 id="should-i-use-a-single-leveldb-or-many-to-hold-my-data"><a href="/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html">Should I use a single LevelDB or many to hold my data?</a></h2>
+
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on October 3, 2013</p>
+        <p class="link"><a href="/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html">Permalink &amp; Comments</a></p>
+        <!-- <p class="commentcount"><a href="/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html#disqus_thread">Comments</a></p> -->
+      </div>
+
+      <section class="post-body">
+        <p>This is a long overdue post, so long in fact that I can&#39;t remember who I promised to do this for! Regardless, I keep on having discussions around this topic so I thought it worthwhile putting down some notes on what I believe to be the factors you should consider when making this decision.</p>
+<h3>What&#39;s the question?</h3>
+<p>It goes like this: You have an application that uses LevelDB, in particular I&#39;m talking about Node.js applications here but the same would apply if you&#39;re using LevelUP in the browser and also most of the other back-ends for LevelUP. And you invariably end up with different kinds of data, sometimes the kinds of data you&#39;re storing is so different that it feels strange putting them into the same storage blob. Often though, you just have sets of not-very-related data that you need to store and you end up having to make a decision: <strong>do I put everything into a single LevelDB store or do I put things into their own, separate, LevelDB store?</strong></p>
+<h3>This stuff doesn&#39;t <em>belong</em> together!</h3>
+<p>Coming from an relational database background, it took me a little while to displace the concept of discrete <em>tables</em> with the notion of <em>namespacing</em> within the same store. I can understand the temptation to want to keep things separate, not wanting to end up with a huge blob of data that just <em>shouldn&#39;t be together</em>. But this isn&#39;t the relational database world and you need to move on!</p>
+<p>We have a set of LevelUP addons, such as <a href="https://github.com/dominictarr/level-sublevel">sublevel</a>, that exist mainly to provide you with the comfort of being able to separate your data by whatever criteria makes sense. <a href="https://github.com/deanlandolt/bytewise">bytewise</a> is another tool that can serve a similar purpose and some people even use sublevel and bytewise together to achieve more complex organisation.</p>
+<p><strong>We have the tools at our disposal in Node.js to turn a one-dimensional storage array into a very complex, multidimensional storage <em>system</em> where unrelated, and semi-related data can coexist.</strong> So, if the only reason you want to store things in separate stores is because it just <em>feels</em> right to do so, you should probably be looking at what&#39;s making you think that way. You may need to update your assumptions.</p>
+<h3>Technical considerations</h3>
+<p>That aside, there are some technical considerations for making this decision:</p>
+<h4>Size and performance</h4>
+<p>To be clear, <strong>LevelDB is fast</strong> and it can also store <strong>lots of data</strong>, it&#39;ll handle Gigabytes of data without too much sweat. However, there <em>are</em> some performance concerns when you start getting in to the Gigabyte range, mainly when you&#39;re trying to push data in at a high rate. Most use-cases don&#39;t do this so be honest about your performance needs. For most people LevelDB is simply fast.</p>
+<p>However, if you do have a high-throughput scenario involving a large amount of data that you need to store then you may want to consider having a separate store to deal with the large data and another one to deal with the rest of your data so the performance isn&#39;t impacted across the board.</p>
+<p>But again, be honest about what your workload is, you&#39;re probably not pushing <a href="http://voxer.com">Voxer</a> amounts of data so don&#39;t prematurely optimise around the workload you&#39;d like to think you have or are going to have one day in the distant future.</p>
+<h3>Cache</h3>
+<p>Caching is transparent by default with LevelDB so it&#39;s easy to forget about it when making these kinds of decisions but it&#39;s actually quite important for this particular question.</p>
+<p>By default, you have an 8M LRU cache with LevelDB and <em>all</em> reads use that cache, for look-ups and also for updating with newly read values. So, you can have a lot of cache-thrash unless you&#39;re reading the same values again and again. </p>
+<p>But, there is a <code>fillCache</code> (boolean) option for read operations (both <code>get()</code> and <code>createReadStream()</code> and its variations). So you can set this to <code>false</code> where you know you won&#39;t be needing fast access to those entries again and you don&#39;t want to push out other entries from the LRU.</p>
+<p>So caching strategies can be separate for different types of data and are not a strong reason to keep things in a separate data store.</p>
+<p>I always recommend that you should tinker with the <code>cacheSize</code> option when you&#39;re using LevelDB, it can be as large as you want to fit in the available memory of your machine. As a rule of thumb, somewhere between 2/3 and 3/4 of the available memory should be a maximum if you can afford it.</p>
+<p>Consider though what happens if you are using separate LevelDB stores, you now have to deal with juggling <code>cacheSize</code> between the stores. Often, you&#39;re probably going to be best served by having a single, large cache that can operate across all your data types and let the normal behaviour of your application determine what gets cached with occasional reliance on <code>&#39;fillCache&#39;: false</code> to fine-tune. </p>
+<h3>Consistency</h3>
+<p>As I discussed in my <a href="http://r.va.gg/presentations/lxjs2013/">LXJS</a> talk, the <em>atomic batch</em> is an important primitive for building solid database functionality with inherent <em>consistency</em>. When you&#39;re using <strong>sublevel</strong>, even though you have what operate like separate LevelUP instances for each sublevel, you still get to perform atomic batch operations between sublevels. Consider indexing where you may have a primary sublevel for the entries you&#39;re writing and a secondary sublevel for the indexing data used to reference the primary data for lookups. If you&#39;re running these as separate stores then you lose the benefits of the atomic batch, you just can&#39;t perform multiple operations with guaranteed consistency.</p>
+<p>Try and keep the atomic batch in mind when building your application, instead of accepting the possibility of inconsistent state, use the batch to keep consistency.</p>
+<h3>Back-end flexibility</h3>
+<p>OK, this one is a bit left-field, but remember that LevelUP is back-end-agnostic. It&#39;s inspired by LevelDB but it doesn&#39;t have to be Google&#39;s LevelDB that&#39;s storing data for you. It could be Basho&#39;s fork or HyperLevelDB. It could even be LMDB or something a little crazy like MemDOWN or mysqlDOWN! </p>
+<p>If you&#39;re at all concerned about performance, and most people claim to be even though they&#39;re not building performance-critical applications, then you should be benchmarking your particular workload against your storage system. Each of the back-ends for LevelUP have different performance characteristics and different trade-offs that you need to understand and test against your needs. You may find that one back-end works for one kind of data in your application and another back-end works for another.</p>
+<h3>Summary</h3>
+<p>The TL;DR is: in most cases, a single LevelDB store is generally preferable unless you have a <em>real</em> reason for having separate ones.</p>
+<p>Have I missed any considerations that you&#39;ve come across when making this choice? Let me know in the comments.</p>
+
+      </section>
+
+    </section>
+
   
 
     <section class="post-content">
@@ -341,80 +390,6 @@
 <h2>So?</h2>
 <p>If you take anything away from this, here&#39;s what I think it should be: <strong>Do your own benchmarks if performance <em>really</em> is an issue for you</strong>. You&#39;re going to need some kind of benchmark suite that is tailored to your particular application. This will not only let you choose the appropriate storage system but it will give you something to work with when you start to get in to the mire that is &quot;tunables&quot;.</p>
 <p>It&#39;s likely I won&#39;t be able to leave this alone and will be posting more benchmarks with some tweaking and tuning. I&#39;d love to have input from others on this too of course! The code for this is all in the LevelDOWN repo with both of these forks under appropriately named branches.</p>
-
-      </section>
-
-    </section>
-
-  
-
-    <section class="post-content">
-
-      <h2 id="levelup-v0.9-released"><a href="/2013/05/levelup-v0.9-released.html">LevelUP v0.9 Released</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on May 21, 2013</p>
-        <p class="link"><a href="/2013/05/levelup-v0.9-released.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2013/05/levelup-v0.9-released.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p><img src="https://twimg0-a.akamaihd.net/profile_images/3360574989/92fc472928b444980408147e5e5db2fa_bigger.png" alt="LevelDB"></p>
-<p>As per my <a href="http://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html">previous post</a>, <strong><a href="https://github.com/rvagg/node-levelup">LevelUP</a> v0.9 has been released</strong>!</p>
-<p>I&#39;m doing a quick post about this release because it&#39;s got more changes in it than we normally see, including some things worth explaining.</p>
-<h3>Relationship to LevelDOWN</h3>
-<p>The biggest change is the removal of <a href="https://github.com/rvagg/node-leveldown/">LevelDOWN</a> as a dependency, you should <a href="http://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html">review what I&#39;ve already said about this</a> as this will impact you if you&#39;re currently using LevelUP. In short, you&#39;ll either need to explicitly <code>npm install leveldown</code> or switch to using the new <a href="https://github.com/level/level">Level</a> package which bundles them both.</p>
-<p>Along with this change, we also get better <a href="http://browserify.org/">Browserify</a> support. See <a href="https://github.com/maxogden/level.js">level.js</a> for more information on this.</p>
-<h3>Chained batch</h3>
-<p>The other major change is the introduction of a new <strong>chained batch</strong> syntax, additional to the existing batch syntax. This method of creating and writing batch operations is much closer to the way LevelDB does batches and under certain circumstances you may find improved performance from using this method.</p>
-<p>If you call <code>db.batch()</code> with no arguments, you&#39;ll get a <code>Batch</code> object back which has the following operations: <code>put()</code>, <code>del()</code>, <code>clear()</code> and <code>write()</code>. The first three are chainable so you can call them one after the other to build your batch. <code>write()</code> is the only method that takes a callback because it submits the batch. Until you call <code>write()</code>, the batch is transient and can be discarded.</p>
-<p>Example from the <a href="https://github.com/rvagg/node-levelup#readme">README</a>:</p>
-<div class="highlight"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">batch</span><span class="p">()</span>
-  <span class="p">.</span><span class="nx">del</span><span class="p">(</span><span class="s1">&#39;father&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;Yuri Irsenovich Kim&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;dob&#39;</span><span class="p">,</span> <span class="s1">&#39;16 February 1941&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;spouse&#39;</span><span class="p">,</span> <span class="s1">&#39;Kim Young-sook&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;Clown&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Done!&#39;</span><span class="p">)</span> <span class="p">})</span>
-</pre></div>
-
-<h3>Some love for WriteStream</h3>
-<p>WriteStream got some attention in this release. On the main <code>createWriteStream()</code> method and on individual <code>write()</code> calls, you can now pass some new options:</p>
-<ul>
-<li><code>&#39;type&#39;</code> can switch from the default <code>&#39;put&#39;</code> to <code>&#39;del&#39;</code> so you can make a WriteStream that only deletes when you <code>write({ key: &#39;foo&#39; })</code>, or you can make individual writes delete: <code>write({ type: &#39;del&#39;, key: &#39;foo&#39; })</code>.</li>
-<li><code>&#39;keyEncoding&#39;</code> and <code>&#39;valueEncoding&#39;</code> will switch from default encodings for the current LevelUP instance. Again, you can specify them on the main <code>createWriteStream()</code> or on individual <code>write()</code> calls.</li>
-</ul>
-<h3>Other changes</h3>
-<ul>
-<li>A <a href="https://github.com/rvagg/node-levelup/pull/128">race condition</a> was fixed that allowed a <code>put()</code> to write to the store before an iterator was obtained when calling `createReadStream().</li>
-<li>ReadStream no longer emits a <code>&#39;ready&#39;</code> event.</li>
-<li>The <code>db</code> property on LevelUP instances can be used to get access to LevelDOWN or whatever LevelDOWN-substitute you are using (this was <code>_db</code>).</li>
-<li>Some very LevelDB-specific methods have been deprecated on LevelUP and the documentation now recommends either directly using LevelDOWN or calling via the <code>db</code> property. Specifically:<ul>
-<li><code>db.db.approximateSize()</code></li>
-<li><code>leveldown.repair()</code></li>
-<li><code>leveldown.destroy()</code></li>
-</ul>
-</li>
-<li>LevelDOWN got a new LevelDB method: <code>getProperty()</code> that currently understands 3 properties:<ul>
-<li><code>db.db.getProperty(&#39;leveldb.num-files-at-levelN&#39;)</code>: returns the number of files at level <em>N</em>, where N is an integer representing a valid level (e.g. &quot;0&quot;)&#39;).</li>
-<li><code>db.db.getProperty(&#39;leveldb.stats&#39;)</code>: returns a multi-line string describing statistics about LevelDB&#39;s internal operation.</li>
-<li><code>db.db.getProperty(&#39;leveldb.sstables&#39;)</code>: returns a multi-line string describing all of the <em>sstables</em> that make up contents of the current database.</li>
-</ul>
-</li>
-<li>Significantly improved ReadStream performance improvements (up to 50% faster).</li>
-<li>Some LevelDOWN memory leaks discovered and fixed.</li>
-<li>LevelDOWN upgraded to LevelDB@1.10.0, <a href="https://groups.google.com/forum/#!topic/node-levelup/bly-MiUzrZw">details here</a>.</li>
-</ul>
-<h3>Who you should thank</h3>
-<p>A lot of people put in work to this release. There&#39;s a <a href="https://github.com/rvagg/node-levelup#contributors">team of people</a> that can claim ownership of LevelUP, LevelDOWN and related projects and most of them have been involved in this release. You should follow these people on Twitter and GitHub!</p>
-<ul>
-<li><strong>Dominic Tarr</strong> (<a href="https://github.com/dominictarr">GitHub/dominictarr</a> / <a href="http://twitter.com/dominictarr">Twitter/@dominictarr</a>) contributed to the ReadStream fixes and is just a generally valuable &amp; awesome sage in the LevelDB + Node community.</li>
-<li><strong>Julian Gruber</strong> (<a href="https://github.com/juliangruber">GitHub/juliangruber</a> / <a href="http://twitter.com/juliangruber">Twitter/@juliangruber</a>) contributed the encoding options for WriteStreams and most of the work on the new chained <code>batch()</code>.</li>
-<li><strong>Matteo Collina</strong> (<a href="https://github.com/mcollina">GitHub/mcollina</a> / <a href="https://twitter.com/matteocollina">Twitter/@matteocollina</a>) contributed the <code>&#39;type&#39;</code> options for WriteStreams and most of the work on performance improvements to ReadStreams.</li>
-<li><strong>David Björklund</strong> (<a href="https://github.com/kesla">GitHub/kesla</a> / <a href="http://twitter.com/david_bjorklund">Twitter/@david_bjorklund</a>) also contributed work on ReadStream performance.</li>
-<li><strong>Max Ogden</strong> (<a href="https://github.com/maxogden">GitHub/maxogden</a> / <a href="http://twitter.com/maxogden">Twitter/@maxogden</a>) and <strong>Anton Whalley</strong> (<a href="https://github.com/No9">GitHub/No9</a> / <a href="https://twitter.com/antonwhalley">Twitter/@antonwhalley</a>) both worked on extracting most of the LevelDOWN test suite into <a href="https://github.com/rvagg/node-abstract-leveldown">AbstractLevelDOWN</a> to form a LevelDOWN-spec that&#39;s also runnable in browser environments.</li>
-</ul>
-<p>And others, who you can find in <a href="https://github.com/rvagg/node-levelup/pull/129">this 0.9 WIP thread</a>, plus additional users who reported &amp; found issues.</p>
 
       </section>
 

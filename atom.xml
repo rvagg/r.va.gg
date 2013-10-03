@@ -4,13 +4,52 @@
   <title>r.va.gg</title>
  
   <link href="http://r.va.gg" />
-  <updated>2013-10-03T07:47:38.942Z</updated>
+  <updated>2013-10-03T10:21:48.092Z</updated>
   <id>http://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
   </author>
   <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/atom+xml" href="http://r.va.gg/feed.xml" />
 
+  
+    <entry>
+      <title>Should I use a single LevelDB or many to hold my data?</title>
+      <link href="http://r.va.gg/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html" />
+      <updated>2013-10-03T00:00:00.000Z</updated>
+      <id>http://r.va.gg/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html</id>
+      <content type="html">
+        &lt;p&gt;This is a long overdue post, so long in fact that I can&#39;t remember who I promised to do this for! Regardless, I keep on having discussions around this topic so I thought it worthwhile putting down some notes on what I believe to be the factors you should consider when making this decision.&lt;/p&gt;
+&lt;h3&gt;What&#39;s the question?&lt;/h3&gt;
+&lt;p&gt;It goes like this: You have an application that uses LevelDB, in particular I&#39;m talking about Node.js applications here but the same would apply if you&#39;re using LevelUP in the browser and also most of the other back-ends for LevelUP. And you invariably end up with different kinds of data, sometimes the kinds of data you&#39;re storing is so different that it feels strange putting them into the same storage blob. Often though, you just have sets of not-very-related data that you need to store and you end up having to make a decision: &lt;strong&gt;do I put everything into a single LevelDB store or do I put things into their own, separate, LevelDB store?&lt;/strong&gt;&lt;/p&gt;
+&lt;h3&gt;This stuff doesn&#39;t &lt;em&gt;belong&lt;/em&gt; together!&lt;/h3&gt;
+&lt;p&gt;Coming from an relational database background, it took me a little while to displace the concept of discrete &lt;em&gt;tables&lt;/em&gt; with the notion of &lt;em&gt;namespacing&lt;/em&gt; within the same store. I can understand the temptation to want to keep things separate, not wanting to end up with a huge blob of data that just &lt;em&gt;shouldn&#39;t be together&lt;/em&gt;. But this isn&#39;t the relational database world and you need to move on!&lt;/p&gt;
+&lt;p&gt;We have a set of LevelUP addons, such as &lt;a href=&quot;https://github.com/dominictarr/level-sublevel&quot;&gt;sublevel&lt;/a&gt;, that exist mainly to provide you with the comfort of being able to separate your data by whatever criteria makes sense. &lt;a href=&quot;https://github.com/deanlandolt/bytewise&quot;&gt;bytewise&lt;/a&gt; is another tool that can serve a similar purpose and some people even use sublevel and bytewise together to achieve more complex organisation.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;We have the tools at our disposal in Node.js to turn a one-dimensional storage array into a very complex, multidimensional storage &lt;em&gt;system&lt;/em&gt; where unrelated, and semi-related data can coexist.&lt;/strong&gt; So, if the only reason you want to store things in separate stores is because it just &lt;em&gt;feels&lt;/em&gt; right to do so, you should probably be looking at what&#39;s making you think that way. You may need to update your assumptions.&lt;/p&gt;
+&lt;h3&gt;Technical considerations&lt;/h3&gt;
+&lt;p&gt;That aside, there are some technical considerations for making this decision:&lt;/p&gt;
+&lt;h4&gt;Size and performance&lt;/h4&gt;
+&lt;p&gt;To be clear, &lt;strong&gt;LevelDB is fast&lt;/strong&gt; and it can also store &lt;strong&gt;lots of data&lt;/strong&gt;, it&#39;ll handle Gigabytes of data without too much sweat. However, there &lt;em&gt;are&lt;/em&gt; some performance concerns when you start getting in to the Gigabyte range, mainly when you&#39;re trying to push data in at a high rate. Most use-cases don&#39;t do this so be honest about your performance needs. For most people LevelDB is simply fast.&lt;/p&gt;
+&lt;p&gt;However, if you do have a high-throughput scenario involving a large amount of data that you need to store then you may want to consider having a separate store to deal with the large data and another one to deal with the rest of your data so the performance isn&#39;t impacted across the board.&lt;/p&gt;
+&lt;p&gt;But again, be honest about what your workload is, you&#39;re probably not pushing &lt;a href=&quot;http://voxer.com&quot;&gt;Voxer&lt;/a&gt; amounts of data so don&#39;t prematurely optimise around the workload you&#39;d like to think you have or are going to have one day in the distant future.&lt;/p&gt;
+&lt;h3&gt;Cache&lt;/h3&gt;
+&lt;p&gt;Caching is transparent by default with LevelDB so it&#39;s easy to forget about it when making these kinds of decisions but it&#39;s actually quite important for this particular question.&lt;/p&gt;
+&lt;p&gt;By default, you have an 8M LRU cache with LevelDB and &lt;em&gt;all&lt;/em&gt; reads use that cache, for look-ups and also for updating with newly read values. So, you can have a lot of cache-thrash unless you&#39;re reading the same values again and again. &lt;/p&gt;
+&lt;p&gt;But, there is a &lt;code&gt;fillCache&lt;/code&gt; (boolean) option for read operations (both &lt;code&gt;get()&lt;/code&gt; and &lt;code&gt;createReadStream()&lt;/code&gt; and its variations). So you can set this to &lt;code&gt;false&lt;/code&gt; where you know you won&#39;t be needing fast access to those entries again and you don&#39;t want to push out other entries from the LRU.&lt;/p&gt;
+&lt;p&gt;So caching strategies can be separate for different types of data and are not a strong reason to keep things in a separate data store.&lt;/p&gt;
+&lt;p&gt;I always recommend that you should tinker with the &lt;code&gt;cacheSize&lt;/code&gt; option when you&#39;re using LevelDB, it can be as large as you want to fit in the available memory of your machine. As a rule of thumb, somewhere between 2/3 and 3/4 of the available memory should be a maximum if you can afford it.&lt;/p&gt;
+&lt;p&gt;Consider though what happens if you are using separate LevelDB stores, you now have to deal with juggling &lt;code&gt;cacheSize&lt;/code&gt; between the stores. Often, you&#39;re probably going to be best served by having a single, large cache that can operate across all your data types and let the normal behaviour of your application determine what gets cached with occasional reliance on &lt;code&gt;&#39;fillCache&#39;: false&lt;/code&gt; to fine-tune. &lt;/p&gt;
+&lt;h3&gt;Consistency&lt;/h3&gt;
+&lt;p&gt;As I discussed in my &lt;a href=&quot;http://r.va.gg/presentations/lxjs2013/&quot;&gt;LXJS&lt;/a&gt; talk, the &lt;em&gt;atomic batch&lt;/em&gt; is an important primitive for building solid database functionality with inherent &lt;em&gt;consistency&lt;/em&gt;. When you&#39;re using &lt;strong&gt;sublevel&lt;/strong&gt;, even though you have what operate like separate LevelUP instances for each sublevel, you still get to perform atomic batch operations between sublevels. Consider indexing where you may have a primary sublevel for the entries you&#39;re writing and a secondary sublevel for the indexing data used to reference the primary data for lookups. If you&#39;re running these as separate stores then you lose the benefits of the atomic batch, you just can&#39;t perform multiple operations with guaranteed consistency.&lt;/p&gt;
+&lt;p&gt;Try and keep the atomic batch in mind when building your application, instead of accepting the possibility of inconsistent state, use the batch to keep consistency.&lt;/p&gt;
+&lt;h3&gt;Back-end flexibility&lt;/h3&gt;
+&lt;p&gt;OK, this one is a bit left-field, but remember that LevelUP is back-end-agnostic. It&#39;s inspired by LevelDB but it doesn&#39;t have to be Google&#39;s LevelDB that&#39;s storing data for you. It could be Basho&#39;s fork or HyperLevelDB. It could even be LMDB or something a little crazy like MemDOWN or mysqlDOWN! &lt;/p&gt;
+&lt;p&gt;If you&#39;re at all concerned about performance, and most people claim to be even though they&#39;re not building performance-critical applications, then you should be benchmarking your particular workload against your storage system. Each of the back-ends for LevelUP have different performance characteristics and different trade-offs that you need to understand and test against your needs. You may find that one back-end works for one kind of data in your application and another back-end works for another.&lt;/p&gt;
+&lt;h3&gt;Summary&lt;/h3&gt;
+&lt;p&gt;The TL;DR is: in most cases, a single LevelDB store is generally preferable unless you have a &lt;em&gt;real&lt;/em&gt; reason for having separate ones.&lt;/p&gt;
+&lt;p&gt;Have I missed any considerations that you&#39;ve come across when making this choice? Let me know in the comments.&lt;/p&gt;
+
+      </content>
+    </entry>
   
     <entry>
       <title>Primitives for JS Databases (an LXJS adventure)</title>
