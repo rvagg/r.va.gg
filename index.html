@@ -42,6 +42,10 @@
           <ul>
             
  
+                <li><a href="/2013/10/primitives-for-js-databases-an-lxjs-adventure.html">Primitives for JS Databases (an LXJS adventure)</a></li>
+              
+ 
+ 
                 <li><a href="/2013/09/nodeconf.eu.html">NodeConf.eu</a></li>
               
  
@@ -50,8 +54,6 @@
               
  
  
-                <li><a href="/2013/06/leveldown-alternatives.html">LevelDOWN Alternatives</a></li>
-              
  
  
  
@@ -93,6 +95,35 @@
       
 
 <div id="for">
+  
+
+    <section class="post-content">
+
+      <h2 id="primitives-for-js-databases-an-lxjs-adventure"><a href="/2013/10/primitives-for-js-databases-an-lxjs-adventure.html">Primitives for JS Databases (an LXJS adventure)</a></h2>
+
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on October 3, 2013</p>
+        <p class="link"><a href="/2013/10/primitives-for-js-databases-an-lxjs-adventure.html">Permalink &amp; Comments</a></p>
+        <!-- <p class="commentcount"><a href="/2013/10/primitives-for-js-databases-an-lxjs-adventure.html#disqus_thread">Comments</a></p> -->
+      </div>
+
+      <section class="post-body">
+        <p>I gave a talk yesterday at <strong><a href="http://2013.lxjs.org">LXJS</a></strong> yesterday in the <em>&quot;Infrastructure.js&quot;</em> block and tried to talk about JavaScript Database Primitives; i.e. the basic building blocks we have landed on for building more complex database solutions in JavaScript.</p>
+<p>The talk certainly wasn&#39;t as good or clear as I wanted it to be, it worked much better in my head! A huge venue with over 300 talented JavaScripters, an absolutely massive screen, bright lights and loud amplification got the better of me and I wasn&#39;t able to pull the material together how I wanted to. The introvert within me is telling me to become a recluse for a little while just to recover! My <em>hope</em> is that at least one or two people are inspired to give <em>database hacking</em> a go because it&#39;s really not that difficult once you get your head around the primitives.</p>
+<p>Thankfully though, a portion of the material will be able to serve as the basis for the, long overdue, third part in my <a href="http://dailyjs.com/2013/04/19/leveldb-and-node-1/">three</a> <a href="http://dailyjs.com/2013/05/03/leveldb-and-node-2/">part</a> <a href="http://dailyjs.com">DailyJS</a> series on LevelDB &amp; Node.</p>
+<p>In summary, inspired by LevelDB, we&#39;ve ended up with a core set of primitives in <a href="https://github.com/rvagg/node-levelup">LevelUP</a> that can be used to build feature-rich and advanced database functionality. <strong>Atomic batch</strong> and <strong>ReadStream</strong> are the two non-trivial primitives, open, close, get, put, del are all pretty easy to understand as primitives, although <em>del</em> is perhaps redundant but we&#39;re opting for explicitness.</p>
+<p>My <a href="http://r.va.gg/presentations/lxjs2013">slides are online</a> but hopefully I&#39;ll be able to get my DailyJS article sorted out soon and I&#39;ll be able to explain what I was trying to get at.</p>
+<p>ReadStream as a primitive query mechanism is not too hard to understand once you get your head around key sorting and the implications for key structure. Batch is a little more subtle and relates to consistency and our ability to augment basic operations to create more complex functionality while keeping the data store in a consistent state.</p>
+<p>I additionally raised &quot;Buckets&quot;, or &quot;Namespaces&quot; as a primitive concept and discussed how <a href="https://github.com/dominictarr/level-sublevel">sublevel</a> has effectively become the standard for turning a one-dimensional data store into a multi-dimensional store able to encapsulate contain sophisticated functionality behind what is essentially just a key/value store.</p>
+<h3>Thanks to the LXJS team</h3>
+<p>It would be neglectful of me to not say how absolutely grateful I am to the LXJS team for putting so much effort into taking care of speakers; fantastic job.</p>
+<p>LXJS is an amazing event, put on by a dedicated and very talented team of people committed to the JavaScript community and the JavaScript community in Portugal in particular. This conference sets a very high bar for community-driven conferences with the way it has managed to get so many locals (and internationals!) involved in running an event in their own time.</p>
+<p><strong>David Dias, Ana Hevesi, Pedro Teixeira, Luís Reis, Nuno Job, Tiago Rodrigues, Leo Xavier, Alexander Kustov, André Rodrigues and Bruno Coelho</strong> have managed to put on an amazing event and are some of the nicest and talented people I&#39;ve met. Thank you to you all and everyone else who put on LXJS 2013, your hard work is appreciated and should be an inspiration to everyone involved in our local JavaScript communities, running events or considering running events like this.</p>
+
+      </section>
+
+    </section>
+
   
 
     <section class="post-content">
@@ -384,74 +415,6 @@
 <li><strong>Max Ogden</strong> (<a href="https://github.com/maxogden">GitHub/maxogden</a> / <a href="http://twitter.com/maxogden">Twitter/@maxogden</a>) and <strong>Anton Whalley</strong> (<a href="https://github.com/No9">GitHub/No9</a> / <a href="https://twitter.com/antonwhalley">Twitter/@antonwhalley</a>) both worked on extracting most of the LevelDOWN test suite into <a href="https://github.com/rvagg/node-abstract-leveldown">AbstractLevelDOWN</a> to form a LevelDOWN-spec that&#39;s also runnable in browser environments.</li>
 </ul>
 <p>And others, who you can find in <a href="https://github.com/rvagg/node-levelup/pull/129">this 0.9 WIP thread</a>, plus additional users who reported &amp; found issues.</p>
-
-      </section>
-
-    </section>
-
-  
-
-    <section class="post-content">
-
-      <h2 id="levelup-v0.9-some-major-changes"><a href="/2013/05/levelup-v0.9-some-major-changes.html">LevelUP v0.9 - Some Major Changes</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on May 20, 2013</p>
-        <p class="link"><a href="/2013/05/levelup-v0.9-some-major-changes.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2013/05/levelup-v0.9-some-major-changes.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p><img src="https://twimg0-a.akamaihd.net/profile_images/3360574989/92fc472928b444980408147e5e5db2fa_bigger.png" alt="LevelDB"></p>
-<p><a href="https://github.com/rvagg/node-levelup">LevelUP</a> is still quite young and bound to go through some major shifts. It&#39;s best to not be too tied to immature APIs early in a project&#39;s lifetime.</p>
-<p>That said, we&#39;re very interested in stability so we try to keep breaking changes to a minimum. However, we&#39;re about to publish version 0.9 and there&#39;s one change that&#39;s not exactly a &quot;breaking&quot; change in the normal sense, but it is something that I need to explain because it will impact on almost everyone currently using LevelUP.</p>
-<h3>Severing the dependency on LevelDOWN</h3>
-<p>LevelUP depends on <a href="https://github.com/rvagg/node-leveldown/">LevelDOWN</a> to do its <em>LevelDB thing</em>. LevelDOWN was once part of LevelUP until we split it off to a discrete project that focuses entirely on acting as a direct C++ bridge between LevelDB and Node. We get to focus on making LevelUP an awesome LevelDB-ish interface without being tied directly to LevelDB implementation details (e.g. Iterators vs Streams).</p>
-<p>In fact, a new project was spawned to define the LevelDOWN interface that LevelUP requires. <a href="https://github.com/rvagg/node-abstract-leveldown">AbstractLevelDOWN</a> is a set of strict tests for the functionality that LevelUP uses and it also implements a basic abstract shell that can be extended to create additional back-ends for LevelUP.</p>
-<p>So far, there are 3 projects worth mentioning that extend AbstractLevelDOWN:</p>
-<ul>
-<li><p><strong><a href="https://github.com/maxogden/level.js">level.js</a></strong> operates on top of <a href="https://developer.mozilla.org/en-US/docs/IndexedDB">IndexedDB</a> (which is in turn implemented on top of <a href="https://code.google.com/p/leveldb/">LevelDB</a> in Chrome!).</p>
-</li>
-<li><p><strong><a href="https://github.com/No9/node-leveldown-gap">leveldown-gap</a></strong> is another browser implementation that uses <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/DOM/Storage#localStorage">localStorage</a> and is designed to be able to work in <a href="http://phonegap.com/">PhoneGap</a> applications.</p>
-</li>
-<li><p><strong><a href="https://github.com/rvagg/node-memdown">MemDOWN</a></strong> is a pure in-memory implementation that doesn&#39;t touch the disk. It&#39;s obviously not good for persistent data but sometimes that&#39;s not what you need.</p>
-</li>
-</ul>
-<p>Plus some other efforts to adapt other embedded and non-embedded data stores to the LevelDOWN interface. Additionally, there are other versions of LevelDB that can be used, including the fork that <a href="http://basho.com/">Basho</a> maintains for use in <a href="http://basho.com/riak/">Riak</a>. (I have a branch of LevelDOWN that uses this version of LevelDB that I&#39;ll release as soon as I can explain and demonstrate the performance differences to vanilla LevelDB for Node users).</p>
-<p>In short, LevelUP doesn&#39;t <em>need</em> LevelDOWN in the way it once did and LevelUP is turning into a more generic interface to sorted key/value storage systems, albeit with a distinct LevelDB-flavour.</p>
-<p>Since version 0.8 we&#39;ve supported a <code>&#39;db&#39;</code> option when you create a LevelUP instance. This option can be used to provide an alternative LevelDOWN-compatible back-end. Unfortunately, LevelDOWN being defined as a strict dependency of LevelUP means that each time you install it you have to compile LevelDOWN, even if you don&#39;t want it. So, we&#39;ve removed it as a dependency but it&#39;s still <em>wired up</em> so that that the only thing you need to do is actually install LevelDOWN alongside LevelUP and it&#39;ll take care of the rest.</p>
-<div class="highlight"><pre><span class="nv">$ </span>npm install levelup leveldown
-</pre></div>
-
-<p>From version 0.9 onwards, you&#39;ll need to do this, or you&#39;ll see an (informative) error.</p>
-<h3>Introducing &quot;Level&quot;</h3>
-<p>To make life easier, we&#39;re publishing an additional package in npm that will make this easier by bundling both LevelUP and LevelDOWN as dependencies and exposing LevelUP directly. The <strong><a href="https://github.com/level/level">Level</a></strong> package is a very simple wrapper that exists purely as a convenience. It&#39;ll track the same versioning as LevelUP so it&#39;s a straight substitution.</p>
-<div class="highlight"><pre><span class="nv">$ </span>npm install level
-</pre></div>
-
-<p>You can simply change your <code>&quot;dependencies&quot;</code> from <strong>&quot;levelup&quot;</strong> to <strong>&quot;level&quot;</strong>, plus you can use it just like LevelUP:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">levelup</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;level&#39;</span><span class="p">)</span>
-<span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">levelup</span><span class="p">(</span><span class="s1">&#39;./my.db&#39;</span><span class="p">)</span>
-<span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;yay!&#39;</span><span class="p">,</span> <span class="s1">&#39;it works!&#39;</span><span class="p">)</span>
-</pre></div>
-
-<h3>Switching things up</h3>
-<p>Now we have a properly pluggable back-end, expect to see a growing array of choice and innovation. The most exciting space at the moment is browser-land. Consider <strong>level.js</strong>:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">levelup</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;levelup&#39;</span><span class="p">)</span>
-  <span class="p">,</span> <span class="nx">leveljs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;level-js&#39;</span><span class="p">)</span>
-
-<span class="nb">window</span><span class="p">.</span><span class="nx">db</span> <span class="o">=</span> <span class="nx">levelup</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">db</span><span class="o">:</span> <span class="nx">leveljs</span> <span class="p">})</span>
-
-<span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;LevelUP string&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">db</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;name=&#39;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">)</span>
-  <span class="p">})</span>
-<span class="p">})</span>
-</pre></div>
-
-<p>Yep, that&#39;s browser code. Simply <code>npm install levelup level-js</code> and run the module through <a href="http://browserify.org/">Browserify</a> and you get the full LevelUP API in your browser!</p>
-<hr>
-<p>Stay tuned! This is just one step in the quest for a truly modular database system that lets you build a database that suits your applications and not the other way around.</p>
 
       </section>
 
