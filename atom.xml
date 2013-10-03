@@ -4,7 +4,7 @@
   <title>r.va.gg</title>
  
   <link href="http://r.va.gg" />
-  <updated>2013-10-03T10:21:48.092Z</updated>
+  <updated>2013-10-03T16:27:58.990Z</updated>
   <id>http://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
@@ -59,6 +59,7 @@
       <content type="html">
         &lt;p&gt;I gave a talk yesterday at &lt;strong&gt;&lt;a href=&quot;http://2013.lxjs.org&quot;&gt;LXJS&lt;/a&gt;&lt;/strong&gt; yesterday in the &lt;em&gt;&quot;Infrastructure.js&quot;&lt;/em&gt; block and tried to talk about JavaScript Database Primitives; i.e. the basic building blocks we have landed on for building more complex database solutions in JavaScript.&lt;/p&gt;
 &lt;p&gt;The talk certainly wasn&#39;t as good or clear as I wanted it to be, it worked much better in my head! A huge venue with over 300 talented JavaScripters, an absolutely massive screen, bright lights and loud amplification got the better of me and I wasn&#39;t able to pull the material together how I wanted to. The introvert within me is telling me to become a recluse for a little while just to recover! My &lt;em&gt;hope&lt;/em&gt; is that at least one or two people are inspired to give &lt;em&gt;database hacking&lt;/em&gt; a go because it&#39;s really not that difficult once you get your head around the primitives.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Edit:&lt;/em&gt;&lt;/strong&gt; &lt;em&gt;I wasn&#39;t trying to elicit sympathy here, I genuinely think that I wasn&#39;t clear on what I was trying to communicate. It went so well in my head, as it usually does, but I fell far short of what I wanted to express. I&#39;ll attempt to rectify some of that with a writeup (see next para).&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Thankfully though, a portion of the material will be able to serve as the basis for the, long overdue, third part in my &lt;a href=&quot;http://dailyjs.com/2013/04/19/leveldb-and-node-1/&quot;&gt;three&lt;/a&gt; &lt;a href=&quot;http://dailyjs.com/2013/05/03/leveldb-and-node-2/&quot;&gt;part&lt;/a&gt; &lt;a href=&quot;http://dailyjs.com&quot;&gt;DailyJS&lt;/a&gt; series on LevelDB &amp; Node.&lt;/p&gt;
 &lt;p&gt;In summary, inspired by LevelDB, we&#39;ve ended up with a core set of primitives in &lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt; that can be used to build feature-rich and advanced database functionality. &lt;strong&gt;Atomic batch&lt;/strong&gt; and &lt;strong&gt;ReadStream&lt;/strong&gt; are the two non-trivial primitives, open, close, get, put, del are all pretty easy to understand as primitives, although &lt;em&gt;del&lt;/em&gt; is perhaps redundant but we&#39;re opting for explicitness.&lt;/p&gt;
 &lt;p&gt;My &lt;a href=&quot;http://r.va.gg/presentations/lxjs2013&quot;&gt;slides are online&lt;/a&gt; but hopefully I&#39;ll be able to get my DailyJS article sorted out soon and I&#39;ll be able to explain what I was trying to get at.&lt;/p&gt;
