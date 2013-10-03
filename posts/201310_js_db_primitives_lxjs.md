@@ -10,6 +10,8 @@ I gave a talk yesterday at **[LXJS](http://2013.lxjs.org)** yesterday in the *"I
 
 The talk certainly wasn't as good or clear as I wanted it to be, it worked much better in my head! A huge venue with over 300 talented JavaScripters, an absolutely massive screen, bright lights and loud amplification got the better of me and I wasn't able to pull the material together how I wanted to. The introvert within me is telling me to become a recluse for a little while just to recover! My *hope* is that at least one or two people are inspired to give *database hacking* a go because it's really not that difficult once you get your head around the primitives.
 
+***Edit:*** *I wasn't trying to elicit sympathy here, I genuinely think that I wasn't clear on what I was trying to communicate. It went so well in my head, as it usually does, but I fell far short of what I wanted to express. I'll attempt to rectify some of that with a writeup (see next para).*
+
 Thankfully though, a portion of the material will be able to serve as the basis for the, long overdue, third part in my [three](http://dailyjs.com/2013/04/19/leveldb-and-node-1/) [part](http://dailyjs.com/2013/05/03/leveldb-and-node-2/) [DailyJS](http://dailyjs.com) series on LevelDB & Node.
 
 In summary, inspired by LevelDB, we've ended up with a core set of primitives in [LevelUP](https://github.com/rvagg/node-levelup) that can be used to build feature-rich and advanced database functionality. **Atomic batch** and **ReadStream** are the two non-trivial primitives, open, close, get, put, del are all pretty easy to understand as primitives, although *del* is perhaps redundant but we're opting for explicitness.
