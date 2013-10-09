@@ -95,6 +95,7 @@ h2 a {
 
 .post-body p {
   text-align: justify;
+  line-height: 1.5;
 }
 
 pre, code {
