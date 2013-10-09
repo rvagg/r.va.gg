@@ -4,13 +4,49 @@
   <title>r.va.gg</title>
  
   <link href="http://r.va.gg" />
-  <updated>2013-10-03T16:27:58.990Z</updated>
+  <updated>2013-10-09T09:53:44.134Z</updated>
   <id>http://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
   </author>
   <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/atom+xml" href="http://r.va.gg/feed.xml" />
 
+  
+    <entry>
+      <title>All the levels!</title>
+      <link href="http://r.va.gg/2013/10/all-the-levels.html" />
+      <updated>2013-10-09T00:00:00.000Z</updated>
+      <id>http://r.va.gg/2013/10/all-the-levels.html</id>
+      <content type="html">
+        &lt;p&gt;When we completely separated &lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt; and &lt;a href=&quot;https://github.com/rvagg/node-leveldown&quot;&gt;LevelDOWN&lt;/a&gt; so that installing LevelUP didn&#39;t automatically get you LevelDOWN, we set up a new package called &lt;strong&gt;&lt;a href=&quot;https://github.com/Level/level&quot;&gt;Level&lt;/a&gt;&lt;/strong&gt; that has them both as a dependency so you just need to do &lt;code&gt;var level = require(&#39;level&#39;)&lt;/code&gt; and everything is done for you.&lt;/p&gt;
+&lt;p&gt;But, we now have more than just the vanilla (Google) LevelDB in LevelDOWN. We also have a HyperLevelDB version and a Basho fork. These are maintained on branches in the LevelDOWN repo and are usually released now every time a new LevelDOWN is released. They are called &lt;strong&gt;leveldown-hyper&lt;/strong&gt; and &lt;strong&gt;leveldown-basho&lt;/strong&gt; in npm but you need to plug them in to LevelUP yourself to make them work. We also have &lt;a href=&quot;https://github.com/rvagg/lmdb&quot;&gt;Node LMDB&lt;/a&gt; that&#39;s LevelDOWN compatible and a few others.&lt;/p&gt;
+&lt;p&gt;So, as of today, we&#39;ve released a new, small library called &lt;strong&gt;&lt;a href=&quot;https://github.com/level/level-packager&quot;&gt;level-packager&lt;/a&gt;&lt;/strong&gt; that does this bundling process so that you can feed it a LevelDOWN instance and it&#39;ll return a Level-type object that can be exported from a package like &lt;strong&gt;Level&lt;/strong&gt;. This is meant to be used internally and it&#39;s now being used to support these new packages that are available in npm:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/Level/level-hyper&quot;&gt;level-hyper&lt;/a&gt;&lt;/strong&gt; bundles the HyperLevelDB version of LevelDOWN with LevelUP&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/Level/level-basho&quot;&gt;level-basho&lt;/a&gt;&lt;/strong&gt; bundles the Bash fork of LevelDB in LevelDOWN with LevelUP&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/Level/level-lmdb&quot;&gt;level-lmdb&lt;/a&gt;&lt;/strong&gt; bundles Node LMDB with LevelUP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The version numbers of these packages will track the version of LevelUP.&lt;/p&gt;
+&lt;p&gt;So you can now simply do:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;level&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;level-hyper&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;db&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;level&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;/path/to/db&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;foo&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;woohoo!&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;If you&#39;re already using &lt;strong&gt;Level&lt;/strong&gt; then you can very easily switch it out with one of these alternatives to try them out.&lt;/p&gt;
+&lt;p&gt;Both HyperLevelDB and the Basho LevelDB fork are binary-compatible with Google&#39;s LevelDB, with one small caveat: with the latest release, LevelDB has switched to making &lt;em&gt;.ldb&lt;/em&gt; files instead of &lt;em&gt;.sst&lt;/em&gt; files inside a data store directory because of something about Windows backups (blah blah). Neither of the alternative forks know anything about these new files yet so you may run in to trouble if you have &lt;em&gt;.ldb&lt;/em&gt; files in your store (although I&#39;m pretty sure you can simply rename these to &lt;em&gt;.sst&lt;/em&gt; and it&#39;ll be fine with any version).&lt;/p&gt;
+&lt;p&gt;Also, LMDB is completely different to LevelDB so you won&#39;t be able to open an existing data store. But you should be able to do something like this:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;level&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;/path/to/level.db&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;createReadStream&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pipe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;level-lmdb&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;/path/to/lmdb.db&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;createWriteStream&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Whoa...&lt;/p&gt;
+&lt;h3&gt;A note about HyperLevelDB&lt;/h3&gt;
+&lt;p&gt;Lastly, I&#39;d like to encourage you to try the HyperLevelDB version if you are pushing hard on LevelDB&#39;s performance. The HyperDex fork is tuned for multi-threaded access for reads and writes and is therefore particularly suited to how we use it in Node. The Basho version doesn&#39;t show much performance difference mainly because they are optimising for Riak running 16 separate instances on the same server so multi-threaded access isn&#39;t as interesting for them. You should find significant performance gains if you&#39;re doing very heavy writes in particular with HyperLevelDB. Also, if you&#39;re interested in support for HyperLevelDB then pop in to ##leveldb on Freenode and bother &lt;em&gt;&lt;a href=&quot;https://twitter.com/rescrv&quot;&gt;rescrv&lt;/a&gt;&lt;/em&gt; (Robert Escriva), author of HyperLevelDB and our resident LevelDB expert.&lt;/p&gt;
+&lt;p&gt;It&#39;s also worth nothing that HyperDex are interested in offering commercial support for people using LevelDB, not just HyperLevelDB but also Google&#39;s LevelDB. This means that anyone using either of these packages in Node should be able to get solid support if they are doing any heavy work in a commercial environment and need the surety of experts behind them to help pick up the pieces. I imagine this would cover things like LevelDB corruption and any LevelDB bugs you may run in to (we&#39;re currently looking at a subtle &lt;a href=&quot;https://github.com/rvagg/node-levelup/issues/171&quot;&gt;batch-related LevelDB bug&lt;/a&gt; that&#39;s come along with the 1.14.0 release, they do exist!). Talk to Robert if you want more information about commercial support.&lt;/p&gt;
+
+      </content>
+    </entry>
   
     <entry>
       <title>Should I use a single LevelDB or many to hold my data?</title>

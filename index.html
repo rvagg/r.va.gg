@@ -42,6 +42,10 @@
           <ul>
             
  
+                <li><a href="/2013/10/all-the-levels.html">All the levels!</a></li>
+              
+ 
+ 
                 <li><a href="/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html">Should I use a single LevelDB or many to hold my data?</a></li>
               
  
@@ -50,8 +54,6 @@
               
  
  
-                <li><a href="/2013/09/nodeconf.eu.html">NodeConf.eu</a></li>
-              
  
  
  
@@ -97,6 +99,50 @@
       
 
 <div id="for">
+  
+
+    <section class="post-content">
+
+      <h2 id="all-the-levels"><a href="/2013/10/all-the-levels.html">All the levels!</a></h2>
+
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on October 9, 2013</p>
+        <p class="link"><a href="/2013/10/all-the-levels.html">Permalink &amp; Comments</a></p>
+        <!-- <p class="commentcount"><a href="/2013/10/all-the-levels.html#disqus_thread">Comments</a></p> -->
+      </div>
+
+      <section class="post-body">
+        <p>When we completely separated <a href="https://github.com/rvagg/node-levelup">LevelUP</a> and <a href="https://github.com/rvagg/node-leveldown">LevelDOWN</a> so that installing LevelUP didn&#39;t automatically get you LevelDOWN, we set up a new package called <strong><a href="https://github.com/Level/level">Level</a></strong> that has them both as a dependency so you just need to do <code>var level = require(&#39;level&#39;)</code> and everything is done for you.</p>
+<p>But, we now have more than just the vanilla (Google) LevelDB in LevelDOWN. We also have a HyperLevelDB version and a Basho fork. These are maintained on branches in the LevelDOWN repo and are usually released now every time a new LevelDOWN is released. They are called <strong>leveldown-hyper</strong> and <strong>leveldown-basho</strong> in npm but you need to plug them in to LevelUP yourself to make them work. We also have <a href="https://github.com/rvagg/lmdb">Node LMDB</a> that&#39;s LevelDOWN compatible and a few others.</p>
+<p>So, as of today, we&#39;ve released a new, small library called <strong><a href="https://github.com/level/level-packager">level-packager</a></strong> that does this bundling process so that you can feed it a LevelDOWN instance and it&#39;ll return a Level-type object that can be exported from a package like <strong>Level</strong>. This is meant to be used internally and it&#39;s now being used to support these new packages that are available in npm:</p>
+<ul>
+<li><strong><a href="https://github.com/Level/level-hyper">level-hyper</a></strong> bundles the HyperLevelDB version of LevelDOWN with LevelUP</li>
+<li><strong><a href="https://github.com/Level/level-basho">level-basho</a></strong> bundles the Bash fork of LevelDB in LevelDOWN with LevelUP</li>
+<li><strong><a href="https://github.com/Level/level-lmdb">level-lmdb</a></strong> bundles Node LMDB with LevelUP</li>
+</ul>
+<p>The version numbers of these packages will track the version of LevelUP.</p>
+<p>So you can now simply do:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">level</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;level-hyper&#39;</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">level</span><span class="p">(</span><span class="s1">&#39;/path/to/db&#39;</span><span class="p">)</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;woohoo!&#39;</span><span class="p">)</span>
+</pre></div>
+
+<p>If you&#39;re already using <strong>Level</strong> then you can very easily switch it out with one of these alternatives to try them out.</p>
+<p>Both HyperLevelDB and the Basho LevelDB fork are binary-compatible with Google&#39;s LevelDB, with one small caveat: with the latest release, LevelDB has switched to making <em>.ldb</em> files instead of <em>.sst</em> files inside a data store directory because of something about Windows backups (blah blah). Neither of the alternative forks know anything about these new files yet so you may run in to trouble if you have <em>.ldb</em> files in your store (although I&#39;m pretty sure you can simply rename these to <em>.sst</em> and it&#39;ll be fine with any version).</p>
+<p>Also, LMDB is completely different to LevelDB so you won&#39;t be able to open an existing data store. But you should be able to do something like this:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;level&#39;</span><span class="p">)(</span><span class="s1">&#39;/path/to/level.db&#39;</span><span class="p">).</span><span class="nx">createReadStream</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;level-lmdb&#39;</span><span class="p">)(</span><span class="s1">&#39;/path/to/lmdb.db&#39;</span><span class="p">).</span><span class="nx">createWriteStream</span><span class="p">())</span>
+</pre></div>
+
+<p>Whoa...</p>
+<h3>A note about HyperLevelDB</h3>
+<p>Lastly, I&#39;d like to encourage you to try the HyperLevelDB version if you are pushing hard on LevelDB&#39;s performance. The HyperDex fork is tuned for multi-threaded access for reads and writes and is therefore particularly suited to how we use it in Node. The Basho version doesn&#39;t show much performance difference mainly because they are optimising for Riak running 16 separate instances on the same server so multi-threaded access isn&#39;t as interesting for them. You should find significant performance gains if you&#39;re doing very heavy writes in particular with HyperLevelDB. Also, if you&#39;re interested in support for HyperLevelDB then pop in to ##leveldb on Freenode and bother <em><a href="https://twitter.com/rescrv">rescrv</a></em> (Robert Escriva), author of HyperLevelDB and our resident LevelDB expert.</p>
+<p>It&#39;s also worth nothing that HyperDex are interested in offering commercial support for people using LevelDB, not just HyperLevelDB but also Google&#39;s LevelDB. This means that anyone using either of these packages in Node should be able to get solid support if they are doing any heavy work in a commercial environment and need the surety of experts behind them to help pick up the pieces. I imagine this would cover things like LevelDB corruption and any LevelDB bugs you may run in to (we&#39;re currently looking at a subtle <a href="https://github.com/rvagg/node-levelup/issues/171">batch-related LevelDB bug</a> that&#39;s come along with the 1.14.0 release, they do exist!). Talk to Robert if you want more information about commercial support.</p>
+
+      </section>
+
+    </section>
+
   
 
     <section class="post-content">
@@ -323,74 +369,6 @@
 <p>If anyone wants to run a similar style workshop for their local meet-up, using the same content, I&#39;d love to receive contributions to <strong>learnyounode</strong>. Alternatively, make your own! I extracted the core framework from <strong>learnyounode</strong> and it now lives separately as <strong><a href="https://github.com/rvagg/workshopper">workshopper</a></strong>.</p>
 <p><a href="https://nodei.co/npm/workshopper/"><img src="https://nodei.co/npm/workshopper.png?downloads=true&amp;stars=true" alt="NPM"></a></p>
 <p>I would love feedback from anyone in attendance or anyone that uses this tool to run their own workshops! <strong>learnyounode</strong> is already listed in Max Ogden&#39;s excellent <strong><a href="https://github.com/maxogden/art-of-node">The Art of Node</a></strong>, so I&#39;m looking forward to contributions to help turn this into a really useful teaching tool.</p>
-
-      </section>
-
-    </section>
-
-  
-
-    <section class="post-content">
-
-      <h2 id="leveldown-alternatives"><a href="/2013/06/leveldown-alternatives.html">LevelDOWN Alternatives</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on June 7, 2013</p>
-        <p class="link"><a href="/2013/06/leveldown-alternatives.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2013/06/leveldown-alternatives.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p>Since <strong><a href="https://github.com/rvagg/node-levelup">LevelUP</a></strong> v0.9, <strong><a href="https://github.com/rvagg/node-leveldown/">LevelDOWN</a></strong> has been an optional dependency, allowing you to switch in alternative back-ends.</p>
-<p>We have <strong><a href="https://github.com/rvagg/node-memdown">MemDOWN</a></strong>, a pure in-memory data-store, allowing you to run LevelUP against transient, and very fast storage.</p>
-<p>We also have <strong><a href="https://github.com/maxogden/level.js">level.js</a></strong> which works against <strong>IndexedDB</strong>, allowing you to run LevelUP in the browser!</p>
-<p>Since LevelUP just needs some basic primitives and a sorted bi-directional iterator, we can swap out the back-end with numerous alternatives.</p>
-<p>The easy targets are the forks of LevelDB that purport to <em>fix</em> or <em>improve</em> LevelDB in some way. I have another post brewing on what I think about the claims made in this area and how we ought to approach them, but that can come later. For now I have some packages in npm for you to try for yourself!</p>
-<h2>Basho</h2>
-<p>First of all we have <strong>leveldown-basho</strong> which bundles the <a href="https://github.com/basho/leveldb">Basho LevelDB fork</a> into LevelDOWN. See Matthew Von-Maszewski&#39;s <a href="https://speakerdeck.com/basho/optimizing-leveldb-for-performance-and-scale-ricon-east-2013">slides</a> from the recent Ricon East 2013 for more information on what they&#39;ve tried to do with LevelDB.</p>
-<p>In summary, Basho&#39;s aim is to optimise LevelDB &quot;for the server&quot;, particularly for high write throughput. They use &gt;1 compaction threads and relax the rules a little on overlapping keys for the lower levels. Plus a few other things that I won&#39;t get in to here.</p>
-<div class="highlight"><pre><span class="nv">$ </span>npm install levelup leveldown-basho
-</pre></div>
-
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">levelup</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;levelup&#39;</span><span class="p">)</span>
-  <span class="p">,</span> <span class="nx">leveldown</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;leveldown-basho&#39;</span><span class="p">)</span>
-  <span class="p">,</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">levelup</span><span class="p">(</span><span class="s1">&#39;/path/to/db&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">db</span><span class="o">:</span> <span class="nx">leveldown</span> <span class="p">})</span>  
-<span class="c1">// go to work on `db`</span>
-</pre></div>
-
-<p><em>Disclaimer: some of the LevelDOWN and LevelUP tests are failing on the current build for this release, although I don&#39;t believe they should impact on standard usage but your mileage may vary...</em></p>
-<h2>HyperDex</h2>
-<p>Next, we have <strong>leveldown-hyper</strong>, which bundles a fork by the people behind <a href="http://hyperdex.org/">HyperDex</a>, a key-value store. Again their aim is to optimise LevelDB for a server environment. You can see some of their claims about performance <a href="http://hyperdex.org/performance/leveldb/">here</a>. I don&#39;t know as much about this fork, I&#39;ll investigate further when I have time, but they are also using multiple compaction threads to do the background work.</p>
-<div class="highlight"><pre><span class="nv">$ </span>npm install levelup leveldown-hyper
-</pre></div>
-
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">levelup</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;levelup&#39;</span><span class="p">)</span>
-  <span class="p">,</span> <span class="nx">leveldown</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;leveldown-hyper&#39;</span><span class="p">)</span>
-  <span class="p">,</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">levelup</span><span class="p">(</span><span class="s1">&#39;/path/to/db&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">db</span><span class="o">:</span> <span class="nx">leveldown</span> <span class="p">})</span>  
-<span class="c1">// go to work on `db`</span>
-</pre></div>
-
-<h2><i><strike>Lies!</strike></i> Benchmarks!</h2>
-<p>OK, benchmarks kind of suck, particularly microbenchmarks. It&#39;s really hard to test something that&#39;s meaningful for everyone&#39;s use-case. But you can make pretty pictures with them and they can tell something of a story, even if it&#39;s just the first page of a novel.</p>
-<p>So here we go. I&#39;ve put together a simplistic benchmark that tries to test the kind of situation that these two forks are aiming to optimise for. In particular, high-throughput writes. There&#39;s a common claim that LevelDB has problems with writes because the compaction thread can hold up levels 0 and 1 while it&#39;s working on higher levels; and you really want to be flushing the new data as soon as possible so you can get more in. (Again, I have more to say on this &amp; the claims about &quot;fixing&quot; the problem in a later post).</p>
-<p>I have a sorted-write benchmark in the <a href="https://github.com/rvagg/node-leveldown/tree/master/bench">LevelDOWN repo</a> that tries to push in 10M pre-sorted entries as fast as possible, fully utilising Node&#39;s worker-threads for the job. So this isn&#39;t your typical browser scenario. An important point here is that <strong>Node is a unique environment when looking at LevelDB performance</strong>. It&#39;s not going to be a straightforward mapping of benchmark results obtained with other LevelDB bindings onto what we can achieve in Node.</p>
-<p>Because there are so many entries, instead of recording the time for individual writes, I&#39;ve recorded average time for batches of 1000 writes. Below you can see what the write-times look like when plotted over time. There are a bunch of outliers that are above the maximum Y of 0.6ms, but not enough to warrant distracting from the interesting behaviour below 0.6ms so I chopped it off there.</p>
-<p><strong>It is important to note that I&#39;m using the default options</strong> here and this is where I&#39;ll probably cop some flak. Basho in particular advocate a healthy amount of &quot;tuning&quot; to achieve appropriate performance. In particular the write-buffer defaults to only 4M and you can push data in faster (at the cost of compactions later on) by increasing this. I think the forks may even have additional tunables of their own that you can fiddle with. But, this whole tuning thing is a rabbit hole I don&#39;t dare go down right now!</p>
-<p>I&#39;m running this on an i7-2630QM CPU, plenty of RAM and an SSD.</p>
-<p>You can see that we managed to push in the 10M entries in just over 95 seconds with the plain <strong>Google LevelDB (v1.10.0)</strong>.</p>
-<p><img src="http://r.va.gg/images/2013/06/write_sorted_times_g.png" height=500 width=800 align="center" /></p>
-<hr>
-<p>Next up we have the HyperDex fork. The main difference here is that we have it working slightly faster in total and the write-times have been trimmed down a bit to be more consistent. Not a bad effort with default settings, quite a nice picture.</p>
-<p><img src="http://r.va.gg/images/2013/06/write_sorted_times_h.png" height=500 width=800 align="center" /></p>
-<hr>
-<p>Lastly we can see what Basho have done. They&#39;ve been on this case for a lot longer than HyperDex have and their fork, internally at least, diverges quite a bit from Google&#39;s LevelDB.</p>
-<p>We can see that the write-time has been considerably flattened; which is in line with what Basho claim and are aiming for, the consistency here is <strong>very</strong> impressive. Unfortunately we&#39;ve ended up with a total time that is <strong>double</strong> what it took Google&#39;s LevelDB to get the 10M entries in!</p>
-<p>No doubt this is probably something to do with the tunables, or perhaps I&#39;ve messed something up, anything&#39;s possible!</p>
-<p><img src="http://r.va.gg/images/2013/06/write_sorted_times_b.png" height=500 width=800 align="center" /></p>
-<hr>
-<h2>So?</h2>
-<p>If you take anything away from this, here&#39;s what I think it should be: <strong>Do your own benchmarks if performance <em>really</em> is an issue for you</strong>. You&#39;re going to need some kind of benchmark suite that is tailored to your particular application. This will not only let you choose the appropriate storage system but it will give you something to work with when you start to get in to the mire that is &quot;tunables&quot;.</p>
-<p>It&#39;s likely I won&#39;t be able to leave this alone and will be posting more benchmarks with some tweaking and tuning. I&#39;d love to have input from others on this too of course! The code for this is all in the LevelDOWN repo with both of these forks under appropriately named branches.</p>
 
       </section>
 

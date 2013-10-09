@@ -42,6 +42,10 @@
           <ul>
             
  
+                <li><a href="/2013/10/all-the-levels.html">All the levels!</a></li>
+              
+ 
+ 
                 <li><a href="/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html">Should I use a single LevelDB or many to hold my data?</a></li>
               
  
@@ -50,8 +54,6 @@
               
  
  
-                <li><a href="/2013/09/nodeconf.eu.html">NodeConf.eu</a></li>
-              
  
  
  
@@ -97,6 +99,32 @@
       
 
 <div id="for">
+  
+
+    <section class="post-content">
+
+      <h2 id="leveldb-and-node-what-is-leveldb-anyway"><a href="/2013/05/leveldb-and-node-what-is-leveldb-anyway.html">LevelDB and Node: What is LevelDB Anyway?</a></h2>
+
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on May 1, 2013</p>
+        <p class="link"><a href="/2013/05/leveldb-and-node-what-is-leveldb-anyway.html">Permalink &amp; Comments</a></p>
+        <!-- <p class="commentcount"><a href="/2013/05/leveldb-and-node-what-is-leveldb-anyway.html#disqus_thread">Comments</a></p> -->
+      </div>
+
+      <section class="post-body">
+        <p>This is the first article in a three-part series on LevelDB and how it can be used in Node.</p>
+<p>This article will cover the LevelDB basics and internals to provide a foundation for the next two articles. The second and third articles will cover the core LevelDB Node libraries: <a href="https://github.com/rvagg/node-levelup">LevelUP</a>, <a href="https://github.com/rvagg/node-leveldown">LevelDOWN</a> and the rest of the LevelDB ecosystem that&#39;s appearing in Node-land.</p>
+<p><img src="http://dailyjs.com/images/posts/leveldb.png" alt="LevelDB"></p>
+<h3>What is LevelDB?</h3>
+<p>LevelDB is an <em>open-source</em>, <em>dependency-free</em>, <em>embedded key/value data store</em>. It was developed in 2011 by Jeff Dean and Sanjay Ghemawat, researchers from Google. It&#39;s written in C++ although it has third-party bindings for most common programming languages. Including JavaScript / Node.js of course.</p>
+<p>LevelDB is based on ideas in Google&#39;s BigTable but does not share code with BigTable, this allows it to be licensed for open source release. Dean and Ghemawat developed LevelDB as a replacement for SQLite as the backing-store for Chrome&#39;s IndexedDB implementation.</p>
+<p>It has since seen very wide adoption across the industry and serves as the back-end to a number of new databases and is now the recommended storage back-end for Riak.</p>
+<p><strong>Continue reading this article on <a href="http://dailyjs.com/2013/04/19/leveldb-and-node-1/">DailyJS.com</a></strong></p>
+
+      </section>
+
+    </section>
+
   
 
     <section class="post-content">
@@ -378,31 +406,6 @@ table.results tr &gt; * { padding: 0 3px; }
 <p>The new version of Bean is in npm with the tag <i>dev</i> so you can include it in your Ender builds by referring to <i>bean@dev</i> as the package name.</p>
 <p>For stand-alone, you can grab it from the <a href="https://github.com/fat/bean/tree/0.5-wip">0.5-wip branch</a> on GitHub.</p>
 <p>Thanks for getting this far!</p>
-
-      </section>
-
-    </section>
-
-  
-
-    <section class="post-content">
-
-      <h2 id="mod_geoip2_xff-update"><a href="/2012/07/mod_geoip2_xff-update.html">mod_geoip2_xff update</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on July 6, 2012</p>
-        <p class="link"><a href="/2012/07/mod_geoip2_xff-update.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2012/07/mod_geoip2_xff-update.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p>Thanks to a contribution from <a href="https://plus.google.com/105599514712357912650/posts">Kevin Gaudin</a>, I have a new release of my <a href="http://www.maxmind.com/app/mod_geoip">mod_geoip2</a> fork. (The history starts <a href="http://rod.vagg.org/2012/04/a-mod_geoip2-that-properly-handles-x-forwarded-for/">here</a>.)</p>
-<p>You can find the source here: <a href="https://github.com/rvagg/mod_geoip2_xff"><a href="https://github.com/rvagg/mod_geoip2_xff">https://github.com/rvagg/mod_geoip2_xff</a></a></p>
-<p>Kevin&#39;s addition provides a fall-back to the standard remote IP address of the client if no public IP address is found in the <em>X-Forwarded-For</em> header. Previously, my implementation just fell back to the default mod_geoip2 behaviour of just taking the first IP address in the <em>X-Forwarded-For</em> header, or the last if you set <em>GeoIPUseLastXForwardedForIP</em> in your config.</p>
-<p>I also took the opportunity to clean things up a little and introduce a config option to turn on the special <em>X-Forwarded-For</em> handling. You now have to set <strong>GeoIPUseLeftPublicXForwardedForIP</strong> to <strong>On</strong> to activate it.</p>
-<p>Thanks to Kevin, and additional contributions are welcome!</p>
-<p><strong>Update July 7th 2012</strong>: Since I was in C-mode, I went ahead and implemented something I&#39;ve tried to get working in the past: <strong>hostname lookups on the X-Forwarded-For host!</strong> I got intimate with APR and worked out how to use Apache to do the resolution so there isn&#39;t the lengthy timeout of raw syscalls. If you set <strong>GeoIPEnableHostnameLookups</strong> to <strong>On</strong>, you&#39;ll get a <strong>GEOIP_HOST</strong> environment variable to use.</p>
-<p>I&#39;ve also decided to start making tarballs available off GitHub for your convenience: <a href="https://github.com/rvagg/mod_geoip2_xff/downloads"><a href="https://github.com/rvagg/mod_geoip2_xff/downloads">https://github.com/rvagg/mod_geoip2_xff/downloads</a></a></p>
 
       </section>
 
