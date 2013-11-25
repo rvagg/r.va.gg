@@ -4,13 +4,113 @@
   <title>r.va.gg</title>
  
   <link href="http://r.va.gg" />
-  <updated>2013-11-18T06:31:17.172Z</updated>
+  <updated>2013-11-25T11:17:12.243Z</updated>
   <id>http://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
   </author>
   <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/atom+xml" href="http://r.va.gg/feed.xml" />
 
+  
+    <entry>
+      <title>Testing code against many Node versions with Docker</title>
+      <link href="http://r.va.gg/2013/11/testing-code-against-many-node-versions-with-docker.html" />
+      <updated>2013-11-26T00:00:00.000Z</updated>
+      <id>http://r.va.gg/2013/11/testing-code-against-many-node-versions-with-docker.html</id>
+      <content type="html">
+        &lt;p&gt;I haven&#39;t found reason to play with &lt;a href=&quot;http://www.docker.io&quot;&gt;Docker&lt;/a&gt; until now, but I&#39;ve finally came up with an excellent use-case.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/rvagg/nan&quot;&gt;NAN&lt;/a&gt; is a project that helps build native Node.js add-ons while maintaining compatibility with Node and V8 from Node versions 0.8 onwards. V8 is currently undergoing major internal changes which is making add-on development very difficult; NAN&#39;s purpose is to abstract that pain. Instead of having to manage the difficulties of keeping your code compatible across Node/V8 versions, NAN does it for you. But this means that we have to be sure to keep NAN tested and compatible with all of the versions it claims to support.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://travis-ci.org/&quot;&gt;Travis&lt;/a&gt; can help a little with this. It&#39;s possible to use &lt;a href=&quot;https://github.com/creationix/nvm&quot;&gt;nvm&lt;/a&gt; to test across different versions of Node, we&#39;ve tried this with NAN (see the &lt;a href=&quot;https://github.com/rvagg/nan/blob/ba82a9c1fba01b3df553ac624aeaf15ca3688315/.travis.yml&quot;&gt;.travis.yml&lt;/a&gt;). Ideally you&#39;d have better choice of Node versions, but Travis have had some &lt;a href=&quot;https://github.com/travis-ci/travis-ci/issues/1328&quot;&gt;difficulty&lt;/a&gt; keeping up. Also, npm bugs make it difficult, with a high failure rate from npm install problems, like &lt;a href=&quot;https://travis-ci.org/rvagg/nan/jobs/14440485&quot;&gt;this&lt;/a&gt; and &lt;a href=&quot;https://travis-ci.org/rvagg/nan/jobs/14474613&quot;&gt;this&lt;/a&gt;, so I don&#39;t even publish the badge on the NAN README.&lt;/p&gt;
+&lt;p&gt;The other problem with Travis is that it&#39;s a CI solution, not a proper testing solution. Even if it worked well, it&#39;s not really that helpful in the development process, you need rapid feedback that your code is working on your target platforms (this is one reason why I love back-end development more than front-end development!)&lt;/p&gt;
+&lt;p&gt;Enter Docker and &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/dnt&quot;&gt;DNT&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;div style=&quot;margin: 0 auto;&quot;&gt;
+  &lt;img src=&quot;http://www.docker.io/static/img/homepage-docker-logo.png&quot; width=&quot;138&quot; height=&quot;114&quot;&gt;
+  &lt;img src=&quot;http://nodejs.org/images/logos/nodejs-dark.png&quot; width=&quot;212&quot; height=&quot;114&quot;&gt;
+  &lt;img src=&quot;http://img.pandawhale.com/29490-Picard-applause-clapping-gif-s5nz.gif&quot; width=&quot;151&quot; height=&quot;114&quot;&gt;
+&lt;/div&gt;
+
+&lt;h3&gt;DNT: Docker Node Tester&lt;/h3&gt;
+&lt;p&gt;Docker is a tool that simplifies the use of Linux containers to create lightweight, isolated compute &quot;instances&quot;. Solaris and its variants have had this functionality for years in the form of &quot;zones&quot; but it&#39;s a fairly new concept for Linux and Docker makes the whole process a lot more friendly.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;DNT&lt;/strong&gt; contains two tools that work with Docker and Node.js to set-up containers for testing and run your project&#39;s tests in those containers.&lt;/p&gt;
+&lt;div style=&quot;margin: 0 auto;&quot;&gt;
+  &lt;img src=&quot;http://r.va.gg/images/2013/11/nan-dnt.png&quot;&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;DNT&lt;/strong&gt; includes a &lt;code&gt;setup-dnt&lt;/code&gt; script that sets up the most basic Docker images required to run Node.js applications, nothing extra. It first creates an image called &quot;dev_base&quot; that uses the default Docker &quot;ubuntu&quot; image and adds the build tools required to compile and install Node.js&lt;/p&gt;
+&lt;p&gt;Next it creates a &quot;node_dev&quot; image that contains a complete copy of the Node.js &lt;a href=&quot;http://github.com/joyent/node&quot;&gt;source repository&lt;/a&gt;. Finally, it creates a series of images that are required; for each Node version, it creates an image with Node installed and ready to use.&lt;/p&gt;
+&lt;p&gt;Setting up a project is a matter of creating a &lt;em&gt;.dntrc&lt;/em&gt; file in the root directory of the project. This configuration file involves setting a &lt;code&gt;NODE_VERSIONS&lt;/code&gt; variable with a list of all of the versions of Node you want to test against, and this can include &quot;master&quot; to test the latest code from the Node repository. You also set a &lt;code&gt;TEST_CMD&lt;/code&gt; variable with a series of commands required to set up, compile and execute your tests. The &lt;code&gt;setup-dnt&lt;/code&gt; command can be run against a &lt;em&gt;.dntrc&lt;/em&gt; file to make sure that the appropriate Docker images are ready. The &lt;code&gt;dnt&lt;/code&gt; command can then be used to execute the tests against all of the Node versions you specified.&lt;/p&gt;
+&lt;p&gt;Since Docker containers are completely isolated, &lt;strong&gt;DNT&lt;/strong&gt; can run tests in parallel as long as the machine has the resources. The default is to use the number of cores on the computer as the concurrency level but this can be configured if not appropriate.&lt;/p&gt;
+&lt;p&gt;Currently &lt;strong&gt;DNT&lt;/strong&gt; is designed to parse TAP test output by reading the final line as either &quot;ok&quot; or &quot;not ok&quot; to report test status back on the command-line. It is configurable but you need to supply a command that will transform test output to either an &quot;ok&quot; or &quot;not ok&quot; (&lt;code&gt;sed&lt;/code&gt; to the rescue?).&lt;/p&gt;
+&lt;h3&gt;How I&#39;m using it&lt;/h3&gt;
+&lt;p&gt;My primary use-case is for testing &lt;strong&gt;NAN&lt;/strong&gt;. The test suite needs a lot of work so being able to test against all the different V8 and Node APIs while coding is super helpful; particularly when tests run so quickly! My NAN &lt;em&gt;.dntrc&lt;/em&gt; file tests against master, all of the 0.11 releases since 0.11.4 (0.11.0 to 0.11.3 are explicitly not supported by NAN) and the last 5 releases of the 0.10 and 0.8 series. At the moment that&#39;s 17 versions of Node in all and on my computer the test suite takes approximately 20 seconds to complete across all of these releases.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The NAN &lt;a href=&quot;https://raw.github.com/rvagg/nan/master/.dntrc&quot;&gt;.dntrc&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nv&quot;&gt;NODE_VERSIONS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;\&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  master   \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.11.9  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.11.8  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.11.7  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.11.6  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.11.5  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.11.4  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.10.22 \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.10.21 \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.10.20 \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.10.19 \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.10.18 \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.8.26  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.8.25  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.8.24  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.8.23  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.8.22  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;OUTPUT_PREFIX&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;nan-&quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;TEST_CMD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;\&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  cd /dnt/test/ &amp;&amp;                                               \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  npm install &amp;&amp;                                                 \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild &amp;&amp; \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  node_modules/.bin/tap js/*-test.js;                            \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Next I configured &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/node-leveldown&quot;&gt;LevelDOWN&lt;/a&gt;&lt;/strong&gt; for &lt;strong&gt;DNT&lt;/strong&gt;. The needs are much simpler, the tests need to do a compile and run a lot of node-tap tests.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The LevelDOWN &lt;a href=&quot;https://raw.github.com/rvagg/node-leveldown/master/.dntrc&quot;&gt;.dntrc&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nv&quot;&gt;NODE_VERSIONS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;\&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  master   \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.11.9  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.11.8  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.10.22 \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.10.21 \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.8.26  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;OUTPUT_PREFIX&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;leveldown-&quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;TEST_CMD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;\&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  cd /dnt/ &amp;&amp;                                                    \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  npm install &amp;&amp;                                                 \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild &amp;&amp; \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  node_modules/.bin/tap test/*-test.js;                          \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Another native Node add-on that I&#39;ve set up with &lt;strong&gt;DNT&lt;/strong&gt; is my &lt;a href=&quot;https://github.com/rvagg/node-libssh&quot;&gt;libssh bindings&lt;/a&gt;. This one is a little more complicated because you need to have some non-standard libraries installed before compile. My &lt;em&gt;.dntrc&lt;/em&gt; adds some extra &lt;code&gt;apt-get&lt;/code&gt; sauce to fetch and install those packages. It means the tests take a little longer but it&#39;s not prohibitive. An alternative would be to configure the &lt;em&gt;node_dev&lt;/em&gt; base-image to have these packages to all of my versioned images have them too.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The node-libssh &lt;a href=&quot;https://raw.github.com/rvagg/node-libssh/master/.dntrc&quot;&gt;.dntrc&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nv&quot;&gt;NODE_VERSIONS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;master v0.11.9 v0.10.22&quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;OUTPUT_PREFIX&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;libssh-&quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;TEST_CMD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;\&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  apt-get install -y libkrb5-dev libssl-dev &amp;&amp;                           \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  cd /dnt/ &amp;&amp;                                                            \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  npm install &amp;&amp;                                                         \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild --debug &amp;&amp; \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  node_modules/.bin/tap test/*-test.js --stderr;                         \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;What&#39;s next?&lt;/h3&gt;
+&lt;p&gt;I have no idea but I&#39;d love to have helpers flesh this out a little more. It&#39;s not hard to imagine this forming the basis of a local CI system as well as a general testing tool. The speed even makes it tempting to run the tests on every git commit, or perhaps on every save.&lt;/p&gt;
+&lt;p&gt;If you&#39;d like to contribute to development then please submit a pull request, I&#39;d be happy to discuss anything you might think would improve this project. I&#39;m keen to share ownership with anyone making significant contributions; as I do with most of my open source projects.&lt;/p&gt;
+&lt;p&gt;See the &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/dnt&quot;&gt;DNT&lt;/a&gt;&lt;/strong&gt; GitHub repo for installation and detailed usage instructions.&lt;/p&gt;
+
+      </content>
+    </entry>
   
     <entry>
       <title>LevelDOWN v0.10 / managing GC in native V8 programming</title>

@@ -42,6 +42,10 @@
           <ul>
             
  
+                <li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
+              
+ 
+ 
                 <li><a href="/2013/11/leveldown-v0.10-managing-gc-in-native-v8-programming.html">LevelDOWN v0.10 / managing GC in native V8 programming</a></li>
               
  
@@ -50,8 +54,6 @@
               
  
  
-                <li><a href="/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html">Should I use a single LevelDB or many to hold my data?</a></li>
-              
  
  
  
@@ -101,6 +103,114 @@
       
 
 <div id="for">
+  
+
+    <section class="post-content">
+
+      <h2 id="testing-code-against-many-node-versions-with-docker"><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></h2>
+
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on November 26, 2013</p>
+        <p class="link"><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Permalink &amp; Comments</a></p>
+        <!-- <p class="commentcount"><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html#disqus_thread">Comments</a></p> -->
+      </div>
+
+      <section class="post-body">
+        <p>I haven&#39;t found reason to play with <a href="http://www.docker.io">Docker</a> until now, but I&#39;ve finally came up with an excellent use-case.</p>
+<p><a href="https://github.com/rvagg/nan">NAN</a> is a project that helps build native Node.js add-ons while maintaining compatibility with Node and V8 from Node versions 0.8 onwards. V8 is currently undergoing major internal changes which is making add-on development very difficult; NAN&#39;s purpose is to abstract that pain. Instead of having to manage the difficulties of keeping your code compatible across Node/V8 versions, NAN does it for you. But this means that we have to be sure to keep NAN tested and compatible with all of the versions it claims to support.</p>
+<p><a href="https://travis-ci.org/">Travis</a> can help a little with this. It&#39;s possible to use <a href="https://github.com/creationix/nvm">nvm</a> to test across different versions of Node, we&#39;ve tried this with NAN (see the <a href="https://github.com/rvagg/nan/blob/ba82a9c1fba01b3df553ac624aeaf15ca3688315/.travis.yml">.travis.yml</a>). Ideally you&#39;d have better choice of Node versions, but Travis have had some <a href="https://github.com/travis-ci/travis-ci/issues/1328">difficulty</a> keeping up. Also, npm bugs make it difficult, with a high failure rate from npm install problems, like <a href="https://travis-ci.org/rvagg/nan/jobs/14440485">this</a> and <a href="https://travis-ci.org/rvagg/nan/jobs/14474613">this</a>, so I don&#39;t even publish the badge on the NAN README.</p>
+<p>The other problem with Travis is that it&#39;s a CI solution, not a proper testing solution. Even if it worked well, it&#39;s not really that helpful in the development process, you need rapid feedback that your code is working on your target platforms (this is one reason why I love back-end development more than front-end development!)</p>
+<p>Enter Docker and <strong><a href="https://github.com/rvagg/dnt">DNT</a></strong></p>
+<div style="margin: 0 auto;">
+  <img src="http://www.docker.io/static/img/homepage-docker-logo.png" width="138" height="114">
+  <img src="http://nodejs.org/images/logos/nodejs-dark.png" width="212" height="114">
+  <img src="http://img.pandawhale.com/29490-Picard-applause-clapping-gif-s5nz.gif" width="151" height="114">
+</div>
+
+<h3>DNT: Docker Node Tester</h3>
+<p>Docker is a tool that simplifies the use of Linux containers to create lightweight, isolated compute &quot;instances&quot;. Solaris and its variants have had this functionality for years in the form of &quot;zones&quot; but it&#39;s a fairly new concept for Linux and Docker makes the whole process a lot more friendly.</p>
+<p><strong>DNT</strong> contains two tools that work with Docker and Node.js to set-up containers for testing and run your project&#39;s tests in those containers.</p>
+<div style="margin: 0 auto;">
+  <img src="http://r.va.gg/images/2013/11/nan-dnt.png">
+</div>
+
+<p><strong>DNT</strong> includes a <code>setup-dnt</code> script that sets up the most basic Docker images required to run Node.js applications, nothing extra. It first creates an image called &quot;dev_base&quot; that uses the default Docker &quot;ubuntu&quot; image and adds the build tools required to compile and install Node.js</p>
+<p>Next it creates a &quot;node_dev&quot; image that contains a complete copy of the Node.js <a href="http://github.com/joyent/node">source repository</a>. Finally, it creates a series of images that are required; for each Node version, it creates an image with Node installed and ready to use.</p>
+<p>Setting up a project is a matter of creating a <em>.dntrc</em> file in the root directory of the project. This configuration file involves setting a <code>NODE_VERSIONS</code> variable with a list of all of the versions of Node you want to test against, and this can include &quot;master&quot; to test the latest code from the Node repository. You also set a <code>TEST_CMD</code> variable with a series of commands required to set up, compile and execute your tests. The <code>setup-dnt</code> command can be run against a <em>.dntrc</em> file to make sure that the appropriate Docker images are ready. The <code>dnt</code> command can then be used to execute the tests against all of the Node versions you specified.</p>
+<p>Since Docker containers are completely isolated, <strong>DNT</strong> can run tests in parallel as long as the machine has the resources. The default is to use the number of cores on the computer as the concurrency level but this can be configured if not appropriate.</p>
+<p>Currently <strong>DNT</strong> is designed to parse TAP test output by reading the final line as either &quot;ok&quot; or &quot;not ok&quot; to report test status back on the command-line. It is configurable but you need to supply a command that will transform test output to either an &quot;ok&quot; or &quot;not ok&quot; (<code>sed</code> to the rescue?).</p>
+<h3>How I&#39;m using it</h3>
+<p>My primary use-case is for testing <strong>NAN</strong>. The test suite needs a lot of work so being able to test against all the different V8 and Node APIs while coding is super helpful; particularly when tests run so quickly! My NAN <em>.dntrc</em> file tests against master, all of the 0.11 releases since 0.11.4 (0.11.0 to 0.11.3 are explicitly not supported by NAN) and the last 5 releases of the 0.10 and 0.8 series. At the moment that&#39;s 17 versions of Node in all and on my computer the test suite takes approximately 20 seconds to complete across all of these releases.</p>
+<p><strong>The NAN <a href="https://raw.github.com/rvagg/nan/master/.dntrc">.dntrc</a></strong></p>
+<div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;\</span>
+<span class="s2">  master   \</span>
+<span class="s2">  v0.11.9  \</span>
+<span class="s2">  v0.11.8  \</span>
+<span class="s2">  v0.11.7  \</span>
+<span class="s2">  v0.11.6  \</span>
+<span class="s2">  v0.11.5  \</span>
+<span class="s2">  v0.11.4  \</span>
+<span class="s2">  v0.10.22 \</span>
+<span class="s2">  v0.10.21 \</span>
+<span class="s2">  v0.10.20 \</span>
+<span class="s2">  v0.10.19 \</span>
+<span class="s2">  v0.10.18 \</span>
+<span class="s2">  v0.8.26  \</span>
+<span class="s2">  v0.8.25  \</span>
+<span class="s2">  v0.8.24  \</span>
+<span class="s2">  v0.8.23  \</span>
+<span class="s2">  v0.8.22  \</span>
+<span class="s2">&quot;</span>
+<span class="nv">OUTPUT_PREFIX</span><span class="o">=</span><span class="s2">&quot;nan-&quot;</span>
+<span class="nv">TEST_CMD</span><span class="o">=</span><span class="s2">&quot;\</span>
+<span class="s2">  cd /dnt/test/ &amp;&amp;                                               \</span>
+<span class="s2">  npm install &amp;&amp;                                                 \</span>
+<span class="s2">  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild &amp;&amp; \</span>
+<span class="s2">  node_modules/.bin/tap js/*-test.js;                            \</span>
+<span class="s2">&quot;</span>
+</pre></div>
+
+<p>Next I configured <strong><a href="https://github.com/rvagg/node-leveldown">LevelDOWN</a></strong> for <strong>DNT</strong>. The needs are much simpler, the tests need to do a compile and run a lot of node-tap tests.</p>
+<p><strong>The LevelDOWN <a href="https://raw.github.com/rvagg/node-leveldown/master/.dntrc">.dntrc</a></strong></p>
+<div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;\</span>
+<span class="s2">  master   \</span>
+<span class="s2">  v0.11.9  \</span>
+<span class="s2">  v0.11.8  \</span>
+<span class="s2">  v0.10.22 \</span>
+<span class="s2">  v0.10.21 \</span>
+<span class="s2">  v0.8.26  \</span>
+<span class="s2">&quot;</span>
+<span class="nv">OUTPUT_PREFIX</span><span class="o">=</span><span class="s2">&quot;leveldown-&quot;</span>
+<span class="nv">TEST_CMD</span><span class="o">=</span><span class="s2">&quot;\</span>
+<span class="s2">  cd /dnt/ &amp;&amp;                                                    \</span>
+<span class="s2">  npm install &amp;&amp;                                                 \</span>
+<span class="s2">  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild &amp;&amp; \</span>
+<span class="s2">  node_modules/.bin/tap test/*-test.js;                          \</span>
+<span class="s2">&quot;</span>
+</pre></div>
+
+<p>Another native Node add-on that I&#39;ve set up with <strong>DNT</strong> is my <a href="https://github.com/rvagg/node-libssh">libssh bindings</a>. This one is a little more complicated because you need to have some non-standard libraries installed before compile. My <em>.dntrc</em> adds some extra <code>apt-get</code> sauce to fetch and install those packages. It means the tests take a little longer but it&#39;s not prohibitive. An alternative would be to configure the <em>node_dev</em> base-image to have these packages to all of my versioned images have them too.</p>
+<p><strong>The node-libssh <a href="https://raw.github.com/rvagg/node-libssh/master/.dntrc">.dntrc</a></strong></p>
+<div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;master v0.11.9 v0.10.22&quot;</span>
+<span class="nv">OUTPUT_PREFIX</span><span class="o">=</span><span class="s2">&quot;libssh-&quot;</span>
+<span class="nv">TEST_CMD</span><span class="o">=</span><span class="s2">&quot;\</span>
+<span class="s2">  apt-get install -y libkrb5-dev libssl-dev &amp;&amp;                           \</span>
+<span class="s2">  cd /dnt/ &amp;&amp;                                                            \</span>
+<span class="s2">  npm install &amp;&amp;                                                         \</span>
+<span class="s2">  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild --debug &amp;&amp; \</span>
+<span class="s2">  node_modules/.bin/tap test/*-test.js --stderr;                         \</span>
+<span class="s2">&quot;</span>
+</pre></div>
+
+<h3>What&#39;s next?</h3>
+<p>I have no idea but I&#39;d love to have helpers flesh this out a little more. It&#39;s not hard to imagine this forming the basis of a local CI system as well as a general testing tool. The speed even makes it tempting to run the tests on every git commit, or perhaps on every save.</p>
+<p>If you&#39;d like to contribute to development then please submit a pull request, I&#39;d be happy to discuss anything you might think would improve this project. I&#39;m keen to share ownership with anyone making significant contributions; as I do with most of my open source projects.</p>
+<p>See the <strong><a href="https://github.com/rvagg/dnt">DNT</a></strong> GitHub repo for installation and detailed usage instructions.</p>
+
+      </section>
+
+    </section>
+
   
 
     <section class="post-content">
@@ -352,110 +462,6 @@
 <p>It would be neglectful of me to not say how absolutely grateful I am to the LXJS team for putting so much effort into taking care of speakers; fantastic job.</p>
 <p>LXJS is an amazing event, put on by a dedicated and very talented team of people committed to the JavaScript community and the JavaScript community in Portugal in particular. This conference sets a very high bar for community-driven conferences with the way it has managed to get so many locals (and internationals!) involved in running an event in their own time.</p>
 <p><strong>David Dias, Ana Hevesi, Pedro Teixeira, Luís Reis, Nuno Job, Tiago Rodrigues, Leo Xavier, Alexander Kustov, André Rodrigues and Bruno Coelho</strong> have managed to put on an amazing event and are some of the nicest and talented people I&#39;ve met. Thank you to you all and everyone else who put on LXJS 2013, your hard work is appreciated and should be an inspiration to everyone involved in our local JavaScript communities, running events or considering running events like this.</p>
-
-      </section>
-
-    </section>
-
-  
-
-    <section class="post-content">
-
-      <h2 id="nodeconf.eu"><a href="/2013/09/nodeconf.eu.html">NodeConf.eu</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on September 27, 2013</p>
-        <p class="link"><a href="/2013/09/nodeconf.eu.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2013/09/nodeconf.eu.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p>Wow, <strong><a href="http://nodeconf.eu/">NodeConf.eu</a></strong> was certainly a once-in-a-lifetime event ... although there&#39;s talk of a repeat performance next year (don&#39;t miss the chance when it comes around!).</p>
-<div style="text-align: center;">
-<img src="http://r.va.gg/images/2013/09/nodeconfeu_raiseflag.jpg" alt="Raise that flag">
-<p style="text-align: center;">Dominic Tarr, @substack and Julian Gruber raising the NodeConf.eu flag</p>
-</div>
-
-
-<p>NodeConf.eu was held in Waterford, Ireland, on an <strong>Island</strong>, in a <strong>Castle</strong> and was organised by the Node lovin&#39; company, <a href="http://nearform.com/">nearForm</a>, in particular <a href="http://cianomaidin.com/">Cian O&#39;Maidin</a> and his amazing assistant Catherine Bradley. Of course <a href="http://futurealoof.com/">Mikeal Rogers</a> had a significant role in organising the event too.</p>
-<div style="text-align: center;">
-<img src="http://r.va.gg/images/2013/09/nodeconfeu_castle.jpg" alt="Waterford Castle">
-<p style="text-align: center;"><a href="http://waterfordcastle.com/">Waterford Castle</a></p>
-</div>
-
-<div style="text-align: center;">
-<img src="http://r.va.gg/images/2013/09/nodeconfeu_pig.jpg" alt="Pig">
-<p style="text-align: center;">The welcome banquet ... yep</p>
-</div>
-
-<p>Instead of describing the talks, I&#39;ll defer to the <a href="http://clock.co.uk/tech-blogs/nodeconfeu-2013-part-one">excellent</a> <a href="http://clock.co.uk/tech-blogs/nodeconfeu-2013-part-two">four</a> <a href="http://clock.co.uk/tech-blogs/nodeconfeu-2013-part-three">part</a> <a href="http://clock.co.uk/tech-blogs/nodeconfeu-reflection">series</a> by Paul, Adam, Luke and Ben of <a href="http://clock.co.uk/">Clock</a> where you&#39;ll find a great summary of the talks and events of the conference.</p>
-<p>For my part, I was deeply honoured to be involved in the <em>&quot;Node Databases&quot;</em> track of the conference. We started off the NodeConf.eu talks with a 3-part show. My talk was titled &quot;A Real Database Rethink&quot; and was followed by <a href="https://twitter.com/dominictarr">Dominic Tarr</a> who talked more about the Level* ecosystem and the various pieces of the Node Databases puzzle that&#39;s being built. <a href="http://juliangruber.com/">Julian Gruber</a> then closed us off with some amazing live-coding of some browser/server streaming LevelUP/multilevel <a href="https://github.com/juliangruber/nodeconfeu-13">wizardry</a>.</p>
-<h3>A Real Database Rethink</h3>
-<p>The slides of my talk are <a href="http://r.va.gg/presentations/nodeconfeu.2013/">online</a>. I attempted to break down the definition of the term <em>&quot;database&quot;</em> by looking at where the concept comes from historically. It&#39;s actually a difficult thing to define and I don&#39;t believe there is any one agreed upon meaning. What I came up with is:</p>
-<blockquote>
-<p>A tool for interacting with structured data, externalised from the core of our application</p>
-<ul>
-<li>Persistence</li>
-<li>Performance</li>
-<li>Simplify access to complex data</li>
-</ul>
-<p>And sometimes...</p>
-<ul>
-<li>Shared access</li>
-<li>Scalability</li>
-</ul>
-</blockquote>
-<p>But even that&#39;s pretty rough.</p>
-<p>Taking that definition, we can apply Node philosophy of small-core and vibrant user-land, along with the culture of extreme modularity afforded us by npm, and build a new kind of database; or at least apply new thinking to the &quot;database&quot;.</p>
-<p>The bulk of my talk was taken up with talking about LevelUP and the basics of the Level<em> ecosystem. There&#39;s a table on slide #7 that I&#39;m going to try and refine over time to help describe what the Level</em> / NodeBase world is all about.</p>
-<h3>Level Me Up Scotty!</h3>
-<p>One of the three workshops available at NodeConf.eu was all about Node Databases. I took the same approach as at <a href="http://campjs.com/">CampJS</a> recently where I built <a href="http://r.va.gg/2013/08/learn-you-the-node.js.html">Learn You The Node.js For Much Win!</a>, a tool that owes a debt to <a href="https://github.com/substack/stream-adventure">stream-adventure</a>, a self-guided workshop-in-your-terminal application by <a href="https://twitter.com/substack">@substack</a> and <a href="https://twitter.com/maxogden">Max Ogden</a> written for NodeConf (US).</p>
-<p>This time around, I received some great help from both @substack and Julian Gruber who helped write some exercises, I also received help from <a href="http://twitter.com/eugeneware">Eugene Ware</a> who wasn&#39;t even at the conference but was assisting with development from Australia. <a href="http://twitter.com/raynos2">Raynos</a> was also a great help in getting the application working well.</p>
-<p>We ended up with <strong><em>Level Me Up Scotty!</em></strong>, or just <strong>levelmeup</strong>.</p>
-<div style="text-align: center;">
-<img src="https://raw.github.com/rvagg/levelmeup/master/levelmeup.png" alt="levelmeup">
-</div>
-
-<p>Dominic Tarr, <a href="https://twitter.com/thlorenz">Thorsten Lorenz</a>, <a href="https://twitter.com/hij1nx">Paolo Fragomeni</a>, <a href="http://www.matteocollina.com/">Matteo Collina</a>, <a href="https://twitter.com/ralphtheninja">Magnus Skog</a>, Max Ogden and other experienced <em>Levelers</em> helped on and off while the workshops were happening; so we had plenty of expertise at hand whenever there were questions.</p>
-<p>Workshops were unstructured and the organisers of each workshop all ended up agreeing that we should just let people come and go as they pleased. This suited us as the workshop was open-ended and designed not to be finished by most people within the originally planned hour <em>(I think that was the original plan)</em>.</p>
-<p><strong><a href="https://github.com/rvagg/levelmeup">levelmeup</a></strong> is installed from npm (<code>npm install levelmeup -g</code>) and is fully self-guided. You run the <code>levelmeup</code> application and it steps you through some exercises designed to:</p>
-<ul>
-<li>introduce you to the format of the workshops with a simple &quot;Hello World&quot; style exercise</li>
-<li>introduce you to LevelUP and its basic operations</li>
-<li>help you understand ReadStream and the range-queries it makes possible</li>
-<li>encourage creative thought regarding key structure</li>
-<li>introduce <a href="https://github.com/dominictarr/level-sublevel">sublevel</a></li>
-<li>introduce <a href="https://github.com/juliangruber/multilevel">multilevel</a></li>
-</ul>
-<p>There&#39;s more planned for the future of this workshop application too, Matteo even has an a <a href="https://github.com/rvagg/levelmeup/pull/19">work-in-progress exercise</a> that should be merged fairly soon.</p>
-<p><strong><a href="http://nodeschool.io/">nodeschool.io</a></strong> was hatched from NodeConf.eu and pulls together the three workshop applications currently available in npm. I believe this was an initiative of <a href="https://twitter.com/brianloveswords">Brian J. Brennan</a> and other Mozillans on the <a href="http://openbadges.org/">Open Badges</a> project. <strong><a href="https://github.com/rvagg/workshopper">workshopper</a></strong> is the engine that runs both learnyounode and levelmeup and we&#39;re trying to make it even easier for others to author their own workshop applications. There is already a <a href="https://github.com/timoxley/functional-javascript-workshop/">Functional Javacript Workshop</a> by <a href="https://twitter.com/secoif">Tim Oxley</a> and there are more in development. Exciting times!</p>
-<div style="text-align: center;">
-<img src="http://r.va.gg/images/2013/09/nodeconfeu_levelmeup.jpg" alt="Level Me Up Workshoppers">
-<p style="text-align: center;">Workshoppers stretching their brains with <strong>levelmeup</strong></p>
-</div>
-
-<p>My experience with <strong>stream-adventure</strong> and <strong>learnyounode</strong> suggested that this format should prove to be relatively successful but ultimately I think we had most of the attendees come through at some point and sit down to have a crack at the workshop. This is particularly impressive given that <a href="http://nexxylove.tumblr.com/">Emily Rose</a>, <a href="http://tmpvar.com/">Elijah Insua</a> and Matteo were running a NodeBots workshop which included Arduino and NodeCopter hacking (always popular!). And <a href="https://twitter.com/mrbruning">Max Bruning</a> and <a href="https://twitter.com/tjfontaine">TJ Fontaine</a> were running a Manta / MDB / DTrace / SmartOS-magic workshop and their material was some of my favourite from NodeConf (US) so I&#39;m sure people really enjoyed what they had to present.</p>
-<p>Unfortunately I didn&#39;t get to attend these other workshops, I also missed out on some skeet!</p>
-<div style="text-align: center;">
-<img src="http://farm6.staticflickr.com/5338/9726258926_e3ea4a656f_z.jpg" alt="Skeet">
-<p style="text-align: center;">Karolina <em>&quot;don&#39;t mess with me&quot;</em> Szczur, photo by <a href="http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/">Matthew Bergman</a></p>
-</div>
-
-<p>But there was plenty of other <em>experience</em> to be had. It was also fantastic to meet so many people I only knew from IRC / Twitter / GitHub. For someone who lives in regional Australia and doesn&#39;t get a chance to socialise much with other nerds, this was a particularly special opportunity.</p>
-<div style="text-align: center;">
-<img src="http://farm8.staticflickr.com/7392/9783982165_43ca4edef2_z.jpg" alt="Shenanigans">
-<p style="text-align: center;">Final night banquet shenanigans with <a href="https://twitter.com/Av1anFlu">Charlie McConnell</a> and @substack ... the napkin hat thing is a story in itself, blame <a href="https://twitter.com/jllord">Jessica Lord</a>, photo by <a href="http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/">Matthew Bergman</a></p>
-</div>
-
-<h3>The Level* Gang</h3>
-<p>As an aside, NodeConf.eu had the largest concentration of LevelUP contributors and active Level* developers of any event that I&#39;m aware of so far. So we took the opportunity to have our own little meeting. We even took minutes, <a href="https://github.com/karolinaszczur/leveldb.org/blob/master/meetup-nodeland">of sorts</a>.</p>
-<p>There has been a long-standing plan to make a Level* / NodeBase website but being the disorganised rabble we are, it hasn&#39;t got off the ground. Karolina (and Jessica too I believe) are keen to help out on the design end but just need the content. So that&#39;s what we planned. There&#39;s a bunch of issues that form a TODO in the <a href="https://github.com/karolinaszczur/leveldb.org/issues">repo</a> for this project. Hopefully we can all get on top of it sooner rather than later. We&#39;re also open to assistance from anyone else that would like to contribute.</p>
-<p>Besides getting stuff done, it was just a pleasure to hang out with these people and talk <em>shop</em>.</p>
-<div style="text-align: center;">
-<img src="http://r.va.gg/images/2013/09/nodeconfeu_levelgang.jpg" alt="A momentus event">
-<p style="text-align: center;"><strong>The Level* Gang</strong>: Paolo, Dominic, @substack, Karolina, Magnus, Mikeal, Julian, Max, Matteo and <a href="https://twitter.com/paulfryzel">Paul Fryzel</a>. Raynos was around but missed this particular <em>event</em>, Thorsten was inside demoing his guitar-typing software.</p>
-</div>
-
 
       </section>
 

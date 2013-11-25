@@ -1,0 +1,240 @@
+<!DOCTYPE HTML>
+<html lang="en-us">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>
+  [r.va.gg] Testing code against many Node versions with Docker
+</title>
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://r.va.gg/atom.xml" />
+    <script type="text/javascript" src="http://use.typekit.com/swo4snt.js"></script>
+    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>  
+    <script type="text/javascript">
+      var _gaq = _gaq || []
+      _gaq.push(['_setAccount', 'UA-21373682-1'])
+      _gaq.push(['_trackPageview'])
+      setTimeout('_gaq.push(["_trackEvent", "15_seconds", "read"])', 15000)
+      !(function () {
+        var ga = document.createElement('script')
+        ga.type = 'text/javascript'
+        ga.async = true
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'
+        var s = document.getElementsByTagName('script')[0]
+        s.parentNode.insertBefore(ga, s)
+      }())
+    </script>
+  </head>
+  <body>
+
+    <section class="content">
+      <h1>
+        <a href="/">r.va.gg</a>
+      </h1>
+
+      <section class="nav">
+        <section class="me">
+          <span>Find me</span>
+          <ul>
+            <li>on <a href="https://twitter.com/rvagg">Twitter / @rvagg</a></li>
+            <li>on <a href="https://github.com/rvagg">GitHub / @rvagg</a></li>
+          </ul>
+        </section>
+        <section class="recent">
+          <span>Recent posts</span>
+          <ul>
+            
+ 
+                <li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
+              
+ 
+ 
+                <li><a href="/2013/11/leveldown-v0.10-managing-gc-in-native-v8-programming.html">LevelDOWN v0.10 / managing GC in native V8 programming</a></li>
+              
+ 
+ 
+                <li><a href="/2013/10/all-the-levels.html">All the levels!</a></li>
+              
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+          </ul>
+        </section>
+      </section>
+      <div style="clear: both;"></div>
+
+      
+
+  <section class="post-content">
+
+    <h2><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></h2>
+
+    <div class="post-meta">
+      <p class="byline">by Rod Vagg on November 26, 2013</p>
+    </div>
+
+    <section class="post-body">
+      <p>I haven&#39;t found reason to play with <a href="http://www.docker.io">Docker</a> until now, but I&#39;ve finally came up with an excellent use-case.</p>
+<p><a href="https://github.com/rvagg/nan">NAN</a> is a project that helps build native Node.js add-ons while maintaining compatibility with Node and V8 from Node versions 0.8 onwards. V8 is currently undergoing major internal changes which is making add-on development very difficult; NAN&#39;s purpose is to abstract that pain. Instead of having to manage the difficulties of keeping your code compatible across Node/V8 versions, NAN does it for you. But this means that we have to be sure to keep NAN tested and compatible with all of the versions it claims to support.</p>
+<p><a href="https://travis-ci.org/">Travis</a> can help a little with this. It&#39;s possible to use <a href="https://github.com/creationix/nvm">nvm</a> to test across different versions of Node, we&#39;ve tried this with NAN (see the <a href="https://github.com/rvagg/nan/blob/ba82a9c1fba01b3df553ac624aeaf15ca3688315/.travis.yml">.travis.yml</a>). Ideally you&#39;d have better choice of Node versions, but Travis have had some <a href="https://github.com/travis-ci/travis-ci/issues/1328">difficulty</a> keeping up. Also, npm bugs make it difficult, with a high failure rate from npm install problems, like <a href="https://travis-ci.org/rvagg/nan/jobs/14440485">this</a> and <a href="https://travis-ci.org/rvagg/nan/jobs/14474613">this</a>, so I don&#39;t even publish the badge on the NAN README.</p>
+<p>The other problem with Travis is that it&#39;s a CI solution, not a proper testing solution. Even if it worked well, it&#39;s not really that helpful in the development process, you need rapid feedback that your code is working on your target platforms (this is one reason why I love back-end development more than front-end development!)</p>
+<p>Enter Docker and <strong><a href="https://github.com/rvagg/dnt">DNT</a></strong></p>
+<div style="margin: 0 auto;">
+  <img src="http://www.docker.io/static/img/homepage-docker-logo.png" width="138" height="114">
+  <img src="http://nodejs.org/images/logos/nodejs-dark.png" width="212" height="114">
+  <img src="http://img.pandawhale.com/29490-Picard-applause-clapping-gif-s5nz.gif" width="151" height="114">
+</div>
+
+<h3>DNT: Docker Node Tester</h3>
+<p>Docker is a tool that simplifies the use of Linux containers to create lightweight, isolated compute &quot;instances&quot;. Solaris and its variants have had this functionality for years in the form of &quot;zones&quot; but it&#39;s a fairly new concept for Linux and Docker makes the whole process a lot more friendly.</p>
+<p><strong>DNT</strong> contains two tools that work with Docker and Node.js to set-up containers for testing and run your project&#39;s tests in those containers.</p>
+<div style="margin: 0 auto;">
+  <img src="http://r.va.gg/images/2013/11/nan-dnt.png">
+</div>
+
+<p><strong>DNT</strong> includes a <code>setup-dnt</code> script that sets up the most basic Docker images required to run Node.js applications, nothing extra. It first creates an image called &quot;dev_base&quot; that uses the default Docker &quot;ubuntu&quot; image and adds the build tools required to compile and install Node.js</p>
+<p>Next it creates a &quot;node_dev&quot; image that contains a complete copy of the Node.js <a href="http://github.com/joyent/node">source repository</a>. Finally, it creates a series of images that are required; for each Node version, it creates an image with Node installed and ready to use.</p>
+<p>Setting up a project is a matter of creating a <em>.dntrc</em> file in the root directory of the project. This configuration file involves setting a <code>NODE_VERSIONS</code> variable with a list of all of the versions of Node you want to test against, and this can include &quot;master&quot; to test the latest code from the Node repository. You also set a <code>TEST_CMD</code> variable with a series of commands required to set up, compile and execute your tests. The <code>setup-dnt</code> command can be run against a <em>.dntrc</em> file to make sure that the appropriate Docker images are ready. The <code>dnt</code> command can then be used to execute the tests against all of the Node versions you specified.</p>
+<p>Since Docker containers are completely isolated, <strong>DNT</strong> can run tests in parallel as long as the machine has the resources. The default is to use the number of cores on the computer as the concurrency level but this can be configured if not appropriate.</p>
+<p>Currently <strong>DNT</strong> is designed to parse TAP test output by reading the final line as either &quot;ok&quot; or &quot;not ok&quot; to report test status back on the command-line. It is configurable but you need to supply a command that will transform test output to either an &quot;ok&quot; or &quot;not ok&quot; (<code>sed</code> to the rescue?).</p>
+<h3>How I&#39;m using it</h3>
+<p>My primary use-case is for testing <strong>NAN</strong>. The test suite needs a lot of work so being able to test against all the different V8 and Node APIs while coding is super helpful; particularly when tests run so quickly! My NAN <em>.dntrc</em> file tests against master, all of the 0.11 releases since 0.11.4 (0.11.0 to 0.11.3 are explicitly not supported by NAN) and the last 5 releases of the 0.10 and 0.8 series. At the moment that&#39;s 17 versions of Node in all and on my computer the test suite takes approximately 20 seconds to complete across all of these releases.</p>
+<p><strong>The NAN <a href="https://raw.github.com/rvagg/nan/master/.dntrc">.dntrc</a></strong></p>
+<div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;\</span>
+<span class="s2">  master   \</span>
+<span class="s2">  v0.11.9  \</span>
+<span class="s2">  v0.11.8  \</span>
+<span class="s2">  v0.11.7  \</span>
+<span class="s2">  v0.11.6  \</span>
+<span class="s2">  v0.11.5  \</span>
+<span class="s2">  v0.11.4  \</span>
+<span class="s2">  v0.10.22 \</span>
+<span class="s2">  v0.10.21 \</span>
+<span class="s2">  v0.10.20 \</span>
+<span class="s2">  v0.10.19 \</span>
+<span class="s2">  v0.10.18 \</span>
+<span class="s2">  v0.8.26  \</span>
+<span class="s2">  v0.8.25  \</span>
+<span class="s2">  v0.8.24  \</span>
+<span class="s2">  v0.8.23  \</span>
+<span class="s2">  v0.8.22  \</span>
+<span class="s2">&quot;</span>
+<span class="nv">OUTPUT_PREFIX</span><span class="o">=</span><span class="s2">&quot;nan-&quot;</span>
+<span class="nv">TEST_CMD</span><span class="o">=</span><span class="s2">&quot;\</span>
+<span class="s2">  cd /dnt/test/ &amp;&amp;                                               \</span>
+<span class="s2">  npm install &amp;&amp;                                                 \</span>
+<span class="s2">  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild &amp;&amp; \</span>
+<span class="s2">  node_modules/.bin/tap js/*-test.js;                            \</span>
+<span class="s2">&quot;</span>
+</pre></div>
+
+<p>Next I configured <strong><a href="https://github.com/rvagg/node-leveldown">LevelDOWN</a></strong> for <strong>DNT</strong>. The needs are much simpler, the tests need to do a compile and run a lot of node-tap tests.</p>
+<p><strong>The LevelDOWN <a href="https://raw.github.com/rvagg/node-leveldown/master/.dntrc">.dntrc</a></strong></p>
+<div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;\</span>
+<span class="s2">  master   \</span>
+<span class="s2">  v0.11.9  \</span>
+<span class="s2">  v0.11.8  \</span>
+<span class="s2">  v0.10.22 \</span>
+<span class="s2">  v0.10.21 \</span>
+<span class="s2">  v0.8.26  \</span>
+<span class="s2">&quot;</span>
+<span class="nv">OUTPUT_PREFIX</span><span class="o">=</span><span class="s2">&quot;leveldown-&quot;</span>
+<span class="nv">TEST_CMD</span><span class="o">=</span><span class="s2">&quot;\</span>
+<span class="s2">  cd /dnt/ &amp;&amp;                                                    \</span>
+<span class="s2">  npm install &amp;&amp;                                                 \</span>
+<span class="s2">  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild &amp;&amp; \</span>
+<span class="s2">  node_modules/.bin/tap test/*-test.js;                          \</span>
+<span class="s2">&quot;</span>
+</pre></div>
+
+<p>Another native Node add-on that I&#39;ve set up with <strong>DNT</strong> is my <a href="https://github.com/rvagg/node-libssh">libssh bindings</a>. This one is a little more complicated because you need to have some non-standard libraries installed before compile. My <em>.dntrc</em> adds some extra <code>apt-get</code> sauce to fetch and install those packages. It means the tests take a little longer but it&#39;s not prohibitive. An alternative would be to configure the <em>node_dev</em> base-image to have these packages to all of my versioned images have them too.</p>
+<p><strong>The node-libssh <a href="https://raw.github.com/rvagg/node-libssh/master/.dntrc">.dntrc</a></strong></p>
+<div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;master v0.11.9 v0.10.22&quot;</span>
+<span class="nv">OUTPUT_PREFIX</span><span class="o">=</span><span class="s2">&quot;libssh-&quot;</span>
+<span class="nv">TEST_CMD</span><span class="o">=</span><span class="s2">&quot;\</span>
+<span class="s2">  apt-get install -y libkrb5-dev libssl-dev &amp;&amp;                           \</span>
+<span class="s2">  cd /dnt/ &amp;&amp;                                                            \</span>
+<span class="s2">  npm install &amp;&amp;                                                         \</span>
+<span class="s2">  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild --debug &amp;&amp; \</span>
+<span class="s2">  node_modules/.bin/tap test/*-test.js --stderr;                         \</span>
+<span class="s2">&quot;</span>
+</pre></div>
+
+<h3>What&#39;s next?</h3>
+<p>I have no idea but I&#39;d love to have helpers flesh this out a little more. It&#39;s not hard to imagine this forming the basis of a local CI system as well as a general testing tool. The speed even makes it tempting to run the tests on every git commit, or perhaps on every save.</p>
+<p>If you&#39;d like to contribute to development then please submit a pull request, I&#39;d be happy to discuss anything you might think would improve this project. I&#39;m keen to share ownership with anyone making significant contributions; as I do with most of my open source projects.</p>
+<p>See the <strong><a href="https://github.com/rvagg/dnt">DNT</a></strong> GitHub repo for installation and detailed usage instructions.</p>
+
+    </section>
+
+    <section class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname  = 'rvagg'
+          , disqus_identifier = '/2013/11/testing-code-against-many-node-versions-with-docker.html'
+          , disqus_title      = 'Testing code against many Node versions with Docker'
+          , disqus_url        = 'http://r.va.gg/2013/11/testing-code-against-many-node-versions-with-docker.html'
+
+        !(function() {
+          var dsq = document.createElement('script')
+          dsq.type = 'text/javascript'
+          dsq.async = true
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
+          !(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+        })()
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>
+    </section>
+
+  </section>
+
+
+
+      <section class="footer">
+        &copy; Rod Vagg 2013, powered by <a href="https://github.com/rvagg/blorg">Blorg</a>
+        <br><a href="http://r.va.gg/atom.xml">Atom / RSS feed</a>
+      </section>
+
+    </section>
+
+  </body>
+</html>
