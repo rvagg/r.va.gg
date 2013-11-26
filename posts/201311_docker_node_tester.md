@@ -115,6 +115,28 @@ TEST_CMD="\
 "
 ```
 
+[LevelUP](https://github.com/rvagg/node-levelup) isn't a native add-on but it does use LevelDOWN which requires compiling. For the DNT config I'm removing *node_modules/leveldown/* prior to `npm install` so it gets rebuilt each time for each new version of Node.
+
+**The [LevelUP .dntrc](https://raw.github.com/rvagg/node-levelup/master/.dntrc)**
+
+```sh
+NODE_VERSIONS="\
+  master   \
+  v0.11.9  \
+  v0.11.8  \
+  v0.10.22 \
+  v0.10.21 \
+  v0.8.26  \
+"
+OUTPUT_PREFIX="levelup-"
+TEST_CMD="\
+  cd /dnt/ &&                                                    \
+  rm -rf node_modules/leveldown/ &&                              \
+  npm install --nodedir=/usr/src/node &&                         \
+  node_modules/.bin/tap test/*-test.js --stderr;                 \
+#"
+```
+
 ### What's next?
 
 I have no idea but I'd love to have helpers flesh this out a little more. It's not hard to imagine this forming the basis of a local CI system as well as a general testing tool. The speed even makes it tempting to run the tests on every git commit, or perhaps on every save.
