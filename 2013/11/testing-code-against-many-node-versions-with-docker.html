@@ -199,6 +199,25 @@
 <span class="s2">&quot;</span>
 </pre></div>
 
+<p><a href="https://github.com/rvagg/node-levelup">LevelUP</a> isn&#39;t a native add-on but it does use LevelDOWN which requires compiling. For the DNT config I&#39;m removing <em>node_modules/leveldown/</em> prior to <code>npm install</code> so it gets rebuilt each time for each new version of Node.</p>
+<p><strong>The <a href="https://raw.github.com/rvagg/node-levelup/master/.dntrc">LevelUP .dntrc</a></strong></p>
+<div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;\</span>
+<span class="s2">  master   \</span>
+<span class="s2">  v0.11.9  \</span>
+<span class="s2">  v0.11.8  \</span>
+<span class="s2">  v0.10.22 \</span>
+<span class="s2">  v0.10.21 \</span>
+<span class="s2">  v0.8.26  \</span>
+<span class="s2">&quot;</span>
+<span class="nv">OUTPUT_PREFIX</span><span class="o">=</span><span class="s2">&quot;levelup-&quot;</span>
+<span class="nv">TEST_CMD</span><span class="o">=</span><span class="s2">&quot;\</span>
+<span class="s2">  cd /dnt/ &amp;&amp;                                                    \</span>
+<span class="s2">  rm -rf node_modules/leveldown/ &amp;&amp;                              \</span>
+<span class="s2">  npm install --nodedir=/usr/src/node &amp;&amp;                         \</span>
+<span class="s2">  node_modules/.bin/tap test/*-test.js --stderr;                 \</span>
+<span class="s2">#&quot;</span>
+</pre></div>
+
 <h3>What&#39;s next?</h3>
 <p>I have no idea but I&#39;d love to have helpers flesh this out a little more. It&#39;s not hard to imagine this forming the basis of a local CI system as well as a general testing tool. The speed even makes it tempting to run the tests on every git commit, or perhaps on every save.</p>
 <p>If you&#39;d like to contribute to development then please submit a pull request, I&#39;d be happy to discuss anything you might think would improve this project. I&#39;m keen to share ownership with anyone making significant contributions; as I do with most of my open source projects.</p>

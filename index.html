@@ -202,6 +202,25 @@
 <span class="s2">&quot;</span>
 </pre></div>
 
+<p><a href="https://github.com/rvagg/node-levelup">LevelUP</a> isn&#39;t a native add-on but it does use LevelDOWN which requires compiling. For the DNT config I&#39;m removing <em>node_modules/leveldown/</em> prior to <code>npm install</code> so it gets rebuilt each time for each new version of Node.</p>
+<p><strong>The <a href="https://raw.github.com/rvagg/node-levelup/master/.dntrc">LevelUP .dntrc</a></strong></p>
+<div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;\</span>
+<span class="s2">  master   \</span>
+<span class="s2">  v0.11.9  \</span>
+<span class="s2">  v0.11.8  \</span>
+<span class="s2">  v0.10.22 \</span>
+<span class="s2">  v0.10.21 \</span>
+<span class="s2">  v0.8.26  \</span>
+<span class="s2">&quot;</span>
+<span class="nv">OUTPUT_PREFIX</span><span class="o">=</span><span class="s2">&quot;levelup-&quot;</span>
+<span class="nv">TEST_CMD</span><span class="o">=</span><span class="s2">&quot;\</span>
+<span class="s2">  cd /dnt/ &amp;&amp;                                                    \</span>
+<span class="s2">  rm -rf node_modules/leveldown/ &amp;&amp;                              \</span>
+<span class="s2">  npm install --nodedir=/usr/src/node &amp;&amp;                         \</span>
+<span class="s2">  node_modules/.bin/tap test/*-test.js --stderr;                 \</span>
+<span class="s2">#&quot;</span>
+</pre></div>
+
 <h3>What&#39;s next?</h3>
 <p>I have no idea but I&#39;d love to have helpers flesh this out a little more. It&#39;s not hard to imagine this forming the basis of a local CI system as well as a general testing tool. The speed even makes it tempting to run the tests on every git commit, or perhaps on every save.</p>
 <p>If you&#39;d like to contribute to development then please submit a pull request, I&#39;d be happy to discuss anything you might think would improve this project. I&#39;m keen to share ownership with anyone making significant contributions; as I do with most of my open source projects.</p>
@@ -394,6 +413,36 @@
 
     <section class="post-content">
 
+      <h2 id="primitives-for-js-databases-an-lxjs-adventure"><a href="/2013/10/primitives-for-js-databases-an-lxjs-adventure.html">Primitives for JS Databases (an LXJS adventure)</a></h2>
+
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on October 3, 2013</p>
+        <p class="link"><a href="/2013/10/primitives-for-js-databases-an-lxjs-adventure.html">Permalink &amp; Comments</a></p>
+        <!-- <p class="commentcount"><a href="/2013/10/primitives-for-js-databases-an-lxjs-adventure.html#disqus_thread">Comments</a></p> -->
+      </div>
+
+      <section class="post-body">
+        <p>I gave a talk yesterday at <strong><a href="http://2013.lxjs.org">LXJS</a></strong> yesterday in the <em>&quot;Infrastructure.js&quot;</em> block and tried to talk about JavaScript Database Primitives; i.e. the basic building blocks we have landed on for building more complex database solutions in JavaScript.</p>
+<p>The talk certainly wasn&#39;t as good or clear as I wanted it to be, it worked much better in my head! A huge venue with over 300 talented JavaScripters, an absolutely massive screen, bright lights and loud amplification got the better of me and I wasn&#39;t able to pull the material together how I wanted to. The introvert within me is telling me to become a recluse for a little while just to recover! My <em>hope</em> is that at least one or two people are inspired to give <em>database hacking</em> a go because it&#39;s really not that difficult once you get your head around the primitives.</p>
+<p><strong><em>Edit:</em></strong> <em>I wasn&#39;t trying to elicit sympathy here, I genuinely think that I wasn&#39;t clear on what I was trying to communicate. It went so well in my head, as it usually does, but I fell far short of what I wanted to express. I&#39;ll attempt to rectify some of that with a writeup (see next para).</em></p>
+<p>Thankfully though, a portion of the material will be able to serve as the basis for the, long overdue, third part in my <a href="http://dailyjs.com/2013/04/19/leveldb-and-node-1/">three</a> <a href="http://dailyjs.com/2013/05/03/leveldb-and-node-2/">part</a> <a href="http://dailyjs.com">DailyJS</a> series on LevelDB &amp; Node.</p>
+<p>In summary, inspired by LevelDB, we&#39;ve ended up with a core set of primitives in <a href="https://github.com/rvagg/node-levelup">LevelUP</a> that can be used to build feature-rich and advanced database functionality. <strong>Atomic batch</strong> and <strong>ReadStream</strong> are the two non-trivial primitives, open, close, get, put, del are all pretty easy to understand as primitives, although <em>del</em> is perhaps redundant but we&#39;re opting for explicitness.</p>
+<p>My <a href="http://r.va.gg/presentations/lxjs2013">slides are online</a> but hopefully I&#39;ll be able to get my DailyJS article sorted out soon and I&#39;ll be able to explain what I was trying to get at.</p>
+<p>ReadStream as a primitive query mechanism is not too hard to understand once you get your head around key sorting and the implications for key structure. Batch is a little more subtle and relates to consistency and our ability to augment basic operations to create more complex functionality while keeping the data store in a consistent state.</p>
+<p>I additionally raised &quot;Buckets&quot;, or &quot;Namespaces&quot; as a primitive concept and discussed how <a href="https://github.com/dominictarr/level-sublevel">sublevel</a> has effectively become the standard for turning a one-dimensional data store into a multi-dimensional store able to encapsulate contain sophisticated functionality behind what is essentially just a key/value store.</p>
+<h3>Thanks to the LXJS team</h3>
+<p>It would be neglectful of me to not say how absolutely grateful I am to the LXJS team for putting so much effort into taking care of speakers; fantastic job.</p>
+<p>LXJS is an amazing event, put on by a dedicated and very talented team of people committed to the JavaScript community and the JavaScript community in Portugal in particular. This conference sets a very high bar for community-driven conferences with the way it has managed to get so many locals (and internationals!) involved in running an event in their own time.</p>
+<p><strong>David Dias, Ana Hevesi, Pedro Teixeira, Luís Reis, Nuno Job, Tiago Rodrigues, Leo Xavier, Alexander Kustov, André Rodrigues and Bruno Coelho</strong> have managed to put on an amazing event and are some of the nicest and talented people I&#39;ve met. Thank you to you all and everyone else who put on LXJS 2013, your hard work is appreciated and should be an inspiration to everyone involved in our local JavaScript communities, running events or considering running events like this.</p>
+
+      </section>
+
+    </section>
+
+  
+
+    <section class="post-content">
+
       <h2 id="should-i-use-a-single-leveldb-or-many-to-hold-my-data"><a href="/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html">Should I use a single LevelDB or many to hold my data?</a></h2>
 
       <div class="post-meta">
@@ -432,36 +481,6 @@
 <h3>Summary</h3>
 <p>The TL;DR is: in most cases, a single LevelDB store is generally preferable unless you have a <em>real</em> reason for having separate ones.</p>
 <p>Have I missed any considerations that you&#39;ve come across when making this choice? Let me know in the comments.</p>
-
-      </section>
-
-    </section>
-
-  
-
-    <section class="post-content">
-
-      <h2 id="primitives-for-js-databases-an-lxjs-adventure"><a href="/2013/10/primitives-for-js-databases-an-lxjs-adventure.html">Primitives for JS Databases (an LXJS adventure)</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on October 3, 2013</p>
-        <p class="link"><a href="/2013/10/primitives-for-js-databases-an-lxjs-adventure.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2013/10/primitives-for-js-databases-an-lxjs-adventure.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p>I gave a talk yesterday at <strong><a href="http://2013.lxjs.org">LXJS</a></strong> yesterday in the <em>&quot;Infrastructure.js&quot;</em> block and tried to talk about JavaScript Database Primitives; i.e. the basic building blocks we have landed on for building more complex database solutions in JavaScript.</p>
-<p>The talk certainly wasn&#39;t as good or clear as I wanted it to be, it worked much better in my head! A huge venue with over 300 talented JavaScripters, an absolutely massive screen, bright lights and loud amplification got the better of me and I wasn&#39;t able to pull the material together how I wanted to. The introvert within me is telling me to become a recluse for a little while just to recover! My <em>hope</em> is that at least one or two people are inspired to give <em>database hacking</em> a go because it&#39;s really not that difficult once you get your head around the primitives.</p>
-<p><strong><em>Edit:</em></strong> <em>I wasn&#39;t trying to elicit sympathy here, I genuinely think that I wasn&#39;t clear on what I was trying to communicate. It went so well in my head, as it usually does, but I fell far short of what I wanted to express. I&#39;ll attempt to rectify some of that with a writeup (see next para).</em></p>
-<p>Thankfully though, a portion of the material will be able to serve as the basis for the, long overdue, third part in my <a href="http://dailyjs.com/2013/04/19/leveldb-and-node-1/">three</a> <a href="http://dailyjs.com/2013/05/03/leveldb-and-node-2/">part</a> <a href="http://dailyjs.com">DailyJS</a> series on LevelDB &amp; Node.</p>
-<p>In summary, inspired by LevelDB, we&#39;ve ended up with a core set of primitives in <a href="https://github.com/rvagg/node-levelup">LevelUP</a> that can be used to build feature-rich and advanced database functionality. <strong>Atomic batch</strong> and <strong>ReadStream</strong> are the two non-trivial primitives, open, close, get, put, del are all pretty easy to understand as primitives, although <em>del</em> is perhaps redundant but we&#39;re opting for explicitness.</p>
-<p>My <a href="http://r.va.gg/presentations/lxjs2013">slides are online</a> but hopefully I&#39;ll be able to get my DailyJS article sorted out soon and I&#39;ll be able to explain what I was trying to get at.</p>
-<p>ReadStream as a primitive query mechanism is not too hard to understand once you get your head around key sorting and the implications for key structure. Batch is a little more subtle and relates to consistency and our ability to augment basic operations to create more complex functionality while keeping the data store in a consistent state.</p>
-<p>I additionally raised &quot;Buckets&quot;, or &quot;Namespaces&quot; as a primitive concept and discussed how <a href="https://github.com/dominictarr/level-sublevel">sublevel</a> has effectively become the standard for turning a one-dimensional data store into a multi-dimensional store able to encapsulate contain sophisticated functionality behind what is essentially just a key/value store.</p>
-<h3>Thanks to the LXJS team</h3>
-<p>It would be neglectful of me to not say how absolutely grateful I am to the LXJS team for putting so much effort into taking care of speakers; fantastic job.</p>
-<p>LXJS is an amazing event, put on by a dedicated and very talented team of people committed to the JavaScript community and the JavaScript community in Portugal in particular. This conference sets a very high bar for community-driven conferences with the way it has managed to get so many locals (and internationals!) involved in running an event in their own time.</p>
-<p><strong>David Dias, Ana Hevesi, Pedro Teixeira, Luís Reis, Nuno Job, Tiago Rodrigues, Leo Xavier, Alexander Kustov, André Rodrigues and Bruno Coelho</strong> have managed to put on an amazing event and are some of the nicest and talented people I&#39;ve met. Thank you to you all and everyone else who put on LXJS 2013, your hard work is appreciated and should be an inspiration to everyone involved in our local JavaScript communities, running events or considering running events like this.</p>
 
       </section>
 

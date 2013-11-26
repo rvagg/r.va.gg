@@ -4,7 +4,7 @@
   <title>r.va.gg</title>
  
   <link href="http://r.va.gg" />
-  <updated>2013-11-25T11:17:12.243Z</updated>
+  <updated>2013-11-26T09:07:54.728Z</updated>
   <id>http://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
@@ -102,6 +102,25 @@
 &lt;span class=&quot;s2&quot;&gt;  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild --debug &amp;&amp; \&lt;/span&gt;
 &lt;span class=&quot;s2&quot;&gt;  node_modules/.bin/tap test/*-test.js --stderr;                         \&lt;/span&gt;
 &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt; isn&#39;t a native add-on but it does use LevelDOWN which requires compiling. For the DNT config I&#39;m removing &lt;em&gt;node_modules/leveldown/&lt;/em&gt; prior to &lt;code&gt;npm install&lt;/code&gt; so it gets rebuilt each time for each new version of Node.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The &lt;a href=&quot;https://raw.github.com/rvagg/node-levelup/master/.dntrc&quot;&gt;LevelUP .dntrc&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nv&quot;&gt;NODE_VERSIONS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;\&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  master   \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.11.9  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.11.8  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.10.22 \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.10.21 \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  v0.8.26  \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;OUTPUT_PREFIX&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;levelup-&quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;TEST_CMD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;\&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  cd /dnt/ &amp;&amp;                                                    \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  rm -rf node_modules/leveldown/ &amp;&amp;                              \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  npm install --nodedir=/usr/src/node &amp;&amp;                         \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;  node_modules/.bin/tap test/*-test.js --stderr;                 \&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;#&quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 &lt;h3&gt;What&#39;s next?&lt;/h3&gt;
@@ -276,6 +295,28 @@
     </entry>
   
     <entry>
+      <title>Primitives for JS Databases (an LXJS adventure)</title>
+      <link href="http://r.va.gg/2013/10/primitives-for-js-databases-an-lxjs-adventure.html" />
+      <updated>2013-10-03T00:00:00.000Z</updated>
+      <id>http://r.va.gg/2013/10/primitives-for-js-databases-an-lxjs-adventure.html</id>
+      <content type="html">
+        &lt;p&gt;I gave a talk yesterday at &lt;strong&gt;&lt;a href=&quot;http://2013.lxjs.org&quot;&gt;LXJS&lt;/a&gt;&lt;/strong&gt; yesterday in the &lt;em&gt;&quot;Infrastructure.js&quot;&lt;/em&gt; block and tried to talk about JavaScript Database Primitives; i.e. the basic building blocks we have landed on for building more complex database solutions in JavaScript.&lt;/p&gt;
+&lt;p&gt;The talk certainly wasn&#39;t as good or clear as I wanted it to be, it worked much better in my head! A huge venue with over 300 talented JavaScripters, an absolutely massive screen, bright lights and loud amplification got the better of me and I wasn&#39;t able to pull the material together how I wanted to. The introvert within me is telling me to become a recluse for a little while just to recover! My &lt;em&gt;hope&lt;/em&gt; is that at least one or two people are inspired to give &lt;em&gt;database hacking&lt;/em&gt; a go because it&#39;s really not that difficult once you get your head around the primitives.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Edit:&lt;/em&gt;&lt;/strong&gt; &lt;em&gt;I wasn&#39;t trying to elicit sympathy here, I genuinely think that I wasn&#39;t clear on what I was trying to communicate. It went so well in my head, as it usually does, but I fell far short of what I wanted to express. I&#39;ll attempt to rectify some of that with a writeup (see next para).&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Thankfully though, a portion of the material will be able to serve as the basis for the, long overdue, third part in my &lt;a href=&quot;http://dailyjs.com/2013/04/19/leveldb-and-node-1/&quot;&gt;three&lt;/a&gt; &lt;a href=&quot;http://dailyjs.com/2013/05/03/leveldb-and-node-2/&quot;&gt;part&lt;/a&gt; &lt;a href=&quot;http://dailyjs.com&quot;&gt;DailyJS&lt;/a&gt; series on LevelDB &amp; Node.&lt;/p&gt;
+&lt;p&gt;In summary, inspired by LevelDB, we&#39;ve ended up with a core set of primitives in &lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt; that can be used to build feature-rich and advanced database functionality. &lt;strong&gt;Atomic batch&lt;/strong&gt; and &lt;strong&gt;ReadStream&lt;/strong&gt; are the two non-trivial primitives, open, close, get, put, del are all pretty easy to understand as primitives, although &lt;em&gt;del&lt;/em&gt; is perhaps redundant but we&#39;re opting for explicitness.&lt;/p&gt;
+&lt;p&gt;My &lt;a href=&quot;http://r.va.gg/presentations/lxjs2013&quot;&gt;slides are online&lt;/a&gt; but hopefully I&#39;ll be able to get my DailyJS article sorted out soon and I&#39;ll be able to explain what I was trying to get at.&lt;/p&gt;
+&lt;p&gt;ReadStream as a primitive query mechanism is not too hard to understand once you get your head around key sorting and the implications for key structure. Batch is a little more subtle and relates to consistency and our ability to augment basic operations to create more complex functionality while keeping the data store in a consistent state.&lt;/p&gt;
+&lt;p&gt;I additionally raised &quot;Buckets&quot;, or &quot;Namespaces&quot; as a primitive concept and discussed how &lt;a href=&quot;https://github.com/dominictarr/level-sublevel&quot;&gt;sublevel&lt;/a&gt; has effectively become the standard for turning a one-dimensional data store into a multi-dimensional store able to encapsulate contain sophisticated functionality behind what is essentially just a key/value store.&lt;/p&gt;
+&lt;h3&gt;Thanks to the LXJS team&lt;/h3&gt;
+&lt;p&gt;It would be neglectful of me to not say how absolutely grateful I am to the LXJS team for putting so much effort into taking care of speakers; fantastic job.&lt;/p&gt;
+&lt;p&gt;LXJS is an amazing event, put on by a dedicated and very talented team of people committed to the JavaScript community and the JavaScript community in Portugal in particular. This conference sets a very high bar for community-driven conferences with the way it has managed to get so many locals (and internationals!) involved in running an event in their own time.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;David Dias, Ana Hevesi, Pedro Teixeira, Luís Reis, Nuno Job, Tiago Rodrigues, Leo Xavier, Alexander Kustov, André Rodrigues and Bruno Coelho&lt;/strong&gt; have managed to put on an amazing event and are some of the nicest and talented people I&#39;ve met. Thank you to you all and everyone else who put on LXJS 2013, your hard work is appreciated and should be an inspiration to everyone involved in our local JavaScript communities, running events or considering running events like this.&lt;/p&gt;
+
+      </content>
+    </entry>
+  
+    <entry>
       <title>Should I use a single LevelDB or many to hold my data?</title>
       <link href="http://r.va.gg/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html" />
       <updated>2013-10-03T00:00:00.000Z</updated>
@@ -310,28 +351,6 @@
 &lt;h3&gt;Summary&lt;/h3&gt;
 &lt;p&gt;The TL;DR is: in most cases, a single LevelDB store is generally preferable unless you have a &lt;em&gt;real&lt;/em&gt; reason for having separate ones.&lt;/p&gt;
 &lt;p&gt;Have I missed any considerations that you&#39;ve come across when making this choice? Let me know in the comments.&lt;/p&gt;
-
-      </content>
-    </entry>
-  
-    <entry>
-      <title>Primitives for JS Databases (an LXJS adventure)</title>
-      <link href="http://r.va.gg/2013/10/primitives-for-js-databases-an-lxjs-adventure.html" />
-      <updated>2013-10-03T00:00:00.000Z</updated>
-      <id>http://r.va.gg/2013/10/primitives-for-js-databases-an-lxjs-adventure.html</id>
-      <content type="html">
-        &lt;p&gt;I gave a talk yesterday at &lt;strong&gt;&lt;a href=&quot;http://2013.lxjs.org&quot;&gt;LXJS&lt;/a&gt;&lt;/strong&gt; yesterday in the &lt;em&gt;&quot;Infrastructure.js&quot;&lt;/em&gt; block and tried to talk about JavaScript Database Primitives; i.e. the basic building blocks we have landed on for building more complex database solutions in JavaScript.&lt;/p&gt;
-&lt;p&gt;The talk certainly wasn&#39;t as good or clear as I wanted it to be, it worked much better in my head! A huge venue with over 300 talented JavaScripters, an absolutely massive screen, bright lights and loud amplification got the better of me and I wasn&#39;t able to pull the material together how I wanted to. The introvert within me is telling me to become a recluse for a little while just to recover! My &lt;em&gt;hope&lt;/em&gt; is that at least one or two people are inspired to give &lt;em&gt;database hacking&lt;/em&gt; a go because it&#39;s really not that difficult once you get your head around the primitives.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;Edit:&lt;/em&gt;&lt;/strong&gt; &lt;em&gt;I wasn&#39;t trying to elicit sympathy here, I genuinely think that I wasn&#39;t clear on what I was trying to communicate. It went so well in my head, as it usually does, but I fell far short of what I wanted to express. I&#39;ll attempt to rectify some of that with a writeup (see next para).&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;Thankfully though, a portion of the material will be able to serve as the basis for the, long overdue, third part in my &lt;a href=&quot;http://dailyjs.com/2013/04/19/leveldb-and-node-1/&quot;&gt;three&lt;/a&gt; &lt;a href=&quot;http://dailyjs.com/2013/05/03/leveldb-and-node-2/&quot;&gt;part&lt;/a&gt; &lt;a href=&quot;http://dailyjs.com&quot;&gt;DailyJS&lt;/a&gt; series on LevelDB &amp; Node.&lt;/p&gt;
-&lt;p&gt;In summary, inspired by LevelDB, we&#39;ve ended up with a core set of primitives in &lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt; that can be used to build feature-rich and advanced database functionality. &lt;strong&gt;Atomic batch&lt;/strong&gt; and &lt;strong&gt;ReadStream&lt;/strong&gt; are the two non-trivial primitives, open, close, get, put, del are all pretty easy to understand as primitives, although &lt;em&gt;del&lt;/em&gt; is perhaps redundant but we&#39;re opting for explicitness.&lt;/p&gt;
-&lt;p&gt;My &lt;a href=&quot;http://r.va.gg/presentations/lxjs2013&quot;&gt;slides are online&lt;/a&gt; but hopefully I&#39;ll be able to get my DailyJS article sorted out soon and I&#39;ll be able to explain what I was trying to get at.&lt;/p&gt;
-&lt;p&gt;ReadStream as a primitive query mechanism is not too hard to understand once you get your head around key sorting and the implications for key structure. Batch is a little more subtle and relates to consistency and our ability to augment basic operations to create more complex functionality while keeping the data store in a consistent state.&lt;/p&gt;
-&lt;p&gt;I additionally raised &quot;Buckets&quot;, or &quot;Namespaces&quot; as a primitive concept and discussed how &lt;a href=&quot;https://github.com/dominictarr/level-sublevel&quot;&gt;sublevel&lt;/a&gt; has effectively become the standard for turning a one-dimensional data store into a multi-dimensional store able to encapsulate contain sophisticated functionality behind what is essentially just a key/value store.&lt;/p&gt;
-&lt;h3&gt;Thanks to the LXJS team&lt;/h3&gt;
-&lt;p&gt;It would be neglectful of me to not say how absolutely grateful I am to the LXJS team for putting so much effort into taking care of speakers; fantastic job.&lt;/p&gt;
-&lt;p&gt;LXJS is an amazing event, put on by a dedicated and very talented team of people committed to the JavaScript community and the JavaScript community in Portugal in particular. This conference sets a very high bar for community-driven conferences with the way it has managed to get so many locals (and internationals!) involved in running an event in their own time.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;David Dias, Ana Hevesi, Pedro Teixeira, Luís Reis, Nuno Job, Tiago Rodrigues, Leo Xavier, Alexander Kustov, André Rodrigues and Bruno Coelho&lt;/strong&gt; have managed to put on an amazing event and are some of the nicest and talented people I&#39;ve met. Thank you to you all and everyone else who put on LXJS 2013, your hard work is appreciated and should be an inspiration to everyone involved in our local JavaScript communities, running events or considering running events like this.&lt;/p&gt;
 
       </content>
     </entry>
