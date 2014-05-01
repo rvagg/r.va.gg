@@ -6,6 +6,13 @@
   font-style: normal;
 }
 
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    @font-face {
+      font-family: 'Century Schoolbook Monospace';
+      src: url('/fonts/Century-Schoolbook-Monospace-BT.svg#CenturySchoolbookMonospaceBT') format('svg');
+    }
+}
+
 body {
   background: transparent url(images/bg.gif) repeat top left;
   color: #444;
