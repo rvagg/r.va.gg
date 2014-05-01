@@ -39,6 +39,7 @@
 
 body {
   color: #33342d;
+  overflow-y: hidden;
 }
 
 body, section.bespoke-slide {
@@ -79,6 +80,7 @@ body, section.bespoke-slide {
   top: auto;
   position: static;
   margin: 10px;
+  padding: 0 10px;
 }
 
 .rv h1 {
@@ -92,10 +94,12 @@ body, section.bespoke-slide {
 
 .rv h3 {
   font-size: 22px;
+  margin-bottom: 1em;
 }
 
 .rv h4 {
   font-size: 18px;
+  margin-bottom: 1em;
 }
 
 .rv p {
@@ -140,3 +144,5 @@ pre code, pre tt {
   background-color: transparent;
   border: none;
 }
+
+.shrink + .highlight pre { font-size: 9.5px !important; }

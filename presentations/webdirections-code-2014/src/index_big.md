@@ -27,13 +27,14 @@
 
 Defining *"asynchronous programming"*
 
-Constructing basic async abstractions: each, map, series
+Constructing basic abstractions: series, each, map, memoisation
 
 Advanced abstractions
 
 * EventEmitter
 * Streams
 * Promises
+* Continuables / thunks
 
 Generators for async programming
 
@@ -142,6 +143,20 @@ table#iocost td, table#iocost th {
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+## The CPU wants to be busy
+
+<br>
+
+An idle CPU is a waste of a valuable resource
+
+Solutions?
+
+ * Multi-process
+ * Threads
+ * Non-blocking I/O
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ## The UI introduced new challenges
 
 <br>
@@ -154,7 +169,44 @@ Unpredictable
 
 Sequential programming has limits
 
-Good UIs don't constrain the user
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Sequential programming for UIs?
+
+```sh
+#!/bin/sh
+
+echo -n "What's your name? "
+read name
+runcmd() {
+  echo -n "OK ${name}, what command shal I run? "
+  read cmd
+  echo "Here's the output of the command \`${cmd}\`, ${name}:\n"
+  $cmd
+  echo -n "\nMore commands ${name}? [Y/n] "
+  read more
+  if [ "$more" != "n" ]; then
+    runcmd
+  fi
+}
+runcmd
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Good UIs don't constrain the user
+
+<br>
+
+Wide range of:
+
+* input devices
+
+* user preferences
+
+* user abilities
+
+* users!
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -218,7 +270,7 @@ setInterval(scroll, 100)
 
 * First-class functions
 
-* Closures and scope capturing
+* Function scope for simple closures
 
 * *Single-threaded*
 
@@ -230,11 +282,15 @@ setInterval(scroll, 100)
 
 Async works well for performing many complex, parallel tasks in the browser, why not on the server too?
 
+**Async all the things!**
+
+All I/O is asynchronous, some optional synchronous calls
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Synchronous I/O with Node.js
 
-Synchronous file system I/O, on the JavaScript thread
+**Synchronous** file system I/O, on the JavaScript thread
 
 ```js
 console.log('Reading data...');
@@ -249,6 +305,8 @@ console.log('Finished reading data!');
 ## Asynchronous I/O with Node.js
 
 File system I/O is performed on a thread-pool when asynchronous
+
+**Asynchronous** file system I/O, off the JavaScript thread
 
 ```js
 console.log('Reading data...');
@@ -592,6 +650,26 @@ asyncMap(
 
 ## Basic abstractions: asynchronous map
 
+*Example usage with proper async:*
+
+```js
+asyncMap(
+  [ 1, 2, 3 ],
+  function (el, callback) {
+    setTimeout(function () {
+      callback(null, el * 10);
+    }, Math.random() * 1000);
+  },
+  function (err, result) {
+    console.log(result);
+  }
+);
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Basic abstractions: asynchronous map
+
 ```js
 // v7: introduce async map abstraction, remove all explicit state
 fs.readdir(dir, function (err, fileList) {
@@ -608,7 +686,7 @@ fs.readdir(dir, function (err, fileList) {
     fs.stat(dir + '/' + file, function (err, stat) {
       callback(null, { file: file, time: stat ? stat.mtime : 0 });
     });
-  }
+  };
   asyncMap(fileList, statFile, sortAndPrint);
 });
 ```
@@ -646,18 +724,41 @@ files.forEach(function (file) {
 });
 ```
 
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Basic abstractions: serial execution
 
 ```js
-// v2: process files one at a time
+// v2: extract individual file processor
+function catFile (file, callback) {
+  fs.readFile(file, 'utf8', function (err, contents) {
+    if (err) return callback(err);
+
+    fs.appendFile(output, contents, callback);
+  });
+}
+
+files.forEach(function (file) {
+  catFile(file, function (err) {
+    if (err) throw err;
+  });
+});
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Basic abstractions: serial execution
+
+```js
+// v3: process files one at a time
 function catFile (file, callback) {
   fs.readFile(file, 'utf8', function (err, contents) {
     if (err) return callback(err);
     fs.appendFile(output, contents, callback);
   });
 }
+
 function next (index) {
   if (index >= files.length)
     return console.log('Done!');
@@ -669,7 +770,254 @@ function next (index) {
 next(0);
 ```
 
-<p style="font-size: 10px;"><a href="https://github.com/hughsk/async-series">https://github.com/hughsk/async-series</a></p>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Basic abstractions: serial execution
+
+```js
+// v4: alternative, less obvious, execution
+function catFile (file, callback) {
+  fs.readFile(file, 'utf8', function (err, contents) {
+    if (err) return callback(err);
+    fs.appendFile(output, contents, callback);
+  });
+}
+
+(function next (index) {
+  if (index >= files.length)
+    return console.log('Done!');
+  catFile(files[index], function (err) {
+    if (err) throw err;
+    next(index + 1);
+  });
+}(0));
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Basic abstractions: serial execution
+
+```js
+// a serial async executor
+function serial (fns, callback) {
+  var index = 0;
+  function next (index) {
+    if (index >= fns.length)
+      return callback();
+    fns[index](function (err) {
+      if (err) return callback(err);
+      next(index + 1);
+    });
+  }
+  next(0);
+}
+```
+
+<https://github.com/hughsk/async-series>
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Basic abstractions: serial execution
+
+```js
+// v5: use the serial() abstraction
+serial([
+    function (callback) { catFile(files[0], callback); },
+    function (callback) { catFile(files[1], callback); },
+    function (callback) { catFile(files[2], callback); },
+    function (callback) { catFile(files[3], callback); }
+  ],
+  function (err) {
+    if (err) throw err;
+    console.log('Done!');  
+  }
+);
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Basic abstractions: serial execution
+
+```js
+// v6: make flexible
+function mkCatFile (file) {
+  return function (callback) {
+    catFile(file, callback);
+  }
+}
+
+var fns = files.map(mkCatFile);
+
+serial(fns, function (err) {
+  if (err) throw err;
+  console.log('Done!');  
+});
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Basic abstractions: memoisation
+
+Exercise: write a templating engine
+
+Tools:
+
+```js
+// uber-simple template replacer
+// replaces entries like: {foo}
+// given an object like `{ foo: 'bar!' }`
+
+function replace (template, model) {
+  var re;
+  for (var key in model) {
+    re = new RegExp('{' + key + '}', 'g');
+    template = template.replace(re, model[key]);
+  }
+  return template;
+}
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Basic abstractions: memoisation
+
+```js
+// v1: basic structure, needs template logic
+function processTemplate (file, model, callback) {
+  /* .. template stuff .. */
+  callback(null, renderedTemplateString);
+}
+
+var model = { name: 'Rod', status: 'w00t!' };
+
+processTemplate('demo.tmpl', model, function (err, content) {
+  if (err) throw err;
+  console.log('Rendered content:\n', content);
+});
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Basic abstractions: memoisation
+
+```js
+// v2: working implementation
+function processTemplate (file, model, callback) {
+  fs.readFile(file, 'utf8', function (err, content) {
+    if (err) return callback(err);
+    content = replace(content, model);
+    callback(null, content);
+  })
+}
+
+var model = { name: 'Rod', status: 'w00t!' };
+
+processTemplate('demo.tmpl', model, function (err, content) {
+  if (err) throw err;
+  console.log('Rendered content:\n', content);
+});
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Basic abstractions: memoisation
+
+```js
+// v3: cache file contents
+var cache = {};
+function processTemplate (file, model, callback) {
+  if (cache[file]) {
+    return setImmediate(function () {
+      callback(null, cache[file]);
+    })
+  }
+
+  fs.readFile(file, 'utf8', function (err, content) {
+    if (err) return callback(err);
+    cache[file] = content;
+    content = replace(content, model);
+    callback(null, content);
+  })
+}
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Basic abstractions: memoisation
+
+```js
+// v4: ensure single read per-file
+var cache = {}, pending = {};
+function processTemplate (file, model, callback) {
+  if (cache[file])
+    return setImmediate(function () { callback(null, cache[file]); })
+  if (!pending[file]) {
+    pending[file] = [];
+    fs.readFile(file, 'utf8', function (err, content) {
+      if (!err) cache[file] = content;
+      pending[file].forEach(function (p) {
+        if (err) return p.callback(err);
+        p.callback(null, replace(content, p.model));
+      });
+      delete pending[file];
+    });
+  }
+  pending[file].push({ model: model, callback: callback });
+}
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Basic abstractions: memoisation
+
+<p class="shrink"></p>
+
+```js
+// a memoisation utility, first arg of `wrappedFn` is `key`, last arg is `callback`
+function memoise (wrappedFn) {
+  var cache = {}, pending = {};
+  return function () {
+    var args = Array.prototype.slice.call(arguments);
+    var key = args[0], callback = args.pop(); // remove original callback
+    if (cache[key])
+      return setImmediate(function () { callback.apply(null, cache[key]) });
+    if (!pending[key]) {
+      pending[key] = [];
+      function cb () {
+        cache[key] = Array.prototype.slice.call(arguments);
+        pending[key].forEach(function (p) { p.callback.apply(null, cache[key]); });
+        delete pending[key];
+      }
+      wrappedFn.apply(null, args.concat([ cb ]));
+    }
+    pending[key].push({ callback: callback, args: args });
+  }
+}
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Basic abstractions: memoisation
+
+```js
+// v5: use the `memoise()` utility
+var memoisedReadFile = memoise(fs.readFile);
+
+function processTemplate (file, model, callback) {
+  memoisedReadFile(file, 'utf8', function (err, content) {
+    if (err) return callback(err);
+    content = replace(content, model);
+    callback(null, content);
+  })
+}
+
+var model = { name: 'Rod', status: 'w00t!' };
+
+processTemplate('demo.tmpl', model, function (err, content) {
+  if (err) throw err;
+  console.log('Rendered content:\n', content);
+});
+```
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -682,6 +1030,8 @@ next(0);
 * Streams
 
 * Promises
+
+* Continuables / thunks
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -718,6 +1068,8 @@ One surprise: `'error'` event
 
 ## Advanced abstractions: EventEmitter
 
+Useful for communicating state and unrelated events
+
 ```js
 var server = http.createServer()
 
@@ -738,12 +1090,108 @@ server.listen(8080);
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+## Advanced abstractions: EventEmitter
+
+In Node.js, APIs taking a simple callback should fire that callback **once** or never
+
+```js
+// a Node.js anti-pattern:
+
+http.createServer(function (req, res) {
+  res.end('Hello World!');
+}).listen(8888);
+
+// better:
+
+var server = http.createServer();
+server.on('request', function (req, res) {
+  res.end('Hello World!');
+});
+server.listen(8888);
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Advanced abstractions: EventEmitter
+
+Useful if you want a concrete object to identify an async call
+
+```js
+function getFromDatabase (key) {
+  var ee = new EventEmitter();
+  setImmediate(processGet);
+  return ee;  
+
+  function processGet () {
+    db.get(key, function (err, value) {
+      if (err) return ee.emit('error', err);
+      ee.emit('data', value);
+    });
+  }
+}
+
+var get = getFromDatabase('foo');
+get.on('data', console.log);
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Advanced abstractions: EventEmitter
+
+<p class="shrink"></p>
+
+```js
+// for detailed feedback about async progress
+function getFromDatabase (key) {
+  var ee = new EventEmitter();
+  var connection;
+  setImmediate(processGet);
+  return ee;
+
+  function processGet () {
+    pool.getConnection(function (err, connection, isNew) {
+      if (err) return ee.emit('error', err);
+      ee.emit(isNew ? 'newConnection' : 'existingConnection');
+      ee.emit('fetching', key);
+      connection.get(key, function (err, value) {
+        if (err) return ee.emit('error', err);
+        ee.emit('data', value);
+      });
+    });
+  }
+}
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Advanced abstractions: EventEmitter
+
+For observability
+
+```js
+var EventEmitter = require('event').EventEmitter;
+var inherits = require('util').inherits;
+
+function Database () {
+  EventEmitter.call(this);
+}
+
+inherits(Database, EventEmitter);
+
+Database.prototype.get = function (key, callback) {
+  this.emit('get', key);
+  // ... perform get, call `callback`
+}
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ## Advanced abstractions: Streams
 
 #### For
 
-* Chunked I/O
 * Chunked data processing
+* Chunked I/O
 
 #### Why?
 
@@ -779,23 +1227,45 @@ request({ url: 'https://registry.npmjs.org/-/all' }) // ~35M raw
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Advanced abstractions: Promises
+## Advanced abstractions: Streams
 
-<br>
+Dust.js: streaming template rendering *(an interesting use-case)*
 
-An abstraction with a very well-defined API
+<p class="shrink"></p>
 
-Promises/A+ <http://promisesaplus.com/>
+```html
+<h1>{title}</h1>
+<ul>
+{#names}
+  <li><a href="{url}">{name}</a></li>{~n}
+{/names}
+</ul>
+```
+
+<p class="shrink"></p>
+
+```js
+function body_0(chk,ctx){
+  return chk.write("<h1>").reference(ctx.get("title"),ctx,"h").write("</h1><ul>")
+    .section(ctx.get("names"),ctx,{"block":body_1},null).write("</ul>");
+}
+function body_1(chk,ctx){
+  return chk.write("<li><a href=\"").reference(ctx.get("url"),ctx,"h").write("\">")
+    .reference(ctx.get("name"),ctx,"h").write("</a></li>\n");
+}
+```
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Advanced abstractions: Promises
 
-<br>
+An abstraction with a very well-defined API
 
-An object with a `then()` method as a hook in to the state and data represented by the *Promise*
+Promises/A+ <http://promisesaplus.com/>
 
-Three states: pending, fulfilled, rejected
+Simple definition: **A concrete object with a `then()` method as a hook in to the state and data represented by the *Promise***
+
+Three states: **pending, fulfilled, rejected**
 
 `promise.then(onFulfilled, onRejected)`
 
@@ -831,6 +1301,16 @@ preaddir(dir).then(function (fileList) {
 });
 ```
 
+<!--
+
+## Advanced abstractions: Promises
+
+<p style="text-align: center; padding-top: 5px;"><img src="img/q_doom.png" alt="DOOM" style="width: 400px; box-shadow: 0px 0px 18px rgba(0,0,0,0.3);"></p>
+
+<p st\yle="font-size: 10px; font-style: italic;">ORLY? <i>From <a href="https://github.com/kriskowal/q">https://github.com/kriskowal/q</a></i></p>
+
+-->
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Advanced abstractions: Promises
@@ -841,9 +1321,88 @@ preaddir(dir).then(function (fileList) {
 
 Error-handling as a second-class citizen
 
+* Programmer errors difficult to detect
+* Very easy to ignore error handling
+
 Heavy-weight abstraction: can easily mask problems
 
 Viral: infect everything they touch
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+<h2 style="font-size: 24px;">Advanced abstractions: continuables / thunks</h2>
+
+<br>
+
+**A function that take a single callback argument**
+
+Like light-weight Promises
+
+Concrete objects representing units of work
+
+Easily defined
+
+Composable
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+<h2 style="font-size: 24px;">Advanced abstractions: continuables / thunks</h2>
+
+```js
+var readFile = function (uri) {
+  return function (callback) { fs.readFile(uri, callback); }
+}
+```
+
+<p style="font-size: 14px;"><a href="https://github.com/Raynos/continuable">https://github.com/Raynos/continuable</a></p>
+
+```js
+var readFile = continuable.to(fs.readFile);
+var readindat = readFile('in.dat', 'utf8');
+readindat(function (err, contents) { /* ... */ });
+```
+
+<p style="font-size: 14px;"><a href="https://github.com/visionmedia/node-thunkify">https://github.com/visionmedia/node-thunkify</a></p>
+
+```js
+var readFile = thunkify(fs.readFile);
+var readindat = readFile('in.dat', 'utf8');
+readindat(function (err, contents) { /* ... */ });
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+<h2 style="font-size: 24px;">Advanced abstractions: continuables / thunks</h2>
+
+#### Why?
+
+Simpler and more flexible abstractions
+
+```js
+para([ cont1, cont2, cont3 ])(function (err, arr) {
+  // arr == [ .., .., .. ]
+});
+
+para(cont1, cont2, cont3)(function (err, ary) {
+  // arr == [ .., .., .. ]
+});
+
+para({ A: cont1, B: cont2, C: cont3 })(function (err, obj) {
+  // obj == { A:.., B:..., C:... }
+});
+```
+
+<https://github.com/dominictarr/continuable-para>
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+<h2 style="font-size: 24px;">Advanced abstractions: continuables / thunks</h2>
+
+<br>
+
+#### What's the catch?
+
+Higher-order programming...
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -945,6 +1504,20 @@ function random (seed) {
 
 ## ES6 Generators
 
+Generators are a protocol for functions that can return multiple values
+
+* Returns an object that has a `next()` function
+* Executed when `next()` is called
+* Execution is halted when `yield` is called
+* `yield` causes an object with `'value'` and `'done'` properties to be returned
+* If `'done'` is `false`, `'value'` has a value
+* Execution is continued when `next()` is called
+* A `return` (or function end) causes the return object to have `'done'` equal `true` and `'value'` to have the return value
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## ES6 Generators
+
 ```js
 // PRNG generator with re-seed capabilities
 function* random (seed) {
@@ -964,6 +1537,47 @@ console.log(gen.next().value);
 console.log(gen.next(10).value); // re-seed
 console.log(gen.next().value);
 console.log(gen.next().value);
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## ES6 Generators
+
+```js
+// re-seedable PRNG in ES3 using the generator protocol
+function random (seed) {
+  var m = 25, a = 11, c = 17, z = seed;
+  return {
+    next: function (seed) {
+      z = typeof seed == 'number' ? seed : (a * z + c) % m;
+      return { value: z, done: false };
+    }
+  }
+}
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## ES6 Generators
+
+Generators also have a `throw()` method
+
+```js
+function* random (seed) {
+  var m = 25, a = 11, c = 17, z = seed;
+  while (true) {
+    z = (a * z + c) % m;
+    try {
+      seed = yield z; // throw() throws the Error object here
+    } catch (e) {
+      console.error('Whoa!!', e.message);
+      break;
+    }
+    if (typeof seed == 'number')
+      z = seed;
+  }
+  return -1; // optional, will show up as `value`
+}
 ```
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1005,7 +1619,7 @@ function runGenerator (fn) {
     if (it.done) return;
 
     it.value(function (err, data) {
-      if (err) return gen.throw(err); // raise exception at `yield`
+      if (err) return gen.throw(err);
       next(data);
     });
   }());
@@ -1018,7 +1632,7 @@ function runGenerator (fn) {
 
 ## ES6 Generators
 
-Callback-only functions make this practical
+Continuables / thunks make this practical
 
 ```js
 function timer (timeout) {
@@ -1036,7 +1650,6 @@ runGenerator(function* timerGen () {
   console.log('v3', v3);
 });
 ```
-<p style="font-size: 10px;"><a href="https://github.com/visionmedia/node-thunkify">https://github.com/visionmedia/node-thunkify</a></p>
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

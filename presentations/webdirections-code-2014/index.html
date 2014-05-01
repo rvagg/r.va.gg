@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width" />
-    <title>CBRJS: Learn You the Node.js For Much Win!</title>
+    <title>WebDirections Code 2014: Asynchronous JavaScript Patterns (@rvagg)</title>
     <link rel="stylesheet" type="text/css" href="style/markbase.css">
     <link rel="stylesheet" type="text/css" href="style/markthemes.css">
     <link rel="stylesheet" type="text/css" href="style/highlight.css">
@@ -16,7 +16,7 @@
 
     <div id="main">
       <header>
-        CBRJS: Learn You The Node.js <i>For Much Win</i>
+        WebDirections Code 2014: <i>Asynchronous JavaScript Patterns</i> &nbsp; (@rvagg)
       </header>
 
       <article>
@@ -33,28 +33,39 @@
         </section>
       
         <section>
-          <ul>
-<li>Defining <em>asynchronous programming</em><ul>
-<li>History</li>
-<li>Continuation-passing</li>
-<li>Benefits</li>
-</ul>
-</li>
-<li>Constructing basic abstractions: series, each, map, memoisation</li>
-<li>Advanced abstractions<ul>
+          <h2>@rvagg<br>Rod Vagg</h2>
+<p><br></p>
+<p style="text-align: center; padding-top: 5px;"><img src="img/erik.png" alt="Erik" style="width: 50px; border-radius: 5px; box-shadow: 0px 0px 7px rgba(0,0,0,0.4);"></p>
+
+<p style="text-align: center; padding-top: 5px;"><img src="img/milkyjoe.jpeg" alt="Milky Joe" style="width: 50px; border-radius: 5px; box-shadow: 0px 0px 7px rgba(0,0,0,0.4);"></p>
+
+<p><br></p>
+<p style="text-align: center;">
+  <a href="http://r.va.gg"><a href="http://r.va.gg">http://r.va.gg</a></a><br>
+  <a href="http://nodefirm.com"><a href="http://nodefirm.com">http://nodefirm.com</a></a>
+</p>
+
+
+        </section>
+      
+        <section>
+          <h2>TOC</h2>
+<p>Defining <em>&quot;asynchronous programming&quot;</em></p>
+<p>Constructing basic async abstractions: each, map, series</p>
+<p>Advanced abstractions</p>
+<ul>
 <li>EventEmitter</li>
 <li>Streams</li>
 <li>Promises</li>
-<li>Continuables / thunks</li>
 </ul>
-</li>
-<li>Generators for async programming</li>
-</ul>
+<p>Generators for async programming</p>
+<p><em>Ranty stuff</em></p>
 
         </section>
       
         <section>
           <h2>In the begining</h2>
+<p><br></p>
 <p>Programming was about <em>computing</em></p>
 <p>Computers were self-contained number-crunchers</p>
 <p>I/O was late to the game</p>
@@ -63,6 +74,7 @@
       
         <section>
           <h2>I/O is not <em>computing</em></h2>
+<p><br></p>
 <p>I/O is what computers wait for</p>
 <p>I/O is the bottleneck in the majority of programs</p>
 
@@ -79,7 +91,6 @@
 
   <span class="k">while</span> <span class="o">((</span><span class="n">line</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="na">readLine</span><span class="o">())</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
     <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">line</span> <span class="o">+</span> <span class="s">&quot;\n&quot;</span><span class="o">);</span>
-
   <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
 <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
   <span class="n">br</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
@@ -139,7 +150,7 @@ table#iocost td, table#iocost th {
       <td style="text-align: right;">4,000,000 ns</td>
     </tr>
     <tr>
-      <td>Round-trip from US to EU:</td>
+      <td>Round-trip from AU to US:</td>
       <td style="text-align: right;">150,000,000 ns</td>
     </tr>
   </tbody>
@@ -149,67 +160,19 @@ table#iocost td, table#iocost th {
         </section>
       
         <section>
-          <h2>The CPU wants to be busy</h2>
-<p>An idle CPU is a waste of a valuable resource</p>
-<p>Solutions?</p>
-<ul>
-<li>Multi-process</li>
-<li>Threads</li>
-<li>Non-blocking I/O</li>
-</ul>
-
-        </section>
-      
-        <section>
           <h2>The UI introduced new challenges</h2>
+<p><br></p>
 <p>I/O in the form of a human</p>
 <p>Unpredictable</p>
 <p><em>Very</em> high latency</p>
 <p>Sequential programming has limits</p>
-
-        </section>
-      
-        <section>
-          <h2>Sequential programming for UIs?</h2>
-<div class="highlight"><pre><span class="c">#!/bin/sh</span>
-
-<span class="nb">echo</span> -n <span class="s2">&quot;What&#39;s your name? &quot;</span>
-<span class="nb">read </span>name
-runcmd<span class="o">()</span> <span class="o">{</span>
-  <span class="nb">echo</span> -n <span class="s2">&quot;OK ${name}, what command shal I run? &quot;</span>
-  <span class="nb">read </span>cmd
-  <span class="nb">echo</span> <span class="s2">&quot;Here&#39;s the output of the command \`${cmd}\`, ${name}:\n&quot;</span>
-  <span class="nv">$cmd</span>
-  <span class="nb">echo</span> -n <span class="s2">&quot;\nMore commands ${name}? [Y/n] &quot;</span>
-  <span class="nb">read </span>more
-  <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$more&quot;</span> !<span class="o">=</span> <span class="s2">&quot;n&quot;</span> <span class="o">]</span>; <span class="k">then</span>
-<span class="k">    </span>runcmd
-  <span class="k">fi</span>
-<span class="o">}</span>
-runcmd
-</pre></div>
-
-
-        </section>
-      
-        <section>
-          <h2>Good UIs don&#39;t constrain the user</h2>
-<p>Wide range of:</p>
-<ul>
-<li><p>input devices</p>
-</li>
-<li><p>user preferences</p>
-</li>
-<li><p>user abilities</p>
-</li>
-<li><p>users!</p>
-</li>
-</ul>
+<p>Good UIs don&#39;t constrain the user</p>
 
         </section>
       
         <section>
           <h2>Networked UIs: a perfect storm</h2>
+<p><br></p>
 <p>User variability delivered over unreliable, high-latency networks</p>
 <p>Browsers...</p>
 
@@ -217,7 +180,8 @@ runcmd
       
         <section>
           <h2>On the web, nothing is synchronous</h2>
-<p>Reactive programming is king</p>
+<p><br></p>
+<p>Always in <em>reactive</em> mode, responding to external events</p>
 <ul>
 <li>React to user events</li>
 <li>React to network events</li>
@@ -227,7 +191,7 @@ runcmd
         </section>
       
         <section>
-          <h2>JavaScript<br>The King of event-driven programming</h2>
+          <h2>JavaScript:<br>The King of event-driven programming</h2>
 <p>Born in the browser</p>
 <p>Designed to respond to user-events</p>
 <p><strong>Timers!</strong> &nbsp; <span id="scroll">BREAKING NEWS: Scrolling text with DHTML!         </span></p>
@@ -256,21 +220,821 @@ setInterval(scroll, 100)
         </section>
       
         <section>
-          <h2>Asynchronicity at the extreme: Node.js</h2>
-<p>Works well for performing many complex, parallel tasks in the browser, why not on the server too?</p>
-<p><strong>Async all the things!</strong></p>
+          <h2>JavaScript:<br>The King of event-driven programming</h2>
+<p><br></p>
+<ul>
+<li><p>First-class functions</p>
+</li>
+<li><p>Closures and scope capturing</p>
+</li>
+<li><p><em>Single-threaded</em></p>
+</li>
+</ul>
 
         </section>
       
         <section>
-          
+          <h2>Asynchronicity at the extreme: Node.js</h2>
+<p><br></p>
+<p>Async works well for performing many complex, parallel tasks in the browser, why not on the server too?</p>
+
+        </section>
+      
+        <section>
+          <h2>Synchronous I/O with Node.js</h2>
+<p>Synchronous file system I/O, on the JavaScript thread</p>
+<div class="highlight"><pre><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Reading data...&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;in.dat&#39;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Finished reading data!&#39;</span><span class="p">);</span>
+</pre></div>
+
+<p><em>Don&#39;t do this</em></p>
+
+        </section>
+      
+        <section>
+          <h2>Asynchronous I/O with Node.js</h2>
+<p>File system I/O is performed on a thread-pool when asynchronous</p>
+<div class="highlight"><pre><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Reading data...&#39;</span><span class="p">);</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s1">&#39;in.dat&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// asynchronous</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Finished reading data!&#39;</span><span class="p">);</span>
+<span class="p">})</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Not finished reading data...&#39;</span><span class="p">);</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Asynchronous I/O with Node.js</h2>
+<p><br></p>
+<p>Network I/O performed with non-blocking system calls</p>
+<p><code>epoll</code> or <code>select</code> depending on platform</p>
+
+        </section>
+      
+        <section>
+          <h2>Asynchronous I/O with Node.js</h2>
+<p>Network I/O, always asynchronous, generally event-based</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">()</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// handle HTTP request</span>
+<span class="p">});</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;clientError&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}});</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}});</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;close&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Server shut down&#39;</span><span class="p">);</span>
+<span class="p">})</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;listening&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Listening on port 8080&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">);</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>The <em>callback</em></h2>
+<p>JavaScript embraces the <strong>continuation passing</strong> style</p>
+<div class="highlight"><pre><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Ping!&#39;</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nx">pong</span> <span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Pong!&#39;</span><span class="p">);</span> <span class="p">}</span>
+<span class="nx">setTimeout</span><span class="p">(</span><span class="nx">pong</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Reading file...&#39;</span><span class="p">);</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s1">&#39;in.dat&#39;</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;in.dat contains %d lines&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">).</span><span class="nx">length</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">clickHandler</span> <span class="p">()</span> <span class="p">{</span> <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Yo!&#39;</span><span class="p">);</span> <span class="p">}</span>
+<span class="nx">el</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">clickHandler</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>The <em>callback</em></h2>
+<p>The <em>callback</em> function is the fundamental unit of asynchronous programming in JavaScript</p>
+<ul>
+<li>DOM events</li>
+<li>Browser-based networking</li>
+<li>Basic Node.js I/O operations</li>
+<li>Node.js EventEmitter</li>
+<li>Streams</li>
+</ul>
+<p>Even <em>Promises</em> and async utilities for generators are built on callbacks</p>
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions</h2>
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions: callback counting</h2>
+<p>Example: a program to <code>ls -ta</code></p>
+<p>Tools:</p>
+<div class="highlight"><pre><span class="c1">// list files in a directory</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readdir</span><span class="p">(</span><span class="nx">directory</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">fileList</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">});</span>
+
+<span class="c1">// perform a `stat` on a file</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">filename</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stat</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">});</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions: callback counting</h2>
+<div class="highlight"><pre><span class="c1">// v1: print the modification times of each file</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readdir</span><span class="p">(</span><span class="nx">dir</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">fileList</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+
+  <span class="nx">fileList</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stat</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">return</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Error stating %s&#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span>
+
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;%s: %s&#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">stat</span><span class="p">.</span><span class="nx">mtime</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions: callback counting</h2>
+<div class="highlight"><pre><span class="c1">// v2: collect modification times</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readdir</span><span class="p">(</span><span class="nx">dir</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">fileList</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+
+  <span class="kd">var</span> <span class="nx">times</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="nx">fileList</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stat</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">return</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Error stating %s&#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span>
+
+      <span class="nx">times</span><span class="p">[</span><span class="nx">file</span><span class="p">]</span> <span class="o">=</span> <span class="nx">stat</span><span class="p">.</span><span class="nx">mtime</span><span class="p">;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">times</span><span class="p">);</span>
+      <span class="c1">// now what?</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions: callback counting</h2>
+<div class="highlight"><pre><span class="c1">// v3: collect modification times and count callbacks</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readdir</span><span class="p">(</span><span class="nx">dir</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">fileList</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+
+  <span class="kd">var</span> <span class="nx">times</span> <span class="o">=</span> <span class="p">{},</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="nx">fileList</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stat</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Error stating %s&#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">times</span><span class="p">[</span><span class="nx">file</span><span class="p">]</span> <span class="o">=</span> <span class="nx">stat</span><span class="p">.</span><span class="nx">mtime</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">++</span><span class="nx">count</span> <span class="o">===</span> <span class="nx">fileList</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">times</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions: callback counting</h2>
+<div class="highlight"><pre><span class="c1">// v4: collect modification times, count callbacks, sort and print</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readdir</span><span class="p">(</span><span class="nx">dir</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">fileList</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">times</span> <span class="o">=</span> <span class="p">{},</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="nx">fileList</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stat</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">err</span><span class="p">)</span> <span class="nx">times</span><span class="p">[</span><span class="nx">file</span><span class="p">]</span> <span class="o">=</span> <span class="nx">stat</span><span class="p">.</span><span class="nx">mtime</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">++</span><span class="nx">count</span> <span class="o">===</span> <span class="nx">fileList</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">fileList</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">times</span><span class="p">[</span><span class="nx">a</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nx">times</span><span class="p">[</span><span class="nx">b</span><span class="p">])</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">times</span><span class="p">[</span><span class="nx">a</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nx">times</span><span class="p">[</span><span class="nx">b</span><span class="p">])</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+          <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">});</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fileList</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">));</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions: callback counting</h2>
+<div class="highlight"><pre><span class="c1">// v5: reorganise</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readdir</span><span class="p">(</span><span class="nx">dir</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">fileList</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">times</span> <span class="o">=</span> <span class="p">{},</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="kd">function</span> <span class="nx">sortFn</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">times</span><span class="p">[</span><span class="nx">a</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nx">times</span><span class="p">[</span><span class="nx">b</span><span class="p">]</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="nx">times</span><span class="p">[</span><span class="nx">a</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nx">times</span><span class="p">[</span><span class="nx">b</span><span class="p">]</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="kd">function</span> <span class="nx">sortAndPrint</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fileList</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="nx">sortFn</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">));</span>
+  <span class="p">}</span>
+  <span class="nx">fileList</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stat</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">err</span><span class="p">)</span> <span class="nx">times</span><span class="p">[</span><span class="nx">file</span><span class="p">]</span> <span class="o">=</span> <span class="nx">stat</span><span class="p">.</span><span class="nx">mtime</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">++</span><span class="nx">count</span> <span class="o">===</span> <span class="nx">fileList</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="nx">sortAndPrint</span><span class="p">();</span>
+    <span class="p">})</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions: callback counting</h2>
+<div class="highlight"><pre><span class="c1">// a handy utility!</span>
+<span class="kd">function</span> <span class="nx">counter</span> <span class="p">(</span><span class="nx">limit</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">return</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">count</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">count</span> <span class="o">===</span> <span class="nx">limit</span><span class="p">)</span>
+      <span class="nx">callback</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">done</span> <span class="o">=</span> <span class="nx">counter</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;DONE!&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="nx">done</span><span class="p">();</span>
+<span class="nx">done</span><span class="p">();</span>
+<span class="nx">done</span><span class="p">();</span>
+<span class="nx">done</span><span class="p">();</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions: callback counting</h2>
+<div class="highlight"><pre><span class="c1">// v6: introduce counting abstraction</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readdir</span><span class="p">(</span><span class="nx">dir</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">fileList</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">times</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="kd">var</span> <span class="nx">done</span> <span class="o">=</span> <span class="nx">counter</span><span class="p">(</span><span class="nx">fileList</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">sortAndPrint</span><span class="p">);</span>
+  <span class="kd">function</span> <span class="nx">sortFn</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">times</span><span class="p">[</span><span class="nx">a</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nx">times</span><span class="p">[</span><span class="nx">b</span><span class="p">]</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="nx">times</span><span class="p">[</span><span class="nx">a</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nx">times</span><span class="p">[</span><span class="nx">b</span><span class="p">]</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="kd">function</span> <span class="nx">sortAndPrint</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fileList</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="nx">sortFn</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">));</span>
+  <span class="p">}</span>
+  <span class="nx">fileList</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stat</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">err</span><span class="p">)</span> <span class="nx">times</span><span class="p">[</span><span class="nx">file</span><span class="p">]</span> <span class="o">=</span> <span class="nx">stat</span><span class="p">.</span><span class="nx">mtime</span><span class="p">;</span>
+      <span class="nx">done</span><span class="p">();</span>
+    <span class="p">})</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions: callback counting</h2>
+<div class="highlight"><pre><span class="c1">// with error handling</span>
+<span class="kd">function</span> <span class="nx">counter</span> <span class="p">(</span><span class="nx">limit</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">borked</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="k">return</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">borked</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">borked</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">count</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">count</span> <span class="o">===</span> <span class="nx">limit</span><span class="p">)</span>
+      <span class="nx">callback</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p><a href="https://github.com/Raynos/after">https://github.com/Raynos/after</a></p>
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions: asynchronous map</h2>
+<div class="highlight"><pre><span class="c1">// Array#map() for async!</span>
+<span class="kd">function</span> <span class="nx">asyncMap</span> <span class="p">(</span><span class="nx">arr</span><span class="p">,</span> <span class="nx">workCallback</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="kd">var</span> <span class="nx">done</span> <span class="o">=</span> <span class="nx">counter</span><span class="p">(</span><span class="nx">arr</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">result</span><span class="p">);</span>
+  <span class="p">});</span>
+  <span class="nx">arr</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">workCallback</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">elResult</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">return</span> <span class="nx">done</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+      <span class="nx">result</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">elResult</span><span class="p">;</span>
+      <span class="nx">done</span><span class="p">();</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</pre></div>
+
+<p><a href="https://github.com/Raynos/map-async">https://github.com/Raynos/map-async</a></p>
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions: asynchronous map</h2>
+<p><em>Example usage:</em></p>
+<div class="highlight"><pre><span class="cm">/* Array#map version:</span>
+<span class="cm">console.log([ 1, 2, 3 ].map(function (el) {</span>
+<span class="cm">  return el * 10;</span>
+<span class="cm">}));</span>
+<span class="cm">*/</span>
+
+<span class="nx">asyncMap</span><span class="p">(</span>
+  <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span> <span class="p">],</span>
+  <span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">el</span> <span class="o">*</span> <span class="mi">10</span><span class="p">);</span>
+  <span class="p">},</span>
+  <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">);</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions: asynchronous map</h2>
+<div class="highlight"><pre><span class="c1">// v7: introduce async map abstraction, remove all explicit state</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readdir</span><span class="p">(</span><span class="nx">dir</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">fileList</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+  <span class="kd">function</span> <span class="nx">sortAndPrint</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">fileTimes</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fileTimes</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">a</span><span class="p">.</span><span class="nx">time</span> <span class="o">&gt;</span> <span class="nx">b</span><span class="p">.</span><span class="nx">time</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="nx">a</span><span class="p">.</span><span class="nx">time</span> <span class="o">&lt;</span> <span class="nx">b</span><span class="p">.</span><span class="nx">time</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">});</span>
+    <span class="nx">fileTimes</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">fileTime</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fileTime</span><span class="p">.</span><span class="nx">file</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+  <span class="kd">function</span> <span class="nx">statFile</span> <span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stat</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span> <span class="nx">file</span><span class="o">:</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">time</span><span class="o">:</span> <span class="nx">stat</span> <span class="o">?</span> <span class="nx">stat</span><span class="p">.</span><span class="nx">mtime</span> <span class="o">:</span> <span class="mi">0</span> <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+  <span class="nx">asyncMap</span><span class="p">(</span><span class="nx">fileList</span><span class="p">,</span> <span class="nx">statFile</span><span class="p">,</span> <span class="nx">sortAndPrint</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions: serial execution</h2>
+<p>Example: concat multiple files into a single file</p>
+<p>Tools:</p>
+<div class="highlight"><pre><span class="c1">// read the contents of a file into a String or Buffer</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">filename</span><span class="p">,</span> <span class="nx">encoding</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">});</span>
+
+<span class="c1">// append a String or Buffer to a file</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">appendFile</span><span class="p">(</span><span class="nx">filename</span><span class="p">,</span> <span class="nx">buffer</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">});</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions: serial execution</h2>
+<div class="highlight"><pre><span class="c1">// v1: naive version, read and write each file</span>
+<span class="nx">files</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">contents</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">appendFile</span><span class="p">(</span><span class="nx">output</span><span class="p">,</span> <span class="nx">contents</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+    <span class="p">})</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions: serial execution</h2>
+<div class="highlight"><pre><span class="c1">// v2: process files one at a time</span>
+<span class="kd">function</span> <span class="nx">catFile</span> <span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">contents</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">appendFile</span><span class="p">(</span><span class="nx">output</span><span class="p">,</span> <span class="nx">contents</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">next</span> <span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">index</span> <span class="o">&gt;=</span> <span class="nx">files</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Done!&#39;</span><span class="p">);</span>
+  <span class="nx">catFile</span><span class="p">(</span><span class="nx">files</span><span class="p">[</span><span class="nx">index</span><span class="p">],</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+    <span class="nx">next</span><span class="p">(</span><span class="nx">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+  <span class="p">})</span>
+<span class="p">}</span>
+<span class="nx">next</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</pre></div>
+
+<p style="font-size: 10px;"><a href="https://github.com/hughsk/async-series"><a href="https://github.com/hughsk/async-series">https://github.com/hughsk/async-series</a></a></p>
+
+
+        </section>
+      
+        <section>
+          <h2>Advanced abstractions</h2>
+<p><br></p>
+<ul>
+<li><p>EventEmitter</p>
+</li>
+<li><p>Streams</p>
+</li>
+<li><p>Promises</p>
+</li>
+</ul>
+
+        </section>
+      
+        <section>
+          <h2>Advanced abstractions: EventEmitter</h2>
+<p><br></p>
+<p>Sometimes a single callback isn&#39;t enough</p>
+<ul>
+<li>Multiple calls</li>
+<li>Multiple types of responses</li>
+<li>Communicate complex state</li>
+</ul>
+
+        </section>
+      
+        <section>
+          <h2>Advanced abstractions: EventEmitter</h2>
+<div class="highlight"><pre><span class="c1">// in Node.js</span>
+<span class="kd">var</span> <span class="nx">EventEmitter</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">).</span><span class="nx">EventEmitter</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">ee</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EventEmitter</span><span class="p">();</span>
+<span class="nx">ee</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ping&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;pong&#39;</span><span class="p">);</span>
+<span class="p">})</span>
+<span class="nx">ee</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;ping&#39;</span><span class="p">);</span>
+</pre></div>
+
+<p><code>on()</code>, <code>once()</code>, <code>emit()</code>, <code>removeListener()</code>, <code>removeAllListeners()</code></p>
+<p>One surprise: <code>&#39;error&#39;</code> event</p>
+
+        </section>
+      
+        <section>
+          <h2>Advanced abstractions: EventEmitter</h2>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">()</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// handle HTTP request</span>
+<span class="p">});</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;clientError&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}});</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}});</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;close&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Server shut down&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;listening&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Listening on port 8080&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">);</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Advanced abstractions: Streams</h2>
+<h4>For</h4>
+<ul>
+<li>Chunked I/O</li>
+<li>Chunked data processing</li>
+</ul>
+<h4>Why?</h4>
+<ul>
+<li>Abstraction suited to flowing data: plumbing</li>
+<li>Process very large amounts of data with minimal memory</li>
+<li>Process many asynchronous streams of data simultaneously</li>
+<li>Push output data before input data has completed</li>
+<li><strong>Backpressure</strong></li>
+</ul>
+
+        </section>
+      
+        <section>
+          <h2>Advanced abstractions: Streams</h2>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">json</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;JSONStream&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">through2</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;through2&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">csv</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;csv-write-stream&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">zlib</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;zlib&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+
+<span class="nx">request</span><span class="p">({</span> <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;https://registry.npmjs.org/-/all&#39;</span> <span class="p">})</span> <span class="c1">// ~35M raw</span>
+  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">json</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">through2</span><span class="p">.</span><span class="nx">obj</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">enc</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">name</span> <span class="o">&amp;&amp;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">description</span><span class="p">)</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="nx">description</span><span class="o">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">description</span> <span class="p">})</span>
+    <span class="nx">callback</span><span class="p">()</span>
+  <span class="p">}))</span>
+  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">csv</span><span class="p">({</span> <span class="nx">headers</span><span class="o">:</span> <span class="p">[</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span> <span class="p">]</span> <span class="p">}))</span>
+  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">zlib</span><span class="p">.</span><span class="nx">createGzip</span><span class="p">())</span>
+  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">createWriteStream</span><span class="p">(</span><span class="s1">&#39;npm.csv.gz&#39;</span><span class="p">))</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Advanced abstractions: Promises</h2>
+<p><br></p>
+<p>An abstraction with a very well-defined API</p>
+<p>Promises/A+ <a href="http://promisesaplus.com/">http://promisesaplus.com/</a></p>
+
+        </section>
+      
+        <section>
+          <h2>Advanced abstractions: Promises</h2>
+<p><br></p>
+<p>An object with a <code>then()</code> method as a hook in to the state and data represented by the <em>Promise</em></p>
+<p>Three states: pending, fulfilled, rejected</p>
+<p><code>promise.then(onFulfilled, onRejected)</code></p>
+<p>Composable</p>
+
+        </section>
+      
+        <section>
+          <h2>Advanced abstractions: Promises</h2>
+<p class="shrink"></p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">q</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">preaddir</span> <span class="o">=</span> <span class="nx">q</span><span class="p">.</span><span class="nx">denodeify</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">readdir</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">pstat</span> <span class="o">=</span> <span class="nx">q</span><span class="p">.</span><span class="nx">denodeify</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">sortAndPrint</span> <span class="p">(</span><span class="nx">fileTimes</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">fileTimes</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">a</span><span class="p">.</span><span class="nx">time</span> <span class="o">&gt;</span> <span class="nx">b</span><span class="p">.</span><span class="nx">time</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="nx">a</span><span class="p">.</span><span class="nx">time</span> <span class="o">&lt;</span> <span class="nx">b</span><span class="p">.</span><span class="nx">time</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="p">});</span>
+  <span class="nx">fileTimes</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">fileTime</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fileTime</span><span class="p">.</span><span class="nx">file</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">preaddir</span><span class="p">(</span><span class="nx">dir</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">fileList</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">function</span> <span class="nx">statFile</span> <span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">pstat</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">dir</span><span class="p">,</span> <span class="nx">file</span><span class="p">)).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">stat</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">{</span> <span class="nx">file</span><span class="o">:</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">time</span><span class="o">:</span> <span class="nx">stat</span> <span class="o">?</span> <span class="nx">stat</span><span class="p">.</span><span class="nx">mtime</span> <span class="o">:</span> <span class="mi">0</span> <span class="p">};</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+  <span class="nx">q</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">fileList</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">statFile</span><span class="p">)).</span><span class="nx">then</span><span class="p">(</span><span class="nx">sortAndPrint</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Advanced abstractions: Promises</h2>
+<p><br></p>
+<h4>What&#39;s the catch?</h4>
+<p>Error-handling as a second-class citizen</p>
+<p>Heavy-weight abstraction: can easily mask problems</p>
+<p>Viral: infect everything they touch</p>
+
+        </section>
+      
+        <section>
+          <h2>ES6 Generators</h2>
+<p><br></p>
+<p>Magic to solve async programming pain?</p>
+
+        </section>
+      
+        <section>
+          <h2>ES6 Generators</h2>
+<p><br></p>
+<p>Not actually magic</p>
+<p>Not actually an async programming construct</p>
+<p>A <strong><em>protocol</em></strong> with some additional syntactic sugar:</p>
+<ul>
+<li><code>function* myGenerator () { /* ... */ }</code></li>
+<li><code>yield someValue;</code></li>
+</ul>
+
+        </section>
+      
+        <section>
+          <h2>ES6 Generators</h2>
+<p>A pseudo random number generator (PRNG)</p>
+<div class="highlight"><pre><span class="c1">// Linear congruential pseudo random number generator</span>
+<span class="kd">function</span> <span class="nx">random</span> <span class="p">(</span><span class="nx">seed</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">m</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">11</span><span class="p">,</span> <span class="nx">c</span> <span class="o">=</span> <span class="mi">17</span><span class="p">,</span> <span class="nx">z</span> <span class="o">=</span> <span class="nx">seed</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">z</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span> <span class="o">*</span> <span class="nx">z</span> <span class="o">+</span> <span class="nx">c</span><span class="p">)</span> <span class="o">%</span> <span class="nx">m</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">z</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>ES6 Generators</h2>
+<p>A pseudo random number generator generator (PRNGG?)</p>
+<div class="highlight"><pre><span class="kd">function</span><span class="o">*</span> <span class="nx">random</span> <span class="p">(</span><span class="nx">seed</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">m</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">11</span><span class="p">,</span> <span class="nx">c</span> <span class="o">=</span> <span class="mi">17</span><span class="p">,</span> <span class="nx">z</span> <span class="o">=</span> <span class="nx">seed</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">z</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span> <span class="o">*</span> <span class="nx">z</span> <span class="o">+</span> <span class="nx">c</span><span class="p">)</span> <span class="o">%</span> <span class="nx">m</span><span class="p">;</span>
+    <span class="nx">yield</span> <span class="nx">z</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>ES6 Generators</h2>
+<div class="highlight"><pre><span class="kd">function</span><span class="o">*</span> <span class="nx">random</span> <span class="p">(</span><span class="nx">seed</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">m</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">11</span><span class="p">,</span> <span class="nx">c</span> <span class="o">=</span> <span class="mi">17</span><span class="p">,</span> <span class="nx">z</span> <span class="o">=</span> <span class="nx">seed</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">z</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span> <span class="o">*</span> <span class="nx">z</span> <span class="o">+</span> <span class="nx">c</span><span class="p">)</span> <span class="o">%</span> <span class="nx">m</span><span class="p">;</span>
+    <span class="nx">yield</span> <span class="nx">z</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">gen</span> <span class="o">=</span> <span class="nx">random</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">value</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">value</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">value</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">value</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">value</span><span class="p">);</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>ES6 Generators</h2>
+<div class="highlight"><pre><span class="c1">// PRNG in ES3 using the generator protocol</span>
+<span class="kd">function</span> <span class="nx">random</span> <span class="p">(</span><span class="nx">seed</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">m</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">11</span><span class="p">,</span> <span class="nx">c</span> <span class="o">=</span> <span class="mi">17</span><span class="p">,</span> <span class="nx">z</span> <span class="o">=</span> <span class="nx">seed</span><span class="p">;</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">next</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="nx">z</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span> <span class="o">*</span> <span class="nx">z</span> <span class="o">+</span> <span class="nx">c</span><span class="p">)</span> <span class="o">%</span> <span class="nx">m</span><span class="p">;</span>
+      <span class="k">return</span> <span class="p">{</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">z</span><span class="p">,</span> <span class="nx">done</span><span class="o">:</span> <span class="kc">false</span> <span class="p">};</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>ES6 Generators</h2>
+<div class="highlight"><pre><span class="c1">// PRNG generator with re-seed capabilities</span>
+<span class="kd">function</span><span class="o">*</span> <span class="nx">random</span> <span class="p">(</span><span class="nx">seed</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">m</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">11</span><span class="p">,</span> <span class="nx">c</span> <span class="o">=</span> <span class="mi">17</span><span class="p">,</span> <span class="nx">z</span> <span class="o">=</span> <span class="nx">seed</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">z</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span> <span class="o">*</span> <span class="nx">z</span> <span class="o">+</span> <span class="nx">c</span><span class="p">)</span> <span class="o">%</span> <span class="nx">m</span><span class="p">;</span>
+    <span class="nx">seed</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">z</span><span class="p">;</span> <span class="c1">// if next() is called with a value, it returns here</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">seed</span> <span class="o">==</span> <span class="s1">&#39;number&#39;</span><span class="p">)</span>
+      <span class="nx">z</span> <span class="o">=</span> <span class="nx">seed</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">gen</span> <span class="o">=</span> <span class="nx">random</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">value</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">value</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">value</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="mi">10</span><span class="p">).</span><span class="nx">value</span><span class="p">);</span> <span class="c1">// re-seed</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">value</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">value</span><span class="p">);</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>ES6 Generators</h2>
+<p>For asynchronous programming?</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">timer</span> <span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">());</span>
+  <span class="p">},</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// take advantage of the suspendable nature of generators</span>
+<span class="kd">function</span><span class="o">*</span> <span class="nx">timerGen</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">v1</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">timer</span><span class="p">;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="nx">v1</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">v2</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">timer</span><span class="p">;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;v2&#39;</span><span class="p">,</span> <span class="nx">v2</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">v3</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">timer</span><span class="p">;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;v3&#39;</span><span class="p">,</span> <span class="nx">v3</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>ES6 Generators</h2>
+<p>Requires a helper</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">runGenerator</span> <span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">gen</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">();</span>
+
+  <span class="p">(</span><span class="kd">function</span> <span class="nx">next</span> <span class="p">(</span><span class="nx">arg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">it</span> <span class="o">=</span> <span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="nx">arg</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">it</span><span class="p">.</span><span class="nx">done</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+    <span class="nx">it</span><span class="p">.</span><span class="nx">value</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">return</span> <span class="nx">gen</span><span class="p">.</span><span class="k">throw</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span> <span class="c1">// raise exception at `yield`</span>
+      <span class="nx">next</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">}());</span>
+<span class="p">}</span>
+</pre></div>
+
+<p><a href="https://github.com/visionmedia/co">https://github.com/visionmedia/co</a></p>
+
+        </section>
+      
+        <section>
+          <h2>ES6 Generators</h2>
+<p>Callback-only functions make this practical</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">timer</span> <span class="p">(</span><span class="nx">timeout</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">());</span> <span class="p">},</span> <span class="nx">timeout</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">runGenerator</span><span class="p">(</span><span class="kd">function</span><span class="o">*</span> <span class="nx">timerGen</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">v1</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">timer</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="nx">v1</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">v2</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">timer</span><span class="p">(</span><span class="mi">2000</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;v2&#39;</span><span class="p">,</span> <span class="nx">v2</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">v3</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">timer</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;v3&#39;</span><span class="p">,</span> <span class="nx">v3</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<p style="font-size: 10px;"><a href="https://github.com/visionmedia/node-thunkify"><a href="https://github.com/visionmedia/node-thunkify">https://github.com/visionmedia/node-thunkify</a></a></p>
+
+
+        </section>
+      
+        <section>
+          <h2>ES6 Generators</h2>
+<p><br></p>
+<h4>What&#39;s the catch?</h4>
+<p>Not widely available</p>
+<p>Not well optimised <em>yet</em></p>
+<p>Serial execution by default, parallel requires extra steps</p>
+<p>Is it intuitive?</p>
+
+        </section>
+      
+        <section>
+          <h2>Asynchronous programming</h2>
+<p><br></p>
+<p><br></p>
+<p><h4 style="text-align: center;">Accept it, it&#39;s the new norm</p></p>
+
         </section>
       
 
       </article>
-
-      <footer>
-      </footer>
 
     </div>
 
