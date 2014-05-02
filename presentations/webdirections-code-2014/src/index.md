@@ -733,6 +733,7 @@ One surprise: `'error'` event
 ## Advanced abstractions: EventEmitter
 
 ```js
+// sometimes an API should return an EventEmitter
 var server = http.createServer()
 
 server.on('request', function (request, response) {
