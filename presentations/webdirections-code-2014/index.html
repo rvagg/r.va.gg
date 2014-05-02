@@ -540,6 +540,20 @@ setInterval(scroll, 100)
       
         <section>
           <h2>Basic abstractions: asynchronous map</h2>
+<div class="highlight"><pre><span class="c1">// synchronous ES5 Array#map()</span>
+
+<span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span> <span class="p">].</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">el</span> <span class="o">*</span> <span class="mi">10</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="c1">// -&gt; [ 10, 20, 30 ]</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Basic abstractions: asynchronous map</h2>
 <div class="highlight"><pre><span class="c1">// Array#map() for async!</span>
 <span class="kd">function</span> <span class="nx">asyncMap</span> <span class="p">(</span><span class="nx">arr</span><span class="p">,</span> <span class="nx">workCallback</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[];</span>

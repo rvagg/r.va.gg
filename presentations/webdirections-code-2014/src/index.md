@@ -545,6 +545,20 @@ function counter (limit, callback) {
 ## Basic abstractions: asynchronous map
 
 ```js
+// synchronous ES5 Array#map()
+
+[ 1, 2, 3 ].map(function (el) {
+  return el * 10;
+});
+
+// -> [ 10, 20, 30 ]
+```
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Basic abstractions: asynchronous map
+
+```js
 // Array#map() for async!
 function asyncMap (arr, workCallback, callback) {
   var result = [];
