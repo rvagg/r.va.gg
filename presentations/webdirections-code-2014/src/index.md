@@ -1,5 +1,10 @@
 
 # Asynchronous JavaScript Patterns
+
+<p style="position: absolute; bottom: 0; font-size: 9px;">
+  <i>This work is &copy; 2014 Rod Vagg and is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/au/">Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Australia License</a></i>
+</p>
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # *Embrace the Async*
