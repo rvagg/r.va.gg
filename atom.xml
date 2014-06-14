@@ -4,13 +4,55 @@
   <title>r.va.gg</title>
  
   <link href="http://r.va.gg" />
-  <updated>2013-11-26T09:07:54.728Z</updated>
+  <updated>2014-06-14T04:19:36.627Z</updated>
   <id>http://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
   </author>
   <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/atom+xml" href="http://r.va.gg/feed.xml" />
 
+  
+    <entry>
+      <title>NodeSchool comes to Australia</title>
+      <link href="http://r.va.gg/2014/06/nodeschool-comes-to-australia.html" />
+      <updated>2014-06-13T14:00:00.000Z</updated>
+      <id>http://r.va.gg/2014/06/nodeschool-comes-to-australia.html</id>
+      <content type="html">
+        &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;http://nodeschool.io&quot;&gt;NodeSchool&lt;/a&gt;&lt;/strong&gt; has its genesis ultimately at NodeConf 2013 where &lt;a href=&quot;https://twitter.com/substack&quot;&gt;@substack&lt;/a&gt; introduced us to &lt;a href=&quot;https://github.com/substack/stream-adventure&quot;&gt;stream-adevnture&lt;/a&gt;. I took the concept home to &lt;a href=&quot;http://campjs.com/&quot;&gt;CampJS&lt;/a&gt; and wrote &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/learnyounode/&quot;&gt;learnyounode&lt;/a&gt;&lt;/strong&gt; for the &lt;em&gt;introduction to Node.js&lt;/em&gt; workshop I was to run. As part of the process I extracted a package called &lt;a href=&quot;https://github.com/rvagg/workshopper&quot;&gt;workshopper&lt;/a&gt; to do the work of making a terminal workshop experience. Most of the logic originally came from stream-adventure. A short time after CampJS, I created &lt;a href=&quot;https://github.com/rvagg/levelmeup&quot;&gt;levelmeup&lt;/a&gt; for &lt;a href=&quot;http://nodeconf.eu/&quot;&gt;NodeConf.eu&lt;/a&gt; and suddenly we had a selection of what have come to be known as &lt;em&gt;&quot;workshoppers&quot;&lt;/em&gt;. At NodeConf.eu, &lt;a href=&quot;https://twitter.com/brianloveswords&quot;&gt;@brianloveswords&lt;/a&gt; suggested the NodeSchool concept and registered the &lt;a href=&quot;http://nodeschool.io&quot;&gt;domain&lt;/a&gt;, @substack provided the artwork and the ball was rolling.&lt;/p&gt;
+&lt;p&gt;Today, workshopper is depended on by 22 packages in npm, most of which are workshoppers that you can install and use to learn aspects of Node.js or JavaScript in general. The curated list of usable workshoppers is maintained at &lt;a href=&quot;http://nodeschool.io&quot;&gt;nodeschool.io&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;learnyounode itself is now being downloaded at a rate of roughly 200 &lt;em&gt;per day&lt;/em&gt;. That&#39;s at least 200 more people each day wanting to learn how to &lt;em&gt;do Node.js&lt;/em&gt;.&lt;/p&gt;
+&lt;div style=&quot;margin: 0 auto; text-align: center;&quot;&gt;
+
+&lt;img src=&quot;https://nodei.co/npm-dl/learnyounode.png?months=6&quot; alt=&quot;learnyounode downloads&quot;&gt;
+
+&lt;/div&gt;
+
+&lt;p&gt;I can&#39;t recall exactly how &lt;em&gt;&quot;NodeSchool IRL&quot;&lt;/em&gt; events started but it was probably &lt;a href=&quot;http://twitter.com/maxogden&quot;&gt;@maxogden&lt;/a&gt; who has been responsible for a large number of these events. There have now been over 30 of these events around the world and the momentum is only picking up steam. The beauty of this format is that it&#39;s low-cost and low-effort to make it happen. All you need is a venue where nerds can show up with their computers and some basic guidance. There have even been a few events that were without experienced Node.js mentors but that&#39;s no great barrier as the lessons are largely self-guided and work particularly well when pairs or groups of people work together on solutions.&lt;/p&gt;
+&lt;div style=&quot;margin: 0 auto; text-align: center;&quot;&gt;
+
+&lt;img src=&quot;https://raw.githubusercontent.com/nodeschool/nodeschool.github.io/master/images/nodeschool-hex.png&quot; style=&quot;width: 300px;&quot;&gt;
+
+&lt;/div&gt;
+
+&lt;h2&gt;NodeSchool comes to Australia&lt;/h2&gt;
+&lt;p&gt;It&#39;s surprising that so far, given all of the NodeSchool activity around the world, that we haven&#39;t had a single NodeSchool event in Australia. CampJS had learnyounode last year and this year there were &lt;a href=&quot;https://github.com/nodeschool/discussions/issues/323&quot;&gt;3 brand new workshoppers&lt;/a&gt; introduced there, so it&#39;s the closest thing we&#39;ve had.&lt;/p&gt;
+&lt;p&gt;Next weekend, on the &lt;strong&gt;21st of June&lt;/strong&gt;, we are attempting a &lt;strong&gt;coordinated Australian NodeSchool&lt;/strong&gt; event. At the moment, that coordination amounts to having events hosted in Sydney, Melbourne and Hobart, unfortunately the timing has been difficult for Brisbane and we haven&#39;t managed to bring anyone else out of the woodwork. But, we will be attempting to do this regularly, plus we&#39;d like to encourage meet-up hosts to use the format now and again with their groups.&lt;/p&gt;
+&lt;h2&gt;NodeSchool in Sydney&lt;/h2&gt;
+&lt;p&gt;I&#39;ll be at NodeSchool in Sydney next weekend. It will be proudly hosted by &lt;a href=&quot;http://nicta.com.au/&quot;&gt;NICTA&lt;/a&gt; who have a space for up to 60 people. NICTA are currently doing some interesting work with WebRTC, you should catch up with &lt;a href=&quot;https://twitter.com/DamonOehlman&quot;&gt;@DamonOehlman&lt;/a&gt; if this is something you&#39;re interested in. &lt;a href=&quot;https://www.tabcorp.com.au/&quot;&gt;Tabcorp&lt;/a&gt; will also be a major sponsor of the event. Tabcorp have been building a new digital team with the back-end almost entirely in Node.js. They are also doing a great job engaging and contributing to existing and new open source projects. They are also hiring so be sure to catch up with &lt;a href=&quot;https://twitter.com/romainprieto&quot;&gt;@romainprieto&lt;/a&gt; if you&#39;re doing PHP, Java or some other abomination and want to be doing Node!&lt;/p&gt;
+&lt;p&gt;Thanks to the sponsorship, we&#39;ll be able to provide some catering for the event. Currently we&#39;re looking at providing lunch but we may be expanding that to providing some breakfast treats. We&#39;ll also be providing refreshments for everyone attending throughout the day.&lt;/p&gt;
+&lt;p&gt;Start time is 9.30am, end is 4pm. The plan is to spend the first half of the day doing introductory Node.js which will mainly mean working through learnyounode. The second half of the day will be less structured and we&#39;ll encourage attendees to work on other workshoppers that they find interesting. Thankfully we have some amazing Node.js programmers in Sydney and they&#39;ll be available as mentors.&lt;/p&gt;
+&lt;p&gt;We are currently &lt;em&gt;selling&lt;/em&gt; tickets for $5, the money will contribute towards the event, there is no profit involved here. We don&#39;t &lt;em&gt;need&lt;/em&gt; to charge for the event but given the generally dismal turnout for tech meet-ups that are free we feel that providing a small commitment barrier will help us maximise the use of the space we have available. &lt;strong&gt;If the money is a barrier for you please contact us!&lt;/strong&gt; We don&#39;t want anyone to miss out. Also, we have special &quot;mentor&quot; tickets available for experienced Node.js programmers who are able to assist. If you think you fit into this category please contact us also.&lt;/p&gt;
+&lt;p&gt;You can &lt;strong&gt;sign up for Sydney NodeSchool at &lt;a href=&quot;https://ti.to/nodeschool/sydney-june-2014/&quot;&gt;&lt;a href=&quot;https://ti.to/nodeschool/sydney-june-2014/&quot;&gt;https://ti.to/nodeschool/sydney-june-2014/&lt;/a&gt;&lt;/a&gt;&lt;/strong&gt;. If you are tempted, don&#39;t sit on the fence because spots are limited and as of writing the tickets are almost 1/2 gone.&lt;/p&gt;
+&lt;h2&gt;NodeSchool in Melbourne&lt;/h2&gt;
+&lt;p&gt;NodeSchool in Melbourne is being supported by &lt;a href=&quot;http://www.thoughtworks.com/&quot;&gt;ThoughtWorks&lt;/a&gt; who have been doing Node in Australia for a while now. If you&#39;re interested in their services or want to chat about employment opportunities you should catch up with &lt;a href=&quot;https://github.com/lfendy&quot;&gt;Liauw Fendy&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://twitter.com/sidorares&quot;&gt;@sidorares&lt;/a&gt; is putting in a large amount of the legwork in to Melbourne&#39;s event. He was a major contributor to the original learnyounode and is a huge asset to the Melbourne Node community. Along with Andrey, Melbourne has large number of expert Node.js hackers, many of who will be available as mentors. This will be a treat for Melbournians so this is not something you should miss out on if you are in town! Potential mentors should contact Andrey.&lt;/p&gt;
+&lt;p&gt;You can &lt;strong&gt;sign up for Melbourne NodeSchool at &lt;a href=&quot;https://ti.to/nodeschool/melbourne-june-2014/&quot;&gt;&lt;a href=&quot;https://ti.to/nodeschool/melbourne-june-2014/&quot;&gt;https://ti.to/nodeschool/melbourne-june-2014/&lt;/a&gt;&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2&gt;NodeSchool in Hobart&lt;/h2&gt;
+&lt;p&gt;Hobart is lucky to have &lt;a href=&quot;http://joshgilli.es/&quot;&gt;@joshgillies&lt;/a&gt;, a local tech-community organiser responsible for many Tasmanian web and JavaScript events. The event is being hosted at &lt;a href=&quot;http://typewriterfactory.com/&quot;&gt;The Typewriter Factory&lt;/a&gt;, a business workspace that Josh helps run. Sponsorship is being provided by &lt;a href=&quot;http://www.acs.org.au/&quot;&gt;ACS&lt;/a&gt; who will be helping support the venue and also provide some catering.&lt;/p&gt;
+&lt;p&gt;You can &lt;strong&gt;sign up for Hobart NodeSchool at &lt;a href=&quot;https://ti.to/nodeschool/hobart-june-2014/&quot;&gt;&lt;a href=&quot;https://ti.to/nodeschool/hobart-june-2014/&quot;&gt;https://ti.to/nodeschool/hobart-june-2014/&lt;/a&gt;&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+      </content>
+    </entry>
   
     <entry>
       <title>Testing code against many Node versions with Docker</title>
@@ -295,28 +337,6 @@
     </entry>
   
     <entry>
-      <title>Primitives for JS Databases (an LXJS adventure)</title>
-      <link href="http://r.va.gg/2013/10/primitives-for-js-databases-an-lxjs-adventure.html" />
-      <updated>2013-10-03T00:00:00.000Z</updated>
-      <id>http://r.va.gg/2013/10/primitives-for-js-databases-an-lxjs-adventure.html</id>
-      <content type="html">
-        &lt;p&gt;I gave a talk yesterday at &lt;strong&gt;&lt;a href=&quot;http://2013.lxjs.org&quot;&gt;LXJS&lt;/a&gt;&lt;/strong&gt; yesterday in the &lt;em&gt;&quot;Infrastructure.js&quot;&lt;/em&gt; block and tried to talk about JavaScript Database Primitives; i.e. the basic building blocks we have landed on for building more complex database solutions in JavaScript.&lt;/p&gt;
-&lt;p&gt;The talk certainly wasn&#39;t as good or clear as I wanted it to be, it worked much better in my head! A huge venue with over 300 talented JavaScripters, an absolutely massive screen, bright lights and loud amplification got the better of me and I wasn&#39;t able to pull the material together how I wanted to. The introvert within me is telling me to become a recluse for a little while just to recover! My &lt;em&gt;hope&lt;/em&gt; is that at least one or two people are inspired to give &lt;em&gt;database hacking&lt;/em&gt; a go because it&#39;s really not that difficult once you get your head around the primitives.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;Edit:&lt;/em&gt;&lt;/strong&gt; &lt;em&gt;I wasn&#39;t trying to elicit sympathy here, I genuinely think that I wasn&#39;t clear on what I was trying to communicate. It went so well in my head, as it usually does, but I fell far short of what I wanted to express. I&#39;ll attempt to rectify some of that with a writeup (see next para).&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;Thankfully though, a portion of the material will be able to serve as the basis for the, long overdue, third part in my &lt;a href=&quot;http://dailyjs.com/2013/04/19/leveldb-and-node-1/&quot;&gt;three&lt;/a&gt; &lt;a href=&quot;http://dailyjs.com/2013/05/03/leveldb-and-node-2/&quot;&gt;part&lt;/a&gt; &lt;a href=&quot;http://dailyjs.com&quot;&gt;DailyJS&lt;/a&gt; series on LevelDB &amp; Node.&lt;/p&gt;
-&lt;p&gt;In summary, inspired by LevelDB, we&#39;ve ended up with a core set of primitives in &lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt; that can be used to build feature-rich and advanced database functionality. &lt;strong&gt;Atomic batch&lt;/strong&gt; and &lt;strong&gt;ReadStream&lt;/strong&gt; are the two non-trivial primitives, open, close, get, put, del are all pretty easy to understand as primitives, although &lt;em&gt;del&lt;/em&gt; is perhaps redundant but we&#39;re opting for explicitness.&lt;/p&gt;
-&lt;p&gt;My &lt;a href=&quot;http://r.va.gg/presentations/lxjs2013&quot;&gt;slides are online&lt;/a&gt; but hopefully I&#39;ll be able to get my DailyJS article sorted out soon and I&#39;ll be able to explain what I was trying to get at.&lt;/p&gt;
-&lt;p&gt;ReadStream as a primitive query mechanism is not too hard to understand once you get your head around key sorting and the implications for key structure. Batch is a little more subtle and relates to consistency and our ability to augment basic operations to create more complex functionality while keeping the data store in a consistent state.&lt;/p&gt;
-&lt;p&gt;I additionally raised &quot;Buckets&quot;, or &quot;Namespaces&quot; as a primitive concept and discussed how &lt;a href=&quot;https://github.com/dominictarr/level-sublevel&quot;&gt;sublevel&lt;/a&gt; has effectively become the standard for turning a one-dimensional data store into a multi-dimensional store able to encapsulate contain sophisticated functionality behind what is essentially just a key/value store.&lt;/p&gt;
-&lt;h3&gt;Thanks to the LXJS team&lt;/h3&gt;
-&lt;p&gt;It would be neglectful of me to not say how absolutely grateful I am to the LXJS team for putting so much effort into taking care of speakers; fantastic job.&lt;/p&gt;
-&lt;p&gt;LXJS is an amazing event, put on by a dedicated and very talented team of people committed to the JavaScript community and the JavaScript community in Portugal in particular. This conference sets a very high bar for community-driven conferences with the way it has managed to get so many locals (and internationals!) involved in running an event in their own time.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;David Dias, Ana Hevesi, Pedro Teixeira, Luís Reis, Nuno Job, Tiago Rodrigues, Leo Xavier, Alexander Kustov, André Rodrigues and Bruno Coelho&lt;/strong&gt; have managed to put on an amazing event and are some of the nicest and talented people I&#39;ve met. Thank you to you all and everyone else who put on LXJS 2013, your hard work is appreciated and should be an inspiration to everyone involved in our local JavaScript communities, running events or considering running events like this.&lt;/p&gt;
-
-      </content>
-    </entry>
-  
-    <entry>
       <title>Should I use a single LevelDB or many to hold my data?</title>
       <link href="http://r.va.gg/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html" />
       <updated>2013-10-03T00:00:00.000Z</updated>
@@ -351,6 +371,28 @@
 &lt;h3&gt;Summary&lt;/h3&gt;
 &lt;p&gt;The TL;DR is: in most cases, a single LevelDB store is generally preferable unless you have a &lt;em&gt;real&lt;/em&gt; reason for having separate ones.&lt;/p&gt;
 &lt;p&gt;Have I missed any considerations that you&#39;ve come across when making this choice? Let me know in the comments.&lt;/p&gt;
+
+      </content>
+    </entry>
+  
+    <entry>
+      <title>Primitives for JS Databases (an LXJS adventure)</title>
+      <link href="http://r.va.gg/2013/10/primitives-for-js-databases-an-lxjs-adventure.html" />
+      <updated>2013-10-03T00:00:00.000Z</updated>
+      <id>http://r.va.gg/2013/10/primitives-for-js-databases-an-lxjs-adventure.html</id>
+      <content type="html">
+        &lt;p&gt;I gave a talk yesterday at &lt;strong&gt;&lt;a href=&quot;http://2013.lxjs.org&quot;&gt;LXJS&lt;/a&gt;&lt;/strong&gt; yesterday in the &lt;em&gt;&quot;Infrastructure.js&quot;&lt;/em&gt; block and tried to talk about JavaScript Database Primitives; i.e. the basic building blocks we have landed on for building more complex database solutions in JavaScript.&lt;/p&gt;
+&lt;p&gt;The talk certainly wasn&#39;t as good or clear as I wanted it to be, it worked much better in my head! A huge venue with over 300 talented JavaScripters, an absolutely massive screen, bright lights and loud amplification got the better of me and I wasn&#39;t able to pull the material together how I wanted to. The introvert within me is telling me to become a recluse for a little while just to recover! My &lt;em&gt;hope&lt;/em&gt; is that at least one or two people are inspired to give &lt;em&gt;database hacking&lt;/em&gt; a go because it&#39;s really not that difficult once you get your head around the primitives.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Edit:&lt;/em&gt;&lt;/strong&gt; &lt;em&gt;I wasn&#39;t trying to elicit sympathy here, I genuinely think that I wasn&#39;t clear on what I was trying to communicate. It went so well in my head, as it usually does, but I fell far short of what I wanted to express. I&#39;ll attempt to rectify some of that with a writeup (see next para).&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Thankfully though, a portion of the material will be able to serve as the basis for the, long overdue, third part in my &lt;a href=&quot;http://dailyjs.com/2013/04/19/leveldb-and-node-1/&quot;&gt;three&lt;/a&gt; &lt;a href=&quot;http://dailyjs.com/2013/05/03/leveldb-and-node-2/&quot;&gt;part&lt;/a&gt; &lt;a href=&quot;http://dailyjs.com&quot;&gt;DailyJS&lt;/a&gt; series on LevelDB &amp; Node.&lt;/p&gt;
+&lt;p&gt;In summary, inspired by LevelDB, we&#39;ve ended up with a core set of primitives in &lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt; that can be used to build feature-rich and advanced database functionality. &lt;strong&gt;Atomic batch&lt;/strong&gt; and &lt;strong&gt;ReadStream&lt;/strong&gt; are the two non-trivial primitives, open, close, get, put, del are all pretty easy to understand as primitives, although &lt;em&gt;del&lt;/em&gt; is perhaps redundant but we&#39;re opting for explicitness.&lt;/p&gt;
+&lt;p&gt;My &lt;a href=&quot;http://r.va.gg/presentations/lxjs2013&quot;&gt;slides are online&lt;/a&gt; but hopefully I&#39;ll be able to get my DailyJS article sorted out soon and I&#39;ll be able to explain what I was trying to get at.&lt;/p&gt;
+&lt;p&gt;ReadStream as a primitive query mechanism is not too hard to understand once you get your head around key sorting and the implications for key structure. Batch is a little more subtle and relates to consistency and our ability to augment basic operations to create more complex functionality while keeping the data store in a consistent state.&lt;/p&gt;
+&lt;p&gt;I additionally raised &quot;Buckets&quot;, or &quot;Namespaces&quot; as a primitive concept and discussed how &lt;a href=&quot;https://github.com/dominictarr/level-sublevel&quot;&gt;sublevel&lt;/a&gt; has effectively become the standard for turning a one-dimensional data store into a multi-dimensional store able to encapsulate contain sophisticated functionality behind what is essentially just a key/value store.&lt;/p&gt;
+&lt;h3&gt;Thanks to the LXJS team&lt;/h3&gt;
+&lt;p&gt;It would be neglectful of me to not say how absolutely grateful I am to the LXJS team for putting so much effort into taking care of speakers; fantastic job.&lt;/p&gt;
+&lt;p&gt;LXJS is an amazing event, put on by a dedicated and very talented team of people committed to the JavaScript community and the JavaScript community in Portugal in particular. This conference sets a very high bar for community-driven conferences with the way it has managed to get so many locals (and internationals!) involved in running an event in their own time.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;David Dias, Ana Hevesi, Pedro Teixeira, Luís Reis, Nuno Job, Tiago Rodrigues, Leo Xavier, Alexander Kustov, André Rodrigues and Bruno Coelho&lt;/strong&gt; have managed to put on an amazing event and are some of the nicest and talented people I&#39;ve met. Thank you to you all and everyone else who put on LXJS 2013, your hard work is appreciated and should be an inspiration to everyone involved in our local JavaScript communities, running events or considering running events like this.&lt;/p&gt;
 
       </content>
     </entry>
