@@ -42,6 +42,10 @@
           <ul>
             
  
+                <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li>
+              
+ 
+ 
                 <li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li>
               
  
@@ -50,8 +54,6 @@
               
  
  
-                <li><a href="/2013/11/leveldown-v0.10-managing-gc-in-native-v8-programming.html">LevelDOWN v0.10 / managing GC in native V8 programming</a></li>
-              
  
  
  
@@ -105,6 +107,173 @@
       
 
 <div id="for">
+  
+
+    <section class="post-content">
+
+      <h2 id="why-i-dont-use-nodes-core-stream-module"><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></h2>
+
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on June 14, 2014</p>
+        <p class="link"><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Permalink &amp; Comments</a></p>
+        <!-- <p class="commentcount"><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html#disqus_thread">Comments</a></p> -->
+      </div>
+
+      <section class="post-body">
+        <p><em>This article was originally offered to nearForm for publishing and appeared for some time on their blog from early 2014 (at this URL: <a href="http://www.nearform.com/nodecrunch/dont-use-nodes-core-stream-module">http://www.nearform.com/nodecrunch/dont-use-nodes-core-stream-module</a>). It has since been deleted. I&#39;d rather not speculate about the reasons for the deletion but I believe the article contains a very important core message so I&#39;m now republishing it here.</em></p>
+<h2>TL;DR</h2>
+<p>The &quot;readable-stream&quot; package available in npm is a mirror of the Streams2 and Streams3 implementations in Node-core. You can guarantee a stable streams base, regardless of what version of Node you are using, if you only use &quot;readable-stream&quot;.</p>
+<h2>The good &#39;ol days</h2>
+<p>Prior to Node 0.10, implementing a stream meant extending the core <code>Stream</code> object. This object was simply an <code>EventEmitter</code> that added a special <code>pipe()</code> method to do the streaming magic.</p>
+<p>Implementing a stream usually started with something like this:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Stream</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;stream&#39;</span><span class="p">).</span><span class="nx">Stream</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">)</span>
+
+<span class="kd">function</span> <span class="nx">MyStream</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">Stream</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">MyStream</span><span class="p">,</span> <span class="nx">Stream</span><span class="p">)</span>
+
+<span class="c1">// stream logic, implemented however you want</span>
+</pre></div>
+
+<p>If you ever had to write a non-trivial stream implementation for pre-Node 0.10 without using a helper library (such as <a href="https://github.com/dominictarr/through">through</a>), you know what a nightmare the state-management it can be. The actual implementation of a custom stream is a lot more than just the above code.</p>
+<h2>Welcome to Node 0.10</h2>
+<p>Thankfully, Streams2 came along with a brand new set of base Stream implementations that do a whole lot more than <code>pipe()</code>. The biggest win for stream implementers comes from the fact that state-management is almost entirely taken care of for you. You simply need to provide concrete implementations of some abstract methods to make a fully functional stream, even for non-trivial workloads.</p>
+<p>Implementing a stream now looks something like this:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Readable</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;stream&#39;</span><span class="p">).</span><span class="nx">Readable</span>
+<span class="c1">// `Stream` is still provided for backward-compatibility</span>
+<span class="c1">// Use `Writable`, `Duplex` and `Transform` where required</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">)</span>
+
+<span class="kd">function</span> <span class="nx">MyStream</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">Readable</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="p">{</span> <span class="cm">/* options, maybe `objectMode:true` */</span> <span class="p">})</span>
+<span class="p">}</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">MyStream</span><span class="p">,</span> <span class="nx">Readable</span><span class="p">)</span>
+
+<span class="c1">// stream logic, implemented mainly by providing concrete method implementations:</span>
+
+<span class="nx">MyStream</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_read</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">size</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// ... </span>
+<span class="p">}</span>
+</pre></div>
+
+<p>State-management is handled by the base-object and you interact with internal methods, such as <code>this.push(chunk)</code> in the case of a <code>Readable</code> stream.</p>
+<p>While the internal streams implementations are an order-of-magnitude more complex than the previous core-streams implementation, most of it is there to make life an order-of-magnitude easier for those of us implementing custom streams. Yay!</p>
+<h2>Backward-compatibility</h2>
+<p>When every new major stable release of Node occurs, anyone releasing public packages in npm has to make a decision about which versions of Node they support. As a general rule, the authors of the most popular packages in npm will support the current stable version of Node and the previous stable release.</p>
+<p>Streams2 was designed with backwards-compatibility in mind. Streams using <code>require(&#39;stream&#39;).Stream</code> as a base will still mostly work as you&#39;d expect and they will also work when piped to streams that extend the other classes. Streams2 streams won&#39;t work like classic EventEmitter objects when you pipe them together, as old-style streams do. But when you pipe a Streams2 stream and an old-style EventEmitter-based stream together, Streams2 will fall-back to &quot;compatibility-mode&quot; and operate in a backward-compatible way.</p>
+<p>So Streams2 are great and mostly backward-compatible (aside from some tricky edge cases). But what about when you want to implement Streams2 and run on Node 0.8? And what about open source packages in npm that want to still offer Node 0.8 compatibility while embracing the new Streams2-goodness?</p>
+<h3>&quot;readable-stream&quot; to the rescue</h3>
+<p>During the 0.9 development phase, prior to the 0.10 release, Isaac developed the new Streams2 implementation in a package that was released in npm and usable on older versions of Node. The <a href="https://github.com/isaacs/readable-stream">readable-stream</a> package is essentially a mirror of the streams implementation of Node-core but is available in npm. This is a pattern we will hopefully be seeing more of as we march towards Node 1.0. Already there is a <a href="https://github.com/isaacs/core-util-is">core-util-is</a> package that makes available the shiny new <code>is</code> type-checking functions in the 0.11 core &#39;util&#39; package.</p>
+<p><strong>readable-stream</strong> gives us the ability to use Streams2 on versions of Node that don&#39;t even have Streams2 in core. So a common pattern for supporting older versions of Node while still being able to hop on the Streams2-bandwagon starts off something like this, assuming you have &quot;readable-stream&quot; as a dependency:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Readable</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;stream&#39;</span><span class="p">).</span><span class="nx">Readable</span> <span class="o">||</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;readable-stream&#39;</span><span class="p">).</span><span class="nx">Readable</span>
+</pre></div>
+
+<p>This works because there is no <code>Readable</code> object on the core &#39;stream&#39; package in 0.8 and prior, so if you are running on an older version of Node it skips straight to the &quot;readable-stream&quot; package to get the required implementation.</p>
+<h2>Streams3: a new flavour</h2>
+<p>The <strong>readable-stream</strong> package is still being used to track the changes to streams coming in 0.12. The upcoming Streams3 implementation is more of a tweak than a major change. It contains an attempt to make &quot;compatibility mode&quot; more of a first-class citizen of the API and also some improvements to pause/resume behaviour.</p>
+<p>Like Streams2, the aim with Streams3 is for backward (and forward) compatibility but there are limits to what can be achieved on this front.</p>
+<p>While this new streams implementation will likely be an improvement over the current Streams2 implementation, it is part of the <em>unstable</em> development branch of Node and is so far not 
+without its edge cases which can break code designed against the pure 0.10 versions of Streams2.</p>
+<h2>What is your base implementation?</h2>
+<p>Looking back at the code used to fetch the base Streams2 implementation for building custom streams, let&#39;s consider what we&#39;re actually getting with different versions of Node:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Readable</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;stream&#39;</span><span class="p">).</span><span class="nx">Readable</span> <span class="o">||</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;readable-stream&#39;</span><span class="p">).</span><span class="nx">Readable</span>
+</pre></div>
+
+<ul>
+<li><em>Node 0.8 and prior:</em> we get whatever is provided by the readable-stream package in our dependencies.</li>
+<li><em>Node 0.10:</em> we get the particular version of Streams2 that comes with the version of Node we&#39;re using.</li>
+<li><em>Node 0.11:</em> we get the particular version of Streams3 that comes with the version of Node we&#39;re using.</li>
+</ul>
+<p>This may not be interesting if you have full control over all deployments of your custom stream implementations and which version(s) of Node they will be used on. But it can cause some problems in the case of open source libraries distributed via npm with users still stuck on 0.8 (for some, the upgrade path is not an easy one for various reasons), 0.10 and even people trying out some of the new Node and V8 features available in 0.11.</p>
+<p>What you end up with is a very unstable base upon which to build your streams implementation. This is particularly acute since the vast bulk of the code used to construct the stream logic is coming from either Node-core or the readable-stream package. Any <em>bugs</em> fixed in later Node 0.10 releases will obviously still be present for people still stuck on earlier 0.10 releases even if the readable-stream dependency has the <em>fixed</em> version.</p>
+<p>Then, when your streams code is run on Node 0.11, suddenly it&#39;s a Streams3 stream which has slightly different behaviour to what most of your users are experiencing.</p>
+<p>One of the ways these subtle differences are exposed is in bug reports. Users may report a bug that only occurs on their particular combination of core-streams and readable-stream and it may not be obvious that the problem is related to base-stream implementation edge-cases they are stumbling upon; wasting time for everyone.</p>
+<p>And what about stability? The fragmentation introduced by all of the possible combinations means that your otherwise stable library is having instability foisted upon it from the outside. This is one of the costs of relying on a featureful standard-library (core) within a rapidly developing, pre-v1 platform. But we can do something about it by taking control of the exact version of the base streams objects we want to extend regardless of what is bundled in the version of Node being used. <strong>readable-stream</strong> to the rescue!</p>
+<h2>Taking control</h2>
+<p>To control exactly what code your streams implementation is building on, simply pin the version of readable-stream and use only it, avoiding <code>require(&#39;stream&#39;)</code> completely. Then you get to make the choice when to upgrade to Streams3, even if that&#39;s some time <em>after</em> Node 0.12.</p>
+<p><strong>readable-stream</strong> comes in two major versions, <strong>v1.0.x</strong> and <strong>v1.1.x</strong>. The former tracks the Streams2 implementation in Node 0.10, including bug-fixes and minor improvements as they are added. The latter tracks Streams3 as it develops in Node 0.11; we may see a v1.2.x branch for Node 0.12.</p>
+<p>Any library worth using should be following the basics of semver minor and patch versions (the merits and finer points of major versioning are still something worth debating). readable-stream gives you proper patch-level versioning so if you pin to <code>&quot;~1.0.0&quot;</code> you&#39;ll get the latest Node 0.10 Streams2 implementation, including any fixes and minor non-breaking improvements. The patch-level version of 1.0.x and 1.1.x should mirror the patch-level versions of Node core releases as we proceed.</p>
+<p>When you&#39;re ready to start using Streams3 you can pin to <code>&quot;~1.1.0&quot;</code>, but you should hold off until much closer to Node 0.12, if not after its formal release.</p>
+<h2>Small core FTW!</h2>
+<p>Being able to control precisely the versions of dependencies your code uses reduces the scope for bugs introduced by version incompatibilities or new and unproven implementations.</p>
+<p>When we rely on a bulky standard-library to build our libraries and applications, we&#39;re relying on a shifting sand that we have little control over. This is particularly a problem for open source libraries whose users have legitimate (and sometimes not-so-legitimate) reasons for using versions that you&#39;d rather not have to support.</p>
+<p>Streams2 is a powerful abstraction, but the implementation is far from simple. The Streams2 code is some of the most complex JavaScript you&#39;ll find in Node core. Unless you want to have a detailed understanding of how they work and be able to track the changes as they develop, you should pin your Streams2 dependency in the same way as you pin all your other dependencies. Opt for <strong>readable-stream</strong> over what Node-core offers:</p>
+<div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;mystream&quot;</span><span class="p">,</span>
+  <span class="err">...</span>
+  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;readable-stream&quot;</span><span class="p">:</span> <span class="s2">&quot;~1.0.0&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Readable</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;readable-stream&#39;</span><span class="p">).</span><span class="nx">Readable</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">)</span>
+
+<span class="kd">function</span> <span class="nx">MyStream</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">Readable</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">MyStream</span><span class="p">,</span> <span class="nx">Readable</span><span class="p">)</span>
+
+<span class="nx">MyStream</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_read</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">size</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// ... </span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>Addendum: &quot;through2&quot;</h2>
+<p>If the boilerplate of the Streams2 base objects (&quot;classes&quot;) is too much for you or triggers some past-life Java PTSD, you can just opt for the &quot;through2&quot; package in npm to get the job done.</p>
+<p><a href="https://github.com/rvagg/through2">through2</a> is based on Dominic Tarr&#39;s <a href="https://github.com/dominictarr/through">through</a> but is built for Streams2, whereas &quot;through&quot; is a pure Streams1 style. The API isn&#39;t quite the same but the flexibility and simplicity is.</p>
+<p>through2 gives you a <code>DuplexStream</code> as a base to implement any kind of stream you like, be it as purely readable, purely writable or a fully duplex stream. In fact, you can even use through2 to implement a <code>PassThrough</code> stream by not providing an implementation!</p>
+<p>From the examples:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">through2</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;through2&#39;</span><span class="p">)</span>
+
+<span class="nx">fs</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="s1">&#39;ex.txt&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">through2</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">,</span> <span class="nx">enc</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">chunk</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">97</span><span class="p">)</span>
+        <span class="nx">chunk</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">122</span> <span class="c1">// swap &#39;a&#39; for &#39;z&#39;</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">chunk</span><span class="p">)</span>
+
+    <span class="nx">callback</span><span class="p">()</span>
+
+   <span class="p">}))</span>
+  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">createWriteStream</span><span class="p">(</span><span class="s1">&#39;out.txt&#39;</span><span class="p">))</span>
+</pre></div>
+
+<p>Or an object stream:</p>
+<pre><code>fs.createReadStream(&#39;data.csv&#39;)
+  .pipe(csv2())
+  .pipe(through2.obj(function (chunk, enc, callback) {
+
+    var data = {
+        name    : chunk[0]
+      , address : chunk[3]
+      , phone   : chunk[10]
+    }
+
+    this.push(data)
+
+    callback()
+
+  }))
+  .on(&#39;data&#39;, function (data) {
+    all.push(data)
+  })
+  .on(&#39;end&#39;, function () {
+    doSomethingSpecial(all)
+  })</code></pre>
+
+      </section>
+
+    </section>
+
   
 
     <section class="post-content">
@@ -456,53 +625,6 @@
 <h3>A note about HyperLevelDB</h3>
 <p>Lastly, I&#39;d like to encourage you to try the HyperLevelDB version if you are pushing hard on LevelDB&#39;s performance. The HyperDex fork is tuned for multi-threaded access for reads and writes and is therefore particularly suited to how we use it in Node. The Basho version doesn&#39;t show much performance difference mainly because they are optimising for Riak running 16 separate instances on the same server so multi-threaded access isn&#39;t as interesting for them. You should find significant performance gains if you&#39;re doing very heavy writes in particular with HyperLevelDB. Also, if you&#39;re interested in support for HyperLevelDB then pop in to ##leveldb on Freenode and bother <em><a href="https://twitter.com/rescrv">rescrv</a></em> (Robert Escriva), author of HyperLevelDB and our resident LevelDB expert.</p>
 <p>It&#39;s also worth nothing that HyperDex are interested in offering commercial support for people using LevelDB, not just HyperLevelDB but also Google&#39;s LevelDB. This means that anyone using either of these packages in Node should be able to get solid support if they are doing any heavy work in a commercial environment and need the surety of experts behind them to help pick up the pieces. I imagine this would cover things like LevelDB corruption and any LevelDB bugs you may run in to (we&#39;re currently looking at a subtle <a href="https://github.com/rvagg/node-levelup/issues/171">batch-related LevelDB bug</a> that&#39;s come along with the 1.14.0 release, they do exist!). Talk to Robert if you want more information about commercial support.</p>
-
-      </section>
-
-    </section>
-
-  
-
-    <section class="post-content">
-
-      <h2 id="should-i-use-a-single-leveldb-or-many-to-hold-my-data"><a href="/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html">Should I use a single LevelDB or many to hold my data?</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on October 3, 2013</p>
-        <p class="link"><a href="/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p>This is a long overdue post, so long in fact that I can&#39;t remember who I promised to do this for! Regardless, I keep on having discussions around this topic so I thought it worthwhile putting down some notes on what I believe to be the factors you should consider when making this decision.</p>
-<h3>What&#39;s the question?</h3>
-<p>It goes like this: You have an application that uses LevelDB, in particular I&#39;m talking about Node.js applications here but the same would apply if you&#39;re using LevelUP in the browser and also most of the other back-ends for LevelUP. And you invariably end up with different kinds of data, sometimes the kinds of data you&#39;re storing is so different that it feels strange putting them into the same storage blob. Often though, you just have sets of not-very-related data that you need to store and you end up having to make a decision: <strong>do I put everything into a single LevelDB store or do I put things into their own, separate, LevelDB store?</strong></p>
-<h3>This stuff doesn&#39;t <em>belong</em> together!</h3>
-<p>Coming from an relational database background, it took me a little while to displace the concept of discrete <em>tables</em> with the notion of <em>namespacing</em> within the same store. I can understand the temptation to want to keep things separate, not wanting to end up with a huge blob of data that just <em>shouldn&#39;t be together</em>. But this isn&#39;t the relational database world and you need to move on!</p>
-<p>We have a set of LevelUP addons, such as <a href="https://github.com/dominictarr/level-sublevel">sublevel</a>, that exist mainly to provide you with the comfort of being able to separate your data by whatever criteria makes sense. <a href="https://github.com/deanlandolt/bytewise">bytewise</a> is another tool that can serve a similar purpose and some people even use sublevel and bytewise together to achieve more complex organisation.</p>
-<p><strong>We have the tools at our disposal in Node.js to turn a one-dimensional storage array into a very complex, multidimensional storage <em>system</em> where unrelated, and semi-related data can coexist.</strong> So, if the only reason you want to store things in separate stores is because it just <em>feels</em> right to do so, you should probably be looking at what&#39;s making you think that way. You may need to update your assumptions.</p>
-<h3>Technical considerations</h3>
-<p>That aside, there are some technical considerations for making this decision:</p>
-<h4>Size and performance</h4>
-<p>To be clear, <strong>LevelDB is fast</strong> and it can also store <strong>lots of data</strong>, it&#39;ll handle Gigabytes of data without too much sweat. However, there <em>are</em> some performance concerns when you start getting in to the Gigabyte range, mainly when you&#39;re trying to push data in at a high rate. Most use-cases don&#39;t do this so be honest about your performance needs. For most people LevelDB is simply fast.</p>
-<p>However, if you do have a high-throughput scenario involving a large amount of data that you need to store then you may want to consider having a separate store to deal with the large data and another one to deal with the rest of your data so the performance isn&#39;t impacted across the board.</p>
-<p>But again, be honest about what your workload is, you&#39;re probably not pushing <a href="http://voxer.com">Voxer</a> amounts of data so don&#39;t prematurely optimise around the workload you&#39;d like to think you have or are going to have one day in the distant future.</p>
-<h3>Cache</h3>
-<p>Caching is transparent by default with LevelDB so it&#39;s easy to forget about it when making these kinds of decisions but it&#39;s actually quite important for this particular question.</p>
-<p>By default, you have an 8M LRU cache with LevelDB and <em>all</em> reads use that cache, for look-ups and also for updating with newly read values. So, you can have a lot of cache-thrash unless you&#39;re reading the same values again and again. </p>
-<p>But, there is a <code>fillCache</code> (boolean) option for read operations (both <code>get()</code> and <code>createReadStream()</code> and its variations). So you can set this to <code>false</code> where you know you won&#39;t be needing fast access to those entries again and you don&#39;t want to push out other entries from the LRU.</p>
-<p>So caching strategies can be separate for different types of data and are not a strong reason to keep things in a separate data store.</p>
-<p>I always recommend that you should tinker with the <code>cacheSize</code> option when you&#39;re using LevelDB, it can be as large as you want to fit in the available memory of your machine. As a rule of thumb, somewhere between 2/3 and 3/4 of the available memory should be a maximum if you can afford it.</p>
-<p>Consider though what happens if you are using separate LevelDB stores, you now have to deal with juggling <code>cacheSize</code> between the stores. Often, you&#39;re probably going to be best served by having a single, large cache that can operate across all your data types and let the normal behaviour of your application determine what gets cached with occasional reliance on <code>&#39;fillCache&#39;: false</code> to fine-tune. </p>
-<h3>Consistency</h3>
-<p>As I discussed in my <a href="http://r.va.gg/presentations/lxjs2013/">LXJS</a> talk, the <em>atomic batch</em> is an important primitive for building solid database functionality with inherent <em>consistency</em>. When you&#39;re using <strong>sublevel</strong>, even though you have what operate like separate LevelUP instances for each sublevel, you still get to perform atomic batch operations between sublevels. Consider indexing where you may have a primary sublevel for the entries you&#39;re writing and a secondary sublevel for the indexing data used to reference the primary data for lookups. If you&#39;re running these as separate stores then you lose the benefits of the atomic batch, you just can&#39;t perform multiple operations with guaranteed consistency.</p>
-<p>Try and keep the atomic batch in mind when building your application, instead of accepting the possibility of inconsistent state, use the batch to keep consistency.</p>
-<h3>Back-end flexibility</h3>
-<p>OK, this one is a bit left-field, but remember that LevelUP is back-end-agnostic. It&#39;s inspired by LevelDB but it doesn&#39;t have to be Google&#39;s LevelDB that&#39;s storing data for you. It could be Basho&#39;s fork or HyperLevelDB. It could even be LMDB or something a little crazy like MemDOWN or mysqlDOWN! </p>
-<p>If you&#39;re at all concerned about performance, and most people claim to be even though they&#39;re not building performance-critical applications, then you should be benchmarking your particular workload against your storage system. Each of the back-ends for LevelUP have different performance characteristics and different trade-offs that you need to understand and test against your needs. You may find that one back-end works for one kind of data in your application and another back-end works for another.</p>
-<h3>Summary</h3>
-<p>The TL;DR is: in most cases, a single LevelDB store is generally preferable unless you have a <em>real</em> reason for having separate ones.</p>
-<p>Have I missed any considerations that you&#39;ve come across when making this choice? Let me know in the comments.</p>
 
       </section>
 

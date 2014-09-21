@@ -1,0 +1,303 @@
+<!DOCTYPE HTML>
+<html lang="en-us">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>
+  [r.va.gg] Why I don&#39;t use Node&#39;s core &#39;stream&#39; module
+</title>
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://r.va.gg/atom.xml" />
+    <script type="text/javascript" src="http://use.typekit.com/swo4snt.js"></script>
+    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>  
+    <script type="text/javascript">
+      var _gaq = _gaq || []
+      _gaq.push(['_setAccount', 'UA-21373682-1'])
+      _gaq.push(['_trackPageview'])
+      setTimeout('_gaq.push(["_trackEvent", "15_seconds", "read"])', 15000)
+      !(function () {
+        var ga = document.createElement('script')
+        ga.type = 'text/javascript'
+        ga.async = true
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'
+        var s = document.getElementsByTagName('script')[0]
+        s.parentNode.insertBefore(ga, s)
+      }())
+    </script>
+  </head>
+  <body>
+
+    <section class="content">
+      <h1>
+        <a href="/">r.va.gg</a>
+      </h1>
+
+      <section class="nav">
+        <section class="me">
+          <span>Find me</span>
+          <ul>
+            <li>on <a href="https://twitter.com/rvagg">Twitter / @rvagg</a></li>
+            <li>on <a href="https://github.com/rvagg">GitHub / @rvagg</a></li>
+          </ul>
+        </section>
+        <section class="recent">
+          <span>Recent posts</span>
+          <ul>
+            
+ 
+                <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li>
+              
+ 
+ 
+                <li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li>
+              
+ 
+ 
+                <li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
+              
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+          </ul>
+        </section>
+      </section>
+      <div style="clear: both;"></div>
+
+      
+
+  <section class="post-content">
+
+    <h2><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></h2>
+
+    <div class="post-meta">
+      <p class="byline">by Rod Vagg on June 14, 2014</p>
+    </div>
+
+    <section class="post-body">
+      <p><em>This article was originally offered to nearForm for publishing and appeared for some time on their blog from early 2014 (at this URL: <a href="http://www.nearform.com/nodecrunch/dont-use-nodes-core-stream-module">http://www.nearform.com/nodecrunch/dont-use-nodes-core-stream-module</a>). It has since been deleted. I&#39;d rather not speculate about the reasons for the deletion but I believe the article contains a very important core message so I&#39;m now republishing it here.</em></p>
+<h2>TL;DR</h2>
+<p>The &quot;readable-stream&quot; package available in npm is a mirror of the Streams2 and Streams3 implementations in Node-core. You can guarantee a stable streams base, regardless of what version of Node you are using, if you only use &quot;readable-stream&quot;.</p>
+<h2>The good &#39;ol days</h2>
+<p>Prior to Node 0.10, implementing a stream meant extending the core <code>Stream</code> object. This object was simply an <code>EventEmitter</code> that added a special <code>pipe()</code> method to do the streaming magic.</p>
+<p>Implementing a stream usually started with something like this:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Stream</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;stream&#39;</span><span class="p">).</span><span class="nx">Stream</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">)</span>
+
+<span class="kd">function</span> <span class="nx">MyStream</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">Stream</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">MyStream</span><span class="p">,</span> <span class="nx">Stream</span><span class="p">)</span>
+
+<span class="c1">// stream logic, implemented however you want</span>
+</pre></div>
+
+<p>If you ever had to write a non-trivial stream implementation for pre-Node 0.10 without using a helper library (such as <a href="https://github.com/dominictarr/through">through</a>), you know what a nightmare the state-management it can be. The actual implementation of a custom stream is a lot more than just the above code.</p>
+<h2>Welcome to Node 0.10</h2>
+<p>Thankfully, Streams2 came along with a brand new set of base Stream implementations that do a whole lot more than <code>pipe()</code>. The biggest win for stream implementers comes from the fact that state-management is almost entirely taken care of for you. You simply need to provide concrete implementations of some abstract methods to make a fully functional stream, even for non-trivial workloads.</p>
+<p>Implementing a stream now looks something like this:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Readable</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;stream&#39;</span><span class="p">).</span><span class="nx">Readable</span>
+<span class="c1">// `Stream` is still provided for backward-compatibility</span>
+<span class="c1">// Use `Writable`, `Duplex` and `Transform` where required</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">)</span>
+
+<span class="kd">function</span> <span class="nx">MyStream</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">Readable</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="p">{</span> <span class="cm">/* options, maybe `objectMode:true` */</span> <span class="p">})</span>
+<span class="p">}</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">MyStream</span><span class="p">,</span> <span class="nx">Readable</span><span class="p">)</span>
+
+<span class="c1">// stream logic, implemented mainly by providing concrete method implementations:</span>
+
+<span class="nx">MyStream</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_read</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">size</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// ... </span>
+<span class="p">}</span>
+</pre></div>
+
+<p>State-management is handled by the base-object and you interact with internal methods, such as <code>this.push(chunk)</code> in the case of a <code>Readable</code> stream.</p>
+<p>While the internal streams implementations are an order-of-magnitude more complex than the previous core-streams implementation, most of it is there to make life an order-of-magnitude easier for those of us implementing custom streams. Yay!</p>
+<h2>Backward-compatibility</h2>
+<p>When every new major stable release of Node occurs, anyone releasing public packages in npm has to make a decision about which versions of Node they support. As a general rule, the authors of the most popular packages in npm will support the current stable version of Node and the previous stable release.</p>
+<p>Streams2 was designed with backwards-compatibility in mind. Streams using <code>require(&#39;stream&#39;).Stream</code> as a base will still mostly work as you&#39;d expect and they will also work when piped to streams that extend the other classes. Streams2 streams won&#39;t work like classic EventEmitter objects when you pipe them together, as old-style streams do. But when you pipe a Streams2 stream and an old-style EventEmitter-based stream together, Streams2 will fall-back to &quot;compatibility-mode&quot; and operate in a backward-compatible way.</p>
+<p>So Streams2 are great and mostly backward-compatible (aside from some tricky edge cases). But what about when you want to implement Streams2 and run on Node 0.8? And what about open source packages in npm that want to still offer Node 0.8 compatibility while embracing the new Streams2-goodness?</p>
+<h3>&quot;readable-stream&quot; to the rescue</h3>
+<p>During the 0.9 development phase, prior to the 0.10 release, Isaac developed the new Streams2 implementation in a package that was released in npm and usable on older versions of Node. The <a href="https://github.com/isaacs/readable-stream">readable-stream</a> package is essentially a mirror of the streams implementation of Node-core but is available in npm. This is a pattern we will hopefully be seeing more of as we march towards Node 1.0. Already there is a <a href="https://github.com/isaacs/core-util-is">core-util-is</a> package that makes available the shiny new <code>is</code> type-checking functions in the 0.11 core &#39;util&#39; package.</p>
+<p><strong>readable-stream</strong> gives us the ability to use Streams2 on versions of Node that don&#39;t even have Streams2 in core. So a common pattern for supporting older versions of Node while still being able to hop on the Streams2-bandwagon starts off something like this, assuming you have &quot;readable-stream&quot; as a dependency:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Readable</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;stream&#39;</span><span class="p">).</span><span class="nx">Readable</span> <span class="o">||</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;readable-stream&#39;</span><span class="p">).</span><span class="nx">Readable</span>
+</pre></div>
+
+<p>This works because there is no <code>Readable</code> object on the core &#39;stream&#39; package in 0.8 and prior, so if you are running on an older version of Node it skips straight to the &quot;readable-stream&quot; package to get the required implementation.</p>
+<h2>Streams3: a new flavour</h2>
+<p>The <strong>readable-stream</strong> package is still being used to track the changes to streams coming in 0.12. The upcoming Streams3 implementation is more of a tweak than a major change. It contains an attempt to make &quot;compatibility mode&quot; more of a first-class citizen of the API and also some improvements to pause/resume behaviour.</p>
+<p>Like Streams2, the aim with Streams3 is for backward (and forward) compatibility but there are limits to what can be achieved on this front.</p>
+<p>While this new streams implementation will likely be an improvement over the current Streams2 implementation, it is part of the <em>unstable</em> development branch of Node and is so far not 
+without its edge cases which can break code designed against the pure 0.10 versions of Streams2.</p>
+<h2>What is your base implementation?</h2>
+<p>Looking back at the code used to fetch the base Streams2 implementation for building custom streams, let&#39;s consider what we&#39;re actually getting with different versions of Node:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Readable</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;stream&#39;</span><span class="p">).</span><span class="nx">Readable</span> <span class="o">||</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;readable-stream&#39;</span><span class="p">).</span><span class="nx">Readable</span>
+</pre></div>
+
+<ul>
+<li><em>Node 0.8 and prior:</em> we get whatever is provided by the readable-stream package in our dependencies.</li>
+<li><em>Node 0.10:</em> we get the particular version of Streams2 that comes with the version of Node we&#39;re using.</li>
+<li><em>Node 0.11:</em> we get the particular version of Streams3 that comes with the version of Node we&#39;re using.</li>
+</ul>
+<p>This may not be interesting if you have full control over all deployments of your custom stream implementations and which version(s) of Node they will be used on. But it can cause some problems in the case of open source libraries distributed via npm with users still stuck on 0.8 (for some, the upgrade path is not an easy one for various reasons), 0.10 and even people trying out some of the new Node and V8 features available in 0.11.</p>
+<p>What you end up with is a very unstable base upon which to build your streams implementation. This is particularly acute since the vast bulk of the code used to construct the stream logic is coming from either Node-core or the readable-stream package. Any <em>bugs</em> fixed in later Node 0.10 releases will obviously still be present for people still stuck on earlier 0.10 releases even if the readable-stream dependency has the <em>fixed</em> version.</p>
+<p>Then, when your streams code is run on Node 0.11, suddenly it&#39;s a Streams3 stream which has slightly different behaviour to what most of your users are experiencing.</p>
+<p>One of the ways these subtle differences are exposed is in bug reports. Users may report a bug that only occurs on their particular combination of core-streams and readable-stream and it may not be obvious that the problem is related to base-stream implementation edge-cases they are stumbling upon; wasting time for everyone.</p>
+<p>And what about stability? The fragmentation introduced by all of the possible combinations means that your otherwise stable library is having instability foisted upon it from the outside. This is one of the costs of relying on a featureful standard-library (core) within a rapidly developing, pre-v1 platform. But we can do something about it by taking control of the exact version of the base streams objects we want to extend regardless of what is bundled in the version of Node being used. <strong>readable-stream</strong> to the rescue!</p>
+<h2>Taking control</h2>
+<p>To control exactly what code your streams implementation is building on, simply pin the version of readable-stream and use only it, avoiding <code>require(&#39;stream&#39;)</code> completely. Then you get to make the choice when to upgrade to Streams3, even if that&#39;s some time <em>after</em> Node 0.12.</p>
+<p><strong>readable-stream</strong> comes in two major versions, <strong>v1.0.x</strong> and <strong>v1.1.x</strong>. The former tracks the Streams2 implementation in Node 0.10, including bug-fixes and minor improvements as they are added. The latter tracks Streams3 as it develops in Node 0.11; we may see a v1.2.x branch for Node 0.12.</p>
+<p>Any library worth using should be following the basics of semver minor and patch versions (the merits and finer points of major versioning are still something worth debating). readable-stream gives you proper patch-level versioning so if you pin to <code>&quot;~1.0.0&quot;</code> you&#39;ll get the latest Node 0.10 Streams2 implementation, including any fixes and minor non-breaking improvements. The patch-level version of 1.0.x and 1.1.x should mirror the patch-level versions of Node core releases as we proceed.</p>
+<p>When you&#39;re ready to start using Streams3 you can pin to <code>&quot;~1.1.0&quot;</code>, but you should hold off until much closer to Node 0.12, if not after its formal release.</p>
+<h2>Small core FTW!</h2>
+<p>Being able to control precisely the versions of dependencies your code uses reduces the scope for bugs introduced by version incompatibilities or new and unproven implementations.</p>
+<p>When we rely on a bulky standard-library to build our libraries and applications, we&#39;re relying on a shifting sand that we have little control over. This is particularly a problem for open source libraries whose users have legitimate (and sometimes not-so-legitimate) reasons for using versions that you&#39;d rather not have to support.</p>
+<p>Streams2 is a powerful abstraction, but the implementation is far from simple. The Streams2 code is some of the most complex JavaScript you&#39;ll find in Node core. Unless you want to have a detailed understanding of how they work and be able to track the changes as they develop, you should pin your Streams2 dependency in the same way as you pin all your other dependencies. Opt for <strong>readable-stream</strong> over what Node-core offers:</p>
+<div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;mystream&quot;</span><span class="p">,</span>
+  <span class="err">...</span>
+  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;readable-stream&quot;</span><span class="p">:</span> <span class="s2">&quot;~1.0.0&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Readable</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;readable-stream&#39;</span><span class="p">).</span><span class="nx">Readable</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">)</span>
+
+<span class="kd">function</span> <span class="nx">MyStream</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">Readable</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nx">util</span><span class="p">.</span><span class="nx">inherits</span><span class="p">(</span><span class="nx">MyStream</span><span class="p">,</span> <span class="nx">Readable</span><span class="p">)</span>
+
+<span class="nx">MyStream</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_read</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">size</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// ... </span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>Addendum: &quot;through2&quot;</h2>
+<p>If the boilerplate of the Streams2 base objects (&quot;classes&quot;) is too much for you or triggers some past-life Java PTSD, you can just opt for the &quot;through2&quot; package in npm to get the job done.</p>
+<p><a href="https://github.com/rvagg/through2">through2</a> is based on Dominic Tarr&#39;s <a href="https://github.com/dominictarr/through">through</a> but is built for Streams2, whereas &quot;through&quot; is a pure Streams1 style. The API isn&#39;t quite the same but the flexibility and simplicity is.</p>
+<p>through2 gives you a <code>DuplexStream</code> as a base to implement any kind of stream you like, be it as purely readable, purely writable or a fully duplex stream. In fact, you can even use through2 to implement a <code>PassThrough</code> stream by not providing an implementation!</p>
+<p>From the examples:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">through2</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;through2&#39;</span><span class="p">)</span>
+
+<span class="nx">fs</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="s1">&#39;ex.txt&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">through2</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">,</span> <span class="nx">enc</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">chunk</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">97</span><span class="p">)</span>
+        <span class="nx">chunk</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">122</span> <span class="c1">// swap &#39;a&#39; for &#39;z&#39;</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">chunk</span><span class="p">)</span>
+
+    <span class="nx">callback</span><span class="p">()</span>
+
+   <span class="p">}))</span>
+  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">createWriteStream</span><span class="p">(</span><span class="s1">&#39;out.txt&#39;</span><span class="p">))</span>
+</pre></div>
+
+<p>Or an object stream:</p>
+<pre><code>fs.createReadStream(&#39;data.csv&#39;)
+  .pipe(csv2())
+  .pipe(through2.obj(function (chunk, enc, callback) {
+
+    var data = {
+        name    : chunk[0]
+      , address : chunk[3]
+      , phone   : chunk[10]
+    }
+
+    this.push(data)
+
+    callback()
+
+  }))
+  .on(&#39;data&#39;, function (data) {
+    all.push(data)
+  })
+  .on(&#39;end&#39;, function () {
+    doSomethingSpecial(all)
+  })</code></pre>
+
+    </section>
+
+    <section class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname  = 'rvagg'
+          , disqus_identifier = '/2014/06/why-i-dont-use-nodes-core-stream-module.html'
+          , disqus_title      = 'Why I don&#39;t use Node&#39;s core &#39;stream&#39; module'
+          , disqus_url        = 'http://r.va.gg/2014/06/why-i-dont-use-nodes-core-stream-module.html'
+
+        !(function() {
+          var dsq = document.createElement('script')
+          dsq.type = 'text/javascript'
+          dsq.async = true
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
+          !(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+        })()
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript>
+    </section>
+
+  </section>
+
+
+
+      <section class="footer">
+        &copy; Rod Vagg 2013, powered by <a href="https://github.com/rvagg/blorg">Blorg</a>
+        <br><a href="http://r.va.gg/atom.xml">Atom / RSS feed</a>
+      </section>
+
+    </section>
+
+  </body>
+</html>
