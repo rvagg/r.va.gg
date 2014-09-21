@@ -187,7 +187,7 @@ fs.createReadStream('ex.txt')
 
 Or an object stream:
 
-```
+```js
 fs.createReadStream('data.csv')
   .pipe(csv2())
   .pipe(through2.obj(function (chunk, enc, callback) {
