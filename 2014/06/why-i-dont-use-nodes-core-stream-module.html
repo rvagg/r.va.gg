@@ -44,11 +44,11 @@
           <ul>
             
  
-                <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li>
+                <li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li>
               
  
  
-                <li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li>
+                <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li>
               
  
  
@@ -245,27 +245,29 @@ without its edge cases which can break code designed against the pure 0.10 versi
 </pre></div>
 
 <p>Or an object stream:</p>
-<pre><code>fs.createReadStream(&#39;data.csv&#39;)
-  .pipe(csv2())
-  .pipe(through2.obj(function (chunk, enc, callback) {
+<div class="highlight"><pre><span class="nx">fs</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="s1">&#39;data.csv&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">csv2</span><span class="p">())</span>
+  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">through2</span><span class="p">.</span><span class="nx">obj</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">,</span> <span class="nx">enc</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
 
-    var data = {
-        name    : chunk[0]
-      , address : chunk[3]
-      , phone   : chunk[10]
-    }
+    <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">name</span>    <span class="o">:</span> <span class="nx">chunk</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="p">,</span> <span class="nx">address</span> <span class="o">:</span> <span class="nx">chunk</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+      <span class="p">,</span> <span class="nx">phone</span>   <span class="o">:</span> <span class="nx">chunk</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span>
+    <span class="p">}</span>
 
-    this.push(data)
+    <span class="k">this</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
 
-    callback()
+    <span class="nx">callback</span><span class="p">()</span>
 
-  }))
-  .on(&#39;data&#39;, function (data) {
-    all.push(data)
-  })
-  .on(&#39;end&#39;, function () {
-    doSomethingSpecial(all)
-  })</code></pre>
+  <span class="p">}))</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">all</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">doSomethingSpecial</span><span class="p">(</span><span class="nx">all</span><span class="p">)</span>
+  <span class="p">})</span>
+</pre></div>
+
 
     </section>
 
