@@ -161,6 +161,9 @@ User variability delivered over unreliable, high-latency networks
 
 <i>Browsers...</i>
 
+
+<p style="text-align: right; padding-top: 56px;"><img src="img/ietroll.png" alt="IE" style="width: 100px; border-radius: 5px; box-shadow: 0px 0px 7px rgba(0,0,0,0.4);"></p>
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## On the web, nothing is synchronous
