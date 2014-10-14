@@ -28,21 +28,21 @@
 
 ## In the beginning
 
-<br>
-
 Programming was about *computing*
 
 Computers were self-contained number-crunchers
 
-<br>
+<p style="text-align: center; padding-top: 5px;"><img src="img/bigsmall-ibmsystem360.jpg" alt="Cruncher" style="width: 300px; border-radius: 5px; box-shadow: 0px 0px 7px rgba(0,0,0,0.4);"></p>
 
-_I/O was late to the game_
+_Interactive I/O was late to the game_
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## I/O is not *computing*
 
 <br>
+
+<p style="float: right; padding-top: 5px;"><img src="img/tape_robot.jpg" alt="Tape Robot" style="width: 150px; border-radius: 5px; box-shadow: 0px 0px 7px rgba(0,0,0,0.4);"></p>
 
 I/O is what computers wait for
 
@@ -136,6 +136,8 @@ table#iocost td, table#iocost th {
 ## The UI introduced new challenges
 
 <br>
+
+<p style="float: right; padding-top: 5px;"><img src="img/fran-computing.gif" alt="Fran" style="width: 200px; border-radius: 5px; box-shadow: 0px 0px 7px rgba(0,0,0,0.4);"></p>
 
 I/O in the form of a human
 
