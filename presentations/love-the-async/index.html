@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <title>WebDirections Code 2014: Asynchronous JavaScript Patterns (@rvagg)</title>
+    <link rel="stylesheet" type="text/css" href="style/markbase.css">
+    <link rel="stylesheet" type="text/css" href="style/markthemes.css">
+    <link rel="stylesheet" type="text/css" href="style/highlight.css">
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+    <!--
+    <link href='http://fonts.googleapis.com/css?family=Signika+Negative:400,700' rel='stylesheet' type='text/css'>
+    -->
+  </head>
+  <body class="coverflow rv">
+
+    <div id="main">
+      <header>
+        WebDirections Code 2014: <i>Asynchronous JavaScript Patterns</i> &nbsp; (@rvagg)
+      </header>
+
+      <article>
+
+      
+        <section>
+          <h1>Stop Worrying and Learn to Love the Async</h1>
+<p style="position: absolute; bottom: 0; font-size: 9px;">
+  <i>This work is &copy; 2014 Rod Vagg and is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/au/">Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Australia License</a></i>
+</p>
+
+
+        </section>
+      
+        <section>
+          <h2>@rvagg<br>Rod Vagg</h2>
+<p><br></p>
+<p style="text-align: center; padding-top: 5px;"><img src="img/erik.png" alt="Erik" style="width: 65px; border-radius: 5px; box-shadow: 0px 0px 7px rgba(0,0,0,0.4);"></p>
+
+<p style="text-align: center; padding-top: 5px;"><img src="img/nodesource-hexagons.svg" alt="NodeSource" style="width: 75px; height: 75px; xborder-radius: 5px; xbox-shadow: 0px 0px 7px rgba(0,0,0,0.4);"></p>
+
+<p style="text-align: center;">
+  <a href="http://r.va.gg"><a href="http://r.va.gg">http://r.va.gg</a></a><br>
+  <a href="http://nodesource.com"><a href="http://nodesource.com">http://nodesource.com</a></a>
+</p>
+
+
+        </section>
+      
+        <section>
+          <h1>A Quick History of Computing</h1>
+
+        </section>
+      
+        <section>
+          <h2>In the beginning</h2>
+<p><br></p>
+<p>Programming was about <em>computing</em></p>
+<p>Computers were self-contained number-crunchers</p>
+<p><br></p>
+<p><em>I/O was late to the game</em></p>
+
+        </section>
+      
+        <section>
+          <h2>I/O is not <em>computing</em></h2>
+<p><br></p>
+<p>I/O is what computers wait for</p>
+<p>I/O is the bottleneck in the majority of programs</p>
+
+        </section>
+      
+        <section>
+          <h2>But, I/O is usually hidden</h2>
+<div class="highlight"><pre><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Reading file...&quot;</span><span class="o">);</span>
+<span class="n">BufferedReader</span> <span class="n">br</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedReader</span><span class="o">(</span><span class="k">new</span> <span class="n">FileReader</span><span class="o">(</span><span class="s">&quot;in.txt&quot;</span><span class="o">));</span>
+
+<span class="k">try</span> <span class="o">{</span>
+  <span class="n">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+  <span class="n">String</span> <span class="n">line</span><span class="o">;</span>
+
+  <span class="k">while</span> <span class="o">((</span><span class="n">line</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="na">readLine</span><span class="o">())</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+    <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">line</span> <span class="o">+</span> <span class="s">&quot;\n&quot;</span><span class="o">);</span>
+  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+<span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+  <span class="n">br</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Finished reading file!&quot;</span><span class="o">);</span>
+</pre></div>
+
+<p>The programmer isn&#39;t prompted to consider the costs</p>
+
+        </section>
+      
+        <section>
+          <h2>I/O is expensive</h2>
+<style>
+table#iocost {
+  font-size: 15px;
+  margin: 20px auto;
+}
+table#iocost td, table#iocost th {
+  padding: 4px 12px;
+  margin: 0;
+  border-bottom: #333 solid 1px;
+}
+</style>
+
+<table id="iocost" cellpadding="0" cellspacing="0">
+  <thead>
+    <tr><th>Class</th><th>Operation</th><th>Time cost</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="3" style="text-align: center;">Memory</td>
+      <td>L1 cache reference:</td>
+      <td style="text-align: right;">1 ns</td>
+    </tr>
+    <tr>
+      <td>L2 cache reference:</td>
+      <td style="text-align: right;">4 ns</td>
+    </tr>
+    <tr>
+      <td>Main memory reference:</td>
+      <td style="text-align: right;">100 ns</td>
+    </tr>
+    <tr>
+    <tr>
+      <td rowspan="4" style="text-align: center;">I/O</td>
+      <td>SSD random-read:</td>
+      <td style="text-align: right;">16,000 ns</td>
+    </tr>
+    <tr>
+      <td>Round-trip in same datacenter:</td>
+      <td style="text-align: right;">500,000 ns</td>
+    </tr>
+    <tr>
+      <td>Physical disk seek:</td>
+      <td style="text-align: right;">4,000,000 ns</td>
+    </tr>
+    <tr>
+      <td>Round-trip from AU to US:</td>
+      <td style="text-align: right;">150,000,000 ns</td>
+    </tr>
+  </tbody>
+</table>
+
+
+        </section>
+      
+        <section>
+          <h1>Then ...<br>User Interfaces</h1>
+
+        </section>
+      
+        <section>
+          <h2>The UI introduced new challenges</h2>
+<p><br></p>
+<p>I/O in the form of a human</p>
+<p>Unpredictable</p>
+<p><em>Very</em> high latency</p>
+<p>Sequential programming has limits</p>
+<p>Good UI&#39;s don&#39;t constrain the user</p>
+
+        </section>
+      
+        <section>
+          <h2>Networked UI&#39;s: a perfect storm</h2>
+<p><br></p>
+<p>User variability delivered over unreliable, high-latency networks</p>
+<p><br></p>
+<p><i>Browsers...</i></p>
+
+        </section>
+      
+        <section>
+          <h2>On the web, nothing is synchronous</h2>
+<p><br></p>
+<p>Always in <em>reactive</em> mode, responding to external events</p>
+<ul>
+<li>React to user events</li>
+<li>React to network events</li>
+<li>React to browser events</li>
+</ul>
+
+        </section>
+      
+        <section>
+          <h1>Enter JavaScript</h1>
+
+        </section>
+      
+        <section>
+          <h2>JavaScript:<br>The King of event-driven programming</h2>
+<p>Born in the browser</p>
+<p>Designed to respond to user-events</p>
+<p><strong>Timers!</strong> &nbsp; <span id="scroll">BREAKING NEWS: Scrolling text with DHTML!         </span></p>
+<script>
+var p = document.getElementById('scroll');
+function scroll () {
+  var ptxt = p.innerHTML.replace(/&nbsp;/g, ' ').split('');
+  ptxt.push(ptxt.shift());
+  p.innerHTML = ptxt.join('').replace(/ /g, '&nbsp;');
+}
+setInterval(scroll, 100)
+</script>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;scroll&#39;</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nx">scroll</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">ptxt</span> <span class="o">=</span> <span class="nx">p</span><span class="p">.</span><span class="nx">innerHTML</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&amp;nbsp;/g</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">).</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+  <span class="nx">ptxt</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">ptxt</span><span class="p">.</span><span class="nx">shift</span><span class="p">());</span>
+  <span class="nx">p</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">ptxt</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/ /g</span><span class="p">,</span> <span class="s1">&#39;&amp;nbsp;&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">setInterval</span><span class="p">(</span><span class="nx">scroll</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+</pre></div>
+
+<p style="font-size: 10px; font-style: italic;">Warning: content may trigger intense feelings of nostalgia</p>
+
+
+        </section>
+      
+        <section>
+          <h2>JavaScript:<br>The King of event-driven programming</h2>
+<p><br></p>
+<ul>
+<li><p>First-class functions</p>
+</li>
+<li><p>Closures and scope capturing</p>
+</li>
+<li><p><em>Single-threaded</em></p>
+</li>
+</ul>
+
+        </section>
+      
+        <section>
+          <h2>Asynchronicity at the extreme:<br>Node.js</h2>
+<p><br></p>
+<p>Async works well for performing many complex, parallel tasks in the browser ...</p>
+<p style="text-align: center; font-style: italic; font-weight: bold;">Why not on the server too?</p>
+
+
+        </section>
+      
+        <section>
+          <h2>Synchronous I/O with Node.js</h2>
+<p><br></p>
+<p>Node.js can be <em>classic</em></p>
+<p>Synchronous file system I/O, on the JavaScript thread</p>
+<div class="highlight"><pre><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Reading data...&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;in.dat&#39;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Finished reading data!&#39;</span><span class="p">);</span>
+</pre></div>
+
+<p><em>Don&#39;t do this</em></p>
+
+        </section>
+      
+        <section>
+          <h2>Asynchronous I/O with Node.js</h2>
+<p><br></p>
+<p>File system I/O is performed on a <strong>thread-pool</strong> when asynchronous</p>
+<div class="highlight"><pre><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Reading data...&#39;</span><span class="p">);</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s1">&#39;in.dat&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// asynchronous</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Finished reading data!&#39;</span><span class="p">);</span>
+<span class="p">})</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Not finished reading data...&#39;</span><span class="p">);</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>Asynchronous I/O with Node.js</h2>
+<p><br></p>
+<p>Network I/O performed with non-blocking system calls</p>
+<p><code>epoll</code> or <code>select</code> depending on platform</p>
+
+        </section>
+      
+        <section>
+          <h2>Asynchronous I/O with Node.js</h2>
+<p>Network I/O, always asynchronous, generally event-based</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">()</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// handle HTTP request</span>
+<span class="p">});</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;clientError&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}});</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}});</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;close&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Server shut down&#39;</span><span class="p">);</span>
+<span class="p">})</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;listening&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Listening on port 8080&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">);</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h1>The Callback</h1>
+
+        </section>
+      
+        <section>
+          <h2>The <em>callback</em></h2>
+<p>JavaScript embraces the <strong>continuation passing</strong> style</p>
+<div class="highlight"><pre><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Ping!&#39;</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nx">pong</span> <span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Pong!&#39;</span><span class="p">);</span> <span class="p">}</span>
+<span class="nx">setTimeout</span><span class="p">(</span><span class="nx">pong</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Reading file...&#39;</span><span class="p">);</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s1">&#39;in.dat&#39;</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;in.dat contains %d lines&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">).</span><span class="nx">length</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">clickHandler</span> <span class="p">()</span> <span class="p">{</span> <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Yo!&#39;</span><span class="p">);</span> <span class="p">}</span>
+<span class="nx">el</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">clickHandler</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+</pre></div>
+
+
+        </section>
+      
+        <section>
+          <h2>The <em>callback</em></h2>
+<p>The <em>callback</em> function is the fundamental unit of asynchronous programming in JavaScript</p>
+<ul>
+<li>DOM events</li>
+<li>Browser-based networking</li>
+<li>Basic Node.js I/O operations</li>
+<li>Node.js EventEmitter</li>
+<li>Streams</li>
+</ul>
+<p>Even <em>Promises</em> and async utilities for generators are built on callbacks</p>
+
+        </section>
+      
+        <section>
+          <h1>Embrace the Async</h1>
+
+        </section>
+      
+        <section>
+          <h2>Embrace the Async</h2>
+<p>Node.js-style callbacks are a great way to represent an asynchronous platform</p>
+<div class="highlight"><pre><span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="s1">&#39;fooballs.txt&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stat</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="c1">// deal with it</span>
+  <span class="k">else</span>
+    <span class="c1">// get on with it</span>
+<span class="p">})</span>
+</pre></div>
+
+<ul>
+<li>I/O is in your face, you have to deal with as a special case</li>
+<li>Error-handling is first-class</li>
+<li>The pattern is simple and allows highly compatible modularity</li>
+</ul>
+
+        </section>
+      
+        <section>
+          <h2>Embrace the Async</h2>
+<p><br></p>
+<p>Hide asynchronous behaviour at your peril</p>
+<p><strong>Use abstractions wisely</strong>: for productivity, not to change the fundamental nature of the platform</p>
+<p>The world is asynchronous, programming should be asynchronous, learn to think in async</p>
+
+        </section>
+      
+        <section>
+          <h2>Asynchronous programming</h2>
+<p><br></p>
+<p><br></p>
+<p><h4 style="text-align: center;">Accept it; it&#39;s the new norm</p></p>
+
+        </section>
+      
+        <section>
+          <h2>CampJS</h2>
+<p style="text-align: center; padding-top: 5px;"><img src="img/campjs.png" alt="CampJS" style="width: 400px; border-radius: 5px; box-shadow: 0px 0px 7px rgba(0,0,0,0.4);"></p>
+
+<p style="text-align: center; font-weight: bold;">Node.ninjas Discount, $85 off</p>
+
+<p style="text-align: center; font-weight: bold;"><a href="https://ti.to/campjs/campjs-iv?release_id=iq4v0pooxfw"><a href="https://ti.to/campjs/campjs-iv?release_id=iq4v0pooxfw">https://ti.to/campjs/campjs-iv?release_id=iq4v0pooxfw</a></a></p>
+
+        </section>
+      
+
+      </article>
+
+    </div>
+
+    <script src="js/bespoke.min.js"></script>
+    <script src="js/bespoke-keys.min.js"></script>
+    <script src="js/bespoke-touch.min.js"></script>
+    <script src="js/bespoke-hash.min.js"></script>
+    <script src="js/script.js"></script>
+  </body>
+</script>
+</body>
