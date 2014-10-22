@@ -389,13 +389,3 @@ The world is asynchronous, programming should be asynchronous, learn to think in
 <br>
 
 <h4 style="text-align: center;">Accept it; it's the new norm</p>
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-## CampJS
-
-<p style="text-align: center; padding-top: 5px;"><img src="img/campjs.png" alt="CampJS" style="width: 400px; border-radius: 5px; box-shadow: 0px 0px 7px rgba(0,0,0,0.4);"></p>
-
-<p style="text-align: center; font-weight: bold;">Node.ninjas Discount, $85 off</p>
-
-<p style="text-align: center; font-weight: bold;"><a href="https://ti.to/campjs/campjs-iv?release_id=iq4v0pooxfw">https://ti.to/campjs/campjs-iv?release_id=iq4v0pooxfw</a></p>
