@@ -42,65 +42,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            
- 
-                <li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li>
-              
- 
- 
-                <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li>
-              
- 
- 
-                <li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
-              
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+            <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li><li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
           </ul>
         </section>
       </section>
@@ -120,7 +62,7 @@
       <p>This is just a short follow-up to my original post on<em> <a title="Wrangling the X-Forwarded-For Header" href="http://rod.vagg.org/2011/07/wrangling-the-x-forwarded-for-header/">Wrangling the X-Forwarded-For Header</a></em> where I promised that one of the things I would follow up with was how to get MaxMind&#39;s mod_geoip2 to handle the X-Forwarded-For according to the rule:</p>
 <p><p style="text-align: center;"><strong><em>Always use the leftmost non-private address</em></strong>.</p>
 Well, since it&#39;s turning out to be such a popular post I thought I&#39;d better get it done to help anyone else out that&#39;s searching around for solutions. So, I&#39;ve put up the code on my GitHub account here:<strong></strong></p>
-<p><p style="text-align: center;"><strong><a href="https://github.com/rvagg/mod_geoip2_xff"><a href="https://github.com/rvagg/mod_geoip2_xff">https://github.com/rvagg/mod_geoip2_xff</a></a></strong></p>
+<p><p style="text-align: center;"><strong><a href="https://github.com/rvagg/mod_geoip2_xff">https://github.com/rvagg/mod_geoip2_xff</a></strong></p>
 I&#39;m maintaining a <em>maxmind</em> branch that contains the original code from MaxMind and the <em>master</em> contains my changes, so you can see a nice <a href="https://github.com/rvagg/mod_geoip2_xff/compare/maxmind...master">diff</a> of what I&#39;ve done.</p>
 <p>I have to warn that I haven&#39;t done any serious C programming for more than 15 years or so, my code probably isn&#39;t fantastic, and I&#39;m open to outside contributions from anyone with suggestions. The approach I&#39;ve taken is to embed the regexes of my previous post into the module and walk through the IP addresses looking for a non-private match.</p>
 <p>Since my initial release, based on MaxMind&#39;s 1.2.5, they&#39;ve put out a 1.2.7 which includes the addition of a <em>GeoIPUseLastXForwardedForIP</em> flag. I can imagine what prompted this addition but as I said in my previous post this isn&#39;t the way to get the best IP address. As of writing, my current master branch is based on 1.2.7 and has this new flag but because the <em>first_public_ip_in_list</em> is done first it&#39;s mostly useless.</p>

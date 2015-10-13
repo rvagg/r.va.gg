@@ -42,65 +42,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            
- 
-                <li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li>
-              
- 
- 
-                <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li>
-              
- 
- 
-                <li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
-              
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+            <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li><li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
           </ul>
         </section>
       </section>
@@ -129,8 +71,8 @@ We rely very heavily on <a href="http://www.maxmind.com/app/country">GeoIP</a> f
 <p><h3>X-Forwarded-For</h3>
 The X-Forwarded-For header was first introduced by <a href="http://www.squid-cache.org/">Squid</a> as a means of passing on the IP address of the client to the server. It has since been widely adopted by other proxy servers and load balancers so it&#39;s pretty much considered a <em>standard</em> even if it technically isn&#39;t.</p>
 <p>What you are supposed to get as your header is this:</p>
-<pre><code>X-Forwarded-For: clientIP, server1IP, server2IP, server3IP</code></pre>
-<p>The client IP address should be first, followed by first proxy server, followed by any other servers in a comma separated list. The final server that passes the request on to you won&#39;t be in the list, <span style="text-decoration: underline;">a proxy server or load balancer will only append the address of server it received the request from if the X-Forwarded-For header was passed to it</span> otherwise it just constructs a new X-Forwarded-For with just the client address in it. The address of the last server in the complete <em>chain</em> is simply the address of the client making the request to your server. But as usual in the web world there are no guarantees.</p>
+<pre><code>X-Forwarded-For: clientIP, server1IP, server2IP, server3IP
+</code></pre><p>The client IP address should be first, followed by first proxy server, followed by any other servers in a comma separated list. The final server that passes the request on to you won&#39;t be in the list, <span style="text-decoration: underline;">a proxy server or load balancer will only append the address of server it received the request from if the X-Forwarded-For header was passed to it</span> otherwise it just constructs a new X-Forwarded-For with just the client address in it. The address of the last server in the complete <em>chain</em> is simply the address of the client making the request to your server. But as usual in the web world there are no guarantees.</p>
 <p>Apache kindly gives you an HTTP_X_FORWARDED_FOR environment variable (although I can&#39;t find official documentation on this so I&#39;m not sure of the specifics of what conditions may prevent you from getting this variable). You could use this in custom modules or standard modules that use environment variables such as mod_rewrite. If you want to log with it then you could configure your <code>LogFormat</code> to print it out with <code>%{X-Forwarded-For}i</code> to make your logs more interesting than just showing the load balancer hostname as <code>%h</code>.</p>
 <p>mod_geoip has a configuration switch, <code>GeoIPScanProxyHeaders On</code> that tells it to use X-Forwarded-For (or HTTP_X_FORWARDED_FOR) to determine the client IP address rather than just the remote address.</p>
 <p>There are some important catches to consider before you proceed to use this header to do anything interesting:</p>
@@ -152,13 +94,13 @@ When using X-Forwarded-For, the assumption normally made is that the first IP ad
 </ul>
 You can thank these beauties for extending the life of IPv4 way beyond what it would otherwise have been.</p>
 <p>If you have a client behind one of these networks and it&#39;s not routed through a proxy server then you&#39;ll probably just get the IP address of the NAT gateway which is likely to be the address you want to use. If the request is routed through a proxy server then you may get an X-Forwarded-For that looks something like this:</p>
-<pre><code>X-Forwarded-For: 10.208.4.38, 58.163.175.187</code></pre>
-<p>Where the address you probably want is actually the (proxy) server address on the end rather than the private client address.</p>
+<pre><code>X-Forwarded-For: 10.208.4.38, 58.163.175.187
+</code></pre><p>Where the address you probably want is actually the (proxy) server address on the end rather than the private client address.</p>
 <p>You may also have a chain of multiple servers, perhaps you have a downstream proxy server going through a larger upstream one before heading out of the network, so you may get something like this:</p>
-<pre><code>X-Forwarded-For: 10.208.4.38, 58.163.1.4, 58.163.175.187</code></pre>
-<p>Or, the downstream proxy server could be within the private network, perhaps a departmental proxy server connecting to a company-wide proxy server and then this may happen:</p>
-<pre><code>X-Forwarded-For: 10.208.4.38, 10.10.300.23, 58.163.175.187</code></pre>
-<p>This could of course be even more complex as you may have a longer chain of proxy servers (although I&#39;ve never actually seen anyone chain more than 2 layers of proxy servers together in a network before).</p>
+<pre><code>X-Forwarded-For: 10.208.4.38, 58.163.1.4, 58.163.175.187
+</code></pre><p>Or, the downstream proxy server could be within the private network, perhaps a departmental proxy server connecting to a company-wide proxy server and then this may happen:</p>
+<pre><code>X-Forwarded-For: 10.208.4.38, 10.10.300.23, 58.163.175.187
+</code></pre><p>This could of course be even more complex as you may have a longer chain of proxy servers (although I&#39;ve never actually seen anyone chain more than 2 layers of proxy servers together in a network before).</p>
 <p>So what general rule should we construct for extracting our usable client IP from these addresses?</p>
 <p>Of course, I&#39;m suggesting that the rule: <strong><em>always use the leftmost address</em></strong> is not correct as there is a good chance it may be a private IP address if there is more than 1 address in the list. Unfortunately this is the rule that mod_geoip adopts, if it finds a comma it just chops off the string at that comma. We immediately found this led to unsatisfactory results with ELB as we had more requests than we expected originating from private networks routed through proxy servers; and we heard about it in the form of error reports from our users (<em>&quot;where&#39;s the log in link?&quot;</em>--it&#39;s not normally displayed in countries where we haven&#39;t released FeedXL).</p>
 <p>An alternative would be <strong><em>always use the rightmost address</em></strong> which would probably get you a pretty good guess in almost all cases. If there is more than one IP address in the list then the rightmost address will probably be the address where the request left whatever corporate or internal network the client was hidden behind, even if there are multiple layers. However, multiple layers of IP addresses suggests a fairly large network, possibly widely disbursed. There&#39;s also a chance that you have one proxy server piggybacking off a higher capacity upstream proxy server: for example, some ISPs run their own very large proxy servers that customers can use and may make ideal upstream connections for internal proxy servers with caching at both levels. The ISP proxy server is likely to be located in a very different place to the client though and if you&#39;re trying to pin down the IP address of the client using something like <a href="http://www.maxmind.com/app/city">GeoIP City</a> then you&#39;ll probably get the wrong city.</p>

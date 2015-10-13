@@ -40,65 +40,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            
- 
-                <li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li>
-              
- 
- 
-                <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li>
-              
- 
- 
-                <li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
-              
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+            <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li><li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
           </ul>
         </section>
       </section>
@@ -166,7 +108,7 @@ And IE doesn&#39;t let you have it any other way. So you either encode your SVG 
         <p>This is just a short follow-up to my original post on<em> <a title="Wrangling the X-Forwarded-For Header" href="http://rod.vagg.org/2011/07/wrangling-the-x-forwarded-for-header/">Wrangling the X-Forwarded-For Header</a></em> where I promised that one of the things I would follow up with was how to get MaxMind&#39;s mod_geoip2 to handle the X-Forwarded-For according to the rule:</p>
 <p><p style="text-align: center;"><strong><em>Always use the leftmost non-private address</em></strong>.</p>
 Well, since it&#39;s turning out to be such a popular post I thought I&#39;d better get it done to help anyone else out that&#39;s searching around for solutions. So, I&#39;ve put up the code on my GitHub account here:<strong></strong></p>
-<p><p style="text-align: center;"><strong><a href="https://github.com/rvagg/mod_geoip2_xff"><a href="https://github.com/rvagg/mod_geoip2_xff">https://github.com/rvagg/mod_geoip2_xff</a></a></strong></p>
+<p><p style="text-align: center;"><strong><a href="https://github.com/rvagg/mod_geoip2_xff">https://github.com/rvagg/mod_geoip2_xff</a></strong></p>
 I&#39;m maintaining a <em>maxmind</em> branch that contains the original code from MaxMind and the <em>master</em> contains my changes, so you can see a nice <a href="https://github.com/rvagg/mod_geoip2_xff/compare/maxmind...master">diff</a> of what I&#39;ve done.</p>
 <p>I have to warn that I haven&#39;t done any serious C programming for more than 15 years or so, my code probably isn&#39;t fantastic, and I&#39;m open to outside contributions from anyone with suggestions. The approach I&#39;ve taken is to embed the regexes of my previous post into the module and walk through the IP addresses looking for a non-private match.</p>
 <p>Since my initial release, based on MaxMind&#39;s 1.2.5, they&#39;ve put out a 1.2.7 which includes the addition of a <em>GeoIPUseLastXForwardedForIP</em> flag. I can imagine what prompted this addition but as I said in my previous post this isn&#39;t the way to get the best IP address. As of writing, my current master branch is based on 1.2.7 and has this new flag but because the <em>first_public_ip_in_list</em> is done first it&#39;s mostly useless.</p>
@@ -234,7 +176,7 @@ The general C-family rules for semicolons can be found in most teaching material
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doFilter</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">res</span><span class="o">,</span> <span class="n">FilterChain</span> <span class="n">chain</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ServletException</span> <span class="o">{</span>
         <span class="n">HttpServletResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="o">(</span><span class="n">HttpServletResponse</span><span class="o">)</span> <span class="n">res</span><span class="o">;</span>
-        <span class="n">ResponseWrapper</span> <span class="n">wrapper</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ResponseWrapper</span><span class="o">(</span><span class="n">response</span><span class="o">);</span>
+        <span class="n">ResponseWrapper</span> <span class="n">wrapper</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ResponseWrapper</span><span class="o">(</span><span class="n">response</span><span class="o">);</span>
         <span class="n">chain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">req</span><span class="o">,</span> <span class="n">wrapper</span><span class="o">);</span>
         <span class="n">String</span> <span class="n">html</span> <span class="o">=</span> <span class="n">wrapper</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">regex</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">response</span><span class="o">.</span><span class="na">getContentType</span><span class="o">()</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">response</span><span class="o">.</span><span class="na">getContentType</span><span class="o">().</span><span class="na">startsWith</span><span class="o">(</span><span class="s">&quot;text/html&quot;</span><span class="o">))</span>
@@ -249,7 +191,7 @@ The general C-family rules for semicolons can be found in most teaching material
     <span class="o">}</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">(</span><span class="n">FilterConfig</span> <span class="n">config</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span> <span class="o">{</span>
-        <span class="n">StringBuffer</span> <span class="n">pattern</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>
+        <span class="n">StringBuffer</span> <span class="n">pattern</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">StringBuffer</span><span class="o">();</span>
         <span class="n">appendIf</span><span class="o">(</span><span class="n">config</span><span class="o">,</span> <span class="s">&quot;strip-linestart-whitespace&quot;</span><span class="o">,</span> <span class="n">pattern</span><span class="o">,</span> <span class="s">&quot;(?&lt;=^)[ \\t]+&quot;</span><span class="o">);</span>
         <span class="n">appendIf</span><span class="o">(</span><span class="n">config</span><span class="o">,</span> <span class="s">&quot;strip-lineend-whitespace&quot;</span><span class="o">,</span> <span class="n">pattern</span><span class="o">,</span> <span class="s">&quot;[ \\t]+(?:$)&quot;</span><span class="o">);</span>
         <span class="n">appendIf</span><span class="o">(</span><span class="n">config</span><span class="o">,</span> <span class="s">&quot;strip-multiple-whitespace&quot;</span><span class="o">,</span> <span class="n">pattern</span><span class="o">,</span> <span class="s">&quot;([ \\t](?:[ \\t]))+&quot;</span><span class="o">);</span>
@@ -271,7 +213,7 @@ The general C-family rules for semicolons can be found in most teaching material
 
         <span class="kd">public</span> <span class="nf">ResponseWrapper</span><span class="o">(</span><span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
             <span class="kd">super</span><span class="o">(</span><span class="n">response</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">output</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CharArrayWriter</span><span class="o">();</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">output</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">CharArrayWriter</span><span class="o">();</span>
         <span class="o">}</span>
 
         <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
@@ -295,7 +237,7 @@ This regex will match whitespace at the beginning of any line. You&#39;ll notice
 <p><h4><strong></strong>strip-lineend-whitespace - [ \t]+(?:$)</h4>
 Same deal as the linestart regex but this time we have (?:$), a non-capturing positive look-ahead for <em>line end</em>.</p>
 <p>This will pick up any sloppyness in your HTML (I wish I could do this in Microsoft Word when I have to edit other people&#39;s documents, you can&#39;t see it, <strong>but it&#39;s still there</strong>!).</p>
-<p><h4>strip-multiple-whitespace - ([ \t](?:[ \t]))+</h4>
+<p><h4>strip-multiple-whitespace - (<a href="?:[ \\t]"> \t</a>)+</h4>
 Here we have a group of one or more whitespace characters followed by another whitespace character, non-captured, so we don&#39;t strip out all whitespace, remember that we are replacing matches with an empty string so we need the non-capturing second space to leave one intact.</p>
 <p>This is probably going to be the most dangerous if you might have content where whitespace is important, e.g. &lt;script&gt;, &lt;pre&gt;.l</p>
 <p><h4>strip-blank-lines - (\n[ \t]*(?:\n))+</h4>
@@ -487,7 +429,8 @@ You enable request logging in Tomcat by attaching an AccessLogValve to your cont
       </div>
 
     
- 
+
+    
 
       <div class="next">
         <a href="/page5.html">&laquo; Older posts</a>

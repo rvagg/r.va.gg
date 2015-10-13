@@ -42,65 +42,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            
- 
-                <li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li>
-              
- 
- 
-                <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li>
-              
- 
- 
-                <li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
-              
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+            <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li><li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
           </ul>
         </section>
       </section>
@@ -137,7 +79,7 @@
 
 <p>Instead of describing the talks, I&#39;ll defer to the <a href="http://clock.co.uk/tech-blogs/nodeconfeu-2013-part-one">excellent</a> <a href="http://clock.co.uk/tech-blogs/nodeconfeu-2013-part-two">four</a> <a href="http://clock.co.uk/tech-blogs/nodeconfeu-2013-part-three">part</a> <a href="http://clock.co.uk/tech-blogs/nodeconfeu-reflection">series</a> by Paul, Adam, Luke and Ben of <a href="http://clock.co.uk/">Clock</a> where you&#39;ll find a great summary of the talks and events of the conference.</p>
 <p>For my part, I was deeply honoured to be involved in the <em>&quot;Node Databases&quot;</em> track of the conference. We started off the NodeConf.eu talks with a 3-part show. My talk was titled &quot;A Real Database Rethink&quot; and was followed by <a href="https://twitter.com/dominictarr">Dominic Tarr</a> who talked more about the Level* ecosystem and the various pieces of the Node Databases puzzle that&#39;s being built. <a href="http://juliangruber.com/">Julian Gruber</a> then closed us off with some amazing live-coding of some browser/server streaming LevelUP/multilevel <a href="https://github.com/juliangruber/nodeconfeu-13">wizardry</a>.</p>
-<h3>A Real Database Rethink</h3>
+<h3 id="a-real-database-rethink">A Real Database Rethink</h3>
 <p>The slides of my talk are <a href="http://r.va.gg/presentations/nodeconfeu.2013/">online</a>. I attempted to break down the definition of the term <em>&quot;database&quot;</em> by looking at where the concept comes from historically. It&#39;s actually a difficult thing to define and I don&#39;t believe there is any one agreed upon meaning. What I came up with is:</p>
 <blockquote>
 <p>A tool for interacting with structured data, externalised from the core of our application</p>
@@ -155,7 +97,7 @@
 <p>But even that&#39;s pretty rough.</p>
 <p>Taking that definition, we can apply Node philosophy of small-core and vibrant user-land, along with the culture of extreme modularity afforded us by npm, and build a new kind of database; or at least apply new thinking to the &quot;database&quot;.</p>
 <p>The bulk of my talk was taken up with talking about LevelUP and the basics of the Level<em> ecosystem. There&#39;s a table on slide #7 that I&#39;m going to try and refine over time to help describe what the Level</em> / NodeBase world is all about.</p>
-<h3>Level Me Up Scotty!</h3>
+<h3 id="level-me-up-scotty-">Level Me Up Scotty!</h3>
 <p>One of the three workshops available at NodeConf.eu was all about Node Databases. I took the same approach as at <a href="http://campjs.com/">CampJS</a> recently where I built <a href="http://r.va.gg/2013/08/learn-you-the-node.js.html">Learn You The Node.js For Much Win!</a>, a tool that owes a debt to <a href="https://github.com/substack/stream-adventure">stream-adventure</a>, a self-guided workshop-in-your-terminal application by <a href="https://twitter.com/substack">@substack</a> and <a href="https://twitter.com/maxogden">Max Ogden</a> written for NodeConf (US).</p>
 <p>This time around, I received some great help from both @substack and Julian Gruber who helped write some exercises, I also received help from <a href="http://twitter.com/eugeneware">Eugene Ware</a> who wasn&#39;t even at the conference but was assisting with development from Australia. <a href="http://twitter.com/raynos2">Raynos</a> was also a great help in getting the application working well.</p>
 <p>We ended up with <strong><em>Level Me Up Scotty!</em></strong>, or just <strong>levelmeup</strong>.</p>
@@ -194,7 +136,7 @@
 <p style="text-align: center;">Final night banquet shenanigans with <a href="https://twitter.com/Av1anFlu">Charlie McConnell</a> and @substack ... the napkin hat thing is a story in itself, blame <a href="https://twitter.com/jllord">Jessica Lord</a>, photo by <a href="http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/">Matthew Bergman</a></p>
 </div>
 
-<h3>The Level* Gang</h3>
+<h3 id="the-level-gang">The Level* Gang</h3>
 <p>As an aside, NodeConf.eu had the largest concentration of LevelUP contributors and active Level* developers of any event that I&#39;m aware of so far. So we took the opportunity to have our own little meeting. We even took minutes, <a href="https://github.com/karolinaszczur/leveldb.org/blob/master/meetup-nodeland">of sorts</a>.</p>
 <p>There has been a long-standing plan to make a Level* / NodeBase website but being the disorganised rabble we are, it hasn&#39;t got off the ground. Karolina (and Jessica too I believe) are keen to help out on the design end but just need the content. So that&#39;s what we planned. There&#39;s a bunch of issues that form a TODO in the <a href="https://github.com/karolinaszczur/leveldb.org/issues">repo</a> for this project. Hopefully we can all get on top of it sooner rather than later. We&#39;re also open to assistance from anyone else that would like to contribute.</p>
 <p>Besides getting stuff done, it was just a pleasure to hang out with these people and talk <em>shop</em>.</p>

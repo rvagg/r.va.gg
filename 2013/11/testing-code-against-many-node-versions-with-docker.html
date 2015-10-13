@@ -42,65 +42,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            
- 
-                <li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li>
-              
- 
- 
-                <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li>
-              
- 
- 
-                <li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
-              
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+            <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li><li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
           </ul>
         </section>
       </section>
@@ -128,7 +70,7 @@
   <img src="http://img.pandawhale.com/29490-Picard-applause-clapping-gif-s5nz.gif" width="151" height="114">
 </div>
 
-<h3>DNT: Docker Node Tester</h3>
+<h3 id="dnt-docker-node-tester">DNT: Docker Node Tester</h3>
 <p>Docker is a tool that simplifies the use of Linux containers to create lightweight, isolated compute &quot;instances&quot;. Solaris and its variants have had this functionality for years in the form of &quot;zones&quot; but it&#39;s a fairly new concept for Linux and Docker makes the whole process a lot more friendly.</p>
 <p><strong>DNT</strong> contains two tools that work with Docker and Node.js to set-up containers for testing and run your project&#39;s tests in those containers.</p>
 <div style="margin: 0 auto;">
@@ -140,7 +82,7 @@
 <p>Setting up a project is a matter of creating a <em>.dntrc</em> file in the root directory of the project. This configuration file involves setting a <code>NODE_VERSIONS</code> variable with a list of all of the versions of Node you want to test against, and this can include &quot;master&quot; to test the latest code from the Node repository. You also set a <code>TEST_CMD</code> variable with a series of commands required to set up, compile and execute your tests. The <code>setup-dnt</code> command can be run against a <em>.dntrc</em> file to make sure that the appropriate Docker images are ready. The <code>dnt</code> command can then be used to execute the tests against all of the Node versions you specified.</p>
 <p>Since Docker containers are completely isolated, <strong>DNT</strong> can run tests in parallel as long as the machine has the resources. The default is to use the number of cores on the computer as the concurrency level but this can be configured if not appropriate.</p>
 <p>Currently <strong>DNT</strong> is designed to parse TAP test output by reading the final line as either &quot;ok&quot; or &quot;not ok&quot; to report test status back on the command-line. It is configurable but you need to supply a command that will transform test output to either an &quot;ok&quot; or &quot;not ok&quot; (<code>sed</code> to the rescue?).</p>
-<h3>How I&#39;m using it</h3>
+<h3 id="how-i-m-using-it">How I&#39;m using it</h3>
 <p>My primary use-case is for testing <strong>NAN</strong>. The test suite needs a lot of work so being able to test against all the different V8 and Node APIs while coding is super helpful; particularly when tests run so quickly! My NAN <em>.dntrc</em> file tests against master, all of the 0.11 releases since 0.11.4 (0.11.0 to 0.11.3 are explicitly not supported by NAN) and the last 5 releases of the 0.10 and 0.8 series. At the moment that&#39;s 17 versions of Node in all and on my computer the test suite takes approximately 20 seconds to complete across all of these releases.</p>
 <p><strong>The NAN <a href="https://raw.github.com/rvagg/nan/master/.dntrc">.dntrc</a></strong></p>
 <div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;\</span>
@@ -222,7 +164,7 @@
 <span class="s2">#&quot;</span>
 </pre></div>
 
-<h3>What&#39;s next?</h3>
+<h3 id="what-s-next-">What&#39;s next?</h3>
 <p>I have no idea but I&#39;d love to have helpers flesh this out a little more. It&#39;s not hard to imagine this forming the basis of a local CI system as well as a general testing tool. The speed even makes it tempting to run the tests on every git commit, or perhaps on every save.</p>
 <p>If you&#39;d like to contribute to development then please submit a pull request, I&#39;d be happy to discuss anything you might think would improve this project. I&#39;m keen to share ownership with anyone making significant contributions; as I do with most of my open source projects.</p>
 <p>See the <strong><a href="https://github.com/rvagg/dnt">DNT</a></strong> GitHub repo for installation and detailed usage instructions.</p>

@@ -42,65 +42,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            
- 
-                <li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li>
-              
- 
- 
-                <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li>
-              
- 
- 
-                <li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
-              
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+            <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li><li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
           </ul>
         </section>
       </section>
@@ -140,7 +82,7 @@
 </pre></div>
 
 <p>Whoa...</p>
-<h3>A note about HyperLevelDB</h3>
+<h3 id="a-note-about-hyperleveldb">A note about HyperLevelDB</h3>
 <p>Lastly, I&#39;d like to encourage you to try the HyperLevelDB version if you are pushing hard on LevelDB&#39;s performance. The HyperDex fork is tuned for multi-threaded access for reads and writes and is therefore particularly suited to how we use it in Node. The Basho version doesn&#39;t show much performance difference mainly because they are optimising for Riak running 16 separate instances on the same server so multi-threaded access isn&#39;t as interesting for them. You should find significant performance gains if you&#39;re doing very heavy writes in particular with HyperLevelDB. Also, if you&#39;re interested in support for HyperLevelDB then pop in to ##leveldb on Freenode and bother <em><a href="https://twitter.com/rescrv">rescrv</a></em> (Robert Escriva), author of HyperLevelDB and our resident LevelDB expert.</p>
 <p>It&#39;s also worth nothing that HyperDex are interested in offering commercial support for people using LevelDB, not just HyperLevelDB but also Google&#39;s LevelDB. This means that anyone using either of these packages in Node should be able to get solid support if they are doing any heavy work in a commercial environment and need the surety of experts behind them to help pick up the pieces. I imagine this would cover things like LevelDB corruption and any LevelDB bugs you may run in to (we&#39;re currently looking at a subtle <a href="https://github.com/rvagg/node-levelup/issues/171">batch-related LevelDB bug</a> that&#39;s come along with the 1.14.0 release, they do exist!). Talk to Robert if you want more information about commercial support.</p>
 

@@ -40,65 +40,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            
- 
-                <li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li>
-              
- 
- 
-                <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li>
-              
- 
- 
-                <li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
-              
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+            <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li><li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
           </ul>
         </section>
       </section>
@@ -256,10 +198,10 @@
 <p>So, more so than most benchmarks, take these with a very large grain of salt or two!</p>
 <p><i>(The numbers are ops/sec, so higher is better in all cases)</i></p>
 <style>
-table.results { font-family: &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, sans-serif; margin-bottom: 1.4em; }
+table.results { font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, sans-serif; margin-bottom: 1.4em; }
 table.results th:first-child, table.results td { text-align: right; }
 table.results tbody tr:nth-child(2n+1) { background-color: rgba(0,0,0,0.075); }
-table.results tr &gt; * { padding: 0 3px; }
+table.results tr > * { padding: 0 3px; }
 </style>
 
 <h4>Chrome</h4>
@@ -407,12 +349,12 @@ table.results tr &gt; * { padding: 0 3px; }
 
       <section class="post-body">
         <p>Thanks to a contribution from <a href="https://plus.google.com/105599514712357912650/posts">Kevin Gaudin</a>, I have a new release of my <a href="http://www.maxmind.com/app/mod_geoip">mod_geoip2</a> fork. (The history starts <a href="http://rod.vagg.org/2012/04/a-mod_geoip2-that-properly-handles-x-forwarded-for/">here</a>.)</p>
-<p>You can find the source here: <a href="https://github.com/rvagg/mod_geoip2_xff"><a href="https://github.com/rvagg/mod_geoip2_xff">https://github.com/rvagg/mod_geoip2_xff</a></a></p>
+<p>You can find the source here: <a href="https://github.com/rvagg/mod_geoip2_xff">https://github.com/rvagg/mod_geoip2_xff</a></p>
 <p>Kevin&#39;s addition provides a fall-back to the standard remote IP address of the client if no public IP address is found in the <em>X-Forwarded-For</em> header. Previously, my implementation just fell back to the default mod_geoip2 behaviour of just taking the first IP address in the <em>X-Forwarded-For</em> header, or the last if you set <em>GeoIPUseLastXForwardedForIP</em> in your config.</p>
 <p>I also took the opportunity to clean things up a little and introduce a config option to turn on the special <em>X-Forwarded-For</em> handling. You now have to set <strong>GeoIPUseLeftPublicXForwardedForIP</strong> to <strong>On</strong> to activate it.</p>
 <p>Thanks to Kevin, and additional contributions are welcome!</p>
 <p><strong>Update July 7th 2012</strong>: Since I was in C-mode, I went ahead and implemented something I&#39;ve tried to get working in the past: <strong>hostname lookups on the X-Forwarded-For host!</strong> I got intimate with APR and worked out how to use Apache to do the resolution so there isn&#39;t the lengthy timeout of raw syscalls. If you set <strong>GeoIPEnableHostnameLookups</strong> to <strong>On</strong>, you&#39;ll get a <strong>GEOIP_HOST</strong> environment variable to use.</p>
-<p>I&#39;ve also decided to start making tarballs available off GitHub for your convenience: <a href="https://github.com/rvagg/mod_geoip2_xff/downloads"><a href="https://github.com/rvagg/mod_geoip2_xff/downloads">https://github.com/rvagg/mod_geoip2_xff/downloads</a></a></p>
+<p>I&#39;ve also decided to start making tarballs available off GitHub for your convenience: <a href="https://github.com/rvagg/mod_geoip2_xff/downloads">https://github.com/rvagg/mod_geoip2_xff/downloads</a></p>
 
       </section>
 
@@ -429,7 +371,8 @@ table.results tr &gt; * { padding: 0 3px; }
       </div>
 
     
- 
+
+    
 
       <div class="next">
         <a href="/page4.html">&laquo; Older posts</a>

@@ -42,65 +42,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            
- 
-                <li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li>
-              
- 
- 
-                <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li>
-              
- 
- 
-                <li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
-              
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+            <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li><li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
           </ul>
         </section>
       </section>
@@ -131,7 +73,7 @@
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doFilter</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">res</span><span class="o">,</span> <span class="n">FilterChain</span> <span class="n">chain</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ServletException</span> <span class="o">{</span>
         <span class="n">HttpServletResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="o">(</span><span class="n">HttpServletResponse</span><span class="o">)</span> <span class="n">res</span><span class="o">;</span>
-        <span class="n">ResponseWrapper</span> <span class="n">wrapper</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ResponseWrapper</span><span class="o">(</span><span class="n">response</span><span class="o">);</span>
+        <span class="n">ResponseWrapper</span> <span class="n">wrapper</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ResponseWrapper</span><span class="o">(</span><span class="n">response</span><span class="o">);</span>
         <span class="n">chain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">req</span><span class="o">,</span> <span class="n">wrapper</span><span class="o">);</span>
         <span class="n">String</span> <span class="n">html</span> <span class="o">=</span> <span class="n">wrapper</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">regex</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">response</span><span class="o">.</span><span class="na">getContentType</span><span class="o">()</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">response</span><span class="o">.</span><span class="na">getContentType</span><span class="o">().</span><span class="na">startsWith</span><span class="o">(</span><span class="s">&quot;text/html&quot;</span><span class="o">))</span>
@@ -146,7 +88,7 @@
     <span class="o">}</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">(</span><span class="n">FilterConfig</span> <span class="n">config</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span> <span class="o">{</span>
-        <span class="n">StringBuffer</span> <span class="n">pattern</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>
+        <span class="n">StringBuffer</span> <span class="n">pattern</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">StringBuffer</span><span class="o">();</span>
         <span class="n">appendIf</span><span class="o">(</span><span class="n">config</span><span class="o">,</span> <span class="s">&quot;strip-linestart-whitespace&quot;</span><span class="o">,</span> <span class="n">pattern</span><span class="o">,</span> <span class="s">&quot;(?&lt;=^)[ \\t]+&quot;</span><span class="o">);</span>
         <span class="n">appendIf</span><span class="o">(</span><span class="n">config</span><span class="o">,</span> <span class="s">&quot;strip-lineend-whitespace&quot;</span><span class="o">,</span> <span class="n">pattern</span><span class="o">,</span> <span class="s">&quot;[ \\t]+(?:$)&quot;</span><span class="o">);</span>
         <span class="n">appendIf</span><span class="o">(</span><span class="n">config</span><span class="o">,</span> <span class="s">&quot;strip-multiple-whitespace&quot;</span><span class="o">,</span> <span class="n">pattern</span><span class="o">,</span> <span class="s">&quot;([ \\t](?:[ \\t]))+&quot;</span><span class="o">);</span>
@@ -168,7 +110,7 @@
 
         <span class="kd">public</span> <span class="nf">ResponseWrapper</span><span class="o">(</span><span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
             <span class="kd">super</span><span class="o">(</span><span class="n">response</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">output</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CharArrayWriter</span><span class="o">();</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">output</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">CharArrayWriter</span><span class="o">();</span>
         <span class="o">}</span>
 
         <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
@@ -192,7 +134,7 @@ This regex will match whitespace at the beginning of any line. You&#39;ll notice
 <p><h4><strong></strong>strip-lineend-whitespace - [ \t]+(?:$)</h4>
 Same deal as the linestart regex but this time we have (?:$), a non-capturing positive look-ahead for <em>line end</em>.</p>
 <p>This will pick up any sloppyness in your HTML (I wish I could do this in Microsoft Word when I have to edit other people&#39;s documents, you can&#39;t see it, <strong>but it&#39;s still there</strong>!).</p>
-<p><h4>strip-multiple-whitespace - ([ \t](?:[ \t]))+</h4>
+<p><h4>strip-multiple-whitespace - (<a href="?:[ \\t]"> \t</a>)+</h4>
 Here we have a group of one or more whitespace characters followed by another whitespace character, non-captured, so we don&#39;t strip out all whitespace, remember that we are replacing matches with an empty string so we need the non-capturing second space to leave one intact.</p>
 <p>This is probably going to be the most dangerous if you might have content where whitespace is important, e.g. &lt;script&gt;, &lt;pre&gt;.l</p>
 <p><h4>strip-blank-lines - (\n[ \t]*(?:\n))+</h4>

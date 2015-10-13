@@ -42,65 +42,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            
- 
-                <li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li>
-              
- 
- 
-                <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li>
-              
- 
- 
-                <li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
-              
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+            <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li><li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
           </ul>
         </section>
       </section>
@@ -120,7 +62,7 @@
       <p><img src="https://twimg0-a.akamaihd.net/profile_images/3360574989/92fc472928b444980408147e5e5db2fa_bigger.png" alt="LevelDB"></p>
 <p><a href="https://github.com/rvagg/node-levelup">LevelUP</a> is still quite young and bound to go through some major shifts. It&#39;s best to not be too tied to immature APIs early in a project&#39;s lifetime.</p>
 <p>That said, we&#39;re very interested in stability so we try to keep breaking changes to a minimum. However, we&#39;re about to publish version 0.9 and there&#39;s one change that&#39;s not exactly a &quot;breaking&quot; change in the normal sense, but it is something that I need to explain because it will impact on almost everyone currently using LevelUP.</p>
-<h3>Severing the dependency on LevelDOWN</h3>
+<h3 id="severing-the-dependency-on-leveldown">Severing the dependency on LevelDOWN</h3>
 <p>LevelUP depends on <a href="https://github.com/rvagg/node-leveldown/">LevelDOWN</a> to do its <em>LevelDB thing</em>. LevelDOWN was once part of LevelUP until we split it off to a discrete project that focuses entirely on acting as a direct C++ bridge between LevelDB and Node. We get to focus on making LevelUP an awesome LevelDB-ish interface without being tied directly to LevelDB implementation details (e.g. Iterators vs Streams).</p>
 <p>In fact, a new project was spawned to define the LevelDOWN interface that LevelUP requires. <a href="https://github.com/rvagg/node-abstract-leveldown">AbstractLevelDOWN</a> is a set of strict tests for the functionality that LevelUP uses and it also implements a basic abstract shell that can be extended to create additional back-ends for LevelUP.</p>
 <p>So far, there are 3 projects worth mentioning that extend AbstractLevelDOWN:</p>
@@ -139,7 +81,7 @@
 </pre></div>
 
 <p>From version 0.9 onwards, you&#39;ll need to do this, or you&#39;ll see an (informative) error.</p>
-<h3>Introducing &quot;Level&quot;</h3>
+<h3 id="introducing-level-">Introducing &quot;Level&quot;</h3>
 <p>To make life easier, we&#39;re publishing an additional package in npm that will make this easier by bundling both LevelUP and LevelDOWN as dependencies and exposing LevelUP directly. The <strong><a href="https://github.com/level/level">Level</a></strong> package is a very simple wrapper that exists purely as a convenience. It&#39;ll track the same versioning as LevelUP so it&#39;s a straight substitution.</p>
 <div class="highlight"><pre><span class="nv">$ </span>npm install level
 </pre></div>
@@ -150,7 +92,7 @@
 <span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;yay!&#39;</span><span class="p">,</span> <span class="s1">&#39;it works!&#39;</span><span class="p">)</span>
 </pre></div>
 
-<h3>Switching things up</h3>
+<h3 id="switching-things-up">Switching things up</h3>
 <p>Now we have a properly pluggable back-end, expect to see a growing array of choice and innovation. The most exciting space at the moment is browser-land. Consider <strong>level.js</strong>:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">levelup</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;levelup&#39;</span><span class="p">)</span>
   <span class="p">,</span> <span class="nx">leveljs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;level-js&#39;</span><span class="p">)</span>
