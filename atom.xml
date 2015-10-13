@@ -3,20 +3,62 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>r.va.gg</title>
  
-  <link href="http://r.va.gg" />
-  <updated>2015-10-13T05:48:40.989Z</updated>
-  <id>http://r.va.gg/</id>
+  <link href="https://r.va.gg" />
+  <updated>2015-10-13T09:44:05.451Z</updated>
+  <id>https://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
   </author>
-  <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/atom+xml" href="http://r.va.gg/feed.xml" />
+  <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/atom+xml" href="https://r.va.gg/feed.xml" />
 
   
     <entry>
-      <title>Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</title>
-      <link href="http://r.va.gg/2014/06/why-i-dont-use-nodes-core-stream-module.html" />
+      <title>NodeSchool comes to Australia</title>
+      <link href="https://r.va.gg/2014/06/nodeschool-comes-to-australia.html" />
       <updated>2014-06-14T00:00:00.000Z</updated>
-      <id>http://r.va.gg/2014/06/why-i-dont-use-nodes-core-stream-module.html</id>
+      <id>https://r.va.gg/2014/06/nodeschool-comes-to-australia.html</id>
+      <content type="html">
+        &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;http://nodeschool.io&quot;&gt;NodeSchool&lt;/a&gt;&lt;/strong&gt; has its genesis ultimately at NodeConf 2013 where &lt;a href=&quot;https://twitter.com/substack&quot;&gt;@substack&lt;/a&gt; introduced us to &lt;a href=&quot;https://github.com/substack/stream-adventure&quot;&gt;stream-adevnture&lt;/a&gt;. I took the concept home to &lt;a href=&quot;http://campjs.com/&quot;&gt;CampJS&lt;/a&gt; and wrote &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/learnyounode/&quot;&gt;learnyounode&lt;/a&gt;&lt;/strong&gt; for the &lt;em&gt;introduction to Node.js&lt;/em&gt; workshop I was to run. As part of the process I extracted a package called &lt;a href=&quot;https://github.com/rvagg/workshopper&quot;&gt;workshopper&lt;/a&gt; to do the work of making a terminal workshop experience. Most of the logic originally came from stream-adventure. A short time after CampJS, I created &lt;a href=&quot;https://github.com/rvagg/levelmeup&quot;&gt;levelmeup&lt;/a&gt; for &lt;a href=&quot;http://nodeconf.eu/&quot;&gt;NodeConf.eu&lt;/a&gt; and suddenly we had a selection of what have come to be known as &lt;em&gt;&quot;workshoppers&quot;&lt;/em&gt;. At NodeConf.eu, &lt;a href=&quot;https://twitter.com/brianloveswords&quot;&gt;@brianloveswords&lt;/a&gt; suggested the NodeSchool concept and registered the &lt;a href=&quot;http://nodeschool.io&quot;&gt;domain&lt;/a&gt;, @substack provided the artwork and the ball was rolling.&lt;/p&gt;
+&lt;p&gt;Today, workshopper is depended on by 22 packages in npm, most of which are workshoppers that you can install and use to learn aspects of Node.js or JavaScript in general. The curated list of usable workshoppers is maintained at &lt;a href=&quot;http://nodeschool.io&quot;&gt;nodeschool.io&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;learnyounode itself is now being downloaded at a rate of roughly 200 &lt;em&gt;per day&lt;/em&gt;. That&#39;s at least 200 more people each day wanting to learn how to &lt;em&gt;do Node.js&lt;/em&gt;.&lt;/p&gt;
+&lt;div style=&quot;margin: 0 auto; text-align: center;&quot;&gt;
+
+&lt;img src=&quot;https://nodei.co/npm-dl/learnyounode.png?months=6&quot; alt=&quot;learnyounode downloads&quot;&gt;
+
+&lt;/div&gt;
+
+&lt;p&gt;I can&#39;t recall exactly how &lt;em&gt;&quot;NodeSchool IRL&quot;&lt;/em&gt; events started but it was probably &lt;a href=&quot;http://twitter.com/maxogden&quot;&gt;@maxogden&lt;/a&gt; who has been responsible for a large number of these events. There have now been over 30 of these events around the world and the momentum is only picking up steam. The beauty of this format is that it&#39;s low-cost and low-effort to make it happen. All you need is a venue where nerds can show up with their computers and some basic guidance. There have even been a few events that were without experienced Node.js mentors but that&#39;s no great barrier as the lessons are largely self-guided and work particularly well when pairs or groups of people work together on solutions.&lt;/p&gt;
+&lt;div style=&quot;margin: 0 auto; text-align: center;&quot;&gt;
+
+&lt;img src=&quot;https://raw.githubusercontent.com/nodeschool/nodeschool.github.io/master/images/nodeschool-hex.png&quot; style=&quot;width: 300px;&quot;&gt;
+
+&lt;/div&gt;
+
+&lt;h2 id=&quot;nodeschool-comes-to-australia&quot;&gt;NodeSchool comes to Australia&lt;/h2&gt;
+&lt;p&gt;It&#39;s surprising that so far, given all of the NodeSchool activity around the world, that we haven&#39;t had a single NodeSchool event in Australia. CampJS had learnyounode last year and this year there were &lt;a href=&quot;https://github.com/nodeschool/discussions/issues/323&quot;&gt;3 brand new workshoppers&lt;/a&gt; introduced there, so it&#39;s the closest thing we&#39;ve had.&lt;/p&gt;
+&lt;p&gt;Next weekend, on the &lt;strong&gt;21st of June&lt;/strong&gt;, we are attempting a &lt;strong&gt;coordinated Australian NodeSchool&lt;/strong&gt; event. At the moment, that coordination amounts to having events hosted in Sydney, Melbourne and Hobart, unfortunately the timing has been difficult for Brisbane and we haven&#39;t managed to bring anyone else out of the woodwork. But, we will be attempting to do this regularly, plus we&#39;d like to encourage meet-up hosts to use the format now and again with their groups.&lt;/p&gt;
+&lt;h2 id=&quot;nodeschool-in-sydney&quot;&gt;NodeSchool in Sydney&lt;/h2&gt;
+&lt;p&gt;I&#39;ll be at NodeSchool in Sydney next weekend. It will be proudly hosted by &lt;a href=&quot;http://nicta.com.au/&quot;&gt;NICTA&lt;/a&gt; who have a space for up to 60 people. NICTA are currently doing some interesting work with WebRTC, you should catch up with &lt;a href=&quot;https://twitter.com/DamonOehlman&quot;&gt;@DamonOehlman&lt;/a&gt; if this is something you&#39;re interested in. &lt;a href=&quot;https://www.tabcorp.com.au/&quot;&gt;Tabcorp&lt;/a&gt; will also be a major sponsor of the event. Tabcorp have been building a new digital team with the back-end almost entirely in Node.js. They are also doing a great job engaging and contributing to existing and new open source projects. They are also hiring so be sure to catch up with &lt;a href=&quot;https://twitter.com/romainprieto&quot;&gt;@romainprieto&lt;/a&gt; if you&#39;re doing PHP, Java or some other abomination and want to be doing Node!&lt;/p&gt;
+&lt;p&gt;Thanks to the sponsorship, we&#39;ll be able to provide some catering for the event. Currently we&#39;re looking at providing lunch but we may be expanding that to providing some breakfast treats. We&#39;ll also be providing refreshments for everyone attending throughout the day.&lt;/p&gt;
+&lt;p&gt;Start time is 9.30am, end is 4pm. The plan is to spend the first half of the day doing introductory Node.js which will mainly mean working through learnyounode. The second half of the day will be less structured and we&#39;ll encourage attendees to work on other workshoppers that they find interesting. Thankfully we have some amazing Node.js programmers in Sydney and they&#39;ll be available as mentors.&lt;/p&gt;
+&lt;p&gt;We are currently &lt;em&gt;selling&lt;/em&gt; tickets for $5, the money will contribute towards the event, there is no profit involved here. We don&#39;t &lt;em&gt;need&lt;/em&gt; to charge for the event but given the generally dismal turnout for tech meet-ups that are free we feel that providing a small commitment barrier will help us maximise the use of the space we have available. &lt;strong&gt;If the money is a barrier for you please contact us!&lt;/strong&gt; We don&#39;t want anyone to miss out. Also, we have special &quot;mentor&quot; tickets available for experienced Node.js programmers who are able to assist. If you think you fit into this category please contact us also.&lt;/p&gt;
+&lt;p&gt;You can &lt;strong&gt;sign up for Sydney NodeSchool at &lt;a href=&quot;https://ti.to/nodeschool/sydney-june-2014/&quot;&gt;https://ti.to/nodeschool/sydney-june-2014/&lt;/a&gt;&lt;/strong&gt;. If you are tempted, don&#39;t sit on the fence because spots are limited and as of writing the tickets are almost 1/2 gone.&lt;/p&gt;
+&lt;h2 id=&quot;nodeschool-in-melbourne&quot;&gt;NodeSchool in Melbourne&lt;/h2&gt;
+&lt;p&gt;NodeSchool in Melbourne is being supported by &lt;a href=&quot;http://www.thoughtworks.com/&quot;&gt;ThoughtWorks&lt;/a&gt; who have been doing Node in Australia for a while now. If you&#39;re interested in their services or want to chat about employment opportunities you should catch up with &lt;a href=&quot;https://github.com/lfendy&quot;&gt;Liauw Fendy&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://twitter.com/sidorares&quot;&gt;@sidorares&lt;/a&gt; is putting in a large amount of the legwork in to Melbourne&#39;s event. He was a major contributor to the original learnyounode and is a huge asset to the Melbourne Node community. Along with Andrey, Melbourne has large number of expert Node.js hackers, many of who will be available as mentors. This will be a treat for Melbournians so this is not something you should miss out on if you are in town! Potential mentors should contact Andrey.&lt;/p&gt;
+&lt;p&gt;You can &lt;strong&gt;sign up for Melbourne NodeSchool at &lt;a href=&quot;https://ti.to/nodeschool/melbourne-june-2014/&quot;&gt;https://ti.to/nodeschool/melbourne-june-2014/&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;nodeschool-in-hobart&quot;&gt;NodeSchool in Hobart&lt;/h2&gt;
+&lt;p&gt;Hobart is lucky to have &lt;a href=&quot;http://joshgilli.es/&quot;&gt;@joshgillies&lt;/a&gt;, a local tech-community organiser responsible for many Tasmanian web and JavaScript events. The event is being hosted at &lt;a href=&quot;http://typewriterfactory.com/&quot;&gt;The Typewriter Factory&lt;/a&gt;, a business workspace that Josh helps run. Sponsorship is being provided by &lt;a href=&quot;http://www.acs.org.au/&quot;&gt;ACS&lt;/a&gt; who will be helping support the venue and also provide some catering.&lt;/p&gt;
+&lt;p&gt;You can &lt;strong&gt;sign up for Hobart NodeSchool at &lt;a href=&quot;https://ti.to/nodeschool/hobart-june-2014/&quot;&gt;https://ti.to/nodeschool/hobart-june-2014/&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+      </content>
+    </entry>
+  
+    <entry>
+      <title>Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</title>
+      <link href="https://r.va.gg/2014/06/why-i-dont-use-nodes-core-stream-module.html" />
+      <updated>2014-06-14T00:00:00.000Z</updated>
+      <id>https://r.va.gg/2014/06/why-i-dont-use-nodes-core-stream-module.html</id>
       <content type="html">
         &lt;p&gt;&lt;em&gt;This article was originally offered to nearForm for publishing and appeared for some time on their blog from early 2014 (at this URL: &lt;a href=&quot;http://www.nearform.com/nodecrunch/dont-use-nodes-core-stream-module&quot;&gt;http://www.nearform.com/nodecrunch/dont-use-nodes-core-stream-module&lt;/a&gt;). It has since been deleted. I&#39;d rather not speculate about the reasons for the deletion but I believe the article contains a very important core message so I&#39;m now republishing it here.&lt;/em&gt;&lt;/p&gt;
 &lt;h2 id=&quot;tl-dr&quot;&gt;TL;DR&lt;/h2&gt;
@@ -174,52 +216,10 @@ without its edge cases which can break code designed against the pure 0.10 versi
     </entry>
   
     <entry>
-      <title>NodeSchool comes to Australia</title>
-      <link href="http://r.va.gg/2014/06/nodeschool-comes-to-australia.html" />
-      <updated>2014-06-14T00:00:00.000Z</updated>
-      <id>http://r.va.gg/2014/06/nodeschool-comes-to-australia.html</id>
-      <content type="html">
-        &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;http://nodeschool.io&quot;&gt;NodeSchool&lt;/a&gt;&lt;/strong&gt; has its genesis ultimately at NodeConf 2013 where &lt;a href=&quot;https://twitter.com/substack&quot;&gt;@substack&lt;/a&gt; introduced us to &lt;a href=&quot;https://github.com/substack/stream-adventure&quot;&gt;stream-adevnture&lt;/a&gt;. I took the concept home to &lt;a href=&quot;http://campjs.com/&quot;&gt;CampJS&lt;/a&gt; and wrote &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/learnyounode/&quot;&gt;learnyounode&lt;/a&gt;&lt;/strong&gt; for the &lt;em&gt;introduction to Node.js&lt;/em&gt; workshop I was to run. As part of the process I extracted a package called &lt;a href=&quot;https://github.com/rvagg/workshopper&quot;&gt;workshopper&lt;/a&gt; to do the work of making a terminal workshop experience. Most of the logic originally came from stream-adventure. A short time after CampJS, I created &lt;a href=&quot;https://github.com/rvagg/levelmeup&quot;&gt;levelmeup&lt;/a&gt; for &lt;a href=&quot;http://nodeconf.eu/&quot;&gt;NodeConf.eu&lt;/a&gt; and suddenly we had a selection of what have come to be known as &lt;em&gt;&quot;workshoppers&quot;&lt;/em&gt;. At NodeConf.eu, &lt;a href=&quot;https://twitter.com/brianloveswords&quot;&gt;@brianloveswords&lt;/a&gt; suggested the NodeSchool concept and registered the &lt;a href=&quot;http://nodeschool.io&quot;&gt;domain&lt;/a&gt;, @substack provided the artwork and the ball was rolling.&lt;/p&gt;
-&lt;p&gt;Today, workshopper is depended on by 22 packages in npm, most of which are workshoppers that you can install and use to learn aspects of Node.js or JavaScript in general. The curated list of usable workshoppers is maintained at &lt;a href=&quot;http://nodeschool.io&quot;&gt;nodeschool.io&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;learnyounode itself is now being downloaded at a rate of roughly 200 &lt;em&gt;per day&lt;/em&gt;. That&#39;s at least 200 more people each day wanting to learn how to &lt;em&gt;do Node.js&lt;/em&gt;.&lt;/p&gt;
-&lt;div style=&quot;margin: 0 auto; text-align: center;&quot;&gt;
-
-&lt;img src=&quot;https://nodei.co/npm-dl/learnyounode.png?months=6&quot; alt=&quot;learnyounode downloads&quot;&gt;
-
-&lt;/div&gt;
-
-&lt;p&gt;I can&#39;t recall exactly how &lt;em&gt;&quot;NodeSchool IRL&quot;&lt;/em&gt; events started but it was probably &lt;a href=&quot;http://twitter.com/maxogden&quot;&gt;@maxogden&lt;/a&gt; who has been responsible for a large number of these events. There have now been over 30 of these events around the world and the momentum is only picking up steam. The beauty of this format is that it&#39;s low-cost and low-effort to make it happen. All you need is a venue where nerds can show up with their computers and some basic guidance. There have even been a few events that were without experienced Node.js mentors but that&#39;s no great barrier as the lessons are largely self-guided and work particularly well when pairs or groups of people work together on solutions.&lt;/p&gt;
-&lt;div style=&quot;margin: 0 auto; text-align: center;&quot;&gt;
-
-&lt;img src=&quot;https://raw.githubusercontent.com/nodeschool/nodeschool.github.io/master/images/nodeschool-hex.png&quot; style=&quot;width: 300px;&quot;&gt;
-
-&lt;/div&gt;
-
-&lt;h2 id=&quot;nodeschool-comes-to-australia&quot;&gt;NodeSchool comes to Australia&lt;/h2&gt;
-&lt;p&gt;It&#39;s surprising that so far, given all of the NodeSchool activity around the world, that we haven&#39;t had a single NodeSchool event in Australia. CampJS had learnyounode last year and this year there were &lt;a href=&quot;https://github.com/nodeschool/discussions/issues/323&quot;&gt;3 brand new workshoppers&lt;/a&gt; introduced there, so it&#39;s the closest thing we&#39;ve had.&lt;/p&gt;
-&lt;p&gt;Next weekend, on the &lt;strong&gt;21st of June&lt;/strong&gt;, we are attempting a &lt;strong&gt;coordinated Australian NodeSchool&lt;/strong&gt; event. At the moment, that coordination amounts to having events hosted in Sydney, Melbourne and Hobart, unfortunately the timing has been difficult for Brisbane and we haven&#39;t managed to bring anyone else out of the woodwork. But, we will be attempting to do this regularly, plus we&#39;d like to encourage meet-up hosts to use the format now and again with their groups.&lt;/p&gt;
-&lt;h2 id=&quot;nodeschool-in-sydney&quot;&gt;NodeSchool in Sydney&lt;/h2&gt;
-&lt;p&gt;I&#39;ll be at NodeSchool in Sydney next weekend. It will be proudly hosted by &lt;a href=&quot;http://nicta.com.au/&quot;&gt;NICTA&lt;/a&gt; who have a space for up to 60 people. NICTA are currently doing some interesting work with WebRTC, you should catch up with &lt;a href=&quot;https://twitter.com/DamonOehlman&quot;&gt;@DamonOehlman&lt;/a&gt; if this is something you&#39;re interested in. &lt;a href=&quot;https://www.tabcorp.com.au/&quot;&gt;Tabcorp&lt;/a&gt; will also be a major sponsor of the event. Tabcorp have been building a new digital team with the back-end almost entirely in Node.js. They are also doing a great job engaging and contributing to existing and new open source projects. They are also hiring so be sure to catch up with &lt;a href=&quot;https://twitter.com/romainprieto&quot;&gt;@romainprieto&lt;/a&gt; if you&#39;re doing PHP, Java or some other abomination and want to be doing Node!&lt;/p&gt;
-&lt;p&gt;Thanks to the sponsorship, we&#39;ll be able to provide some catering for the event. Currently we&#39;re looking at providing lunch but we may be expanding that to providing some breakfast treats. We&#39;ll also be providing refreshments for everyone attending throughout the day.&lt;/p&gt;
-&lt;p&gt;Start time is 9.30am, end is 4pm. The plan is to spend the first half of the day doing introductory Node.js which will mainly mean working through learnyounode. The second half of the day will be less structured and we&#39;ll encourage attendees to work on other workshoppers that they find interesting. Thankfully we have some amazing Node.js programmers in Sydney and they&#39;ll be available as mentors.&lt;/p&gt;
-&lt;p&gt;We are currently &lt;em&gt;selling&lt;/em&gt; tickets for $5, the money will contribute towards the event, there is no profit involved here. We don&#39;t &lt;em&gt;need&lt;/em&gt; to charge for the event but given the generally dismal turnout for tech meet-ups that are free we feel that providing a small commitment barrier will help us maximise the use of the space we have available. &lt;strong&gt;If the money is a barrier for you please contact us!&lt;/strong&gt; We don&#39;t want anyone to miss out. Also, we have special &quot;mentor&quot; tickets available for experienced Node.js programmers who are able to assist. If you think you fit into this category please contact us also.&lt;/p&gt;
-&lt;p&gt;You can &lt;strong&gt;sign up for Sydney NodeSchool at &lt;a href=&quot;https://ti.to/nodeschool/sydney-june-2014/&quot;&gt;https://ti.to/nodeschool/sydney-june-2014/&lt;/a&gt;&lt;/strong&gt;. If you are tempted, don&#39;t sit on the fence because spots are limited and as of writing the tickets are almost 1/2 gone.&lt;/p&gt;
-&lt;h2 id=&quot;nodeschool-in-melbourne&quot;&gt;NodeSchool in Melbourne&lt;/h2&gt;
-&lt;p&gt;NodeSchool in Melbourne is being supported by &lt;a href=&quot;http://www.thoughtworks.com/&quot;&gt;ThoughtWorks&lt;/a&gt; who have been doing Node in Australia for a while now. If you&#39;re interested in their services or want to chat about employment opportunities you should catch up with &lt;a href=&quot;https://github.com/lfendy&quot;&gt;Liauw Fendy&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://twitter.com/sidorares&quot;&gt;@sidorares&lt;/a&gt; is putting in a large amount of the legwork in to Melbourne&#39;s event. He was a major contributor to the original learnyounode and is a huge asset to the Melbourne Node community. Along with Andrey, Melbourne has large number of expert Node.js hackers, many of who will be available as mentors. This will be a treat for Melbournians so this is not something you should miss out on if you are in town! Potential mentors should contact Andrey.&lt;/p&gt;
-&lt;p&gt;You can &lt;strong&gt;sign up for Melbourne NodeSchool at &lt;a href=&quot;https://ti.to/nodeschool/melbourne-june-2014/&quot;&gt;https://ti.to/nodeschool/melbourne-june-2014/&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;nodeschool-in-hobart&quot;&gt;NodeSchool in Hobart&lt;/h2&gt;
-&lt;p&gt;Hobart is lucky to have &lt;a href=&quot;http://joshgilli.es/&quot;&gt;@joshgillies&lt;/a&gt;, a local tech-community organiser responsible for many Tasmanian web and JavaScript events. The event is being hosted at &lt;a href=&quot;http://typewriterfactory.com/&quot;&gt;The Typewriter Factory&lt;/a&gt;, a business workspace that Josh helps run. Sponsorship is being provided by &lt;a href=&quot;http://www.acs.org.au/&quot;&gt;ACS&lt;/a&gt; who will be helping support the venue and also provide some catering.&lt;/p&gt;
-&lt;p&gt;You can &lt;strong&gt;sign up for Hobart NodeSchool at &lt;a href=&quot;https://ti.to/nodeschool/hobart-june-2014/&quot;&gt;https://ti.to/nodeschool/hobart-june-2014/&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
-
-      </content>
-    </entry>
-  
-    <entry>
       <title>Testing code against many Node versions with Docker</title>
-      <link href="http://r.va.gg/2013/11/testing-code-against-many-node-versions-with-docker.html" />
+      <link href="https://r.va.gg/2013/11/testing-code-against-many-node-versions-with-docker.html" />
       <updated>2013-11-26T00:00:00.000Z</updated>
-      <id>http://r.va.gg/2013/11/testing-code-against-many-node-versions-with-docker.html</id>
+      <id>https://r.va.gg/2013/11/testing-code-against-many-node-versions-with-docker.html</id>
       <content type="html">
         &lt;p&gt;I haven&#39;t found reason to play with &lt;a href=&quot;http://www.docker.io&quot;&gt;Docker&lt;/a&gt; until now, but I&#39;ve finally came up with an excellent use-case.&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/rvagg/nan&quot;&gt;NAN&lt;/a&gt; is a project that helps build native Node.js add-ons while maintaining compatibility with Node and V8 from Node versions 0.8 onwards. V8 is currently undergoing major internal changes which is making add-on development very difficult; NAN&#39;s purpose is to abstract that pain. Instead of having to manage the difficulties of keeping your code compatible across Node/V8 versions, NAN does it for you. But this means that we have to be sure to keep NAN tested and compatible with all of the versions it claims to support.&lt;/p&gt;
@@ -336,9 +336,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
   
     <entry>
       <title>LevelDOWN v0.10 / managing GC in native V8 programming</title>
-      <link href="http://r.va.gg/2013/11/leveldown-v0.10-managing-gc-in-native-v8-programming.html" />
+      <link href="https://r.va.gg/2013/11/leveldown-v0.10-managing-gc-in-native-v8-programming.html" />
       <updated>2013-11-18T00:00:00.000Z</updated>
-      <id>http://r.va.gg/2013/11/leveldown-v0.10-managing-gc-in-native-v8-programming.html</id>
+      <id>https://r.va.gg/2013/11/leveldown-v0.10-managing-gc-in-native-v8-programming.html</id>
       <content type="html">
         &lt;p&gt;&lt;img src=&quot;https://twimg0-a.akamaihd.net/profile_images/3360574989/92fc472928b444980408147e5e5db2fa_bigger.png&quot; alt=&quot;LevelDB&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Today we released version 0.10 of &lt;a href=&quot;https://github.com/rvagg/node-leveldown&quot;&gt;LevelDOWN&lt;/a&gt;. LevelDOWN is the package that directly binds LevelDB into Node-land. It&#39;s mainly C++ and is a fairly raw &amp; direct interface to LevelDB. &lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt; is the package that we recommend most people use for LevelDB in Node as it takes LevelDOWN and makes it much more Node-friendly, including the addition of those lovely &lt;em&gt;ReadStreams&lt;/em&gt;.&lt;/p&gt;
@@ -463,9 +463,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
   
     <entry>
       <title>All the levels!</title>
-      <link href="http://r.va.gg/2013/10/all-the-levels.html" />
+      <link href="https://r.va.gg/2013/10/all-the-levels.html" />
       <updated>2013-10-09T00:00:00.000Z</updated>
-      <id>http://r.va.gg/2013/10/all-the-levels.html</id>
+      <id>https://r.va.gg/2013/10/all-the-levels.html</id>
       <content type="html">
         &lt;p&gt;When we completely separated &lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt; and &lt;a href=&quot;https://github.com/rvagg/node-leveldown&quot;&gt;LevelDOWN&lt;/a&gt; so that installing LevelUP didn&#39;t automatically get you LevelDOWN, we set up a new package called &lt;strong&gt;&lt;a href=&quot;https://github.com/Level/level&quot;&gt;Level&lt;/a&gt;&lt;/strong&gt; that has them both as a dependency so you just need to do &lt;code&gt;var level = require(&#39;level&#39;)&lt;/code&gt; and everything is done for you.&lt;/p&gt;
 &lt;p&gt;But, we now have more than just the vanilla (Google) LevelDB in LevelDOWN. We also have a HyperLevelDB version and a Basho fork. These are maintained on branches in the LevelDOWN repo and are usually released now every time a new LevelDOWN is released. They are called &lt;strong&gt;leveldown-hyper&lt;/strong&gt; and &lt;strong&gt;leveldown-basho&lt;/strong&gt; in npm but you need to plug them in to LevelUP yourself to make them work. We also have &lt;a href=&quot;https://github.com/rvagg/lmdb&quot;&gt;Node LMDB&lt;/a&gt; that&#39;s LevelDOWN compatible and a few others.&lt;/p&gt;
@@ -499,9 +499,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
   
     <entry>
       <title>Should I use a single LevelDB or many to hold my data?</title>
-      <link href="http://r.va.gg/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html" />
+      <link href="https://r.va.gg/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html" />
       <updated>2013-10-03T00:00:00.000Z</updated>
-      <id>http://r.va.gg/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html</id>
+      <id>https://r.va.gg/2013/10/should-i-use-a-single-leveldb-or-many-to-hold-my-data.html</id>
       <content type="html">
         &lt;p&gt;This is a long overdue post, so long in fact that I can&#39;t remember who I promised to do this for! Regardless, I keep on having discussions around this topic so I thought it worthwhile putting down some notes on what I believe to be the factors you should consider when making this decision.&lt;/p&gt;
 &lt;h3 id=&quot;what-s-the-question-&quot;&gt;What&#39;s the question?&lt;/h3&gt;
@@ -538,9 +538,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
   
     <entry>
       <title>Primitives for JS Databases (an LXJS adventure)</title>
-      <link href="http://r.va.gg/2013/10/primitives-for-js-databases-an-lxjs-adventure.html" />
+      <link href="https://r.va.gg/2013/10/primitives-for-js-databases-an-lxjs-adventure.html" />
       <updated>2013-10-03T00:00:00.000Z</updated>
-      <id>http://r.va.gg/2013/10/primitives-for-js-databases-an-lxjs-adventure.html</id>
+      <id>https://r.va.gg/2013/10/primitives-for-js-databases-an-lxjs-adventure.html</id>
       <content type="html">
         &lt;p&gt;I gave a talk yesterday at &lt;strong&gt;&lt;a href=&quot;http://2013.lxjs.org&quot;&gt;LXJS&lt;/a&gt;&lt;/strong&gt; yesterday in the &lt;em&gt;&quot;Infrastructure.js&quot;&lt;/em&gt; block and tried to talk about JavaScript Database Primitives; i.e. the basic building blocks we have landed on for building more complex database solutions in JavaScript.&lt;/p&gt;
 &lt;p&gt;The talk certainly wasn&#39;t as good or clear as I wanted it to be, it worked much better in my head! A huge venue with over 300 talented JavaScripters, an absolutely massive screen, bright lights and loud amplification got the better of me and I wasn&#39;t able to pull the material together how I wanted to. The introvert within me is telling me to become a recluse for a little while just to recover! My &lt;em&gt;hope&lt;/em&gt; is that at least one or two people are inspired to give &lt;em&gt;database hacking&lt;/em&gt; a go because it&#39;s really not that difficult once you get your head around the primitives.&lt;/p&gt;
@@ -560,9 +560,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
   
     <entry>
       <title>NodeConf.eu</title>
-      <link href="http://r.va.gg/2013/09/nodeconf.eu.html" />
+      <link href="https://r.va.gg/2013/09/nodeconf.eu.html" />
       <updated>2013-09-27T00:00:00.000Z</updated>
-      <id>http://r.va.gg/2013/09/nodeconf.eu.html</id>
+      <id>https://r.va.gg/2013/09/nodeconf.eu.html</id>
       <content type="html">
         &lt;p&gt;Wow, &lt;strong&gt;&lt;a href=&quot;http://nodeconf.eu/&quot;&gt;NodeConf.eu&lt;/a&gt;&lt;/strong&gt; was certainly a once-in-a-lifetime event ... although there&#39;s talk of a repeat performance next year (don&#39;t miss the chance when it comes around!).&lt;/p&gt;
 &lt;div style=&quot;text-align: center;&quot;&gt;
@@ -656,9 +656,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
   
     <entry>
       <title>Learn You The Node.js</title>
-      <link href="http://r.va.gg/2013/08/learn-you-the-node.js.html" />
+      <link href="https://r.va.gg/2013/08/learn-you-the-node.js.html" />
       <updated>2013-08-14T00:00:00.000Z</updated>
-      <id>http://r.va.gg/2013/08/learn-you-the-node.js.html</id>
+      <id>https://r.va.gg/2013/08/learn-you-the-node.js.html</id>
       <content type="html">
         &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;http://campjs.com/&quot;&gt;CampJS&lt;/a&gt;&lt;/strong&gt; has just finished, with a bigger crowd than last time around. It was lots of fun, and as usual, these events are more about meeting the people I collaborate, and socialise with online than anything else. There was a particularly large turn-out of the hackers on #polyhack, our Australian programmers channel on Freenode. Even &lt;a href=&quot;https://twitter.com/mwotton&quot;&gt;@mwotton&lt;/a&gt;, our resident Haskell-troll was there! Lots of photos and news can be found on &lt;a href=&quot;http://storify.com/campjs/campjs-ii&quot;&gt;Storify&lt;/a&gt;. The next one will likely be near Melbourne in February some time and I highly recommend it if you can get there.&lt;/p&gt;
 &lt;h3 id=&quot;learn-you-the-node-js-for-much-win-presentation-&quot;&gt;Learn You The Node.js For Much Win (presentation)&lt;/h3&gt;
@@ -698,9 +698,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
   
     <entry>
       <title>LevelDOWN Alternatives</title>
-      <link href="http://r.va.gg/2013/06/leveldown-alternatives.html" />
+      <link href="https://r.va.gg/2013/06/leveldown-alternatives.html" />
       <updated>2013-06-07T00:00:00.000Z</updated>
-      <id>http://r.va.gg/2013/06/leveldown-alternatives.html</id>
+      <id>https://r.va.gg/2013/06/leveldown-alternatives.html</id>
       <content type="html">
         &lt;p&gt;Since &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt;&lt;/strong&gt; v0.9, &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/node-leveldown/&quot;&gt;LevelDOWN&lt;/a&gt;&lt;/strong&gt; has been an optional dependency, allowing you to switch in alternative back-ends.&lt;/p&gt;
 &lt;p&gt;We have &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/node-memdown&quot;&gt;MemDOWN&lt;/a&gt;&lt;/strong&gt;, a pure in-memory data-store, allowing you to run LevelUP against transient, and very fast storage.&lt;/p&gt;
@@ -758,9 +758,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
   
     <entry>
       <title>LevelUP v0.9 Released</title>
-      <link href="http://r.va.gg/2013/05/levelup-v0.9-released.html" />
+      <link href="https://r.va.gg/2013/05/levelup-v0.9-released.html" />
       <updated>2013-05-21T00:00:00.000Z</updated>
-      <id>http://r.va.gg/2013/05/levelup-v0.9-released.html</id>
+      <id>https://r.va.gg/2013/05/levelup-v0.9-released.html</id>
       <content type="html">
         &lt;p&gt;&lt;img src=&quot;https://twimg0-a.akamaihd.net/profile_images/3360574989/92fc472928b444980408147e5e5db2fa_bigger.png&quot; alt=&quot;LevelDB&quot;&gt;&lt;/p&gt;
 &lt;p&gt;As per my &lt;a href=&quot;http://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html&quot;&gt;previous post&lt;/a&gt;, &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt; v0.9 has been released&lt;/strong&gt;!&lt;/p&gt;
@@ -824,9 +824,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
   
     <entry>
       <title>LevelUP v0.9 - Some Major Changes</title>
-      <link href="http://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html" />
+      <link href="https://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html" />
       <updated>2013-05-20T00:00:00.000Z</updated>
-      <id>http://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html</id>
+      <id>https://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html</id>
       <content type="html">
         &lt;p&gt;&lt;img src=&quot;https://twimg0-a.akamaihd.net/profile_images/3360574989/92fc472928b444980408147e5e5db2fa_bigger.png&quot; alt=&quot;LevelDB&quot;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt; is still quite young and bound to go through some major shifts. It&#39;s best to not be too tied to immature APIs early in a project&#39;s lifetime.&lt;/p&gt;
@@ -884,9 +884,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
   
     <entry>
       <title>Node.ninjas Presentation - LevelDB and Node Sitting in a Tree</title>
-      <link href="http://r.va.gg/2013/05/node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree.html" />
+      <link href="https://r.va.gg/2013/05/node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree.html" />
       <updated>2013-05-09T00:00:00.000Z</updated>
-      <id>http://r.va.gg/2013/05/node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree.html</id>
+      <id>https://r.va.gg/2013/05/node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree.html</id>
       <content type="html">
         &lt;p&gt;I&#39;m giving a presentation at &lt;a href=&quot;http://www.meetup.com/sydney-node-ninjas/&quot;&gt;Node.ninjas&lt;/a&gt; tonight in Sydney. I&#39;ve put together a talk about LevelDB and Node that covers:&lt;/p&gt;
 &lt;ol&gt;
@@ -911,9 +911,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
   
     <entry>
       <title>LevelDB and Node: Getting Up and Running</title>
-      <link href="http://r.va.gg/2013/05/leveldb-and-node-getting-up-and-running.html" />
+      <link href="https://r.va.gg/2013/05/leveldb-and-node-getting-up-and-running.html" />
       <updated>2013-05-04T00:00:00.000Z</updated>
-      <id>http://r.va.gg/2013/05/leveldb-and-node-getting-up-and-running.html</id>
+      <id>https://r.va.gg/2013/05/leveldb-and-node-getting-up-and-running.html</id>
       <content type="html">
         &lt;p&gt;This is the second article in a three-part series on LevelDB and how it can be used in Node.&lt;/p&gt;
 &lt;ul class=&quot;parts&quot;&gt;
@@ -935,9 +935,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
   
     <entry>
       <title>LevelDB and Node: What is LevelDB Anyway?</title>
-      <link href="http://r.va.gg/2013/05/leveldb-and-node-what-is-leveldb-anyway.html" />
+      <link href="https://r.va.gg/2013/05/leveldb-and-node-what-is-leveldb-anyway.html" />
       <updated>2013-05-01T06:30:00.000Z</updated>
-      <id>http://r.va.gg/2013/05/leveldb-and-node-what-is-leveldb-anyway.html</id>
+      <id>https://r.va.gg/2013/05/leveldb-and-node-what-is-leveldb-anyway.html</id>
       <content type="html">
         &lt;p&gt;This is the first article in a three-part series on LevelDB and how it can be used in Node.&lt;/p&gt;
 &lt;p&gt;This article will cover the LevelDB basics and internals to provide a foundation for the next two articles. The second and third articles will cover the core LevelDB Node libraries: &lt;a href=&quot;https://github.com/rvagg/node-levelup&quot;&gt;LevelUP&lt;/a&gt;, &lt;a href=&quot;https://github.com/rvagg/node-leveldown&quot;&gt;LevelDOWN&lt;/a&gt; and the rest of the LevelDB ecosystem that&#39;s appearing in Node-land.&lt;/p&gt;
@@ -953,9 +953,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
   
     <entry>
       <title>Node.js Dublin Presentation - LevelDB</title>
-      <link href="http://r.va.gg/2013/05/node.js-dublin-presentation-leveldb.html" />
+      <link href="https://r.va.gg/2013/05/node.js-dublin-presentation-leveldb.html" />
       <updated>2013-05-01T06:00:00.000Z</updated>
-      <id>http://r.va.gg/2013/05/node.js-dublin-presentation-leveldb.html</id>
+      <id>https://r.va.gg/2013/05/node.js-dublin-presentation-leveldb.html</id>
       <content type="html">
         &lt;p&gt;I visited lovely Dublin last month to attend &lt;a href=&quot;http://peerconf.com/&quot;&gt;PeerConf&lt;/a&gt;. While there I got to meet a great bunch of Irish programmers at &lt;a href=&quot;http://www.nodejsdublin.com/&quot;&gt;Node.js Dublin&lt;/a&gt;, a semi-regular Node.js meet-up that happens in the &lt;a href=&quot;https://www.engineyard.com/&quot;&gt;Engine Yard&lt;/a&gt; office in Dublin.&lt;/p&gt;
 &lt;p&gt;I was invited to give a presentation on LevelDB and the work that I&#39;ve been doing on it in Node.js. I was followed by &lt;a href=&quot;https://github.com/dominictarr&quot;&gt;Dominic Tarr&lt;/a&gt; who&#39;s doing some amazing work on top of LevelDB.&lt;/p&gt;
@@ -966,9 +966,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
   
     <entry>
       <title>Announcing Bean v1.0.0</title>
-      <link href="http://r.va.gg/2012/09/bean-v1.html" />
+      <link href="https://r.va.gg/2012/09/bean-v1.html" />
       <updated>2012-09-08T12:41:12.000Z</updated>
-      <id>http://r.va.gg/2012/09/bean-v1.html</id>
+      <id>https://r.va.gg/2012/09/bean-v1.html</id>
       <content type="html">
         &lt;p&gt;In my &lt;a href=&quot;http://rod.vagg.org/2012/08/bean_v1/&quot; title=&quot;Towards Bean v1.0 (or: How event managers do their thing)&quot;&gt;previous post&lt;/a&gt; about Bean I discussed in detail the work that has gone in to a v1 release and how it will differ from the v0.4 branch.&lt;/p&gt;
 &lt;p&gt;Bean version 1.0.0 has now been released, you can download it from the &lt;a href=&quot;https://github.com/fat/bean&quot;&gt;GitHub repository&lt;/a&gt; or you can fetch it from &lt;a href=&quot;https://npmjs.org/package/bean&quot;&gt;npm&lt;/a&gt; for your Ender builds.&lt;/p&gt;
@@ -992,9 +992,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
   
     <entry>
       <title>How Ender bundles libraries for the browser</title>
-      <link href="http://r.va.gg/2012/08/ender-bundling.html" />
+      <link href="https://r.va.gg/2012/08/ender-bundling.html" />
       <updated>2012-08-24T03:21:38.000Z</updated>
-      <id>http://r.va.gg/2012/08/ender-bundling.html</id>
+      <id>https://r.va.gg/2012/08/ender-bundling.html</id>
       <content type="html">
         &lt;p&gt;I was asked an interesting Ender question on IRC (#enderjs on Freenode) and as I was answering it, it occurred to me that the subject would be an ideal way to explain how Ender&#39;s multi-library bundling works. So here is that explanation!&lt;/p&gt;&lt;p&gt;The original question went something like this:&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;When a browser first visits my page, they only get served Bonzo (a DOM manipulation library) as a stand-alone library, but on returning visits they are also served Qwery (a selector engine), Bean (an event manager) and a few other modules in an Ender build. Can I integrate Bonzo into the Ender build on the browser for repeat visitors?&lt;/p&gt;&lt;/blockquote&gt;&lt;h3&gt;Wait, what&#39;s Ender?&lt;/h3&gt;&lt;p&gt;Let&#39;s step back a bit and start with some basics. The way I generally explain Ender to people is that it&#39;s two different things:&lt;/p&gt;&lt;ol&gt;&lt;li&gt;It&#39;s a build tool, for bundling JavaScript libraries together into a single file. The resulting file constitutes a new &quot;framework&quot; based around the jQuery-style DOM element collection pattern: &lt;code&gt;$(&#39;selector&#39;).method()&lt;/code&gt;. The constituent libraries provide the functionality for the &lt;em&gt;methods&lt;/em&gt; and may also provide the selector engine functionality.&lt;/li&gt;&lt;li&gt;It&#39;s an &lt;em&gt;ecosystem&lt;/em&gt; of JavaScript libraries. Ender promotes a small collection of libraries as a base, called &lt;strong&gt;The Jeesh&lt;/strong&gt;, which together provide a large portion of the functionality normally required of a JavaScript framework, but there are many more libraries compatible with Ender that add extra functionality. Many of the libraries available for Ender are also usable outside of Ender as stand-alone libraries.&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;&lt;em&gt;&lt;strong&gt;Continue reading this article on &lt;a href=&quot;http://dailyjs.com/2012/08/23/ender-tutorial/&quot;&gt;DailyJS.com&lt;/a&gt;&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
 
@@ -1003,9 +1003,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
   
     <entry>
       <title>Towards Bean v1.0 (or: How event managers do their thing)</title>
-      <link href="http://r.va.gg/2012/08/bean_v1.html" />
+      <link href="https://r.va.gg/2012/08/bean_v1.html" />
       <updated>2012-08-10T13:20:56.000Z</updated>
-      <id>http://r.va.gg/2012/08/bean_v1.html</id>
+      <id>https://r.va.gg/2012/08/bean_v1.html</id>
       <content type="html">
         &lt;p&gt;&lt;b&gt;&lt;a href=&quot;https://github.com/fat/bean&quot;&gt;Bean&lt;/a&gt;&lt;/b&gt; is the event manager included in &lt;b&gt;&lt;a href=&quot;http://ender.no.de/&quot;&gt;Ender&#39;s&lt;/a&gt;&lt;/b&gt; starter pack, &lt;i&gt;The Jeesh&lt;/i&gt;. If you want to do jQuery-style &lt;code&gt;bind()&lt;/code&gt;, &lt;code&gt;on()&lt;/code&gt; etc. with Ender, then use Bean.&lt;/p&gt;
 &lt;p&gt;At the time of writing, we&#39;re on version &lt;i&gt;0.4.11&lt;/i&gt;. There&#39;s also been a &lt;i&gt;0.5-wip&lt;/i&gt; (&quot;work in progress&quot;) branch for a while now that&#39;s included some improvements I&#39;ve been holding off for a major release. I also put together a &lt;a href=&quot;https://github.com/fat/bean/issues/milestones&quot;&gt;0.5 milestone&lt;/a&gt; on GitHub with some ideas. The major item impacting on the external API is a switch to the &lt;code&gt;on()&lt;/code&gt; argument order found in &lt;a href=&quot;http://api.prototypejs.org/dom/Event/on/&quot;&gt;Prototype&lt;/a&gt;, &lt;a href=&quot;http://api.jquery.com/on/&quot;&gt;jQuery&lt;/a&gt; and &lt;a href=&quot;https://github.com/madrobby/zepto/blob/753e80114f0618bd7ce865508e0ff2085d0bfb5f/src/event.js#L166&quot;&gt;Zepto&lt;/a&gt;. Considering the significance of the changes in the new branch, I think that perhaps a &lt;b&gt;1.0&lt;/b&gt; release would be warranted.&lt;/p&gt;
@@ -1207,9 +1207,9 @@ table.results tr &gt; * { padding: 0 3px; }
   
     <entry>
       <title>mod_geoip2_xff update</title>
-      <link href="http://r.va.gg/2012/07/mod_geoip2_xff-update.html" />
+      <link href="https://r.va.gg/2012/07/mod_geoip2_xff-update.html" />
       <updated>2012-07-06T02:47:17.000Z</updated>
-      <id>http://r.va.gg/2012/07/mod_geoip2_xff-update.html</id>
+      <id>https://r.va.gg/2012/07/mod_geoip2_xff-update.html</id>
       <content type="html">
         &lt;p&gt;Thanks to a contribution from &lt;a href=&quot;https://plus.google.com/105599514712357912650/posts&quot;&gt;Kevin Gaudin&lt;/a&gt;, I have a new release of my &lt;a href=&quot;http://www.maxmind.com/app/mod_geoip&quot;&gt;mod_geoip2&lt;/a&gt; fork. (The history starts &lt;a href=&quot;http://rod.vagg.org/2012/04/a-mod_geoip2-that-properly-handles-x-forwarded-for/&quot;&gt;here&lt;/a&gt;.)&lt;/p&gt;
 &lt;p&gt;You can find the source here: &lt;a href=&quot;https://github.com/rvagg/mod_geoip2_xff&quot;&gt;https://github.com/rvagg/mod_geoip2_xff&lt;/a&gt;&lt;/p&gt;
@@ -1224,9 +1224,9 @@ table.results tr &gt; * { padding: 0 3px; }
   
     <entry>
       <title>Data URI + SVG</title>
-      <link href="http://r.va.gg/2012/05/data-uri-svg.html" />
+      <link href="https://r.va.gg/2012/05/data-uri-svg.html" />
       <updated>2012-05-23T05:16:22.000Z</updated>
-      <id>http://r.va.gg/2012/05/data-uri-svg.html</id>
+      <id>https://r.va.gg/2012/05/data-uri-svg.html</id>
       <content type="html">
         &lt;p&gt;Data URIs are great when you want to serve small resources that there&#39;s no point serving up in a combined sprite. Consider &lt;a href=&quot;http://microjs.com&quot;&gt;microjs.com&lt;/a&gt; which serves up an HTML file plus a single JavaScript file containing the latest data used to build the site. The build logic is in an embedded script, the CSS is also embedded, so it&#39;s pretty lean considering what you see and the amount of data displayed. But, notice the 3 icons for each project, 2 GitHub icons and a Twitter icon. They are PNG images, combined as a sprite but to avoid an additional HTTP request to fetch them they are simply embedded in the CSS which is embedded on the page:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nc&quot;&gt;.title&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;.stat&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;span&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -1259,9 +1259,9 @@ And IE doesn&#39;t let you have it any other way. So you either encode your SVG 
   
     <entry>
       <title>A mod_geoip2 that properly handles X-Forwarded-For</title>
-      <link href="http://r.va.gg/2012/04/a-mod_geoip2-that-properly-handles-x-forwarded-for.html" />
+      <link href="https://r.va.gg/2012/04/a-mod_geoip2-that-properly-handles-x-forwarded-for.html" />
       <updated>2012-04-22T04:55:42.000Z</updated>
-      <id>http://r.va.gg/2012/04/a-mod_geoip2-that-properly-handles-x-forwarded-for.html</id>
+      <id>https://r.va.gg/2012/04/a-mod_geoip2-that-properly-handles-x-forwarded-for.html</id>
       <content type="html">
         &lt;p&gt;This is just a short follow-up to my original post on&lt;em&gt; &lt;a title=&quot;Wrangling the X-Forwarded-For Header&quot; href=&quot;http://rod.vagg.org/2011/07/wrangling-the-x-forwarded-for-header/&quot;&gt;Wrangling the X-Forwarded-For Header&lt;/a&gt;&lt;/em&gt; where I promised that one of the things I would follow up with was how to get MaxMind&#39;s mod_geoip2 to handle the X-Forwarded-For according to the rule:&lt;/p&gt;
 &lt;p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;&lt;em&gt;Always use the leftmost non-private address&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
@@ -1278,9 +1278,9 @@ I&#39;m maintaining a &lt;em&gt;maxmind&lt;/em&gt; branch that contains the orig
   
     <entry>
       <title>JavaScript and Semicolons</title>
-      <link href="http://r.va.gg/2012/04/javascript-and-semicolons.html" />
+      <link href="https://r.va.gg/2012/04/javascript-and-semicolons.html" />
       <updated>2012-04-20T06:10:16.000Z</updated>
-      <id>http://r.va.gg/2012/04/javascript-and-semicolons.html</id>
+      <id>https://r.va.gg/2012/04/javascript-and-semicolons.html</id>
       <content type="html">
         &lt;p&gt;In syntax terms, JavaScript is in the broad C-family of languages. The C-family is diverse and includes languages such as C (obviously), C++, Objective-C, Perl, Java, C# and the newer Go from Google and Rust from Mozilla. Common themes in these languages include:&lt;/p&gt;
 &lt;p&gt;&lt;ul&gt;
@@ -1300,9 +1300,9 @@ The general C-family rules for semicolons can be found in most teaching material
   
     <entry>
       <title>Minifying HTML in the Servlet container</title>
-      <link href="http://r.va.gg/2011/11/minifying-html-in-the-servlet-container.html" />
+      <link href="https://r.va.gg/2011/11/minifying-html-in-the-servlet-container.html" />
       <updated>2011-11-23T04:38:44.000Z</updated>
-      <id>http://r.va.gg/2011/11/minifying-html-in-the-servlet-container.html</id>
+      <id>https://r.va.gg/2011/11/minifying-html-in-the-servlet-container.html</id>
       <content type="html">
         &lt;p&gt;Google&#39;s &lt;a title=&quot;mod_pagespeed&quot; href=&quot;http://code.google.com/speed/page-speed/docs/module.html&quot;&gt;mod_pagespeed&lt;/a&gt; is great. I&#39;ve been using it for a while now on &lt;a title=&quot;FeedXL Horse Nutrition&quot; href=&quot;http://feedxl.com&quot;&gt;feedxl.com&lt;/a&gt; but the only filter that I actually find really useful is &lt;a href=&quot;http://code.google.com/speed/page-speed/docs/filter-whitespace-collapse.html&quot;&gt;Collapse Whitespace&lt;/a&gt;; the rest of the filters I either already do myself as part of the site build process or I don&#39;t want applied. But, I imagine that there are a lot of admins out there that would really benefit from all of the clever things it can do.&lt;/p&gt;
 &lt;p&gt;Unfortunately it&#39;s just an Apache2 module so it&#39;s a bit difficult to use the cleverness elsewhere. I recently launched a new service that serves content directly from Apache Tomcat without passing through an Apache2 web server like I would normally do (because there was just no need!). Having got used to the nice whitespace optimisations you can get from mod_pagespeed I decided to implement a simple version of my own for Tomcat. Dynamic content is somewhere that you&#39;re better off trying not to optimise your whitespace during generation, leave it for post-processing so your logic can be clear.&lt;/p&gt;
@@ -1424,9 +1424,9 @@ You simply put the filter into your classpath somewhere and wire it up in web.xm
   
     <entry>
       <title>Handling X-Forwarded-For in Java and Tomcat</title>
-      <link href="http://r.va.gg/2011/07/handling-x-forwarded-for-in-java-and-tomcat.html" />
+      <link href="https://r.va.gg/2011/07/handling-x-forwarded-for-in-java-and-tomcat.html" />
       <updated>2011-07-30T04:49:50.000Z</updated>
-      <id>http://r.va.gg/2011/07/handling-x-forwarded-for-in-java-and-tomcat.html</id>
+      <id>https://r.va.gg/2011/07/handling-x-forwarded-for-in-java-and-tomcat.html</id>
       <content type="html">
         &lt;p&gt;This is the first follow-up to my &lt;a title=&quot;Wrangling the X-Forwarded-For Header&quot; href=&quot;http://rod.vagg.org/2011/07/wrangling-the-x-forwarded-for-header/&quot;&gt;post on X-Forwarded-For&lt;/a&gt;, I&#39;ll assume you&#39;ve at least scanned that article.&lt;/p&gt;
 &lt;p&gt;&lt;h3&gt;Revision of the security issues&lt;/h3&gt;
@@ -1553,9 +1553,9 @@ You enable request logging in Tomcat by attaching an AccessLogValve to your cont
   
     <entry>
       <title>Wrangling the X-Forwarded-For Header</title>
-      <link href="http://r.va.gg/2011/07/wrangling-the-x-forwarded-for-header.html" />
+      <link href="https://r.va.gg/2011/07/wrangling-the-x-forwarded-for-header.html" />
       <updated>2011-07-29T06:15:36.000Z</updated>
-      <id>http://r.va.gg/2011/07/wrangling-the-x-forwarded-for-header.html</id>
+      <id>https://r.va.gg/2011/07/wrangling-the-x-forwarded-for-header.html</id>
       <content type="html">
         &lt;p&gt;Until recently, we&#39;ve served pages directly from the server for &lt;a title=&quot;FeedXL D. I. Y. Horse Nutrition&quot; href=&quot;http://feedxl.com/&quot;&gt;FeedXL.com&lt;/a&gt; but we&#39;ve since moved to a load balancing situation with multiple servers behind a load balancer.&lt;/p&gt;
 &lt;p&gt;&lt;h3&gt;&lt;strong&gt;AWS &amp; ELB&lt;/strong&gt;&lt;/h3&gt;
