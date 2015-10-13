@@ -4,7 +4,7 @@
   <title>r.va.gg</title>
  
   <link href="https://r.va.gg" />
-  <updated>2015-10-13T09:47:45.265Z</updated>
+  <updated>2015-10-13T09:51:57.295Z</updated>
   <id>https://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
@@ -227,9 +227,9 @@ without its edge cases which can break code designed against the pure 0.10 versi
 &lt;p&gt;The other problem with Travis is that it&#39;s a CI solution, not a proper testing solution. Even if it worked well, it&#39;s not really that helpful in the development process, you need rapid feedback that your code is working on your target platforms (this is one reason why I love back-end development more than front-end development!)&lt;/p&gt;
 &lt;p&gt;Enter Docker and &lt;strong&gt;&lt;a href=&quot;https://github.com/rvagg/dnt&quot;&gt;DNT&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;div style=&quot;margin: 0 auto;&quot;&gt;
-  &lt;img src=&quot;http://www.docker.io/static/img/homepage-docker-logo.png&quot; width=&quot;138&quot; height=&quot;114&quot;&gt;
-  &lt;img src=&quot;http://nodejs.org/images/logos/nodejs-dark.png&quot; width=&quot;212&quot; height=&quot;114&quot;&gt;
-  &lt;img src=&quot;http://img.pandawhale.com/29490-Picard-applause-clapping-gif-s5nz.gif&quot; width=&quot;151&quot; height=&quot;114&quot;&gt;
+  &lt;img src=&quot;https://www.docker.com/sites/default/files/legal/small_v.png&quot; width=&quot;114&quot; height=&quot;114&quot;&gt;
+  &lt;img src=&quot;https://nodejs.org/images/logos/nodejs-dark.png&quot; width=&quot;212&quot; height=&quot;114&quot;&gt;
+  &lt;img src=&quot;https://img.pandawhale.com/29490-Picard-applause-clapping-gif-s5nz.gif&quot; width=&quot;151&quot; height=&quot;114&quot;&gt;
 &lt;/div&gt;
 
 &lt;h3 id=&quot;dnt-docker-node-tester&quot;&gt;DNT: Docker Node Tester&lt;/h3&gt;
@@ -631,13 +631,13 @@ without its edge cases which can break code designed against the pure 0.10 versi
 &lt;p&gt;My experience with &lt;strong&gt;stream-adventure&lt;/strong&gt; and &lt;strong&gt;learnyounode&lt;/strong&gt; suggested that this format should prove to be relatively successful but ultimately I think we had most of the attendees come through at some point and sit down to have a crack at the workshop. This is particularly impressive given that &lt;a href=&quot;http://nexxylove.tumblr.com/&quot;&gt;Emily Rose&lt;/a&gt;, &lt;a href=&quot;http://tmpvar.com/&quot;&gt;Elijah Insua&lt;/a&gt; and Matteo were running a NodeBots workshop which included Arduino and NodeCopter hacking (always popular!). And &lt;a href=&quot;https://twitter.com/mrbruning&quot;&gt;Max Bruning&lt;/a&gt; and &lt;a href=&quot;https://twitter.com/tjfontaine&quot;&gt;TJ Fontaine&lt;/a&gt; were running a Manta / MDB / DTrace / SmartOS-magic workshop and their material was some of my favourite from NodeConf (US) so I&#39;m sure people really enjoyed what they had to present.&lt;/p&gt;
 &lt;p&gt;Unfortunately I didn&#39;t get to attend these other workshops, I also missed out on some skeet!&lt;/p&gt;
 &lt;div style=&quot;text-align: center;&quot;&gt;
-&lt;img src=&quot;http://farm6.staticflickr.com/5338/9726258926_e3ea4a656f_z.jpg&quot; alt=&quot;Skeet&quot;&gt;
+&lt;img src=&quot;https://farm6.staticflickr.com/5338/9726258926_e3ea4a656f_z.jpg&quot; alt=&quot;Skeet&quot;&gt;
 &lt;p style=&quot;text-align: center;&quot;&gt;Karolina &lt;em&gt;&quot;don&#39;t mess with me&quot;&lt;/em&gt; Szczur, photo by &lt;a href=&quot;http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/&quot;&gt;Matthew Bergman&lt;/a&gt;&lt;/p&gt;
 &lt;/div&gt;
 
 &lt;p&gt;But there was plenty of other &lt;em&gt;experience&lt;/em&gt; to be had. It was also fantastic to meet so many people I only knew from IRC / Twitter / GitHub. For someone who lives in regional Australia and doesn&#39;t get a chance to socialise much with other nerds, this was a particularly special opportunity.&lt;/p&gt;
 &lt;div style=&quot;text-align: center;&quot;&gt;
-&lt;img src=&quot;http://farm8.staticflickr.com/7392/9783982165_43ca4edef2_z.jpg&quot; alt=&quot;Shenanigans&quot;&gt;
+&lt;img src=&quot;https://farm8.staticflickr.com/7392/9783982165_43ca4edef2_z.jpg&quot; alt=&quot;Shenanigans&quot;&gt;
 &lt;p style=&quot;text-align: center;&quot;&gt;Final night banquet shenanigans with &lt;a href=&quot;https://twitter.com/Av1anFlu&quot;&gt;Charlie McConnell&lt;/a&gt; and @substack ... the napkin hat thing is a story in itself, blame &lt;a href=&quot;https://twitter.com/jllord&quot;&gt;Jessica Lord&lt;/a&gt;, photo by &lt;a href=&quot;http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/&quot;&gt;Matthew Bergman&lt;/a&gt;&lt;/p&gt;
 &lt;/div&gt;
 
