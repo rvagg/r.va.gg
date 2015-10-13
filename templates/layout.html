@@ -40,11 +40,13 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
+            {% spaceless %}
             {% for post in postSpecs %}
               {% if loop.index < 4 %}
                 <li><a href="{{ post.path }}">{{ post.title }}</a></li>
               {% endif %}
             {% endfor %}
+            {% endspaceless %}
           </ul>
         </section>
       </section>

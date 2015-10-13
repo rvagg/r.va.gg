@@ -1,6 +1,6 @@
 ```json
 {
-    "date"   : "2014-006-14"
+    "date"   : "2014-06-14"
   , "title"  : "Why I don't use Node's core 'stream' module"
   , "author" : "Rod Vagg"
 }
