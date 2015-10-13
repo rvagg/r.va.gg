@@ -29,7 +29,7 @@ Docker is a tool that simplifies the use of Linux containers to create lightweig
 **DNT** contains two tools that work with Docker and Node.js to set-up containers for testing and run your project's tests in those containers.
 
 <div style="margin: 0 auto;">
-  <img src="http://r.va.gg/images/2013/11/nan-dnt.png">
+  <img src="https://r.va.gg/images/2013/11/nan-dnt.png">
 </div>
 
 **DNT** includes a `setup-dnt` script that sets up the most basic Docker images required to run Node.js applications, nothing extra. It first creates an image called "dev_base" that uses the default Docker "ubuntu" image and adds the build tools required to compile and install Node.js

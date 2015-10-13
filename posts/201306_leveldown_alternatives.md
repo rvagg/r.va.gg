@@ -67,13 +67,13 @@ I'm running this on an i7-2630QM CPU, plenty of RAM and an SSD.
 
 You can see that we managed to push in the 10M entries in just over 95 seconds with the plain **Google LevelDB (v1.10.0)**.
 
-<img src="http://r.va.gg/images/2013/06/write_sorted_times_g.png" height=500 width=800 align="center" />
+<img src="https://r.va.gg/images/2013/06/write_sorted_times_g.png" height=500 width=800 align="center" />
 
 -------------------------------------
 
 Next up we have the HyperDex fork. The main difference here is that we have it working slightly faster in total and the write-times have been trimmed down a bit to be more consistent. Not a bad effort with default settings, quite a nice picture.
 
-<img src="http://r.va.gg/images/2013/06/write_sorted_times_h.png" height=500 width=800 align="center" />
+<img src="https://r.va.gg/images/2013/06/write_sorted_times_h.png" height=500 width=800 align="center" />
 
 -------------------------------------
 
@@ -83,7 +83,7 @@ We can see that the write-time has been considerably flattened; which is in line
 
 No doubt this is probably something to do with the tunables, or perhaps I've messed something up, anything's possible!
 
-<img src="http://r.va.gg/images/2013/06/write_sorted_times_b.png" height=500 width=800 align="center" />
+<img src="https://r.va.gg/images/2013/06/write_sorted_times_b.png" height=500 width=800 align="center" />
 
 -------------------------------------
 

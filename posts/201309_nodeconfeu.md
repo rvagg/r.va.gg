@@ -9,7 +9,7 @@
 Wow, **[NodeConf.eu](http://nodeconf.eu/)** was certainly a once-in-a-lifetime event ... although there's talk of a repeat performance next year (don't miss the chance when it comes around!).
 
 <div style="text-align: center;">
-![Raise that flag](http://r.va.gg/images/2013/09/nodeconfeu_raiseflag.jpg)
+![Raise that flag](https://r.va.gg/images/2013/09/nodeconfeu_raiseflag.jpg)
 <p style="text-align: center;">Dominic Tarr, @substack and Julian Gruber raising the NodeConf.eu flag</p>
 </div>
 
@@ -17,12 +17,12 @@ Wow, **[NodeConf.eu](http://nodeconf.eu/)** was certainly a once-in-a-lifetime e
 NodeConf.eu was held in Waterford, Ireland, on an **Island**, in a **Castle** and was organised by the Node lovin' company, [nearForm](http://nearform.com/), in particular [Cian O'Maidin](http://cianomaidin.com/) and his amazing assistant Catherine Bradley. Of course [Mikeal Rogers](http://futurealoof.com/) had a significant role in organising the event too.
 
 <div style="text-align: center;">
-![Waterford Castle](http://r.va.gg/images/2013/09/nodeconfeu_castle.jpg)
+![Waterford Castle](https://r.va.gg/images/2013/09/nodeconfeu_castle.jpg)
 <p style="text-align: center;">[Waterford Castle](http://waterfordcastle.com/)</p>
 </div>
 
 <div style="text-align: center;">
-![Pig](http://r.va.gg/images/2013/09/nodeconfeu_pig.jpg)
+![Pig](https://r.va.gg/images/2013/09/nodeconfeu_pig.jpg)
 <p style="text-align: center;">The welcome banquet ... yep</p>
 </div>
 
@@ -32,7 +32,7 @@ For my part, I was deeply honoured to be involved in the *"Node Databases"* trac
 
 ### A Real Database Rethink
 
-The slides of my talk are [online](http://r.va.gg/presentations/nodeconfeu.2013/). I attempted to break down the definition of the term *"database"* by looking at where the concept comes from historically. It's actually a difficult thing to define and I don't believe there is any one agreed upon meaning. What I came up with is:
+The slides of my talk are [online](https://r.va.gg/presentations/nodeconfeu.2013/). I attempted to break down the definition of the term *"database"* by looking at where the concept comes from historically. It's actually a difficult thing to define and I don't believe there is any one agreed upon meaning. What I came up with is:
 
 > A tool for interacting with structured data, externalised from the core of our application
 >
@@ -53,7 +53,7 @@ The bulk of my talk was taken up with talking about LevelUP and the basics of th
 
 ### Level Me Up Scotty!
 
-One of the three workshops available at NodeConf.eu was all about Node Databases. I took the same approach as at [CampJS](http://campjs.com/) recently where I built [Learn You The Node.js For Much Win!](http://r.va.gg/2013/08/learn-you-the-node.js.html), a tool that owes a debt to [stream-adventure](https://github.com/substack/stream-adventure), a self-guided workshop-in-your-terminal application by [@substack](https://twitter.com/substack) and [Max Ogden](https://twitter.com/maxogden) written for NodeConf (US).
+One of the three workshops available at NodeConf.eu was all about Node Databases. I took the same approach as at [CampJS](http://campjs.com/) recently where I built [Learn You The Node.js For Much Win!](https://r.va.gg/2013/08/learn-you-the-node.js.html), a tool that owes a debt to [stream-adventure](https://github.com/substack/stream-adventure), a self-guided workshop-in-your-terminal application by [@substack](https://twitter.com/substack) and [Max Ogden](https://twitter.com/maxogden) written for NodeConf (US).
 
 This time around, I received some great help from both @substack and Julian Gruber who helped write some exercises, I also received help from [Eugene Ware](http://twitter.com/eugeneware) who wasn't even at the conference but was assisting with development from Australia. [Raynos](http://twitter.com/raynos2) was also a great help in getting the application working well.
 
@@ -81,7 +81,7 @@ There's more planned for the future of this workshop application too, Matteo eve
 **[nodeschool.io](http://nodeschool.io/)** was hatched from NodeConf.eu and pulls together the three workshop applications currently available in npm. I believe this was an initiative of [Brian J. Brennan](https://twitter.com/brianloveswords) and other Mozillans on the [Open Badges](http://openbadges.org/) project. **[workshopper](https://github.com/rvagg/workshopper)** is the engine that runs both learnyounode and levelmeup and we're trying to make it even easier for others to author their own workshop applications. There is already a [Functional Javacript Workshop](https://github.com/timoxley/functional-javascript-workshop/) by [Tim Oxley](https://twitter.com/secoif) and there are more in development. Exciting times!
 
 <div style="text-align: center;">
-![Level Me Up Workshoppers](http://r.va.gg/images/2013/09/nodeconfeu_levelmeup.jpg)
+![Level Me Up Workshoppers](https://r.va.gg/images/2013/09/nodeconfeu_levelmeup.jpg)
 <p style="text-align: center;">Workshoppers stretching their brains with **levelmeup**</p>
 </div>
 
@@ -110,6 +110,6 @@ There has been a long-standing plan to make a Level* / NodeBase website but bein
 Besides getting stuff done, it was just a pleasure to hang out with these people and talk *shop*.
 
 <div style="text-align: center;">
-![A momentus event](http://r.va.gg/images/2013/09/nodeconfeu_levelgang.jpg)
+![A momentus event](https://r.va.gg/images/2013/09/nodeconfeu_levelgang.jpg)
 <p style="text-align: center;">**The Level* Gang**: Paolo, Dominic, @substack, Karolina, Magnus, Mikeal, Julian, Max, Matteo and [Paul Fryzel](https://twitter.com/paulfryzel). Raynos was around but missed this particular *event*, Thorsten was inside demoing his guitar-typing software.</p>
 </div>

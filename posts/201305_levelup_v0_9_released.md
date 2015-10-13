@@ -8,13 +8,13 @@
 
 ![LevelDB](https://twimg0-a.akamaihd.net/profile_images/3360574989/92fc472928b444980408147e5e5db2fa_bigger.png)
 
-As per my [previous post](http://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html), **[LevelUP](https://github.com/rvagg/node-levelup) v0.9 has been released**!
+As per my [previous post](https://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html), **[LevelUP](https://github.com/rvagg/node-levelup) v0.9 has been released**!
 
 I'm doing a quick post about this release because it's got more changes in it than we normally see, including some things worth explaining.
 
 ### Relationship to LevelDOWN
 
-The biggest change is the removal of [LevelDOWN](https://github.com/rvagg/node-leveldown/) as a dependency, you should [review what I've already said about this](http://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html) as this will impact you if you're currently using LevelUP. In short, you'll either need to explicitly `npm install leveldown` or switch to using the new [Level](https://github.com/level/level) package which bundles them both.
+The biggest change is the removal of [LevelDOWN](https://github.com/rvagg/node-leveldown/) as a dependency, you should [review what I've already said about this](https://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html) as this will impact you if you're currently using LevelUP. In short, you'll either need to explicitly `npm install leveldown` or switch to using the new [Level](https://github.com/level/level) package which bundles them both.
 
 Along with this change, we also get better [Browserify](http://browserify.org/) support. See [level.js](https://github.com/maxogden/level.js) for more information on this.
 

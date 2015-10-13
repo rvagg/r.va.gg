@@ -16,7 +16,7 @@ Thankfully though, a portion of the material will be able to serve as the basis 
 
 In summary, inspired by LevelDB, we've ended up with a core set of primitives in [LevelUP](https://github.com/rvagg/node-levelup) that can be used to build feature-rich and advanced database functionality. **Atomic batch** and **ReadStream** are the two non-trivial primitives, open, close, get, put, del are all pretty easy to understand as primitives, although *del* is perhaps redundant but we're opting for explicitness.
 
-My [slides are online](http://r.va.gg/presentations/lxjs2013) but hopefully I'll be able to get my DailyJS article sorted out soon and I'll be able to explain what I was trying to get at.
+My [slides are online](https://r.va.gg/presentations/lxjs2013) but hopefully I'll be able to get my DailyJS article sorted out soon and I'll be able to explain what I was trying to get at.
 
 ReadStream as a primitive query mechanism is not too hard to understand once you get your head around key sorting and the implications for key structure. Batch is a little more subtle and relates to consistency and our ability to augment basic operations to create more complex functionality while keeping the data store in a consistent state.
 

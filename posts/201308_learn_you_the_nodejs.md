@@ -12,7 +12,7 @@
 
 I was struck last CampJS how many JavaScript newbies were there, or at least people who deal with JavaScript as a secondary language and therefore only have a cursory understanding of it. And by extension, there were not many people who had much understanding of Node. So I wanted to present some intro-to-Node material this time.
 
-I gave a 30 minute talk covering the very basics of *what Node **is***, called **Learn You The Node.js For Much Win**. Obviously the title is inspired by *[Learn You a Haskell For Great Good](http://learnyouahaskell.com/)* and *[Learn You Some Erlang For Great Good](http://learnyousomeerlang.com/)*. You can find my slides [here](http://r.va.gg/presentations/campjs-learn-you-node/) (feel free to rip them off if you need to give a similar talk somewhere!). The video may be online at some point in the future.
+I gave a 30 minute talk covering the very basics of *what Node **is***, called **Learn You The Node.js For Much Win**. Obviously the title is inspired by *[Learn You a Haskell For Great Good](http://learnyouahaskell.com/)* and *[Learn You Some Erlang For Great Good](http://learnyousomeerlang.com/)*. You can find my slides [here](https://r.va.gg/presentations/campjs-learn-you-node/) (feel free to rip them off if you need to give a similar talk somewhere!). The video may be online at some point in the future.
 
 ### Learn You The Node.js For Much Win (workshop)
 
@@ -53,7 +53,7 @@ Many thanks to these expert Node nerds who hovered and helped people during the 
 
 *Tim Oxley making a contribution during the workshop, along with Christopher Giffard (left) and Eugene Ware (right)*
 
-I had the [solutions](http://r.va.gg/presentations/campjs-learn-you-node/workshop.html) to the workshop ready on the big-screen and walked through some of the early solutions and talked through what was going on. I didn't expect many people to listen to those bits and the workshop was designed so you could totally zone-out and do it at your own pace if that suited.
+I had the [solutions](https://r.va.gg/presentations/campjs-learn-you-node/workshop.html) to the workshop ready on the big-screen and walked through some of the early solutions and talked through what was going on. I didn't expect many people to listen to those bits and the workshop was designed so you could totally zone-out and do it at your own pace if that suited.
 
 If anyone wants to run a similar style workshop for their local meet-up, using the same content, I'd love to receive contributions to **learnyounode**. Alternatively, make your own! I extracted the core framework from **learnyounode** and it now lives separately as **[workshopper](https://github.com/rvagg/workshopper)**.
 

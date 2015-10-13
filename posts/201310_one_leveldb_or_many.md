@@ -48,7 +48,7 @@ Consider though what happens if you are using separate LevelDB stores, you now h
 
 ### Consistency
 
-As I discussed in my [LXJS](http://r.va.gg/presentations/lxjs2013/) talk, the *atomic batch* is an important primitive for building solid database functionality with inherent *consistency*. When you're using **sublevel**, even though you have what operate like separate LevelUP instances for each sublevel, you still get to perform atomic batch operations between sublevels. Consider indexing where you may have a primary sublevel for the entries you're writing and a secondary sublevel for the indexing data used to reference the primary data for lookups. If you're running these as separate stores then you lose the benefits of the atomic batch, you just can't perform multiple operations with guaranteed consistency.
+As I discussed in my [LXJS](https://r.va.gg/presentations/lxjs2013/) talk, the *atomic batch* is an important primitive for building solid database functionality with inherent *consistency*. When you're using **sublevel**, even though you have what operate like separate LevelUP instances for each sublevel, you still get to perform atomic batch operations between sublevels. Consider indexing where you may have a primary sublevel for the entries you're writing and a secondary sublevel for the indexing data used to reference the primary data for lookups. If you're running these as separate stores then you lose the benefits of the atomic batch, you just can't perform multiple operations with guaranteed consistency.
 
 Try and keep the atomic batch in mind when building your application, instead of accepting the possibility of inconsistent state, use the batch to keep consistency.
 
