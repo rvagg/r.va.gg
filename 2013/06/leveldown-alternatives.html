@@ -42,7 +42,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li><li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
+            <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li><li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
           </ul>
         </section>
       </section>
@@ -96,15 +96,15 @@
 <p><strong>It is important to note that I&#39;m using the default options</strong> here and this is where I&#39;ll probably cop some flak. Basho in particular advocate a healthy amount of &quot;tuning&quot; to achieve appropriate performance. In particular the write-buffer defaults to only 4M and you can push data in faster (at the cost of compactions later on) by increasing this. I think the forks may even have additional tunables of their own that you can fiddle with. But, this whole tuning thing is a rabbit hole I don&#39;t dare go down right now!</p>
 <p>I&#39;m running this on an i7-2630QM CPU, plenty of RAM and an SSD.</p>
 <p>You can see that we managed to push in the 10M entries in just over 95 seconds with the plain <strong>Google LevelDB (v1.10.0)</strong>.</p>
-<p><img src="http://r.va.gg/images/2013/06/write_sorted_times_g.png" height=500 width=800 align="center" /></p>
+<p><img src="https://r.va.gg/images/2013/06/write_sorted_times_g.png" height=500 width=800 align="center" /></p>
 <hr>
 <p>Next up we have the HyperDex fork. The main difference here is that we have it working slightly faster in total and the write-times have been trimmed down a bit to be more consistent. Not a bad effort with default settings, quite a nice picture.</p>
-<p><img src="http://r.va.gg/images/2013/06/write_sorted_times_h.png" height=500 width=800 align="center" /></p>
+<p><img src="https://r.va.gg/images/2013/06/write_sorted_times_h.png" height=500 width=800 align="center" /></p>
 <hr>
 <p>Lastly we can see what Basho have done. They&#39;ve been on this case for a lot longer than HyperDex have and their fork, internally at least, diverges quite a bit from Google&#39;s LevelDB.</p>
 <p>We can see that the write-time has been considerably flattened; which is in line with what Basho claim and are aiming for, the consistency here is <strong>very</strong> impressive. Unfortunately we&#39;ve ended up with a total time that is <strong>double</strong> what it took Google&#39;s LevelDB to get the 10M entries in!</p>
 <p>No doubt this is probably something to do with the tunables, or perhaps I&#39;ve messed something up, anything&#39;s possible!</p>
-<p><img src="http://r.va.gg/images/2013/06/write_sorted_times_b.png" height=500 width=800 align="center" /></p>
+<p><img src="https://r.va.gg/images/2013/06/write_sorted_times_b.png" height=500 width=800 align="center" /></p>
 <hr>
 <h2 id="so-">So?</h2>
 <p>If you take anything away from this, here&#39;s what I think it should be: <strong>Do your own benchmarks if performance <em>really</em> is an issue for you</strong>. You&#39;re going to need some kind of benchmark suite that is tailored to your particular application. This will not only let you choose the appropriate storage system but it will give you something to work with when you start to get in to the mire that is &quot;tunables&quot;.</p>

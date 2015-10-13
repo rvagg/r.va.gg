@@ -40,7 +40,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li><li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
+            <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li><li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
           </ul>
         </section>
       </section>
@@ -63,10 +63,10 @@
 
       <section class="post-body">
         <p><img src="https://twimg0-a.akamaihd.net/profile_images/3360574989/92fc472928b444980408147e5e5db2fa_bigger.png" alt="LevelDB"></p>
-<p>As per my <a href="http://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html">previous post</a>, <strong><a href="https://github.com/rvagg/node-levelup">LevelUP</a> v0.9 has been released</strong>!</p>
+<p>As per my <a href="https://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html">previous post</a>, <strong><a href="https://github.com/rvagg/node-levelup">LevelUP</a> v0.9 has been released</strong>!</p>
 <p>I&#39;m doing a quick post about this release because it&#39;s got more changes in it than we normally see, including some things worth explaining.</p>
 <h3 id="relationship-to-leveldown">Relationship to LevelDOWN</h3>
-<p>The biggest change is the removal of <a href="https://github.com/rvagg/node-leveldown/">LevelDOWN</a> as a dependency, you should <a href="http://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html">review what I&#39;ve already said about this</a> as this will impact you if you&#39;re currently using LevelUP. In short, you&#39;ll either need to explicitly <code>npm install leveldown</code> or switch to using the new <a href="https://github.com/level/level">Level</a> package which bundles them both.</p>
+<p>The biggest change is the removal of <a href="https://github.com/rvagg/node-leveldown/">LevelDOWN</a> as a dependency, you should <a href="https://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html">review what I&#39;ve already said about this</a> as this will impact you if you&#39;re currently using LevelUP. In short, you&#39;ll either need to explicitly <code>npm install leveldown</code> or switch to using the new <a href="https://github.com/level/level">Level</a> package which bundles them both.</p>
 <p>Along with this change, we also get better <a href="http://browserify.org/">Browserify</a> support. See <a href="https://github.com/maxogden/level.js">level.js</a> for more information on this.</p>
 <h3 id="chained-batch">Chained batch</h3>
 <p>The other major change is the introduction of a new <strong>chained batch</strong> syntax, additional to the existing batch syntax. This method of creating and writing batch operations is much closer to the way LevelDB does batches and under certain circumstances you may find improved performance from using this method.</p>
@@ -220,7 +220,7 @@
 <li>Syncstore</li>
 </ul>
 <p>And a few more that look like a work in progress. Plus, I&#39;m sure there&#39;s more people out there we&#39;ve never even heard of who are cooking up some amazing things using the LevelDB+Node combination!</p>
-<p><strong>The slides to my talk are <a href="http://r.va.gg/presentations/node.ninjas/">here</a>.</strong></p>
+<p><strong>The slides to my talk are <a href="https://r.va.gg/presentations/node.ninjas/">here</a>.</strong></p>
 
       </section>
 

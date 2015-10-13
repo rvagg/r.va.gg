@@ -40,7 +40,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li><li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
+            <li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li><li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></li>
           </ul>
         </section>
       </section>
@@ -83,7 +83,7 @@
 <p>I always recommend that you should tinker with the <code>cacheSize</code> option when you&#39;re using LevelDB, it can be as large as you want to fit in the available memory of your machine. As a rule of thumb, somewhere between 2/3 and 3/4 of the available memory should be a maximum if you can afford it.</p>
 <p>Consider though what happens if you are using separate LevelDB stores, you now have to deal with juggling <code>cacheSize</code> between the stores. Often, you&#39;re probably going to be best served by having a single, large cache that can operate across all your data types and let the normal behaviour of your application determine what gets cached with occasional reliance on <code>&#39;fillCache&#39;: false</code> to fine-tune. </p>
 <h3 id="consistency">Consistency</h3>
-<p>As I discussed in my <a href="http://r.va.gg/presentations/lxjs2013/">LXJS</a> talk, the <em>atomic batch</em> is an important primitive for building solid database functionality with inherent <em>consistency</em>. When you&#39;re using <strong>sublevel</strong>, even though you have what operate like separate LevelUP instances for each sublevel, you still get to perform atomic batch operations between sublevels. Consider indexing where you may have a primary sublevel for the entries you&#39;re writing and a secondary sublevel for the indexing data used to reference the primary data for lookups. If you&#39;re running these as separate stores then you lose the benefits of the atomic batch, you just can&#39;t perform multiple operations with guaranteed consistency.</p>
+<p>As I discussed in my <a href="https://r.va.gg/presentations/lxjs2013/">LXJS</a> talk, the <em>atomic batch</em> is an important primitive for building solid database functionality with inherent <em>consistency</em>. When you&#39;re using <strong>sublevel</strong>, even though you have what operate like separate LevelUP instances for each sublevel, you still get to perform atomic batch operations between sublevels. Consider indexing where you may have a primary sublevel for the entries you&#39;re writing and a secondary sublevel for the indexing data used to reference the primary data for lookups. If you&#39;re running these as separate stores then you lose the benefits of the atomic batch, you just can&#39;t perform multiple operations with guaranteed consistency.</p>
 <p>Try and keep the atomic batch in mind when building your application, instead of accepting the possibility of inconsistent state, use the batch to keep consistency.</p>
 <h3 id="back-end-flexibility">Back-end flexibility</h3>
 <p>OK, this one is a bit left-field, but remember that LevelUP is back-end-agnostic. It&#39;s inspired by LevelDB but it doesn&#39;t have to be Google&#39;s LevelDB that&#39;s storing data for you. It could be Basho&#39;s fork or HyperLevelDB. It could even be LMDB or something a little crazy like MemDOWN or mysqlDOWN! </p>
@@ -114,7 +114,7 @@
 <p><strong><em>Edit:</em></strong> <em>I wasn&#39;t trying to elicit sympathy here, I genuinely think that I wasn&#39;t clear on what I was trying to communicate. It went so well in my head, as it usually does, but I fell far short of what I wanted to express. I&#39;ll attempt to rectify some of that with a writeup (see next para).</em></p>
 <p>Thankfully though, a portion of the material will be able to serve as the basis for the, long overdue, third part in my <a href="http://dailyjs.com/2013/04/19/leveldb-and-node-1/">three</a> <a href="http://dailyjs.com/2013/05/03/leveldb-and-node-2/">part</a> <a href="http://dailyjs.com">DailyJS</a> series on LevelDB &amp; Node.</p>
 <p>In summary, inspired by LevelDB, we&#39;ve ended up with a core set of primitives in <a href="https://github.com/rvagg/node-levelup">LevelUP</a> that can be used to build feature-rich and advanced database functionality. <strong>Atomic batch</strong> and <strong>ReadStream</strong> are the two non-trivial primitives, open, close, get, put, del are all pretty easy to understand as primitives, although <em>del</em> is perhaps redundant but we&#39;re opting for explicitness.</p>
-<p>My <a href="http://r.va.gg/presentations/lxjs2013">slides are online</a> but hopefully I&#39;ll be able to get my DailyJS article sorted out soon and I&#39;ll be able to explain what I was trying to get at.</p>
+<p>My <a href="https://r.va.gg/presentations/lxjs2013">slides are online</a> but hopefully I&#39;ll be able to get my DailyJS article sorted out soon and I&#39;ll be able to explain what I was trying to get at.</p>
 <p>ReadStream as a primitive query mechanism is not too hard to understand once you get your head around key sorting and the implications for key structure. Batch is a little more subtle and relates to consistency and our ability to augment basic operations to create more complex functionality while keeping the data store in a consistent state.</p>
 <p>I additionally raised &quot;Buckets&quot;, or &quot;Namespaces&quot; as a primitive concept and discussed how <a href="https://github.com/dominictarr/level-sublevel">sublevel</a> has effectively become the standard for turning a one-dimensional data store into a multi-dimensional store able to encapsulate contain sophisticated functionality behind what is essentially just a key/value store.</p>
 <h3 id="thanks-to-the-lxjs-team">Thanks to the LXJS team</h3>
@@ -141,26 +141,26 @@
       <section class="post-body">
         <p>Wow, <strong><a href="http://nodeconf.eu/">NodeConf.eu</a></strong> was certainly a once-in-a-lifetime event ... although there&#39;s talk of a repeat performance next year (don&#39;t miss the chance when it comes around!).</p>
 <div style="text-align: center;">
-<img src="http://r.va.gg/images/2013/09/nodeconfeu_raiseflag.jpg" alt="Raise that flag">
+<img src="https://r.va.gg/images/2013/09/nodeconfeu_raiseflag.jpg" alt="Raise that flag">
 <p style="text-align: center;">Dominic Tarr, @substack and Julian Gruber raising the NodeConf.eu flag</p>
 </div>
 
 
 <p>NodeConf.eu was held in Waterford, Ireland, on an <strong>Island</strong>, in a <strong>Castle</strong> and was organised by the Node lovin&#39; company, <a href="http://nearform.com/">nearForm</a>, in particular <a href="http://cianomaidin.com/">Cian O&#39;Maidin</a> and his amazing assistant Catherine Bradley. Of course <a href="http://futurealoof.com/">Mikeal Rogers</a> had a significant role in organising the event too.</p>
 <div style="text-align: center;">
-<img src="http://r.va.gg/images/2013/09/nodeconfeu_castle.jpg" alt="Waterford Castle">
+<img src="https://r.va.gg/images/2013/09/nodeconfeu_castle.jpg" alt="Waterford Castle">
 <p style="text-align: center;"><a href="http://waterfordcastle.com/">Waterford Castle</a></p>
 </div>
 
 <div style="text-align: center;">
-<img src="http://r.va.gg/images/2013/09/nodeconfeu_pig.jpg" alt="Pig">
+<img src="https://r.va.gg/images/2013/09/nodeconfeu_pig.jpg" alt="Pig">
 <p style="text-align: center;">The welcome banquet ... yep</p>
 </div>
 
 <p>Instead of describing the talks, I&#39;ll defer to the <a href="http://clock.co.uk/tech-blogs/nodeconfeu-2013-part-one">excellent</a> <a href="http://clock.co.uk/tech-blogs/nodeconfeu-2013-part-two">four</a> <a href="http://clock.co.uk/tech-blogs/nodeconfeu-2013-part-three">part</a> <a href="http://clock.co.uk/tech-blogs/nodeconfeu-reflection">series</a> by Paul, Adam, Luke and Ben of <a href="http://clock.co.uk/">Clock</a> where you&#39;ll find a great summary of the talks and events of the conference.</p>
 <p>For my part, I was deeply honoured to be involved in the <em>&quot;Node Databases&quot;</em> track of the conference. We started off the NodeConf.eu talks with a 3-part show. My talk was titled &quot;A Real Database Rethink&quot; and was followed by <a href="https://twitter.com/dominictarr">Dominic Tarr</a> who talked more about the Level* ecosystem and the various pieces of the Node Databases puzzle that&#39;s being built. <a href="http://juliangruber.com/">Julian Gruber</a> then closed us off with some amazing live-coding of some browser/server streaming LevelUP/multilevel <a href="https://github.com/juliangruber/nodeconfeu-13">wizardry</a>.</p>
 <h3 id="a-real-database-rethink">A Real Database Rethink</h3>
-<p>The slides of my talk are <a href="http://r.va.gg/presentations/nodeconfeu.2013/">online</a>. I attempted to break down the definition of the term <em>&quot;database&quot;</em> by looking at where the concept comes from historically. It&#39;s actually a difficult thing to define and I don&#39;t believe there is any one agreed upon meaning. What I came up with is:</p>
+<p>The slides of my talk are <a href="https://r.va.gg/presentations/nodeconfeu.2013/">online</a>. I attempted to break down the definition of the term <em>&quot;database&quot;</em> by looking at where the concept comes from historically. It&#39;s actually a difficult thing to define and I don&#39;t believe there is any one agreed upon meaning. What I came up with is:</p>
 <blockquote>
 <p>A tool for interacting with structured data, externalised from the core of our application</p>
 <ul>
@@ -178,7 +178,7 @@
 <p>Taking that definition, we can apply Node philosophy of small-core and vibrant user-land, along with the culture of extreme modularity afforded us by npm, and build a new kind of database; or at least apply new thinking to the &quot;database&quot;.</p>
 <p>The bulk of my talk was taken up with talking about LevelUP and the basics of the Level<em> ecosystem. There&#39;s a table on slide #7 that I&#39;m going to try and refine over time to help describe what the Level</em> / NodeBase world is all about.</p>
 <h3 id="level-me-up-scotty-">Level Me Up Scotty!</h3>
-<p>One of the three workshops available at NodeConf.eu was all about Node Databases. I took the same approach as at <a href="http://campjs.com/">CampJS</a> recently where I built <a href="http://r.va.gg/2013/08/learn-you-the-node.js.html">Learn You The Node.js For Much Win!</a>, a tool that owes a debt to <a href="https://github.com/substack/stream-adventure">stream-adventure</a>, a self-guided workshop-in-your-terminal application by <a href="https://twitter.com/substack">@substack</a> and <a href="https://twitter.com/maxogden">Max Ogden</a> written for NodeConf (US).</p>
+<p>One of the three workshops available at NodeConf.eu was all about Node Databases. I took the same approach as at <a href="http://campjs.com/">CampJS</a> recently where I built <a href="https://r.va.gg/2013/08/learn-you-the-node.js.html">Learn You The Node.js For Much Win!</a>, a tool that owes a debt to <a href="https://github.com/substack/stream-adventure">stream-adventure</a>, a self-guided workshop-in-your-terminal application by <a href="https://twitter.com/substack">@substack</a> and <a href="https://twitter.com/maxogden">Max Ogden</a> written for NodeConf (US).</p>
 <p>This time around, I received some great help from both @substack and Julian Gruber who helped write some exercises, I also received help from <a href="http://twitter.com/eugeneware">Eugene Ware</a> who wasn&#39;t even at the conference but was assisting with development from Australia. <a href="http://twitter.com/raynos2">Raynos</a> was also a great help in getting the application working well.</p>
 <p>We ended up with <strong><em>Level Me Up Scotty!</em></strong>, or just <strong>levelmeup</strong>.</p>
 <div style="text-align: center;">
@@ -199,7 +199,7 @@
 <p>There&#39;s more planned for the future of this workshop application too, Matteo even has an a <a href="https://github.com/rvagg/levelmeup/pull/19">work-in-progress exercise</a> that should be merged fairly soon.</p>
 <p><strong><a href="http://nodeschool.io/">nodeschool.io</a></strong> was hatched from NodeConf.eu and pulls together the three workshop applications currently available in npm. I believe this was an initiative of <a href="https://twitter.com/brianloveswords">Brian J. Brennan</a> and other Mozillans on the <a href="http://openbadges.org/">Open Badges</a> project. <strong><a href="https://github.com/rvagg/workshopper">workshopper</a></strong> is the engine that runs both learnyounode and levelmeup and we&#39;re trying to make it even easier for others to author their own workshop applications. There is already a <a href="https://github.com/timoxley/functional-javascript-workshop/">Functional Javacript Workshop</a> by <a href="https://twitter.com/secoif">Tim Oxley</a> and there are more in development. Exciting times!</p>
 <div style="text-align: center;">
-<img src="http://r.va.gg/images/2013/09/nodeconfeu_levelmeup.jpg" alt="Level Me Up Workshoppers">
+<img src="https://r.va.gg/images/2013/09/nodeconfeu_levelmeup.jpg" alt="Level Me Up Workshoppers">
 <p style="text-align: center;">Workshoppers stretching their brains with <strong>levelmeup</strong></p>
 </div>
 
@@ -221,7 +221,7 @@
 <p>There has been a long-standing plan to make a Level* / NodeBase website but being the disorganised rabble we are, it hasn&#39;t got off the ground. Karolina (and Jessica too I believe) are keen to help out on the design end but just need the content. So that&#39;s what we planned. There&#39;s a bunch of issues that form a TODO in the <a href="https://github.com/karolinaszczur/leveldb.org/issues">repo</a> for this project. Hopefully we can all get on top of it sooner rather than later. We&#39;re also open to assistance from anyone else that would like to contribute.</p>
 <p>Besides getting stuff done, it was just a pleasure to hang out with these people and talk <em>shop</em>.</p>
 <div style="text-align: center;">
-<img src="http://r.va.gg/images/2013/09/nodeconfeu_levelgang.jpg" alt="A momentus event">
+<img src="https://r.va.gg/images/2013/09/nodeconfeu_levelgang.jpg" alt="A momentus event">
 <p style="text-align: center;"><strong>The Level* Gang</strong>: Paolo, Dominic, @substack, Karolina, Magnus, Mikeal, Julian, Max, Matteo and <a href="https://twitter.com/paulfryzel">Paul Fryzel</a>. Raynos was around but missed this particular <em>event</em>, Thorsten was inside demoing his guitar-typing software.</p>
 </div>
 
@@ -246,7 +246,7 @@
         <p><strong><a href="http://campjs.com/">CampJS</a></strong> has just finished, with a bigger crowd than last time around. It was lots of fun, and as usual, these events are more about meeting the people I collaborate, and socialise with online than anything else. There was a particularly large turn-out of the hackers on #polyhack, our Australian programmers channel on Freenode. Even <a href="https://twitter.com/mwotton">@mwotton</a>, our resident Haskell-troll was there! Lots of photos and news can be found on <a href="http://storify.com/campjs/campjs-ii">Storify</a>. The next one will likely be near Melbourne in February some time and I highly recommend it if you can get there.</p>
 <h3 id="learn-you-the-node-js-for-much-win-presentation-">Learn You The Node.js For Much Win (presentation)</h3>
 <p>I was struck last CampJS how many JavaScript newbies were there, or at least people who deal with JavaScript as a secondary language and therefore only have a cursory understanding of it. And by extension, there were not many people who had much understanding of Node. So I wanted to present some intro-to-Node material this time.</p>
-<p>I gave a 30 minute talk covering the very basics of <em>what Node <strong>is</strong></em>, called <strong>Learn You The Node.js For Much Win</strong>. Obviously the title is inspired by <em><a href="http://learnyouahaskell.com/">Learn You a Haskell For Great Good</a></em> and <em><a href="http://learnyousomeerlang.com/">Learn You Some Erlang For Great Good</a></em>. You can find my slides <a href="http://r.va.gg/presentations/campjs-learn-you-node/">here</a> (feel free to rip them off if you need to give a similar talk somewhere!). The video may be online at some point in the future.</p>
+<p>I gave a 30 minute talk covering the very basics of <em>what Node <strong>is</strong></em>, called <strong>Learn You The Node.js For Much Win</strong>. Obviously the title is inspired by <em><a href="http://learnyouahaskell.com/">Learn You a Haskell For Great Good</a></em> and <em><a href="http://learnyousomeerlang.com/">Learn You Some Erlang For Great Good</a></em>. You can find my slides <a href="https://r.va.gg/presentations/campjs-learn-you-node/">here</a> (feel free to rip them off if you need to give a similar talk somewhere!). The video may be online at some point in the future.</p>
 <h3 id="learn-you-the-node-js-for-much-win-workshop-">Learn You The Node.js For Much Win (workshop)</h3>
 <p><img src="https://pbs.twimg.com/media/BRWaBeeCcAA9R7v.jpg" style="border-radius:4px; border: solid 2px white; box-shadow: 1px 1px 15px rgba(0,0,0,0.4);"></p>
 <p>The next morning, I gave a workshop on the same topic but it was much more hands-on. The inspiration for my workshop came from <a href="http://www.nodeconf.com/">NodeConf</a>, a couple of months earlier. <a href="https://twitter.com/substack">@substack</a> and <a href="https://twitter.com/maxogden">@maxogden</a> presented a workshop titled <strong>stream adventure</strong> which was a self-guided, interactive workshop for the terminal, built with Node. You can find it <a href="https://github.com/substack/stream-adventure">here</a> and install it from npm with <code>npm install stream-adventure -g</code>, I highly recommend it.</p>
@@ -271,7 +271,7 @@
 <p><em>(I really hope I haven&#39;t missed anyone out there; so many quality nerds at CampJS!)</em></p>
 <p><img src="https://lh5.googleusercontent.com/-tKp0U1N7XNw/UgngKk01qqI/AAAAAAAAAoc/xxAOCTqMCZ0/w600-h800-no/campJS+%252870+of+118%2529.jpg" style="border-radius:4px; border: solid 2px white; box-shadow: 1px 1px 15px rgba(0,0,0,0.4);"></p>
 <p><em>Tim Oxley making a contribution during the workshop, along with Christopher Giffard (left) and Eugene Ware (right)</em></p>
-<p>I had the <a href="http://r.va.gg/presentations/campjs-learn-you-node/workshop.html">solutions</a> to the workshop ready on the big-screen and walked through some of the early solutions and talked through what was going on. I didn&#39;t expect many people to listen to those bits and the workshop was designed so you could totally zone-out and do it at your own pace if that suited.</p>
+<p>I had the <a href="https://r.va.gg/presentations/campjs-learn-you-node/workshop.html">solutions</a> to the workshop ready on the big-screen and walked through some of the early solutions and talked through what was going on. I didn&#39;t expect many people to listen to those bits and the workshop was designed so you could totally zone-out and do it at your own pace if that suited.</p>
 <p>If anyone wants to run a similar style workshop for their local meet-up, using the same content, I&#39;d love to receive contributions to <strong>learnyounode</strong>. Alternatively, make your own! I extracted the core framework from <strong>learnyounode</strong> and it now lives separately as <strong><a href="https://github.com/rvagg/workshopper">workshopper</a></strong>.</p>
 <p><a href="https://nodei.co/npm/workshopper/"><img src="https://nodei.co/npm/workshopper.png?downloads=true&amp;stars=true" alt="NPM"></a></p>
 <p>I would love feedback from anyone in attendance or anyone that uses this tool to run their own workshops! <strong>learnyounode</strong> is already listed in Max Ogden&#39;s excellent <strong><a href="https://github.com/maxogden/art-of-node">The Art of Node</a></strong>, so I&#39;m looking forward to contributions to help turn this into a really useful teaching tool.</p>
@@ -330,15 +330,15 @@
 <p><strong>It is important to note that I&#39;m using the default options</strong> here and this is where I&#39;ll probably cop some flak. Basho in particular advocate a healthy amount of &quot;tuning&quot; to achieve appropriate performance. In particular the write-buffer defaults to only 4M and you can push data in faster (at the cost of compactions later on) by increasing this. I think the forks may even have additional tunables of their own that you can fiddle with. But, this whole tuning thing is a rabbit hole I don&#39;t dare go down right now!</p>
 <p>I&#39;m running this on an i7-2630QM CPU, plenty of RAM and an SSD.</p>
 <p>You can see that we managed to push in the 10M entries in just over 95 seconds with the plain <strong>Google LevelDB (v1.10.0)</strong>.</p>
-<p><img src="http://r.va.gg/images/2013/06/write_sorted_times_g.png" height=500 width=800 align="center" /></p>
+<p><img src="https://r.va.gg/images/2013/06/write_sorted_times_g.png" height=500 width=800 align="center" /></p>
 <hr>
 <p>Next up we have the HyperDex fork. The main difference here is that we have it working slightly faster in total and the write-times have been trimmed down a bit to be more consistent. Not a bad effort with default settings, quite a nice picture.</p>
-<p><img src="http://r.va.gg/images/2013/06/write_sorted_times_h.png" height=500 width=800 align="center" /></p>
+<p><img src="https://r.va.gg/images/2013/06/write_sorted_times_h.png" height=500 width=800 align="center" /></p>
 <hr>
 <p>Lastly we can see what Basho have done. They&#39;ve been on this case for a lot longer than HyperDex have and their fork, internally at least, diverges quite a bit from Google&#39;s LevelDB.</p>
 <p>We can see that the write-time has been considerably flattened; which is in line with what Basho claim and are aiming for, the consistency here is <strong>very</strong> impressive. Unfortunately we&#39;ve ended up with a total time that is <strong>double</strong> what it took Google&#39;s LevelDB to get the 10M entries in!</p>
 <p>No doubt this is probably something to do with the tunables, or perhaps I&#39;ve messed something up, anything&#39;s possible!</p>
-<p><img src="http://r.va.gg/images/2013/06/write_sorted_times_b.png" height=500 width=800 align="center" /></p>
+<p><img src="https://r.va.gg/images/2013/06/write_sorted_times_b.png" height=500 width=800 align="center" /></p>
 <hr>
 <h2 id="so-">So?</h2>
 <p>If you take anything away from this, here&#39;s what I think it should be: <strong>Do your own benchmarks if performance <em>really</em> is an issue for you</strong>. You&#39;re going to need some kind of benchmark suite that is tailored to your particular application. This will not only let you choose the appropriate storage system but it will give you something to work with when you start to get in to the mire that is &quot;tunables&quot;.</p>
