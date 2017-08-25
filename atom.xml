@@ -4,7 +4,7 @@
   <title>r.va.gg</title>
  
   <link href="https://r.va.gg" />
-  <updated>2017-08-25T01:18:32.854Z</updated>
+  <updated>2017-08-25T01:21:29.807Z</updated>
   <id>https://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
@@ -18,7 +18,7 @@
       <updated>2017-08-25T00:00:00.000Z</updated>
       <id>https://r.va.gg/2017/08/the-truth-about-rod-vagg.html</id>
       <content type="html">
-        &lt;p&gt;&lt;em&gt;NOTE: This post is copied from &lt;TODO&gt; and the primary intended audience was the Node.js CTC.&lt;/em&gt;&lt;/p&gt;
+        &lt;p&gt;&lt;em&gt;NOTE: This post is copied from &lt;a href=&quot;https://github.com/nodejs/CTC/issues/165#issuecomment-324798494&quot;&gt;https://github.com/nodejs/CTC/issues/165#issuecomment-324798494&lt;/a&gt; and the primary intended audience was the Node.js CTC.&lt;/em&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;&lt;em&gt;Dear reader from &lt;code&gt;${externalSource}&lt;/code&gt;: I neither like nor support personal abuse or attacks. If you are showing up here getting angry at any party involved, I would ask you to refrain from targeting them, privately or in public. Specifically to people who think they may be supporting me by engaging in abusive behaviour: I do not appreciate, want or need it, in any form and it is not helpful in any way.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Yep, this is a long post, but no apologies for the length this time. Buckle up.&lt;/p&gt;
