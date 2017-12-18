@@ -17,9 +17,9 @@ The other problem with Travis is that it's a CI solution, not a proper testing s
 Enter Docker and **[DNT](https://github.com/rvagg/dnt)**
 
 <div style="margin: 0 auto;">
-  <img src="http://www.docker.io/static/img/homepage-docker-logo.png" width="138" height="114">
-  <img src="http://nodejs.org/images/logos/nodejs-dark.png" width="212" height="114">
-  <img src="http://img.pandawhale.com/29490-Picard-applause-clapping-gif-s5nz.gif" width="151" height="114">
+  <img src="https://www.docker.com/sites/default/files/legal/small_v.png" width="114" height="114">
+  <img src="https://nodejs.org/images/logos/nodejs-dark.png" width="212" height="114">
+  <img src="https://img.pandawhale.com/29490-Picard-applause-clapping-gif-s5nz.gif" width="151" height="114">
 </div>
 
 ### DNT: Docker Node Tester

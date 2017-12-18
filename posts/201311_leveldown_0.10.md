@@ -132,7 +132,7 @@ Anyway, Snappy 1.1.1 has some fixes, some minor speed and compression improvemen
 
 ### Some embarrassing bugs
 
-[Amine Mouafik](https://github.com/Kyotoweb) is new to the LevelDOWN repository but has picked up some rather embarrassing bugs/omissions that are probably my fault. It's great to have more eyes on the C++ code, there's not enough JavaScript programmers with the confidence to dig in to messy C++-land.
+[Amine Mouafik](https://github.com/kytwb) is new to the LevelDOWN repository but has picked up some rather embarrassing bugs/omissions that are probably my fault. It's great to have more eyes on the C++ code, there's not enough JavaScript programmers with the confidence to dig in to messy C++-land.
 
 Firstly, on our standard LevelDOWN releases, it turns out that we haven't actually been enabling the internal **bloom filter**. The bloom filter was introduced in LevelDB to speed up read operations to avoid having to scan through whole blocks to find the data a read is looking for. So that's now enabled for 0.10.
 

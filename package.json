@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "main": "build.js",
   "dependencies": {
-    "blorg": "~1.0.0"
+    "blorg": "~1.0.0",
+    "swig": "^1.4.2",
+    "swig-templates": "^2.0.2"
   }
 }

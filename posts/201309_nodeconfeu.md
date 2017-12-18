@@ -90,14 +90,14 @@ My experience with **stream-adventure** and **learnyounode** suggested that this
 Unfortunately I didn't get to attend these other workshops, I also missed out on some skeet!
 
 <div style="text-align: center;">
-![Skeet](http://farm6.staticflickr.com/5338/9726258926_e3ea4a656f_z.jpg)
+![Skeet](https://farm6.staticflickr.com/5338/9726258926_e3ea4a656f_z.jpg)
 <p style="text-align: center;">Karolina *"don't mess with me"* Szczur, photo by [Matthew Bergman](http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/)</p>
 </div>
 
 But there was plenty of other *experience* to be had. It was also fantastic to meet so many people I only knew from IRC / Twitter / GitHub. For someone who lives in regional Australia and doesn't get a chance to socialise much with other nerds, this was a particularly special opportunity.
 
 <div style="text-align: center;">
-![Shenanigans](http://farm8.staticflickr.com/7392/9783982165_43ca4edef2_z.jpg)
+![Shenanigans](https://farm8.staticflickr.com/7392/9783982165_43ca4edef2_z.jpg)
 <p style="text-align: center;">Final night banquet shenanigans with [Charlie McConnell](https://twitter.com/Av1anFlu) and @substack ... the napkin hat thing is a story in itself, blame [Jessica Lord](https://twitter.com/jllord), photo by [Matthew Bergman](http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/)</p>
 </div>
 

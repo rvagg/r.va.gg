@@ -1,12 +1,12 @@
 ```json
 {
     "date"   : "2017-08-25"
-  , "title"  : "Responding to accusations against me in the Node.js Foundation"
+  , "title"  : "The Truth About Rod Vagg"
   , "author" : "Rod Vagg"
 }
 ```
 
-_NOTE: This post is copied from <TODO> and the primary intended audience was the Node.js CTC._
+_NOTE: This post is copied from <https://github.com/nodejs/CTC/issues/165#issuecomment-324798494> and the primary intended audience was the Node.js CTC._
 
 --------------------------
 
