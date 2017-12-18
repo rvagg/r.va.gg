@@ -42,7 +42,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2017/08/the-truth-about-rod-vagg.html">The Truth About Rod Vagg</a></li><li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li><li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li>
+            <li><a href="/2017/08/the-truth-about-rod-vagg.html">The Truth About Rod Vagg</a></li><li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li>
           </ul>
         </section>
       </section>
@@ -145,7 +145,7 @@
 <p>Google released a new version of Snappy, version 1.1.1. I don&#39;t really understand how Google uses <a href="http://semver.org/">semver</a>; we get very simple LevelDB releases with the minor version bumped and then we get versions of Snappy released with non-trivial changes with only the patch version bumped. I suspect that Google doesn&#39;t know how it uses semver either and there&#39;s no internal policy on it.</p>
 <p>Anyway, Snappy 1.1.1 has some fixes, some minor speed and compression improvements but most importantly it breaks compilation on Windows. So we had to figure out how to fix that for this release. Ugh. I also took the opportunity to clean up some of the compilation options for Snappy and we may see some improvements in the way it works now... perhaps.</p>
 <h3 id="some-embarrassing-bugs">Some embarrassing bugs</h3>
-<p><a href="https://github.com/Kyotoweb">Amine Mouafik</a> is new to the LevelDOWN repository but has picked up some rather embarrassing bugs/omissions that are probably my fault. It&#39;s great to have more eyes on the C++ code, there&#39;s not enough JavaScript programmers with the confidence to dig in to messy C++-land.</p>
+<p><a href="https://github.com/kytwb">Amine Mouafik</a> is new to the LevelDOWN repository but has picked up some rather embarrassing bugs/omissions that are probably my fault. It&#39;s great to have more eyes on the C++ code, there&#39;s not enough JavaScript programmers with the confidence to dig in to messy C++-land.</p>
 <p>Firstly, on our standard LevelDOWN releases, it turns out that we haven&#39;t actually been enabling the internal <strong>bloom filter</strong>. The bloom filter was introduced in LevelDB to speed up read operations to avoid having to scan through whole blocks to find the data a read is looking for. So that&#39;s now enabled for 0.10.</p>
 <p>Then he discovered that we had been <strong>turning off compression</strong> by default! I believe this happened with the the switch to NAN. The signature for reading boolean options from V8 objects was changed from internal <code>LD_BOOLEAN_OPTION_VALUE</code> &amp; <code>LD_BOOLEAN_OPTION_VALUE_DEFTRUE</code> macros for defaulting to true and false respectively when the options aren&#39;t supplied, to the NAN version which is a unified <code>NanBooleanOptionValue</code> which takes an optional <code>defaultValue</code> argument that can be used to make the default <code>true</code>. This happened at roughly Node version 0.11.4.</p>
 <p>Well, this code:</p>
