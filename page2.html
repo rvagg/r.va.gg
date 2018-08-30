@@ -40,7 +40,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2017/08/the-truth-about-rod-vagg.html">The Truth About Rod Vagg</a></li><li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li>
+            <li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the &quot;HashWick&quot; vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li><li><a href="/2017/08/the-truth-about-rod-vagg.html">The Truth About Rod Vagg</a></li>
           </ul>
         </section>
       </section>
@@ -49,6 +49,160 @@
       
 
 <div id="for">
+  
+
+    <section class="post-content">
+
+      <h2 id="nodeconf.eu"><a href="/2013/09/nodeconf.eu.html">NodeConf.eu</a></h2>
+
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on September 27, 2013</p>
+        <p class="link"><a href="/2013/09/nodeconf.eu.html">Permalink &amp; Comments</a></p>
+        <!-- <p class="commentcount"><a href="/2013/09/nodeconf.eu.html#disqus_thread">Comments</a></p> -->
+      </div>
+
+      <section class="post-body">
+        <p>Wow, <strong><a href="http://nodeconf.eu/">NodeConf.eu</a></strong> was certainly a once-in-a-lifetime event ... although there&#39;s talk of a repeat performance next year (don&#39;t miss the chance when it comes around!).</p>
+<div style="text-align: center;">
+<img src="https://r.va.gg/images/2013/09/nodeconfeu_raiseflag.jpg" alt="Raise that flag">
+<p style="text-align: center;">Dominic Tarr, @substack and Julian Gruber raising the NodeConf.eu flag</p>
+</div>
+
+
+<p>NodeConf.eu was held in Waterford, Ireland, on an <strong>Island</strong>, in a <strong>Castle</strong> and was organised by the Node lovin&#39; company, <a href="http://nearform.com/">nearForm</a>, in particular <a href="http://cianomaidin.com/">Cian O&#39;Maidin</a> and his amazing assistant Catherine Bradley. Of course <a href="http://futurealoof.com/">Mikeal Rogers</a> had a significant role in organising the event too.</p>
+<div style="text-align: center;">
+<img src="https://r.va.gg/images/2013/09/nodeconfeu_castle.jpg" alt="Waterford Castle">
+<p style="text-align: center;"><a href="http://waterfordcastle.com/">Waterford Castle</a></p>
+</div>
+
+<div style="text-align: center;">
+<img src="https://r.va.gg/images/2013/09/nodeconfeu_pig.jpg" alt="Pig">
+<p style="text-align: center;">The welcome banquet ... yep</p>
+</div>
+
+<p>Instead of describing the talks, I&#39;ll defer to the <a href="http://clock.co.uk/tech-blogs/nodeconfeu-2013-part-one">excellent</a> <a href="http://clock.co.uk/tech-blogs/nodeconfeu-2013-part-two">four</a> <a href="http://clock.co.uk/tech-blogs/nodeconfeu-2013-part-three">part</a> <a href="http://clock.co.uk/tech-blogs/nodeconfeu-reflection">series</a> by Paul, Adam, Luke and Ben of <a href="http://clock.co.uk/">Clock</a> where you&#39;ll find a great summary of the talks and events of the conference.</p>
+<p>For my part, I was deeply honoured to be involved in the <em>&quot;Node Databases&quot;</em> track of the conference. We started off the NodeConf.eu talks with a 3-part show. My talk was titled &quot;A Real Database Rethink&quot; and was followed by <a href="https://twitter.com/dominictarr">Dominic Tarr</a> who talked more about the Level* ecosystem and the various pieces of the Node Databases puzzle that&#39;s being built. <a href="http://juliangruber.com/">Julian Gruber</a> then closed us off with some amazing live-coding of some browser/server streaming LevelUP/multilevel <a href="https://github.com/juliangruber/nodeconfeu-13">wizardry</a>.</p>
+<h3 id="a-real-database-rethink">A Real Database Rethink</h3>
+<p>The slides of my talk are <a href="https://r.va.gg/presentations/nodeconfeu.2013/">online</a>. I attempted to break down the definition of the term <em>&quot;database&quot;</em> by looking at where the concept comes from historically. It&#39;s actually a difficult thing to define and I don&#39;t believe there is any one agreed upon meaning. What I came up with is:</p>
+<blockquote>
+<p>A tool for interacting with structured data, externalised from the core of our application</p>
+<ul>
+<li>Persistence</li>
+<li>Performance</li>
+<li>Simplify access to complex data</li>
+</ul>
+<p>And sometimes...</p>
+<ul>
+<li>Shared access</li>
+<li>Scalability</li>
+</ul>
+</blockquote>
+<p>But even that&#39;s pretty rough.</p>
+<p>Taking that definition, we can apply Node philosophy of small-core and vibrant user-land, along with the culture of extreme modularity afforded us by npm, and build a new kind of database; or at least apply new thinking to the &quot;database&quot;.</p>
+<p>The bulk of my talk was taken up with talking about LevelUP and the basics of the Level<em> ecosystem. There&#39;s a table on slide #7 that I&#39;m going to try and refine over time to help describe what the Level</em> / NodeBase world is all about.</p>
+<h3 id="level-me-up-scotty-">Level Me Up Scotty!</h3>
+<p>One of the three workshops available at NodeConf.eu was all about Node Databases. I took the same approach as at <a href="http://campjs.com/">CampJS</a> recently where I built <a href="https://r.va.gg/2013/08/learn-you-the-node.js.html">Learn You The Node.js For Much Win!</a>, a tool that owes a debt to <a href="https://github.com/substack/stream-adventure">stream-adventure</a>, a self-guided workshop-in-your-terminal application by <a href="https://twitter.com/substack">@substack</a> and <a href="https://twitter.com/maxogden">Max Ogden</a> written for NodeConf (US).</p>
+<p>This time around, I received some great help from both @substack and Julian Gruber who helped write some exercises, I also received help from <a href="http://twitter.com/eugeneware">Eugene Ware</a> who wasn&#39;t even at the conference but was assisting with development from Australia. <a href="http://twitter.com/raynos2">Raynos</a> was also a great help in getting the application working well.</p>
+<p>We ended up with <strong><em>Level Me Up Scotty!</em></strong>, or just <strong>levelmeup</strong>.</p>
+<div style="text-align: center;">
+<img src="https://raw.github.com/rvagg/levelmeup/master/levelmeup.png" alt="levelmeup">
+</div>
+
+<p>Dominic Tarr, <a href="https://twitter.com/thlorenz">Thorsten Lorenz</a>, <a href="https://twitter.com/hij1nx">Paolo Fragomeni</a>, <a href="http://www.matteocollina.com/">Matteo Collina</a>, <a href="https://twitter.com/ralphtheninja">Magnus Skog</a>, Max Ogden and other experienced <em>Levelers</em> helped on and off while the workshops were happening; so we had plenty of expertise at hand whenever there were questions.</p>
+<p>Workshops were unstructured and the organisers of each workshop all ended up agreeing that we should just let people come and go as they pleased. This suited us as the workshop was open-ended and designed not to be finished by most people within the originally planned hour <em>(I think that was the original plan)</em>.</p>
+<p><strong><a href="https://github.com/rvagg/levelmeup">levelmeup</a></strong> is installed from npm (<code>npm install levelmeup -g</code>) and is fully self-guided. You run the <code>levelmeup</code> application and it steps you through some exercises designed to:</p>
+<ul>
+<li>introduce you to the format of the workshops with a simple &quot;Hello World&quot; style exercise</li>
+<li>introduce you to LevelUP and its basic operations</li>
+<li>help you understand ReadStream and the range-queries it makes possible</li>
+<li>encourage creative thought regarding key structure</li>
+<li>introduce <a href="https://github.com/dominictarr/level-sublevel">sublevel</a></li>
+<li>introduce <a href="https://github.com/juliangruber/multilevel">multilevel</a></li>
+</ul>
+<p>There&#39;s more planned for the future of this workshop application too, Matteo even has an a <a href="https://github.com/rvagg/levelmeup/pull/19">work-in-progress exercise</a> that should be merged fairly soon.</p>
+<p><strong><a href="http://nodeschool.io/">nodeschool.io</a></strong> was hatched from NodeConf.eu and pulls together the three workshop applications currently available in npm. I believe this was an initiative of <a href="https://twitter.com/brianloveswords">Brian J. Brennan</a> and other Mozillans on the <a href="http://openbadges.org/">Open Badges</a> project. <strong><a href="https://github.com/rvagg/workshopper">workshopper</a></strong> is the engine that runs both learnyounode and levelmeup and we&#39;re trying to make it even easier for others to author their own workshop applications. There is already a <a href="https://github.com/timoxley/functional-javascript-workshop/">Functional Javacript Workshop</a> by <a href="https://twitter.com/secoif">Tim Oxley</a> and there are more in development. Exciting times!</p>
+<div style="text-align: center;">
+<img src="https://r.va.gg/images/2013/09/nodeconfeu_levelmeup.jpg" alt="Level Me Up Workshoppers">
+<p style="text-align: center;">Workshoppers stretching their brains with <strong>levelmeup</strong></p>
+</div>
+
+<p>My experience with <strong>stream-adventure</strong> and <strong>learnyounode</strong> suggested that this format should prove to be relatively successful but ultimately I think we had most of the attendees come through at some point and sit down to have a crack at the workshop. This is particularly impressive given that <a href="http://nexxylove.tumblr.com/">Emily Rose</a>, <a href="http://tmpvar.com/">Elijah Insua</a> and Matteo were running a NodeBots workshop which included Arduino and NodeCopter hacking (always popular!). And <a href="https://twitter.com/mrbruning">Max Bruning</a> and <a href="https://twitter.com/tjfontaine">TJ Fontaine</a> were running a Manta / MDB / DTrace / SmartOS-magic workshop and their material was some of my favourite from NodeConf (US) so I&#39;m sure people really enjoyed what they had to present.</p>
+<p>Unfortunately I didn&#39;t get to attend these other workshops, I also missed out on some skeet!</p>
+<div style="text-align: center;">
+<img src="https://farm6.staticflickr.com/5338/9726258926_e3ea4a656f_z.jpg" alt="Skeet">
+<p style="text-align: center;">Karolina <em>&quot;don&#39;t mess with me&quot;</em> Szczur, photo by <a href="http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/">Matthew Bergman</a></p>
+</div>
+
+<p>But there was plenty of other <em>experience</em> to be had. It was also fantastic to meet so many people I only knew from IRC / Twitter / GitHub. For someone who lives in regional Australia and doesn&#39;t get a chance to socialise much with other nerds, this was a particularly special opportunity.</p>
+<div style="text-align: center;">
+<img src="https://farm8.staticflickr.com/7392/9783982165_43ca4edef2_z.jpg" alt="Shenanigans">
+<p style="text-align: center;">Final night banquet shenanigans with <a href="https://twitter.com/Av1anFlu">Charlie McConnell</a> and @substack ... the napkin hat thing is a story in itself, blame <a href="https://twitter.com/jllord">Jessica Lord</a>, photo by <a href="http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/">Matthew Bergman</a></p>
+</div>
+
+<h3 id="the-level-gang">The Level* Gang</h3>
+<p>As an aside, NodeConf.eu had the largest concentration of LevelUP contributors and active Level* developers of any event that I&#39;m aware of so far. So we took the opportunity to have our own little meeting. We even took minutes, <a href="https://github.com/karolinaszczur/leveldb.org/blob/master/meetup-nodeland">of sorts</a>.</p>
+<p>There has been a long-standing plan to make a Level* / NodeBase website but being the disorganised rabble we are, it hasn&#39;t got off the ground. Karolina (and Jessica too I believe) are keen to help out on the design end but just need the content. So that&#39;s what we planned. There&#39;s a bunch of issues that form a TODO in the <a href="https://github.com/karolinaszczur/leveldb.org/issues">repo</a> for this project. Hopefully we can all get on top of it sooner rather than later. We&#39;re also open to assistance from anyone else that would like to contribute.</p>
+<p>Besides getting stuff done, it was just a pleasure to hang out with these people and talk <em>shop</em>.</p>
+<div style="text-align: center;">
+<img src="https://r.va.gg/images/2013/09/nodeconfeu_levelgang.jpg" alt="A momentus event">
+<p style="text-align: center;"><strong>The Level* Gang</strong>: Paolo, Dominic, @substack, Karolina, Magnus, Mikeal, Julian, Max, Matteo and <a href="https://twitter.com/paulfryzel">Paul Fryzel</a>. Raynos was around but missed this particular <em>event</em>, Thorsten was inside demoing his guitar-typing software.</p>
+</div>
+
+
+      </section>
+
+    </section>
+
+  
+
+    <section class="post-content">
+
+      <h2 id="learn-you-the-node.js"><a href="/2013/08/learn-you-the-node.js.html">Learn You The Node.js</a></h2>
+
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on August 14, 2013</p>
+        <p class="link"><a href="/2013/08/learn-you-the-node.js.html">Permalink &amp; Comments</a></p>
+        <!-- <p class="commentcount"><a href="/2013/08/learn-you-the-node.js.html#disqus_thread">Comments</a></p> -->
+      </div>
+
+      <section class="post-body">
+        <p><strong><a href="http://campjs.com/">CampJS</a></strong> has just finished, with a bigger crowd than last time around. It was lots of fun, and as usual, these events are more about meeting the people I collaborate, and socialise with online than anything else. There was a particularly large turn-out of the hackers on #polyhack, our Australian programmers channel on Freenode. Even <a href="https://twitter.com/mwotton">@mwotton</a>, our resident Haskell-troll was there! Lots of photos and news can be found on <a href="http://storify.com/campjs/campjs-ii">Storify</a>. The next one will likely be near Melbourne in February some time and I highly recommend it if you can get there.</p>
+<h3 id="learn-you-the-node-js-for-much-win-presentation-">Learn You The Node.js For Much Win (presentation)</h3>
+<p>I was struck last CampJS how many JavaScript newbies were there, or at least people who deal with JavaScript as a secondary language and therefore only have a cursory understanding of it. And by extension, there were not many people who had much understanding of Node. So I wanted to present some intro-to-Node material this time.</p>
+<p>I gave a 30 minute talk covering the very basics of <em>what Node <strong>is</strong></em>, called <strong>Learn You The Node.js For Much Win</strong>. Obviously the title is inspired by <em><a href="http://learnyouahaskell.com/">Learn You a Haskell For Great Good</a></em> and <em><a href="http://learnyousomeerlang.com/">Learn You Some Erlang For Great Good</a></em>. You can find my slides <a href="https://r.va.gg/presentations/campjs-learn-you-node/">here</a> (feel free to rip them off if you need to give a similar talk somewhere!). The video may be online at some point in the future.</p>
+<h3 id="learn-you-the-node-js-for-much-win-workshop-">Learn You The Node.js For Much Win (workshop)</h3>
+<p><img src="https://pbs.twimg.com/media/BRWaBeeCcAA9R7v.jpg" style="border-radius:4px; border: solid 2px white; box-shadow: 1px 1px 15px rgba(0,0,0,0.4);"></p>
+<p>The next morning, I gave a workshop on the same topic but it was much more hands-on. The inspiration for my workshop came from <a href="http://www.nodeconf.com/">NodeConf</a>, a couple of months earlier. <a href="https://twitter.com/substack">@substack</a> and <a href="https://twitter.com/maxogden">@maxogden</a> presented a workshop titled <strong>stream adventure</strong> which was a self-guided, interactive workshop for the terminal, built with Node. You can find it <a href="https://github.com/substack/stream-adventure">here</a> and install it from npm with <code>npm install stream-adventure -g</code>, I highly recommend it.</p>
+<p><a href="https://nodei.co/npm/stream-adventure/"><img src="https://nodei.co/npm/stream-adventure.png?downloads=true&amp;stars=true" alt="NPM"></a></p>
+<p>I was so inspired that I stole their code and made my own workshop application! <strong><a href="https://github.com/rvagg/learnyounode/">learnyounode</a></strong>. You can download and install it with <code>npm install learnyounode -g</code>.</p>
+<p><a href="https://nodei.co/npm/learnyounode/"><img src="https://nodei.co/npm/learnyounode.png?downloads=true&amp;stars=true" alt="NPM"></a></p>
+<p>The application itself is/was a series of 13 separate workshops. Starting off with a simple <em>HELLO WORLD</em> and ending with a JSON API HTTP server (contributed by the very clever <a href="https://twitter.com/sidorares">@sidorares</a>).</p>
+<p><img src="https://raw.github.com/rvagg/learnyounode/master/learnyounode.png" alt="learnyounode"></p>
+<p>Nobody actually managed to finish the workshops in the allotted 60 minutes, although <a href="http://twitter.com/alexdickson">@alexdickson</a>, an expert JavaScripter but Node-n00b was the first one I heard of finishing it not long after.</p>
+<p>The workshops attempt to focus on some of the core concepts of Node. There&#39;s lots of console output because that&#39;s easiest to validate but it introduces filesystem I/O, both synchronous and asynchronous and moves straight on to networking because that&#39;s what Node is so good at. An <em>HTTP CLIENT</em> example, introduces HTTP and is expanded on in <em>HTTP COLLECT</em> which introduces streams. <em>JUGGLING ASYNC</em> builds on <em>HTTP COLLECT</em> to introduce the complexities of managing parallel asynchronous activities. From there, it switches from network clients to network servers, first a simple TCP server in <em>TIME SERVER</em> and then using streams to serve files in <em>HTTP FILE SERVER</em> and transforming data with <em>HTTP UPPERCASERER</em>. The final exercise presents you with a more complex, closer-to-real-world example, an HTTP API server with multiple end-points.</p>
+<p>The entire workshop is designed to take longer than 1-hour, people ought to be able ot take it away and complete it later. It&#39;s also designed to be suitable for complete n00bs and also people with some experience, it ought to make a fun challenge for anyone already experienced with Node to see how quickly they can complete the examples (I believe I earned the honour of being the first person at NodeConf to finish stream-adventure in the allotted time!).</p>
+<p>The Node-experts at CampJS were thankfully helping out during the workshop so there wasn&#39;t much competition going on there.</p>
+<p>Many thanks to these expert Node nerds who hovered and helped people during the workshop and also did some test-driving of the workshop prior to the event:</p>
+<ul>
+<li><a href="https://twitter.com/nicholasf">Nicholas Faiz</a></li>
+<li><a href="https://twitter.com/cgiffard">Christopher Giffard</a></li>
+<li><a href="https://twitter.com/secoif">Tim Oxley</a> (who also poured his heart and soul into organising CampJS)</li>
+<li><a href="http://twitter.com/deoxxa">Conrad Pankoff</a></li>
+<li><a href="https://twitter.com/sidorares">Andrey Sidorov</a> (who also contributed the final exercise of the workshop)</li>
+<li><a href="https://twitter.com/EugeneWare">Eugene Ware</a> (who was also brilliant all weekend, running the local <a href="http://en.wikipedia.org/wiki/Sneakernet">sneakernet</a> because the network was so flakey)</li>
+</ul>
+<p><em>(I really hope I haven&#39;t missed anyone out there; so many quality nerds at CampJS!)</em></p>
+<p><img src="https://lh5.googleusercontent.com/-tKp0U1N7XNw/UgngKk01qqI/AAAAAAAAAoc/xxAOCTqMCZ0/w600-h800-no/campJS+%252870+of+118%2529.jpg" style="border-radius:4px; border: solid 2px white; box-shadow: 1px 1px 15px rgba(0,0,0,0.4);"></p>
+<p><em>Tim Oxley making a contribution during the workshop, along with Christopher Giffard (left) and Eugene Ware (right)</em></p>
+<p>I had the <a href="https://r.va.gg/presentations/campjs-learn-you-node/workshop.html">solutions</a> to the workshop ready on the big-screen and walked through some of the early solutions and talked through what was going on. I didn&#39;t expect many people to listen to those bits and the workshop was designed so you could totally zone-out and do it at your own pace if that suited.</p>
+<p>If anyone wants to run a similar style workshop for their local meet-up, using the same content, I&#39;d love to receive contributions to <strong>learnyounode</strong>. Alternatively, make your own! I extracted the core framework from <strong>learnyounode</strong> and it now lives separately as <strong><a href="https://github.com/rvagg/workshopper">workshopper</a></strong>.</p>
+<p><a href="https://nodei.co/npm/workshopper/"><img src="https://nodei.co/npm/workshopper.png?downloads=true&amp;stars=true" alt="NPM"></a></p>
+<p>I would love feedback from anyone in attendance or anyone that uses this tool to run their own workshops! <strong>learnyounode</strong> is already listed in Max Ogden&#39;s excellent <strong><a href="https://github.com/maxogden/art-of-node">The Art of Node</a></strong>, so I&#39;m looking forward to contributions to help turn this into a really useful teaching tool.</p>
+
+      </section>
+
+    </section>
+
   
 
     <section class="post-content">
@@ -254,73 +408,6 @@
 <p>Yep, that&#39;s browser code. Simply <code>npm install levelup level-js</code> and run the module through <a href="http://browserify.org/">Browserify</a> and you get the full LevelUP API in your browser!</p>
 <hr>
 <p>Stay tuned! This is just one step in the quest for a truly modular database system that lets you build a database that suits your applications and not the other way around.</p>
-
-      </section>
-
-    </section>
-
-  
-
-    <section class="post-content">
-
-      <h2 id="node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree"><a href="/2013/05/node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree.html">Node.ninjas Presentation - LevelDB and Node Sitting in a Tree</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on May 9, 2013</p>
-        <p class="link"><a href="/2013/05/node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2013/05/node.ninjas-presentation-leveldb-and-node-sitting-in-a-tree.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p>I&#39;m giving a presentation at <a href="http://www.meetup.com/sydney-node-ninjas/">Node.ninjas</a> tonight in Sydney. I&#39;ve put together a talk about LevelDB and Node that covers:</p>
-<ol>
-<li>What LevelDB <em>is</em> and the basics of how it works</li>
-<li>A quick introduction to the core LevelDB libraries in Node: <a href="https://github.com/rvagg/node-levelup">LevelUP</a> and <a href="https://github.com/rvagg/node-leveldown/">LevelDOWN</a></li>
-<li>Some preaching about the awesomeness of modularity around a small, extensible core; including a whirlwind tour of the current, flourishing, LevelDB+Node ecosystem</li>
-</ol>
-<p>It&#39;s this last point that excites me the most. There&#39;s some very smart people building some very clever pieces to the <em>Node Database</em> puzzle. What&#39;s more, people are actually building functional databases in Node now, I&#39;ve just collected a list from npm of what looks like functional databases that use LevelDB:</p>
-<ul>
-<li>Rumours</li>
-<li>LevelGraph</li>
-<li>PushDB</li>
-<li>NeutrinoDB</li>
-<li>PlumbDB</li>
-<li>Syncstore</li>
-</ul>
-<p>And a few more that look like a work in progress. Plus, I&#39;m sure there&#39;s more people out there we&#39;ve never even heard of who are cooking up some amazing things using the LevelDB+Node combination!</p>
-<p><strong>The slides to my talk are <a href="https://r.va.gg/presentations/node.ninjas/">here</a>.</strong></p>
-
-      </section>
-
-    </section>
-
-  
-
-    <section class="post-content">
-
-      <h2 id="leveldb-and-node-getting-up-and-running"><a href="/2013/05/leveldb-and-node-getting-up-and-running.html">LevelDB and Node: Getting Up and Running</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on May 4, 2013</p>
-        <p class="link"><a href="/2013/05/leveldb-and-node-getting-up-and-running.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2013/05/leveldb-and-node-getting-up-and-running.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p>This is the second article in a three-part series on LevelDB and how it can be used in Node.</p>
-<ul class="parts">
-  <li><a href="http://dailyjs.com/2013/04/19/leveldb-and-node-1/">Part 1: What is LevelDB Anyway?</a></li>
-  <li><a href="http://dailyjs.com/2013/05/03/leveldb-and-node-2/"><strong>Part 2: Getting Up and Running</strong></a></li>
-</ul>
-
-<p>Our first article covered the basics of LevelDB and its internals. If you haven&#39;t already read it you are encouraged to do so as we will be building upon this knowledge as we introduce the Node interface in this article.</p>
-<p><img src="http://dailyjs.com/images/posts/leveldb.png" alt="LevelDB"></p>
-<p>There are two primary libraries for using LevelDB in Node, <strong><a href="https://github.com/rvagg/node-leveldown">LevelDOWN</a></strong> and <strong><a href="https://github.com/rvagg/node-levelup">LevelUP</a></strong>.</p>
-<p><strong>LevelDOWN</strong> is a pure C++ interface between Node.js and LevelDB. Its API provides limited <em>sugar</em> and is mostly a straight-forward mapping of LevelDB&#39;s operations into JavaScript. All I/O operations in LevelDOWN are asynchronous and take advantage of LevelDB&#39;s thread-safe nature to parallelise reads and writes.</p>
-<p><strong>LevelUP</strong> is the library that the majority of people will use to interface with LevelDB in Node. It wraps LevelDOWN to provide a more Node.js-style interface. Its API provides more <em>sugar</em> than LevelDOWN, with features such as optional arguments.</p>
-<p>LevelUP exposes iterators as Node.js-style object streams. A LevelUP <strong>ReadStream</strong> can be used to read sequential entries, forward or reverse, to and from any key.</p>
-<p>LevelUP handles JSON and other encoding types for you. For example, when operating on a LevelUP instance with JSON value-encoding, you simply pass in your objects for writes and they are serialised for you. Likewise, when you read them, they are deserialised and passed back in their original form.</p>
-<p><strong>Continue reading this article on <a href="http://dailyjs.com/2013/05/03/leveldb-and-node-2/">DailyJS.com</a></strong></p>
 
       </section>
 

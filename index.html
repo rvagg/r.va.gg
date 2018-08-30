@@ -40,7 +40,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2017/08/the-truth-about-rod-vagg.html">The Truth About Rod Vagg</a></li><li><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></li><li><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don&#39;t use Node&#39;s core &#39;stream&#39; module</a></li>
+            <li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the &quot;HashWick&quot; vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li><li><a href="/2017/08/the-truth-about-rod-vagg.html">The Truth About Rod Vagg</a></li>
           </ul>
         </section>
       </section>
@@ -49,6 +49,155 @@
       
 
 <div id="for">
+  
+
+    <section class="post-content">
+
+      <h2 id="node.js-and-the-hashwick-vulnerability"><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the &quot;HashWick&quot; vulnerability</a></h2>
+
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on August 30, 2018</p>
+        <p class="link"><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Permalink &amp; Comments</a></p>
+        <!-- <p class="commentcount"><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html#disqus_thread">Comments</a></p> -->
+      </div>
+
+      <section class="post-body">
+        <p>The following post was originally published on the <a href="https://nodesource.com/blog/node-js-and-the-hashwick-vulnerability">NodeSource Blog</a>. This text is copyright NodeSource and is reproduced with permission.</p>
+<hr>
+<p>Yesterday, veteran Node.js core contributor and former Node.js TSC member Fedor Indutny published an article on his personal blog detailing  a newly-discovered vulnerability in V8.  Named <a href="https://darksi.de/12.hashwick-v8-vulnerability/">HashWick</a>, this vulnerability will need to be addressed by Node.js, but as yet has not been patched.</p>
+<p>This article will cover the details  surrounding the disclosure yesterday, and explain some of the technical background. As a patch for Node.js is not yet available, I will also present some mitigation options for users and discuss how this vulnerability is likely to be addressed by Node.js.</p>
+<h2 id="responsible-disclosure">Responsible disclosure</h2>
+<p>Fedor originally reported this vulnerability to V8 and the Node.js security team in May. Unfortunately, the underlying issues are complex, and Node&#39;s use of older V8 engines complicates the process of finding and applying a suitable fix. The Node.js TSC delegated responsibility to the V8 team to come up with a solution.</p>
+<p>After reporting the vulnerability, Fedor followed a standard practice of holding off public disclosure for 90 days, and although a fix has yet to land in Node, he published high-level details of his findings. </p>
+<p>It is worth pointing out that Fedor’s disclosure does not contain code or specific details on how to exploit this vulnerability; moreover, to exploit HashWick a malicious party would need to tackle some fairly difficult timing analysis. However, knowledge that such a vulnerability exists, and can potentially be executed on a standard PC, is likely to spur some to reverse engineer the details for themselves.</p>
+<p>These circumstances leave us all in an awkward situation while we wait for a fix, but I expect this disclosure to result in security releases in Node.js in the coming weeks.</p>
+<h2 id="vulnerability-details">Vulnerability details</h2>
+<p>There are three important concepts involved in this vulnerability:</p>
+<ol>
+<li>Hash functions and hash tables</li>
+<li>Hash flooding attacks</li>
+<li>Timing analysis</li>
+</ol>
+<h3 id="hash-functions">Hash functions</h3>
+<p>Hash functions are a fundamental concept in computer science. They are typically associated with cryptography, but are widely used for non-cryptographic needs. A <a href="https://en.wikipedia.org/wiki/Hash_function">hash function</a> is simply any function that takes input data of some type and is able to repeatedly return output of a predictable size and range of values. An ideal hash function is one that exhibits apparent randomness and whose results spread evenly across the output range, regardless of input values.</p>
+<p>To understand the utility of such functions, consider a &quot;sharded&quot; database system, divided into multiple storage backends. To route data storage and retrieval, you need a routing mechanism that knows which backend that data belongs in. Given a key, how should the routing mechanism determine where to <em>put</em> new data, and then where to <em>get</em> stored data when requested? A random routing mechanism isn&#39;t helpful here, unless you also want to store metadata telling you which random backend a particular key&#39;s value was placed in.</p>
+<p>This is where hash functions come in handy. A hash function would allow you to take any given key and return a “backend identifier” value, directing the routing mechanism to assign data to a particular backend. Despite apparent randomness, a good hash function can thus distribute keys across all of your backends fairly evenly.</p>
+<p>This concept also operates at the most basic levels of our programming languages and their runtimes. Most languages have hash tables of some kind; data structures that can store values with arbitrary keys. In JavaScript, almost any object can become a hash table because you can add string properties, and store whatever values you like. This is because <code>Object</code> is a form of hash table, and almost everything is related to <code>Object</code> in some way. <code>const foo = { hash: &#39;table&#39; }</code> stores the value <code>&#39;table&#39;</code> at key <code>&#39;hash&#39;</code>. Even an <code>Array</code> can take the form of a hash table. Arrays in JavaScript are not limited to integer keys, and they can be as sparse as you like: <code>const a = [ 1, 2, 3 ]; a[1000] = 4; a[&#39;hash&#39;] = &#39;table&#39;;</code>. The underlying storage of these hash tables in JavaScript needs to be practical and efficient.</p>
+<p>If a JavaScript object is backed by a memory location of a fixed size, the runtime needs to know where in that space a particular key&#39;s value should be located. This is where hash functions come in. An operation such as <code>a[&#39;hash&#39;]</code> involves taking the string <code>&#39;hash&#39;</code>, running it through a hash function, and determining exactly where in the object&#39;s memory storage the value belongs. But here&#39;s the catch: since we are typically dealing with small memory spaces (a new <code>Array</code> in V8 starts off with space for only 4 values by default), a hash function is likely to produce &quot;collisions&quot;, where the output for <code>&#39;hash&#39;</code> may collide with the same location as <code>&#39;foo&#39;</code>. So the runtime has to take this into account. V8 deals with collision problems by simply incrementing the storage location by one until an empty space can be found. So if the storage location for <code>&#39;hash&#39;</code> is already occupied by the value of <code>&#39;foo&#39;</code>, V8 will move across one space, and store it there if that space is empty. If a new value has a collision with either of these spaces, then the incrementing continues until an empty space is found. This process of incrementing can become costly, adding time to data storage operations, which is why hash functions are so important: a good hash function will exhibit maximum randomness.</p>
+<h3 id="hash-flooding-attacks">Hash flooding attacks</h3>
+<p>Hash flooding attacks take advantage of predictability, or poor randomness, in hash functions to overwhelm a target and force it to work hard to store or look up values. These attacks essentially bypass the utility of a hash function by forcing excessive work to find storage locations.</p>
+<p>In our sharded data store example above, a hash flood attack may involve an attacker knowing exactly how keys are resolved to storage locations. By forcing the storage or look-up of values in a single backend, an attacker may be able to overwhelm the entire storage system by placing excessive load on that backend, thereby bypassing any load-sharing advantage that a bucketing system normally provides.</p>
+<p>In Node.js, if an attacker knows exactly how keys are converted to storage locations, they may be able to send a server many object property keys that resolve to the same location, potentially causing an increasing amount of work as V8 performs its check-and-increment operations finding places to store the values. Feed enough of this colliding data to a server and it&#39;ll end up spending most of its time simply trying to figure out how to store and address it. This could be as simple as feeding a JSON string to a server that is known to parse input JSON. If that JSON contains an object with many keys that all collide, the object construction process will be very expensive. This is the essence of a denial-of-service (DoS) attack: force the server to do an excessive amount of work, preventing it from being able to perform its normal functions.</p>
+<p>Hash flooding is a well known attack type, and standard mitigation involves very good hash functions, combined with additional randomness: <strong><em>keyed hash functions</em></strong>. A keyed hash function, is a hash function that is seeded with a random key. That same seed is provided with every hash operation, so that together, the seed and an input value yield the same output value. Change the seed, and the output value is entirely different. In this way, it is not good enough to simply know the particular hash function being used, you also need to know the random seed the system is using.</p>
+<p>V8 uses a keyed hash function for its object property storage operations (and other operations that require hash functions). It generates a random key at start-up and keeps on using that key for the duration of the application&#39;s lifetime. To execute a hash flood type attack against V8, you need to know the random seed it&#39;s using internally. This is precisely what Fedor has figured out how to do&mdash;determine the hash seed used by an instance of V8 by inspecting it from the outside. Once you have the seed, you can perform a hash flood attack and render a Node.js server unresponsive, or even crash it entirely.</p>
+<h3 id="timing-attacks">Timing attacks</h3>
+<p>We covered timing attacks in some detail in our <a href="https://nodesource.com/blog/node-js-security-release-summary-august-2018">deep dive of the August 2018 Node.js security releases</a>. A timing attack is a method of determining sensitive data or program execution steps, by analyzing the time it takes for operations to be performed. This can be done at a very low level, such as most of the recent high-profile vulnerabilities reported against CPUs that rely on memory look-up timing and the timing of other CPU operations.</p>
+<p>At the application level, a timing attack could simply analyze the amount of time it takes to compare strings and make strong guesses about what&#39;s being compared. In a sensitive operation such as <code>if (inputValue == &#39;secretPassword&#39;) ...</code>, an attacker may feed many string variations and analyze the timing. The time it takes to process a <code>inputValue</code>s of <code>&#39;a&#39;</code>, <code>&#39;b&#39;</code> ... <code>&#39;s&#39;</code> may give enough information to assume the first character of the secret. Since timing differences are so tiny, it may take many passes and an average of results to be able to make strong enough inference. Timing attacks often involve a <em>lot</em> of testing and a timing attack against a remote server will usually involve sending a <em>lot</em> of data.</p>
+<p>Fedor&#39;s attack against V8 involves using timing differences to work out the hash seed in use. He claims that by sending approximately 2G of data to a Node.js server, he can collect enough information to reverse engineer the seed value. Thanks to quirks in JavaScript and in the way V8 handles object construction, an external attacker can force many increment-and-store operations. By collecting enough timing data on these operations, combined with knowledge of the hash algorithm being used (which is no secret), a sophisticated analysis can unearth the seed value. Once you have the seed, a hash flood attack is fairly straightforward.</p>
+<h2 id="mitigation">Mitigation</h2>
+<p>There are a number of ways a Node.js developer can foil this type of attack without V8 being patched, or at least make it more difficult. These also represent good practice in application architecture so they are worth implementing regardless of the impact of this specific vulnerability.</p>
+<p>The front-line for mitigating against timing attacks for publicly accessible network services is <strong>rate limiting</strong>. Note that Fedor needs to send 2G of data to determine the hash seed. A server that implements basic rate limiting for clients is likely to make it more difficult or impractical to execute such an attack. Unfortunately, such rate limiting needs to be applied <em>before</em> too much internal V8 processing is allowed to happen. A <code>JSON.parse()</code> on an input string <em>before</em> telling the client that they have exceeded the maximum requests for their IP address won&#39;t help mitigate. Additionally, rate limiting may not mitigate against distributed timing attacks, although these are much more difficult to execute due to the variability in network conditions across multiple clients, leading to very fuzzy timing data.</p>
+<p>Other types of <strong>input limiting</strong> will also be useful. If your service blindly applies a <code>JSON.parse()</code>, or other operation, to any length of input, it will be much easier for an attacker to unearth important timing information. Ensure that you have basic input limit checks in place and your network services don&#39;t blindly process whatever they are provided.</p>
+<p>Standard <strong>load balancing</strong> approaches make such attacks more difficult too. If a client cannot control which Node.js instance it is talking to for any given connection, it will be much more difficult to perform a useful timing analysis of the type Fedor has outlined. Likewise, if a client has no way to determine which unique instance it has been talking to (such as a cookie that identifies the server instance), such an attack may be impossible given a large enough cluster.</p>
+<h3 id="the-future-for-v8">The future for V8</h3>
+<p>As Fedor outlined in his post, the best mitigation comes from V8 fixing its weak hash function. The two suggestions he has are:</p>
+<ol>
+<li>Increase the hash seed size from 32 bits to 64 bits</li>
+<li>Replace the hash function with something that exhibits better randomness</li>
+</ol>
+<p>The key size suggestion simply increases the complexity and cost of an attack, but doesn&#39;t make it go away. Any sufficiently motivated attacker with enough resources may be able to perform the same attack, just on a different scale. Instead of 2G of data, a lot more may need to be sent and this may be impossible in many cases.</p>
+<p>A change of hash function would follow a practice adopted by many runtimes and platforms that require hash functions but need to protect against hash flood attacks. <a href="https://en.wikipedia.org/wiki/SipHash">SipHash</a> was developed specifically for this use and has been slowly adopted as a standard since its introduction 6 years ago. Perl, Python, Rust and Haskell all use SipHash in some form for their hash table data structures.</p>
+<p>SipHash has properties similar to constant-time operations used to mitigate against other forms of timing attacks. By analyzing the timing of the hash function, you cannot (as far as we know) make inference about the seed being used. SipHash is also fast in comparison to many other common and secure keyed hash functions, although it may not be faster than the more naive operation V8 is currently using. Ultimately, it’s up to the V8 authors to come up with an appropriate solution that takes into account the requirement for security and the importance of speed.</p>
+
+      </section>
+
+    </section>
+
+  
+
+    <section class="post-content">
+
+      <h2 id="background-briefing-august-node.js-security-releases"><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></h2>
+
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on August 29, 2018</p>
+        <p class="link"><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Permalink &amp; Comments</a></p>
+        <!-- <p class="commentcount"><a href="/2018/08/background-briefing-august-node.js-security-releases.html#disqus_thread">Comments</a></p> -->
+      </div>
+
+      <section class="post-body">
+        <p>The following post was originally published on the NodeSource Blog as <a href="https://nodesource.com/blog/node-js-security-release-summary-august-2018">Node.js Security Release Summary - August 2018</a>. This text is copyright NodeSource and is reproduced with permission. This is a deep-dive into the security vulnerabilities described in my brief summary on the Node.js blog as <a href="https://nodejs.org/en/blog/vulnerability/august-2018-security-releases/">August 2018 Security Releases</a>.</p>
+<hr>
+<p>This month&#39;s Node.js security releases are primarily focused on upgrades to the OpenSSL library. There are also two minor Node.js security-related flaws in Node.js&#39; <code>Buffer</code> object. All of the flaws addressed in the OpenSSL upgrade and the fixes to <code>Buffer</code> can be classified as either &quot;low&quot; or &quot;very low&quot; in severity. However, this assessment is generic and may not be appropriate to your own Node.js application. It is important to understand the basics of the flaws being addressed and make your own impact assessment. Most users will not be impacted at all by the vulnerabilities being patched but specific use-cases may cause a high severity impact. You may also be exposed via packages you are using via npm, so upgrading as soon as practical is always recommended.</p>
+<p>Node.js switched to the new 1.1.0 release line of OpenSSL for version 10 earlier this year. Before Node.js 10 becomes LTS in October, we expect to further upgrade it to OpenSSL 1.1.1 which will add TLS 1.3 support. Node.js&#39; current LTS lines, 8 (&quot;Carbon&quot;) and 6 (&quot;Boron&quot;) will continue to use OpenSSL 1.0.2.</p>
+<p>In the meantime, OpenSSL continues to support their 1.1.0 and 1.0.2 release lines with a regular stream of security fixes and improvements and Node.js has adopted a practice of shipping new releases with these changes included shortly after their release upstream. Where there are non-trivial &quot;security&quot; fixes, Node.js will generally ship LTS releases with only those security fixes so users have the ability to drop in low-risk upgrades to their deployments. This is the case for this month&#39;s releases.</p>
+<p>The August OpenSSL releases of versions 1.1.0i and 1.0.2p are technically labelled &quot;bug-fix&quot; releases <a href="https://mta.openssl.org/pipermail/openssl-announce/2018-August/000129.html">by the OpenSSL team</a> but they do include security fixes! The reason this isn&#39;t classified as a security release is that those security fixes have already been disclosed and the code is available on GitHub. They are low severity, and one of the three security items included doesn&#39;t even have a CVE number assigned to it. However, this doesn&#39;t mean they should be ignored. You should be aware of the risks and possible attack vectors before making decisions about rolling out upgrades.</p>
+<h2 id="openssl-client-dos-due-to-large-dh-parameter-cve-2018-0732-https-www-openssl-org-news-secadv-20180612-txt-">OpenSSL: Client DoS due to large DH parameter (<a href="https://www.openssl.org/news/secadv/20180612.txt">CVE-2018-0732</a>)</h2>
+<p>All actively supported release lines of Node.js are impacted by this flaw. Patches are included in both OpenSSL 1.1.0i (Node.js 10) and 1.0.2p (Node.js 6 LTS &quot;Boron&quot; and Node.js 8 LTS &quot;Carbon&quot;).</p>
+<p>This fixes a potential denial of service (DoS) attack against <em>client</em> connections by a malicious server. During a TLS communication handshake, where both client and server agree to use a cipher-suite using DH or DHE (Diffie–Hellman, in both ephemeral and non-ephemeral modes), a malicious server can send a very large prime value to the client. Because this has been unbounded in OpenSSL, the client can be forced to spend an unreasonably long period of time to generate a key, potentially causing a denial of service.</p>
+<p>We would expect to see a higher severity for this bug if it were reversed and a client could impose this tax on servers. But in practice, there are more limited scenarios where a denial of service is practical against client connections.</p>
+<p>The <a href="https://github.com/openssl/openssl/commit/ea7abeeab">fix</a> for this bug in OpenSSL limits the number of bits in the prime modulus to 10,000 bits. Numbers in excess will simply fail the DH handshake and a standard SSL error will be emitted.</p>
+<p>Scenarios where Node.js users may need to be concerned about this flaw include those where your application is making client TLS connections to untrusted servers, where significant CPU costs in attempting to establish that connection is likely to cause cascading impact in your application. A TLS connection could be for HTTPS, encrypted HTTP/2 or a plain TLS socket. An &quot;untrusted server&quot; is one outside of your control and not in the control of trustworthy third-parties. An application would likely need to be forced to make a large number of these high-cost connections for an impact to be felt, but you should assess your architecture to determine if such an impact is likely, or even possible.</p>
+<h2 id="openssl-cache-timing-vulnerability-in-rsa-key-generation-cve-2018-0737-https-www-openssl-org-news-secadv-20180416-txt-">OpenSSL: Cache timing vulnerability in RSA key generation (<a href="https://www.openssl.org/news/secadv/20180416.txt">CVE-2018-0737</a>)</h2>
+<p>Node.js is not impacted by this vulnerability as it doesn&#39;t expose or use RSA key generation functionality in OpenSSL. However, it is worth understanding some of the background of this vulnerability as we are seeing an increasing number of software and hardware flaws relating to potential timing attacks. Programming defensively so as to not expose the timing of critical operations in your application is just as important as sanitizing user input while constructing SQL queries. Unfortunately, timing attacks are not as easy to understand, or as obvious, so tend to be overlooked.</p>
+<p>Side-channel attacks are far from new, but there is more interest in this area of security, and researchers have been focusing  more attention on novel ways to extract hidden information. <a href="https://spectreattack.com/">Spectre and Meltdown</a> are the two recent high-profile examples that target CPU design flaws. CVE-2018-0737 is another example, and itself uses hardware-level design flaws. A <a href="https://eprint.iacr.org/2018/367.pdf">paper</a> by Alejandro Cabrera Aldaya, Cesar Pereida García, Luis Manuel Alvarez Tapia and Billy Bob Brumley from Universidad Tecnológica de la Habana (CUJAE), Cuba, and Tampere University of Technology, Finland outlines a cache-timing attack on RSA key generation, the basis of this OpenSSL flaw.</p>
+<p>The CVE-2018-0737 flaw relies on a &quot;<a href="https://www.usenix.org/node/184416">Flush+Reload attack</a>&quot; which targets the last-level of cache on the system (L3, or level-3 cache on many modern processors). This type of attack exploits the way that Intel x86 architectures structure their cache and share it between processors and processes for efficiency. By setting up a local process that shares an area of cache memory with another process you wish to attack, you can make high-confidence inferences about the code being executed in that process. The attack is called &quot;Flush+Reload&quot; because the process executing the attack, called the &quot;spy&quot;, causes a flush on the area of cache containing a piece of critical code, then waits a small amount of time and reloads that code in the cache. By measuring the amount of time the reload takes, the spy can infer whether the process under attack loaded, and therefore executed, the code in question or not. This attack looks at code being executed, not data, but in many cryptographic calculations, the sequence of operations can tell you all you need to know about what data is being generated or operated on. These attacks have been successfully demonstrated against different implementations of RSA, ECDSA and even AES. The attack has been shown to work across virtual machines in shared environments under certain circumstances. One researcher even demonstrated the ability to detect the sequence of operations executed by a user of <code>vi</code> on a shared machine.</p>
+<p>An important take-away about cache-timing attacks is that they require local access to the system under attack. They are an attack type that probes the physical hardware in some way to gather information. Public clouds are usually not vulnerable because of the way cache is configured and partitioned, but we shouldn&#39;t assume we won&#39;t see new novel timing attacks that impact public clouds in the future. Of course browsers blur the definition of &quot;local code execution&quot;, so we shouldn&#39;t be complacent! CVE-2018-0737 is marked as &quot;Low&quot; severity by the OpenSSL team because of the requirement for local access, the difficulty in mounting a successful attack and the rare circumstances in which an attack is feasible.</p>
+<p>The best protection against Flush+Reload and many other classes of timing attacks is to use <strong>constant-time operations</strong> for cryptographic primitives and operations that expose potentially sensitive information. If an operation follows a stable code path and takes a constant amount of time regardless of input or output then it can be hard, or impossible to make external inference about what is going on. An operation as simple as <code>if (userInput === &#39;supersecretkey&#39;) { ... }</code> can be vulnerable to a timing attack if an attacker has the ability to execute this code path enough times. In 2014, as the PHP community debated switching certain operations to constant-time variants, <a href="https://blog.ircmaxell.com/2014/11/its-all-about-time.html">Anthony Ferrara</a> wrote a great piece about timing attacks and the types of mitigations available. Even though it addresses PHP specifically, the same concepts are universal.</p>
+<p>The fix that OpenSSL applied for CVE-2018-0737 was a straight-forward switch to constant-time operations for the code in question. For RSA, this has the effect of masking the operations being performed from side-channel inspection, such as the use of cache.</p>
+<p>Be aware that Node.js has a <a href="https://nodejs.org/docs/latest-carbon/api/crypto.html#crypto_crypto_timingsafeequal_a_b"><code>crypto.timingSafeEqual()</code></a> operation that can be used whenever performing sensitive comparisons. Using this function, our vulnerable operation becomes <code>if (crypto.timingSafeEqual(Buffer.fromString(userInput), Buffer.fromString(&#39;supersecretkey&#39;)) { ... }</code> and we stop exposing timing information to potential attackers.</p>
+<h2 id="openssl-ecdsa-key-extraction-local-side-channel">OpenSSL: ECDSA key extraction local side-channel</h2>
+<p>All actively supported release lines of Node.js are impacted by this flaw. Patches are included in both OpenSSL 1.1.0i (Node.js 10) and 1.0.2p (Node.js 6 LTS &quot;Boron&quot; and Node.js 8 LTS &quot;Carbon&quot;).</p>
+<p>This flaw does not have a CVE due to OpenSSL policy to not assign itself CVEs for local-only vulnerabilities that are more academic than practical. This vulnerability was discovered by <a href="https://www.nccgroup.trust/us/our-research/technical-advisory-return-of-the-hidden-number-problem/">Keegan Ryan at NCC Group</a> and impacts many cryptographic libraries including LibreSSL, BoringSSL, NSS, WolfCrypt, Botan, libgcrypt, MatrixSSL, and of course OpenSSL. A CVE was assigned for this issue specifically for libgcrypt, CVE-2018-0495.</p>
+<p>This flaw is very similar to the above RSA key generation cache-timing flaw in that it also uses cache-timing and an attacker must be able to execute code on the local machine being attacked. It also uses a Flush+Reload to infer the operations being performed but this time it examines Digital Signature Algorithm (DSA) the Elliptic Curve Digital Signature Algorithm (ECDSA), but a little more information is required to mount a successful attack. In an attack scenario, the victim uses a private key to create several signatures. The attacker observes the resulting signatures must know the messages being signed. Then, the cache-timing side-channel is used to infer order of operations and backfill to find the private key.</p>
+<p>This attack could be used against TLS, or SSH, and there are mechanisms in both that would give an attacker enough information to perform a successful attack under certain circumstances. The key component again being local access to a server performing the DSA or ECDSA signing operation, or access to a virtual machine on the same host as long as cache isn&#39;t partitioned as it often is for public clouds.</p>
+<p>Unlike the RSA flaw, a fix is not as simple as switching to constant-time operations. Instead, the <a href="https://github.com/openssl/openssl/pull/6523">fix</a> involves adding a <a href="https://en.wikipedia.org/wiki/Blinding_(cryptography">“blinding”</a>) to the calculation. Blinding is a technique that can mask the underlying operation from side-channel inspection by inserting unpredictability which can be later reversed. This specific fix addresses the problematic addition (<code>+</code>) operation which exposes the side-channel leak. It does this by adding a random value as noise to both sides of the equation. Now, when observing the operation, it is theoretically impossible to remove the noise and discover the important information that would leak data.</p>
+<h2 id="unintentional-exposure-of-uninitialized-memory-in-buffer-creation-cve-2018-7166-">Unintentional exposure of uninitialized memory in <code>Buffer</code> creation (CVE-2018-7166)</h2>
+<p>All versions of Node.js 10 are impacted by this flaw. Prior release lines are not impacted.</p>
+<p>Node.js TSC member Сковорода Никита Андреевич (Nikita Skovoroda / <a href="https://github.com/chalker">@ChALkeR</a>) discovered an argument processing flaw that causes causes <code>Buffer.alloc()</code> to return uninitialized memory. This method is intended to be safe and only return initialized, or cleared, memory.</p>
+<p>Memory is not automatically cleared after use by most software and it is not generally cleared within Node.js during an application&#39;s lifetime when memory is freed from internal use. This means that a call to <code>malloc()</code> (system memory allocation) usually returns a block of memory that contains data stored by the previous user of that block who <code>free()</code>d it without clearing it. This can cause problems if an attacker can find a way to create these blocks and inspect their contents as secrets usually pass through memory—passwords, credit card numbers, etc. Allocate enough blocks of uncleared memory and you&#39;re bound to find something interesting.</p>
+<p>In the browser, you have no way to allocate uninitialized memory, so a malicious site can&#39;t inspect your memory to find sensitive data arising from your interactions with another site. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer"><code>ArrayBuffer</code></a> and the various <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray"><code>TypedArray</code></a> types will only ever give you initialized, or zeroed memory—memory that contains only <code>0</code>s.</p>
+<p>Historically, for the sake of performance, Node.js has acted more like a traditional un-sandboxed server-side runtime that doesn&#39;t need the same kinds of protections as browsers. Unfortunately, many JavaScript programmers are not as attuned to the risks of using uninitialized memory. Additionally, the <code>Buffer</code> constructor itself has some usability flaws that have lead to many expert programmers exposing uninitialized memory to potential attackers. <a href="https://github.com/websockets/ws">ws</a>, the very popular WebSocket library, authored by skilled programmers, <a href="https://github.com/websockets/ws/releases/tag/1.0.1">famously exposed uninitialized memory</a> to client connections over the network by means of a simple remote <code>ping()</code> call that passed an integer instead of a string.</p>
+<p>The usability concerns around <code>Buffer</code> lead to the deprecation of the <code>Buffer()</code> constructor and introduction of new factory methods: <a href="https://nodejs.org/api/buffer.html#buffer_buffer_from_buffer_alloc_and_buffer_allocunsafe"><code>Buffer.from()</code>, <code>Buffer.alloc()</code>,  <code>Buffer.allocUnsafe()</code></a>, and the <a href="https://nodejs.org/api/buffer.html#buffer_the_zero_fill_buffers_command_line_option"><code>--zero-fill-buffers</code></a> command line argument. It&#39;s worth noting that from version 1.0, <a href="https://nodesource.com/products/nsolid">N|Solid</a>, NodeSource&#39;s enterprise Node.js runtime, included a <code>&quot;zeroFillAllocations&quot;</code> option in its <a href="https://docs.nodesource.com/latest/docs#polices">policies</a> feature to address similar concerns.</p>
+<p>Unfortunately, the root cause of <code>Buffer</code> constructor usability concerns—too much flexibility in argument types—is still with us, this time in <a href="https://nodejs.org/api/buffer.html#buffer_buf_fill_value_offset_end_encoding"><code>Buffer#fill()</code></a> who&#39;s signature is far too flexible: <code>Buffer#fill(value[, offset[, end]][, encoding])</code>. Internal re-use of this function, and its flexible argument parsing, by <code>Buffer.alloc()</code> exposes a bug that allows a supposedly <em>safe</em> allocation method to return <em>unsafe</em> (i.e. uninitialized) memory blocks.</p>
+<p><code>Buffer.alloc()</code> allows a third argument, <code>encoding</code>. When there is a second argument, <code>fill</code>, this and the <code>encoding</code> argument are passed blindly to the internal <code>fill()</code> implementation as second and third arguments. This is where it encounters the familiar <code>Buffer()</code> constructor problem:</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">_fill</span><span class="p">(</span><span class="nx">buf</span><span class="p">,</span> <span class="nx">val</span><span class="p">,</span> <span class="nx">start</span><span class="p">,</span> <span class="nx">end</span><span class="p">,</span> <span class="nx">encoding</span><span class="p">)</span> <span class="p">{</span>
+ <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">val</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
+   <span class="k">if</span> <span class="p">(</span><span class="nx">start</span> <span class="o">===</span> <span class="kc">undefined</span> <span class="o">||</span> <span class="k">typeof</span> <span class="nx">start</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
+     <span class="nx">encoding</span> <span class="o">=</span> <span class="nx">start</span><span class="p">;</span>
+     <span class="nx">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+     <span class="nx">end</span> <span class="o">=</span> <span class="nx">buf</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+   <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">end</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
+     <span class="nx">encoding</span> <span class="o">=</span> <span class="nx">end</span><span class="p">;</span>
+     <span class="nx">end</span> <span class="o">=</span> <span class="nx">buf</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="c1">// ...</span>
+</pre></div>
+
+<p>The intention here is that by only passing three arguments, with the third one being <code>encoding</code>, the flexible argument parsing rules would enter the top set of instructions and set <code>encoding = start</code>, <code>start = 0</code>, <code>end = buf.length</code>, precisely what we want for a <code>Buffer</code> fully initialized with the provided <code>val</code>. However, because <code>Buffer.alloc()</code> does minimal type checking of its own, the <code>encoding</code> argument could be a number and this whole block of argument rewriting would be skipped and <code>start</code> could be set to some arbitrary point in the <code>Buffer</code>, even the very end, leaving the whole memory block uninitialized:</p>
+<pre><code>&gt; Buffer.alloc(20, 1)
+&lt;Buffer 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01&gt;
+&gt; Buffer.alloc(20, &#39;x&#39;)
+&lt;Buffer 78 78 78 78 78 78 78 78 78 78 78 78 78 78 78 78 78 78 78 78&gt;
+&gt; Buffer.alloc(20, 1, 20)
+&lt;Buffer 80 be 6a 01 01 00 00 00 ff ff ff ff ff ff ff ff 00 00 00 00&gt;
+// whoops!
+</code></pre><p>This is only a security concern if you are allowing unsanitized user input to control the third argument to <code>Buffer.alloc()</code>. Unless you are fully sanitizing and type-checking everything coming in from an external source and know precisely what types are required by your dependencies, you should not assume that you are not exposed.</p>
+<p>The <a href="https://github.com/nodejs/node/commit/40a7beeddac9b9ec9ef5b49157daaf8470648b08">fix</a> for CVE-2018-7166 simply involves being explicit with internal arguments passed from <code>alloc()</code> to <code>fill()</code> and bypassing the argument shifting code entirely. Avoiding argument cleverness is a good rule to adopt in any case for robustness and security.</p>
+<h2 id="out-of-bounds-oob-write-in-buffer-cve-2018-12115-">Out of bounds (OOB) write in <code>Buffer</code> (CVE-2018-12115)</h2>
+<p>All actively supported release lines of Node.js are impacted by this flaw.</p>
+<p>Node.js TSC member Сковорода Никита Андреевич (Nikita Skovoroda / <a href="https://github.com/chalker">@ChALkeR</a>) discovered an OOB write in <code>Buffer</code> that can be used to write to memory outside of a <code>Buffer</code>&#39;s memory space. This can corrupt unrelated <code>Buffer</code> objects or cause the Node.js process to crash.</p>
+<p><code>Buffer</code> objects expose areas of raw memory in JavaScript. Under the hood, this is done in different ways depending on how the <code>Buffer</code> is created and how big it needs to be. For <code>Buffer</code>s less than 8k bytes in length created via <code>Buffer.allocUnsafe()</code> and from most uses of <code>Buffer.from()</code>, this memory is allocated from a pool. This pool is made up of areas of block-allocated memory larger than an individual <code>Buffer</code>. So <code>Buffer</code>s created sequentially will often occupy adjoining memory space. In other cases, memory space may sit adjacent with some other important area of memory used by the current application—likely an internal part of V8 which makes heaviest use of memory in a typical Node.js application.</p>
+<p>CVE-2018-12115 centers on <code>Buffer#write()</code> when working with UCS-2 encoding, (recognized by Node.js under the names <code>&#39;ucs2&#39;</code>, <code>&#39;ucs-2&#39;</code>, <code>&#39;utf16le&#39;</code> and <code>&#39;utf-16le&#39;</code>) and takes advantage of its two-bytes-per-character arrangement.</p>
+<p>Exploiting this flaw involves confusing the UCS-2 string encoding utility in Node.js by telling it you wish to write new contents in the second-to-last position of the current <code>Buffer</code>. Since one byte is not enough for a single UCS-2 character, it should be rejected without changing the target <code>Buffer</code>, just like any <code>write()</code> with zero bytes is.  The UCS-2 string encoding utility is written with the assumption that it has at least one whole character to write, but by breaking this assumption we end up setting the &quot;maximum number of characters to write&quot; to <code>-1</code>, which, when passed to V8 to perform the <a href="https://v8docs.nodesource.com/node-10.6/d2/db3/classv8_1_1_string.html#a79d9a617e12421ae3afb7a2060eb6fe4">write</a>, is interpreted as &quot;all of the buffer you provided&quot;.</p>
+<p>UCS-2 encoding can therefore be tricked to write as many bytes as you want from the second-to-last position of a <code>Buffer</code> on to the next area of memory. This memory space may be occupied by another <code>Buffer</code> in the application, or even to another semi-random memory space within our application, corrupting state and potentially causing an immediate segmentation fault crash. At best this can be used for a denial of service by forcing a crash. At worst, it could be used to overwrite sensitive data to trick an application into unintended behavior.</p>
+<p>As with CVE-2018-7166, exploiting this flaw requires the passing of unsanitized data through to <code>Buffer#write()</code>, possibly in both the data to be written and the position for writing. Unfortunately, this is not an easy scenario to recognize and such code has been found to exist in npm packages available today.</p>
+<p>The <a href="https://github.com/nodejs/node/commit/88105c998ef9d3f54aa8f22b82ec8cc31cbfac95">fix</a> for CVE-2018-12115 involves checking for this underflow and bailing early when there really are no full UCS-2 characters to write.</p>
+
+      </section>
+
+    </section>
+
   
 
     <section class="post-content">
@@ -171,56 +320,6 @@
 <p>Obviously I hope that you agree that (a) this action against me is unwarranted, is based on flawed and/or irrelevant claims of “misbehaviour” and is based in malicious intent, and that (b) allowing this course of action to be an acceptable part of our governance procedures will have detrimental consequences for the future health of the project.</p>
 <p>I ask the CTC to reject this motion, for the TSC to reject the demand by the Board for my suspension, and that we as a technical team send a signal that our independence is critical to the success of the project, despite the accusations of an angry mob.</p>
 <p>Thank you if you dignified my words by reading this far!</p>
-
-      </section>
-
-    </section>
-
-  
-
-    <section class="post-content">
-
-      <h2 id="nodeschool-comes-to-australia"><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on June 14, 2014</p>
-        <p class="link"><a href="/2014/06/nodeschool-comes-to-australia.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2014/06/nodeschool-comes-to-australia.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p><strong><a href="http://nodeschool.io">NodeSchool</a></strong> has its genesis ultimately at NodeConf 2013 where <a href="https://twitter.com/substack">@substack</a> introduced us to <a href="https://github.com/substack/stream-adventure">stream-adevnture</a>. I took the concept home to <a href="http://campjs.com/">CampJS</a> and wrote <strong><a href="https://github.com/rvagg/learnyounode/">learnyounode</a></strong> for the <em>introduction to Node.js</em> workshop I was to run. As part of the process I extracted a package called <a href="https://github.com/rvagg/workshopper">workshopper</a> to do the work of making a terminal workshop experience. Most of the logic originally came from stream-adventure. A short time after CampJS, I created <a href="https://github.com/rvagg/levelmeup">levelmeup</a> for <a href="http://nodeconf.eu/">NodeConf.eu</a> and suddenly we had a selection of what have come to be known as <em>&quot;workshoppers&quot;</em>. At NodeConf.eu, <a href="https://twitter.com/brianloveswords">@brianloveswords</a> suggested the NodeSchool concept and registered the <a href="http://nodeschool.io">domain</a>, @substack provided the artwork and the ball was rolling.</p>
-<p>Today, workshopper is depended on by 22 packages in npm, most of which are workshoppers that you can install and use to learn aspects of Node.js or JavaScript in general. The curated list of usable workshoppers is maintained at <a href="http://nodeschool.io">nodeschool.io</a>.</p>
-<p>learnyounode itself is now being downloaded at a rate of roughly 200 <em>per day</em>. That&#39;s at least 200 more people each day wanting to learn how to <em>do Node.js</em>.</p>
-<div style="margin: 0 auto; text-align: center;">
-
-<img src="https://nodei.co/npm-dl/learnyounode.png?months=6" alt="learnyounode downloads">
-
-</div>
-
-<p>I can&#39;t recall exactly how <em>&quot;NodeSchool IRL&quot;</em> events started but it was probably <a href="http://twitter.com/maxogden">@maxogden</a> who has been responsible for a large number of these events. There have now been over 30 of these events around the world and the momentum is only picking up steam. The beauty of this format is that it&#39;s low-cost and low-effort to make it happen. All you need is a venue where nerds can show up with their computers and some basic guidance. There have even been a few events that were without experienced Node.js mentors but that&#39;s no great barrier as the lessons are largely self-guided and work particularly well when pairs or groups of people work together on solutions.</p>
-<div style="margin: 0 auto; text-align: center;">
-
-<img src="https://raw.githubusercontent.com/nodeschool/nodeschool.github.io/master/images/nodeschool-hex.png" style="width: 300px;">
-
-</div>
-
-<h2 id="nodeschool-comes-to-australia">NodeSchool comes to Australia</h2>
-<p>It&#39;s surprising that so far, given all of the NodeSchool activity around the world, that we haven&#39;t had a single NodeSchool event in Australia. CampJS had learnyounode last year and this year there were <a href="https://github.com/nodeschool/discussions/issues/323">3 brand new workshoppers</a> introduced there, so it&#39;s the closest thing we&#39;ve had.</p>
-<p>Next weekend, on the <strong>21st of June</strong>, we are attempting a <strong>coordinated Australian NodeSchool</strong> event. At the moment, that coordination amounts to having events hosted in Sydney, Melbourne and Hobart, unfortunately the timing has been difficult for Brisbane and we haven&#39;t managed to bring anyone else out of the woodwork. But, we will be attempting to do this regularly, plus we&#39;d like to encourage meet-up hosts to use the format now and again with their groups.</p>
-<h2 id="nodeschool-in-sydney">NodeSchool in Sydney</h2>
-<p>I&#39;ll be at NodeSchool in Sydney next weekend. It will be proudly hosted by <a href="http://nicta.com.au/">NICTA</a> who have a space for up to 60 people. NICTA are currently doing some interesting work with WebRTC, you should catch up with <a href="https://twitter.com/DamonOehlman">@DamonOehlman</a> if this is something you&#39;re interested in. <a href="https://www.tabcorp.com.au/">Tabcorp</a> will also be a major sponsor of the event. Tabcorp have been building a new digital team with the back-end almost entirely in Node.js. They are also doing a great job engaging and contributing to existing and new open source projects. They are also hiring so be sure to catch up with <a href="https://twitter.com/romainprieto">@romainprieto</a> if you&#39;re doing PHP, Java or some other abomination and want to be doing Node!</p>
-<p>Thanks to the sponsorship, we&#39;ll be able to provide some catering for the event. Currently we&#39;re looking at providing lunch but we may be expanding that to providing some breakfast treats. We&#39;ll also be providing refreshments for everyone attending throughout the day.</p>
-<p>Start time is 9.30am, end is 4pm. The plan is to spend the first half of the day doing introductory Node.js which will mainly mean working through learnyounode. The second half of the day will be less structured and we&#39;ll encourage attendees to work on other workshoppers that they find interesting. Thankfully we have some amazing Node.js programmers in Sydney and they&#39;ll be available as mentors.</p>
-<p>We are currently <em>selling</em> tickets for $5, the money will contribute towards the event, there is no profit involved here. We don&#39;t <em>need</em> to charge for the event but given the generally dismal turnout for tech meet-ups that are free we feel that providing a small commitment barrier will help us maximise the use of the space we have available. <strong>If the money is a barrier for you please contact us!</strong> We don&#39;t want anyone to miss out. Also, we have special &quot;mentor&quot; tickets available for experienced Node.js programmers who are able to assist. If you think you fit into this category please contact us also.</p>
-<p>You can <strong>sign up for Sydney NodeSchool at <a href="https://ti.to/nodeschool/sydney-june-2014/">https://ti.to/nodeschool/sydney-june-2014/</a></strong>. If you are tempted, don&#39;t sit on the fence because spots are limited and as of writing the tickets are almost 1/2 gone.</p>
-<h2 id="nodeschool-in-melbourne">NodeSchool in Melbourne</h2>
-<p>NodeSchool in Melbourne is being supported by <a href="http://www.thoughtworks.com/">ThoughtWorks</a> who have been doing Node in Australia for a while now. If you&#39;re interested in their services or want to chat about employment opportunities you should catch up with <a href="https://github.com/lfendy">Liauw Fendy</a>.</p>
-<p><a href="https://twitter.com/sidorares">@sidorares</a> is putting in a large amount of the legwork in to Melbourne&#39;s event. He was a major contributor to the original learnyounode and is a huge asset to the Melbourne Node community. Along with Andrey, Melbourne has large number of expert Node.js hackers, many of who will be available as mentors. This will be a treat for Melbournians so this is not something you should miss out on if you are in town! Potential mentors should contact Andrey.</p>
-<p>You can <strong>sign up for Melbourne NodeSchool at <a href="https://ti.to/nodeschool/melbourne-june-2014/">https://ti.to/nodeschool/melbourne-june-2014/</a></strong>.</p>
-<h2 id="nodeschool-in-hobart">NodeSchool in Hobart</h2>
-<p>Hobart is lucky to have <a href="http://joshgilli.es/">@joshgillies</a>, a local tech-community organiser responsible for many Tasmanian web and JavaScript events. The event is being hosted at <a href="http://typewriterfactory.com/">The Typewriter Factory</a>, a business workspace that Josh helps run. Sponsorship is being provided by <a href="http://www.acs.org.au/">ACS</a> who will be helping support the venue and also provide some catering.</p>
-<p>You can <strong>sign up for Hobart NodeSchool at <a href="https://ti.to/nodeschool/hobart-june-2014/">https://ti.to/nodeschool/hobart-june-2014/</a></strong>.</p>
 
       </section>
 
@@ -399,259 +498,47 @@ without its edge cases which can break code designed against the pure 0.10 versi
 
     <section class="post-content">
 
-      <h2 id="testing-code-against-many-node-versions-with-docker"><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Testing code against many Node versions with Docker</a></h2>
+      <h2 id="nodeschool-comes-to-australia"><a href="/2014/06/nodeschool-comes-to-australia.html">NodeSchool comes to Australia</a></h2>
 
       <div class="post-meta">
-        <p class="byline">by Rod Vagg on November 26, 2013</p>
-        <p class="link"><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2013/11/testing-code-against-many-node-versions-with-docker.html#disqus_thread">Comments</a></p> -->
+        <p class="byline">by Rod Vagg on June 14, 2014</p>
+        <p class="link"><a href="/2014/06/nodeschool-comes-to-australia.html">Permalink &amp; Comments</a></p>
+        <!-- <p class="commentcount"><a href="/2014/06/nodeschool-comes-to-australia.html#disqus_thread">Comments</a></p> -->
       </div>
 
       <section class="post-body">
-        <p>I haven&#39;t found reason to play with <a href="http://www.docker.io">Docker</a> until now, but I&#39;ve finally came up with an excellent use-case.</p>
-<p><a href="https://github.com/rvagg/nan">NAN</a> is a project that helps build native Node.js add-ons while maintaining compatibility with Node and V8 from Node versions 0.8 onwards. V8 is currently undergoing major internal changes which is making add-on development very difficult; NAN&#39;s purpose is to abstract that pain. Instead of having to manage the difficulties of keeping your code compatible across Node/V8 versions, NAN does it for you. But this means that we have to be sure to keep NAN tested and compatible with all of the versions it claims to support.</p>
-<p><a href="https://travis-ci.org/">Travis</a> can help a little with this. It&#39;s possible to use <a href="https://github.com/creationix/nvm">nvm</a> to test across different versions of Node, we&#39;ve tried this with NAN (see the <a href="https://github.com/rvagg/nan/blob/ba82a9c1fba01b3df553ac624aeaf15ca3688315/.travis.yml">.travis.yml</a>). Ideally you&#39;d have better choice of Node versions, but Travis have had some <a href="https://github.com/travis-ci/travis-ci/issues/1328">difficulty</a> keeping up. Also, npm bugs make it difficult, with a high failure rate from npm install problems, like <a href="https://travis-ci.org/rvagg/nan/jobs/14440485">this</a> and <a href="https://travis-ci.org/rvagg/nan/jobs/14474613">this</a>, so I don&#39;t even publish the badge on the NAN README.</p>
-<p>The other problem with Travis is that it&#39;s a CI solution, not a proper testing solution. Even if it worked well, it&#39;s not really that helpful in the development process, you need rapid feedback that your code is working on your target platforms (this is one reason why I love back-end development more than front-end development!)</p>
-<p>Enter Docker and <strong><a href="https://github.com/rvagg/dnt">DNT</a></strong></p>
-<div style="margin: 0 auto;">
-  <img src="https://www.docker.com/sites/default/files/legal/small_v.png" width="114" height="114">
-  <img src="https://nodejs.org/images/logos/nodejs-dark.png" width="212" height="114">
-  <img src="https://img.pandawhale.com/29490-Picard-applause-clapping-gif-s5nz.gif" width="151" height="114">
+        <p><strong><a href="http://nodeschool.io">NodeSchool</a></strong> has its genesis ultimately at NodeConf 2013 where <a href="https://twitter.com/substack">@substack</a> introduced us to <a href="https://github.com/substack/stream-adventure">stream-adevnture</a>. I took the concept home to <a href="http://campjs.com/">CampJS</a> and wrote <strong><a href="https://github.com/rvagg/learnyounode/">learnyounode</a></strong> for the <em>introduction to Node.js</em> workshop I was to run. As part of the process I extracted a package called <a href="https://github.com/rvagg/workshopper">workshopper</a> to do the work of making a terminal workshop experience. Most of the logic originally came from stream-adventure. A short time after CampJS, I created <a href="https://github.com/rvagg/levelmeup">levelmeup</a> for <a href="http://nodeconf.eu/">NodeConf.eu</a> and suddenly we had a selection of what have come to be known as <em>&quot;workshoppers&quot;</em>. At NodeConf.eu, <a href="https://twitter.com/brianloveswords">@brianloveswords</a> suggested the NodeSchool concept and registered the <a href="http://nodeschool.io">domain</a>, @substack provided the artwork and the ball was rolling.</p>
+<p>Today, workshopper is depended on by 22 packages in npm, most of which are workshoppers that you can install and use to learn aspects of Node.js or JavaScript in general. The curated list of usable workshoppers is maintained at <a href="http://nodeschool.io">nodeschool.io</a>.</p>
+<p>learnyounode itself is now being downloaded at a rate of roughly 200 <em>per day</em>. That&#39;s at least 200 more people each day wanting to learn how to <em>do Node.js</em>.</p>
+<div style="margin: 0 auto; text-align: center;">
+
+<img src="https://nodei.co/npm-dl/learnyounode.png?months=6" alt="learnyounode downloads">
+
 </div>
 
-<h3 id="dnt-docker-node-tester">DNT: Docker Node Tester</h3>
-<p>Docker is a tool that simplifies the use of Linux containers to create lightweight, isolated compute &quot;instances&quot;. Solaris and its variants have had this functionality for years in the form of &quot;zones&quot; but it&#39;s a fairly new concept for Linux and Docker makes the whole process a lot more friendly.</p>
-<p><strong>DNT</strong> contains two tools that work with Docker and Node.js to set-up containers for testing and run your project&#39;s tests in those containers.</p>
-<div style="margin: 0 auto;">
-  <img src="https://r.va.gg/images/2013/11/nan-dnt.png">
+<p>I can&#39;t recall exactly how <em>&quot;NodeSchool IRL&quot;</em> events started but it was probably <a href="http://twitter.com/maxogden">@maxogden</a> who has been responsible for a large number of these events. There have now been over 30 of these events around the world and the momentum is only picking up steam. The beauty of this format is that it&#39;s low-cost and low-effort to make it happen. All you need is a venue where nerds can show up with their computers and some basic guidance. There have even been a few events that were without experienced Node.js mentors but that&#39;s no great barrier as the lessons are largely self-guided and work particularly well when pairs or groups of people work together on solutions.</p>
+<div style="margin: 0 auto; text-align: center;">
+
+<img src="https://raw.githubusercontent.com/nodeschool/nodeschool.github.io/master/images/nodeschool-hex.png" style="width: 300px;">
+
 </div>
 
-<p><strong>DNT</strong> includes a <code>setup-dnt</code> script that sets up the most basic Docker images required to run Node.js applications, nothing extra. It first creates an image called &quot;dev_base&quot; that uses the default Docker &quot;ubuntu&quot; image and adds the build tools required to compile and install Node.js</p>
-<p>Next it creates a &quot;node_dev&quot; image that contains a complete copy of the Node.js <a href="http://github.com/joyent/node">source repository</a>. Finally, it creates a series of images that are required; for each Node version, it creates an image with Node installed and ready to use.</p>
-<p>Setting up a project is a matter of creating a <em>.dntrc</em> file in the root directory of the project. This configuration file involves setting a <code>NODE_VERSIONS</code> variable with a list of all of the versions of Node you want to test against, and this can include &quot;master&quot; to test the latest code from the Node repository. You also set a <code>TEST_CMD</code> variable with a series of commands required to set up, compile and execute your tests. The <code>setup-dnt</code> command can be run against a <em>.dntrc</em> file to make sure that the appropriate Docker images are ready. The <code>dnt</code> command can then be used to execute the tests against all of the Node versions you specified.</p>
-<p>Since Docker containers are completely isolated, <strong>DNT</strong> can run tests in parallel as long as the machine has the resources. The default is to use the number of cores on the computer as the concurrency level but this can be configured if not appropriate.</p>
-<p>Currently <strong>DNT</strong> is designed to parse TAP test output by reading the final line as either &quot;ok&quot; or &quot;not ok&quot; to report test status back on the command-line. It is configurable but you need to supply a command that will transform test output to either an &quot;ok&quot; or &quot;not ok&quot; (<code>sed</code> to the rescue?).</p>
-<h3 id="how-i-m-using-it">How I&#39;m using it</h3>
-<p>My primary use-case is for testing <strong>NAN</strong>. The test suite needs a lot of work so being able to test against all the different V8 and Node APIs while coding is super helpful; particularly when tests run so quickly! My NAN <em>.dntrc</em> file tests against master, all of the 0.11 releases since 0.11.4 (0.11.0 to 0.11.3 are explicitly not supported by NAN) and the last 5 releases of the 0.10 and 0.8 series. At the moment that&#39;s 17 versions of Node in all and on my computer the test suite takes approximately 20 seconds to complete across all of these releases.</p>
-<p><strong>The NAN <a href="https://raw.github.com/rvagg/nan/master/.dntrc">.dntrc</a></strong></p>
-<div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;\</span>
-<span class="s2">  master   \</span>
-<span class="s2">  v0.11.9  \</span>
-<span class="s2">  v0.11.8  \</span>
-<span class="s2">  v0.11.7  \</span>
-<span class="s2">  v0.11.6  \</span>
-<span class="s2">  v0.11.5  \</span>
-<span class="s2">  v0.11.4  \</span>
-<span class="s2">  v0.10.22 \</span>
-<span class="s2">  v0.10.21 \</span>
-<span class="s2">  v0.10.20 \</span>
-<span class="s2">  v0.10.19 \</span>
-<span class="s2">  v0.10.18 \</span>
-<span class="s2">  v0.8.26  \</span>
-<span class="s2">  v0.8.25  \</span>
-<span class="s2">  v0.8.24  \</span>
-<span class="s2">  v0.8.23  \</span>
-<span class="s2">  v0.8.22  \</span>
-<span class="s2">&quot;</span>
-<span class="nv">OUTPUT_PREFIX</span><span class="o">=</span><span class="s2">&quot;nan-&quot;</span>
-<span class="nv">TEST_CMD</span><span class="o">=</span><span class="s2">&quot;\</span>
-<span class="s2">  cd /dnt/test/ &amp;&amp;                                               \</span>
-<span class="s2">  npm install &amp;&amp;                                                 \</span>
-<span class="s2">  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild &amp;&amp; \</span>
-<span class="s2">  node_modules/.bin/tap js/*-test.js;                            \</span>
-<span class="s2">&quot;</span>
-</pre></div>
-
-<p>Next I configured <strong><a href="https://github.com/rvagg/node-leveldown">LevelDOWN</a></strong> for <strong>DNT</strong>. The needs are much simpler, the tests need to do a compile and run a lot of node-tap tests.</p>
-<p><strong>The LevelDOWN <a href="https://raw.github.com/rvagg/node-leveldown/master/.dntrc">.dntrc</a></strong></p>
-<div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;\</span>
-<span class="s2">  master   \</span>
-<span class="s2">  v0.11.9  \</span>
-<span class="s2">  v0.11.8  \</span>
-<span class="s2">  v0.10.22 \</span>
-<span class="s2">  v0.10.21 \</span>
-<span class="s2">  v0.8.26  \</span>
-<span class="s2">&quot;</span>
-<span class="nv">OUTPUT_PREFIX</span><span class="o">=</span><span class="s2">&quot;leveldown-&quot;</span>
-<span class="nv">TEST_CMD</span><span class="o">=</span><span class="s2">&quot;\</span>
-<span class="s2">  cd /dnt/ &amp;&amp;                                                    \</span>
-<span class="s2">  npm install &amp;&amp;                                                 \</span>
-<span class="s2">  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild &amp;&amp; \</span>
-<span class="s2">  node_modules/.bin/tap test/*-test.js;                          \</span>
-<span class="s2">&quot;</span>
-</pre></div>
-
-<p>Another native Node add-on that I&#39;ve set up with <strong>DNT</strong> is my <a href="https://github.com/rvagg/node-libssh">libssh bindings</a>. This one is a little more complicated because you need to have some non-standard libraries installed before compile. My <em>.dntrc</em> adds some extra <code>apt-get</code> sauce to fetch and install those packages. It means the tests take a little longer but it&#39;s not prohibitive. An alternative would be to configure the <em>node_dev</em> base-image to have these packages to all of my versioned images have them too.</p>
-<p><strong>The node-libssh <a href="https://raw.github.com/rvagg/node-libssh/master/.dntrc">.dntrc</a></strong></p>
-<div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;master v0.11.9 v0.10.22&quot;</span>
-<span class="nv">OUTPUT_PREFIX</span><span class="o">=</span><span class="s2">&quot;libssh-&quot;</span>
-<span class="nv">TEST_CMD</span><span class="o">=</span><span class="s2">&quot;\</span>
-<span class="s2">  apt-get install -y libkrb5-dev libssl-dev &amp;&amp;                           \</span>
-<span class="s2">  cd /dnt/ &amp;&amp;                                                            \</span>
-<span class="s2">  npm install &amp;&amp;                                                         \</span>
-<span class="s2">  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild --debug &amp;&amp; \</span>
-<span class="s2">  node_modules/.bin/tap test/*-test.js --stderr;                         \</span>
-<span class="s2">&quot;</span>
-</pre></div>
-
-<p><a href="https://github.com/rvagg/node-levelup">LevelUP</a> isn&#39;t a native add-on but it does use LevelDOWN which requires compiling. For the DNT config I&#39;m removing <em>node_modules/leveldown/</em> prior to <code>npm install</code> so it gets rebuilt each time for each new version of Node.</p>
-<p><strong>The <a href="https://raw.github.com/rvagg/node-levelup/master/.dntrc">LevelUP .dntrc</a></strong></p>
-<div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;\</span>
-<span class="s2">  master   \</span>
-<span class="s2">  v0.11.9  \</span>
-<span class="s2">  v0.11.8  \</span>
-<span class="s2">  v0.10.22 \</span>
-<span class="s2">  v0.10.21 \</span>
-<span class="s2">  v0.8.26  \</span>
-<span class="s2">&quot;</span>
-<span class="nv">OUTPUT_PREFIX</span><span class="o">=</span><span class="s2">&quot;levelup-&quot;</span>
-<span class="nv">TEST_CMD</span><span class="o">=</span><span class="s2">&quot;\</span>
-<span class="s2">  cd /dnt/ &amp;&amp;                                                    \</span>
-<span class="s2">  rm -rf node_modules/leveldown/ &amp;&amp;                              \</span>
-<span class="s2">  npm install --nodedir=/usr/src/node &amp;&amp;                         \</span>
-<span class="s2">  node_modules/.bin/tap test/*-test.js --stderr;                 \</span>
-<span class="s2">#&quot;</span>
-</pre></div>
-
-<h3 id="what-s-next-">What&#39;s next?</h3>
-<p>I have no idea but I&#39;d love to have helpers flesh this out a little more. It&#39;s not hard to imagine this forming the basis of a local CI system as well as a general testing tool. The speed even makes it tempting to run the tests on every git commit, or perhaps on every save.</p>
-<p>If you&#39;d like to contribute to development then please submit a pull request, I&#39;d be happy to discuss anything you might think would improve this project. I&#39;m keen to share ownership with anyone making significant contributions; as I do with most of my open source projects.</p>
-<p>See the <strong><a href="https://github.com/rvagg/dnt">DNT</a></strong> GitHub repo for installation and detailed usage instructions.</p>
-
-      </section>
-
-    </section>
-
-  
-
-    <section class="post-content">
-
-      <h2 id="leveldown-v0.10-managing-gc-in-native-v8-programming"><a href="/2013/11/leveldown-v0.10-managing-gc-in-native-v8-programming.html">LevelDOWN v0.10 / managing GC in native V8 programming</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on November 18, 2013</p>
-        <p class="link"><a href="/2013/11/leveldown-v0.10-managing-gc-in-native-v8-programming.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2013/11/leveldown-v0.10-managing-gc-in-native-v8-programming.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p><img src="https://twimg0-a.akamaihd.net/profile_images/3360574989/92fc472928b444980408147e5e5db2fa_bigger.png" alt="LevelDB"></p>
-<p>Today we released version 0.10 of <a href="https://github.com/rvagg/node-leveldown">LevelDOWN</a>. LevelDOWN is the package that directly binds LevelDB into Node-land. It&#39;s mainly C++ and is a fairly raw &amp; direct interface to LevelDB. <a href="https://github.com/rvagg/node-levelup">LevelUP</a> is the package that we recommend most people use for LevelDB in Node as it takes LevelDOWN and makes it much more Node-friendly, including the addition of those lovely <em>ReadStreams</em>.</p>
-<p>Normally I wouldn&#39;t write a post about a minor release like this but this one seems significant because of a number of small changes that culminate in a <em>relatively</em> major release.</p>
-<p><strong><em>In this post:</em></strong></p>
-<ul>
-<li><strong>V8 <code>Persistent</code> references</strong></li>
-<li><strong><code>Persistent</code> in LevelDOWN; some removed, some added</strong></li>
-<li><strong>Leaks!</strong></li>
-<li><strong>Snappy 1.1.1</strong></li>
-<li><strong>Some embarrassing bugs</strong></li>
-<li><strong>Domains</strong></li>
-<li><strong>Summary</strong></li>
-<li><strong><em>A final note on Node 0.11.9</em></strong></li>
-</ul>
-<h3 id="v8-persistent-references">V8 <code>Persistent</code> references</h3>
-<p>The main story of this release are <code>v8::Persistent</code> references. For the uninitiated, V8 internally has two different ways to track &quot;handles&quot;, which are references to JavaScript objects and values currently active in a running program. There are <code>Local</code> references and there are <code>Persistent</code> references. <code>Local</code> references are the most common, they are the references you get when you create an object or pass them around within a function and do the normal work that you do with an object. <code>Persistent</code> references are a special case that is all about <em>Garbage Collection</em>. An object that has at least one active <code>Persistent</code> reference to it is not a candidate for garbage collection. <code>Persistent</code> references must be explicitly destroyed before they release the object and make it available to the garbage collector.</p>
-<p>Prior to V8 3.2x.xx <em>(I don&#39;t know the exact version, does it matter? It roughly corresponds to Node v0.11.3.)</em>, these handles were both as easy as each other to create and interchange. You could swap one for the other whenever you needed. My guess is that the V8 team decided that this was a little <em>too</em> easy and that a major cause for memory leaks in C++ V8 code was the ease at which you could swap a <code>Local</code> for a <code>Persistent</code> and then forget to destroy the <code>Persistent</code>. So they tweaked the &quot;ease&quot; equation and it&#39;s become quite difficult.</p>
-<p><code>Persistent</code> and <code>Local</code> no longer share the same type hierarchy and the way you instantiate and assign a <code>Persistent</code> has become quite awkward. You now have to go through enough gymnastics to create a <code>Persistent</code> that it makes you ask the question: <em>&quot;Do I really need this to be a <code>Persistent</code>?&quot;</em> Which I guess is a good thing for memory leaks. <a href="https://github.com/rvagg/nan">NAN</a> to the rescue though! We&#39;ve somewhat papered over those difficulties with the capabilities introduced in NAN, it&#39;s still not as easy as it once was but it&#39;s not a total headache.</p>
-<p>So, you understand <code>v8::Persistent</code> now? Great, so back to LevelDOWN.</p>
-<h3 id="-persistent-in-leveldown-some-removed-some-added-"><code>Persistent</code> in LevelDOWN; some removed, some added!</h3>
-<p><strong>Some removed</strong></p>
-<p>Recently, <a href="https://github.com/mcollina">Matteo</a> noticed that when you&#39;re performing a <code>Batch()</code> operation in LevelDB, there is an explicit copy of the data that you&#39;re feeding in to that batch. When you construct a Batch operation in LevelDB you start off with a short string representing the batch and then build on that string as you build your batch with both <code>Put()</code> and <code>Del()</code> operations. You end up with a long string containing all of your write data; keys and values. Then when you call <code>Write()</code> on the Batch, that string gets fed directly into the main LevelDB store as a single write&mdash;which is where the atomicity of Batch comes from.</p>
-<p>Both the chained-form and array-form <code>batch()</code> operations work this way internally in LevelDOWN.</p>
-<p>However, with almost all operations in LevelDOWN, we perform the actual writes and reads against LevelDB in libuv worker threads. So we have to create the &quot;descriptor&quot; for work in the main V8 Node thread and then hand that off to libuv to perform the work in a separate thread. Once the work is completed we get the results back in the main V8 Node thread from where we can trigger a callback. This is where <code>Persistent</code> references come in.</p>
-<p>Before we hand off the work to libuv, we need to make <code>Persistent</code> references to any V8 object that we want to survive across the asynchronous operation. Obviously the main candidate for this is <code>callback</code> functions. Consider this code:</p>
-<div class="highlight"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;foo = %s&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
-<span class="p">})</span>
-</pre></div>
-
-<p>What we&#39;ve actually done is create an anonymous closure for our callback. It has nothing referencing it, so as far as V8 is concerned it&#39;s a candidate for garbage collection once the current thread of execution is completed. In Node however, we&#39;re doing asynchronous work with it and need it to survive until we actually call it. This is where <code>Persistent</code> references come in. We receive the <code>callback</code> function as a <code>Local</code> in our C++ but then assign it to a <code>Persistent</code> so GC doesn&#39;t touch it. Once we&#39;re done our async work we can call the function and destroy the <code>Persistent</code>, effectively turning it back in to a <code>Local</code> and freeing it up for GC.</p>
-<p>Without the <code>Persistent</code> then the behaviour is indeterminate. It depends on the version of V8, the GC settings, the workload currently in the program and the amount of time the async work takes to complete. If the GC is aggressive enough and has a chance to run before our async work is complete, the <code>callback</code> will disappear and we&#39;ll end up trying to call a function that no longer exists. This can obviously lead to runtime errors and will most likely crash our program.</p>
-<p>In LevelDOWN, if you&#39;re passing in <code>String</code> objects for keys and values then to pull out the data and turn it in to a form that LevelDB can use we have to do an explicit <em>copy</em>. Once we&#39;ve copied the data from the <code>String</code> then we don&#39;t need to care about the original object and GC can get its hands on it as soon as it wants. So we can leave <code>String</code> objects as <code>Local</code> references while we are building the descriptor for our async work.</p>
-<p><code>Buffer</code> objects are a different matter all together. Because we have access to the raw character array of a <code>Buffer</code>, we can feed that data straight in to LevelDB and this will save us one <em>copy</em> operation (which can be a significant performance boost if the data is significantly large or you&#39;re doing lots of operations&mdash;so prefer <code>Buffer</code>s where convenient if you need higher perf). When building the descriptor for the async work, we are just passing a character array to the LevelDB data structures that we&#39;re setting up. Because the data is shared with the original <code>Buffer</code> we have to make sure that GC doesn&#39;t clean up that <code>Buffer</code> before we have a chance to use the data. So we make a <code>Persistent</code> reference for it which we clean up after the async work is complete. So you can do this without worrying about GC:</p>
-<div class="highlight"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span>
-    <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
-  <span class="p">,</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crypto&#39;</span><span class="p">).</span><span class="nx">randomBytes</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
-  <span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;foo is now some random data!&#39;</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">)</span>
-</pre></div>
-
-<p>This has been the case in LevelDOWN for all operations since pretty much the beginning. But back to Matteo&#39;s observation. If LevelDB&#39;s data structures perform an explicit copy on the data we feed it then perhaps we don&#39;t need to keep the original data safe from GC? For a <code>batch()</code> call it turns out that we don&#39;t! When we&#39;re constructing the Batch descriptor, as we feed in data to it, both <code>Put()</code> and <code>Del()</code>, it&#39;s taking a copy of our data to create its internal representation. So even when we&#39;re using <code>Buffer</code> objects on the JavaScript side, we&#39;re done with them before the call down in to LevelDOWN is completed so there&#39;s no reason to save a <code>Persistent</code> reference! For other operations we&#39;re still doing some copying during the asynchronous cycle but the removal of the overhead of creating and deleting <code>Persistent</code> references for <code>batch()</code> calls is fantastic news for those doing bulk data loading (like Max Ogden&#39;s <a href="https://github.com/maxogden/dat">dat</a> project which needs to bulk load a <em>lot</em> of data).</p>
-<p><strong>Some added</strong></p>
-<p>Another gem from Matteo was reports of crashes during certain <code>batch()</code> operations. Difficult to reproduce and only under very particular circumstances, it seems to be mostly reproducible by the kinds of workloads generated by LevelGraph. Thanks to some simple C++ debugging we traced it to a dropped reference, obviously by GC. The code in question boiled down to something like this:</p>
-<div class="highlight"><pre><span class="kd">function</span> <span class="nx">doStuff</span> <span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">batch</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">batch</span><span class="p">()</span>
-  <span class="nx">batch</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
-  <span class="nx">batch</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-  <span class="p">})</span>
-<span class="p">}</span>
-</pre></div>
-
-<p>In this code, the <code>batch</code> object is actually a LevelDOWN <code>Batch</code> object created in C++-land. During the <code>write()</code> operation, which is asynchronous, we end up with no hard references to <code>batch</code> in our code because the JS thread has yieled and moved on and the <code>batch</code> is contained within the scope of the <code>doStuff()</code> function. Because most of the asynchronous operations we perform are relatively quick, this normally doesn&#39;t matter. But for writes to LevelDB, if you have enough data in your write and you have enough data already in your data store, you can trigger a compaction upstream which can delay the write which can give V8&#39;s GC time to clean up references that might be important and for which you have no <code>Persistent</code> handles.</p>
-<p>In this case, we weren&#39;t actually creating internal <code>Persistent</code> references for some of our objects. <code>Batch</code> in this case but also <code>Iterator</code>. Normally this isn&#39;t a problem because to use these objects you <em>generally</em> keep references to them yourself in your own code.</p>
-<p>We managed to debug Matteo&#39;s crash by adjusting his test code to look something like this and watching it succeed without a crash:</p>
-<div class="highlight"><pre><span class="kd">function</span> <span class="nx">doStuff</span> <span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">batch</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">batch</span><span class="p">()</span>
-  <span class="nx">batch</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
-  <span class="nx">batch</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-    <span class="nx">batch</span><span class="p">.</span><span class="nx">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
-  <span class="p">})</span>
-<span class="p">}</span>
-</pre></div>
-
-<p>By reusing <code>batch</code> inside our <code>callback</code> function, we&#39;re creating some work that V8 can&#39;t optimise away and therefore has to assume isn&#39;t a noop. Because the <code>batch</code> variable is also now referenced by the <code>callback</code> function and we already have an internal <code>Persistent</code> for it, GC has to pass over <code>batch</code> until the <code>Persistent</code> is destroyed for the <code>callback</code>.</p>
-<p>So the solution is simply to create a <code>Persistent</code> for the internal objects that need to survive across asynchronous operations and make no assumptions about how they&#39;ll be used in JavaScript-land. In our case we&#39;ve gone for assigning a <code>Persistent</code> just prior to every asynchronous operation and destroying it after. The alternative would be to have a <code>Persistent</code> assigned upon the creation of objects we care about but sometimes we want GC to do its work:</p>
-<div class="highlight"><pre><span class="kd">function</span> <span class="nx">dontDoStuff</span> <span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">batch</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">batch</span><span class="p">()</span>
-  <span class="nx">batch</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
-  <span class="c1">// nothing else, wut?</span>
-<span class="p">}</span>
-</pre></div>
-
-<p>I don&#39;t know why you would write that code but perhaps you have a use-case where you want the ability to start constructing a batch but then decide not to follow through with it. GC should be able to take care of your mess like it does with all of the other messes you create in your daily adventures with JavaScript.</p>
-<p>So we are only assigning a <code>Persistent</code> when you do a <code>write()</code> with a chained-batch operation in LevelDOWN since it&#39;s the only asynchronous operation. So in <code>dontDoStuff()</code> GC will come along and rid us of <code>batch</code>, <code>&#39;foo&#39;</code> and <code>&#39;bar&#39;</code> when it has the next opportunity and our C++ code will have the appropriate destructors called that will clean up any other objects we have created along the way, like the internal LevelDB <code>Batch</code> with its copy of our data.</p>
-<h3 id="leaks-">Leaks!</h3>
-<p>We&#39;ve been having some trouble with leaks in LevelUP/LevelDOWN lately <em>(<a href="https://github.com/rvagg/node-levelup/issues/171">LevelDOWN/#171</a>, <a href="https://github.com/mcollina/levelgraph/issues/40">LevelGraph/#40</a>)</em>. And it turns out that these leaks aren&#39;t related to <code>Persistent</code> references, which shouldn&#39;t be a surprise since it&#39;s so easy to leak with non-GC code, particularly if you spend most of your day programming in a language with GC.</p>
-<p>With the help of <a href="http://valgrind.org/">Valgrind</a> we tracked the leak down to the omission of a <code>delete</code> in the destructor of the asynchronous work descriptor for array-batch operations. The internal LevelDB representation of a Batch wasn&#39;t being cleaned up unless you were using the chained-form of LevelDOWN&#39;s <code>batch()</code>. This one has been dogging us for a few releases now and it&#39;s been a headache particularly for people doing bulk-loading of data so I hope we can finally put it behind us!</p>
-<h3 id="snappy-1-1-1">Snappy 1.1.1</h3>
-<p>Google released a new version of Snappy, version 1.1.1. I don&#39;t really understand how Google uses <a href="http://semver.org/">semver</a>; we get very simple LevelDB releases with the minor version bumped and then we get versions of Snappy released with non-trivial changes with only the patch version bumped. I suspect that Google doesn&#39;t know how it uses semver either and there&#39;s no internal policy on it.</p>
-<p>Anyway, Snappy 1.1.1 has some fixes, some minor speed and compression improvements but most importantly it breaks compilation on Windows. So we had to figure out how to fix that for this release. Ugh. I also took the opportunity to clean up some of the compilation options for Snappy and we may see some improvements in the way it works now... perhaps.</p>
-<h3 id="some-embarrassing-bugs">Some embarrassing bugs</h3>
-<p><a href="https://github.com/kytwb">Amine Mouafik</a> is new to the LevelDOWN repository but has picked up some rather embarrassing bugs/omissions that are probably my fault. It&#39;s great to have more eyes on the C++ code, there&#39;s not enough JavaScript programmers with the confidence to dig in to messy C++-land.</p>
-<p>Firstly, on our standard LevelDOWN releases, it turns out that we haven&#39;t actually been enabling the internal <strong>bloom filter</strong>. The bloom filter was introduced in LevelDB to speed up read operations to avoid having to scan through whole blocks to find the data a read is looking for. So that&#39;s now enabled for 0.10.</p>
-<p>Then he discovered that we had been <strong>turning off compression</strong> by default! I believe this happened with the the switch to NAN. The signature for reading boolean options from V8 objects was changed from internal <code>LD_BOOLEAN_OPTION_VALUE</code> &amp; <code>LD_BOOLEAN_OPTION_VALUE_DEFTRUE</code> macros for defaulting to true and false respectively when the options aren&#39;t supplied, to the NAN version which is a unified <code>NanBooleanOptionValue</code> which takes an optional <code>defaultValue</code> argument that can be used to make the default <code>true</code>. This happened at roughly Node version 0.11.4.</p>
-<p>Well, this code:</p>
-<div class="highlight"><pre><span class="kt">bool</span> <span class="n">compression</span> <span class="o">=</span>
-    <span class="n">NanBooleanOptionValue</span><span class="p">(</span><span class="n">optionsObj</span><span class="p">,</span> <span class="n">NanSymbol</span><span class="p">(</span><span class="s">&quot;compression&quot;</span><span class="p">));</span>
-</pre></div>
-
-<p>is now this:</p>
-<div class="highlight"><pre><span class="kt">bool</span> <span class="n">compression</span> <span class="o">=</span>
-    <span class="n">NanBooleanOptionValue</span><span class="p">(</span><span class="n">optionsObj</span><span class="p">,</span> <span class="n">NanSymbol</span><span class="p">(</span><span class="s">&quot;compression&quot;</span><span class="p">),</span> <span class="nb">true</span><span class="p">);</span>
-</pre></div>
-
-<p>so if you don&#39;t supply a <code>&quot;compression&quot;</code> boolean option in your db setup operation then it&#39;ll now actually be turned on!</p>
-<h3 id="domains">Domains</h3>
-<p>We&#39;ve finally caught up with properly supporting Node&#39;s <a href="http://nodejs.org/docs/latest/api/domain.html">domains</a> by switching all C++ <code>callback</code> calls from standard V8 <code>callback-&gt;Call(...)</code> to Node&#39;s own <code>node::MakeCallback(callback, ...)</code> which does the same thing but also does lots of additional things, including accounting for domains. This change was also included in NAN version 0.5.0.</p>
-<h3 id="summary">Summary</h3>
-<p><strong>Go and upgrade!</strong></p>
-<p>leveldown@0.10.0 is packaged with the new levelup@0.18.0 and level@0.18.0 which have their minor versions bumped purely for this LevelDOWN release.</p>
-<p>Also released are the packages:</p>
-<ul>
-<li>leveldown-hyper@0.10.0</li>
-<li>leveldown-basho@0.10.0</li>
-<li>rocksdb@0.10.0 (based on the same LevelDOWN code) (Linux only)</li>
-<li>level-hyper@0.18.0 (levelup on leveldown-hyper)</li>
-<li>level-basho@0.18.0 (levelup on leveldown-basho)</li>
-<li>level-rocks@0.18.0 (levelup on rocksdb) (Linux only)</li>
-</ul>
-<p>I&#39;ll write more about these packages in the future since they&#39;ve gone largely under the radar for most people. If you&#39;re interested in catching up then please join <strong>##leveldb</strong> on Freenode where there&#39;s a bunch of Node database people and also a few non-Node LevelDB people like <a href="https://twitter.com/rescrv">Robert Escriva</a>, author of HyperLevelDB and all-round LevelDB expert.</p>
-<h3 id="-a-final-note-on-node-0-11-9-"><em>A final note on Node 0.11.9</em></h3>
-<p>There will be a LevelDOWN@0.10.1 very soon that will increment the NAN dependency to 0.6.0 when it&#39;s released. This new version of NAN will specifically deal with Node 0.11.9 compatibility where there are more breaking V8 changes that will cause compile errors for any addon not taking them in to account. So if you&#39;re living on the edge in Node then we should have a release soon enough for you!</p>
+<h2 id="nodeschool-comes-to-australia">NodeSchool comes to Australia</h2>
+<p>It&#39;s surprising that so far, given all of the NodeSchool activity around the world, that we haven&#39;t had a single NodeSchool event in Australia. CampJS had learnyounode last year and this year there were <a href="https://github.com/nodeschool/discussions/issues/323">3 brand new workshoppers</a> introduced there, so it&#39;s the closest thing we&#39;ve had.</p>
+<p>Next weekend, on the <strong>21st of June</strong>, we are attempting a <strong>coordinated Australian NodeSchool</strong> event. At the moment, that coordination amounts to having events hosted in Sydney, Melbourne and Hobart, unfortunately the timing has been difficult for Brisbane and we haven&#39;t managed to bring anyone else out of the woodwork. But, we will be attempting to do this regularly, plus we&#39;d like to encourage meet-up hosts to use the format now and again with their groups.</p>
+<h2 id="nodeschool-in-sydney">NodeSchool in Sydney</h2>
+<p>I&#39;ll be at NodeSchool in Sydney next weekend. It will be proudly hosted by <a href="http://nicta.com.au/">NICTA</a> who have a space for up to 60 people. NICTA are currently doing some interesting work with WebRTC, you should catch up with <a href="https://twitter.com/DamonOehlman">@DamonOehlman</a> if this is something you&#39;re interested in. <a href="https://www.tabcorp.com.au/">Tabcorp</a> will also be a major sponsor of the event. Tabcorp have been building a new digital team with the back-end almost entirely in Node.js. They are also doing a great job engaging and contributing to existing and new open source projects. They are also hiring so be sure to catch up with <a href="https://twitter.com/romainprieto">@romainprieto</a> if you&#39;re doing PHP, Java or some other abomination and want to be doing Node!</p>
+<p>Thanks to the sponsorship, we&#39;ll be able to provide some catering for the event. Currently we&#39;re looking at providing lunch but we may be expanding that to providing some breakfast treats. We&#39;ll also be providing refreshments for everyone attending throughout the day.</p>
+<p>Start time is 9.30am, end is 4pm. The plan is to spend the first half of the day doing introductory Node.js which will mainly mean working through learnyounode. The second half of the day will be less structured and we&#39;ll encourage attendees to work on other workshoppers that they find interesting. Thankfully we have some amazing Node.js programmers in Sydney and they&#39;ll be available as mentors.</p>
+<p>We are currently <em>selling</em> tickets for $5, the money will contribute towards the event, there is no profit involved here. We don&#39;t <em>need</em> to charge for the event but given the generally dismal turnout for tech meet-ups that are free we feel that providing a small commitment barrier will help us maximise the use of the space we have available. <strong>If the money is a barrier for you please contact us!</strong> We don&#39;t want anyone to miss out. Also, we have special &quot;mentor&quot; tickets available for experienced Node.js programmers who are able to assist. If you think you fit into this category please contact us also.</p>
+<p>You can <strong>sign up for Sydney NodeSchool at <a href="https://ti.to/nodeschool/sydney-june-2014/">https://ti.to/nodeschool/sydney-june-2014/</a></strong>. If you are tempted, don&#39;t sit on the fence because spots are limited and as of writing the tickets are almost 1/2 gone.</p>
+<h2 id="nodeschool-in-melbourne">NodeSchool in Melbourne</h2>
+<p>NodeSchool in Melbourne is being supported by <a href="http://www.thoughtworks.com/">ThoughtWorks</a> who have been doing Node in Australia for a while now. If you&#39;re interested in their services or want to chat about employment opportunities you should catch up with <a href="https://github.com/lfendy">Liauw Fendy</a>.</p>
+<p><a href="https://twitter.com/sidorares">@sidorares</a> is putting in a large amount of the legwork in to Melbourne&#39;s event. He was a major contributor to the original learnyounode and is a huge asset to the Melbourne Node community. Along with Andrey, Melbourne has large number of expert Node.js hackers, many of who will be available as mentors. This will be a treat for Melbournians so this is not something you should miss out on if you are in town! Potential mentors should contact Andrey.</p>
+<p>You can <strong>sign up for Melbourne NodeSchool at <a href="https://ti.to/nodeschool/melbourne-june-2014/">https://ti.to/nodeschool/melbourne-june-2014/</a></strong>.</p>
+<h2 id="nodeschool-in-hobart">NodeSchool in Hobart</h2>
+<p>Hobart is lucky to have <a href="http://joshgilli.es/">@joshgillies</a>, a local tech-community organiser responsible for many Tasmanian web and JavaScript events. The event is being hosted at <a href="http://typewriterfactory.com/">The Typewriter Factory</a>, a business workspace that Josh helps run. Sponsorship is being provided by <a href="http://www.acs.org.au/">ACS</a> who will be helping support the venue and also provide some catering.</p>
+<p>You can <strong>sign up for Hobart NodeSchool at <a href="https://ti.to/nodeschool/hobart-june-2014/">https://ti.to/nodeschool/hobart-june-2014/</a></strong>.</p>
 
       </section>
 
