@@ -1,6 +1,6 @@
 ```json
 {
-    "date"   : "2018-08-30"
+    "date"   : "2018-08-29"
   , "title"  : "Background Briefing: August Node.js Security Releases"
   , "author" : "Rod Vagg"
 }
