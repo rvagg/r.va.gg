@@ -40,7 +40,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the &quot;HashWick&quot; vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li><li><a href="/2017/08/the-truth-about-rod-vagg.html">The Truth About Rod Vagg</a></li>
+            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the &quot;HashWick&quot; vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
           </ul>
         </section>
       </section>
@@ -49,6 +49,40 @@
       
 
 <div id="for">
+  
+
+    <section class="post-content">
+
+      <h2 id="bean-v1"><a href="/2012/09/bean-v1.html">Announcing Bean v1.0.0</a></h2>
+
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on September 8, 2012</p>
+        <p class="link"><a href="/2012/09/bean-v1.html">Permalink &amp; Comments</a></p>
+        <!-- <p class="commentcount"><a href="/2012/09/bean-v1.html#disqus_thread">Comments</a></p> -->
+      </div>
+
+      <section class="post-body">
+        <p>In my <a href="http://rod.vagg.org/2012/08/bean_v1/" title="Towards Bean v1.0 (or: How event managers do their thing)">previous post</a> about Bean I discussed in detail the work that has gone in to a v1 release and how it will differ from the v0.4 branch.</p>
+<p>Bean version 1.0.0 has now been released, you can download it from the <a href="https://github.com/fat/bean">GitHub repository</a> or you can fetch it from <a href="https://npmjs.org/package/bean">npm</a> for your Ender builds.</p>
+<p>Here&#39;s a quick summary of the changes, but for a more in-depth look you should refer to my <a href="http://rod.vagg.org/2012/08/bean_v1/" title="Towards Bean v1.0 (or: How event managers do their thing)">previous post</a>.</p>
+<blockquote>
+<p><b><code>on()</code> argument ordering</b>: the new signature is now <code>.on(events[, selector], handlerFn)</code>, which will work on both Bean as a standalone library and when bundled in Ender. In Ender, the following aliases also pass through <code>on()</code> so the same arguments work: <code>addListener()</code>, <code>bind()</code>, <code>listen()</code> and <code>one()</code> (which of course will only trigger once). Plus all the specific shortcuts such as <code>click()</code>, <code>keyup()</code> etc. although these methods have the first argument hardwired.</p>
+<p><code>add()</code> is left intact with the same argument ordering for standalone Bean and <code>delegate()</code> has the same signature, the same as jQuery&#39;s equivalent.</p>
+<p><b><code>off()</code> is the new <code>remove()</code></b>: although <code>remove()</code> is still available in standalone Bean.</p>
+<p><b>Bean attaches a single handler to the DOM for each event type on each element</b>: as outlined above, Bean will iterate over all handlers for each triggered and (mostly) reuse the same Event object for each call.</p>
+<p><b><code>Event.stopImmediatePropagation()</code>:</b> is available across all supported browsers, it will stop the processing of all handlers for the current event at the current element (i.e. the event will still bubble).</p>
+<p><b>The selector engine argument to <code>add()</code> is now completely removed</b>: you used to have to pass a selector engine in as the last argument for delegated events. Now you must set it once at start-up with <code>setSelectorEngine()</code>. This is automatically taken care of for you in an Ender build.</p>
+<p><b>A duplicate-handler check is no longer performed when you <i>add</i></b>: performance testing showed that this was a massive slow-down and is simply not something that Bean should be responsible for. If you want to add the same handler twice then that&#39;s your business and responsibility.</p>
+<p><b>Namespace matching for event <code>fire()</code>ing now matches namespaces using an <i>and</i> instead of an <code>or</code>:</b> so for example, firing namespaces &#39;a.b&#39; will fire any event with <i>both</i> &#39;a&#39; and &#39;b&#39; rather than <i>either</i> &#39;a&#39; or &#39;b&#39;. This is compatible with jQuery and is arguably a much more sensible and helpful way to deal with namespaces. You can find some discussion on this <a href="https://github.com/fat/bean/pull/68">on GitHub</a>.</p>
+<p><b>Lots of internal improvements for speed, code size, etc.</b>.</p>
+</blockquote>
+<p>There was one remaining question to be resolved&mdash;whether <code>Event.stop()</code> would also trigger <code>Event.stopImmediatePropagation()</code>. I&#39;ve decided to <b>not</b> include it and leave it to the user to decide whether they want to prevent triggering of other listeners on the same event/element.</p>
+<p>And that&#39;s it! Please give it a spin and open an issue on GitHub if you have any bugs to report or questions to be answered.</p>
+
+      </section>
+
+    </section>
+
   
 
     <section class="post-content">
@@ -344,33 +378,6 @@ And IE doesn&#39;t let you have it any other way. So you either encode your SVG 
 <p>SVG in Data URIs is an elegant solution (and a bit of fun) but only really useful at the moment if you don&#39;t need to support IE8 and below.</p>
 <p><strong>Update 17th Sept 2012</strong></p>
 <p>Below in the comments, Ben reports on his (much more rigorous) research into browser support; refer to that if you&#39;re serious about using SVG in Data URIs. An interesting result of his work comes from the <a href="https://code.google.com/p/chromium/issues/detail?id=137277">issue</a> he filed with Chromium (I don&#39;t know if this is a generic WebKit thing or not but you could easily test if you&#39;re interested). It turns out that Chromium/WebKit requires Base64 Data URIs to be multiples of 4 characters, so you just need to pad with <code>==</code>.</p>
-
-      </section>
-
-    </section>
-
-  
-
-    <section class="post-content">
-
-      <h2 id="a-mod_geoip2-that-properly-handles-x-forwarded-for"><a href="/2012/04/a-mod_geoip2-that-properly-handles-x-forwarded-for.html">A mod_geoip2 that properly handles X-Forwarded-For</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on April 22, 2012</p>
-        <p class="link"><a href="/2012/04/a-mod_geoip2-that-properly-handles-x-forwarded-for.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2012/04/a-mod_geoip2-that-properly-handles-x-forwarded-for.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p>This is just a short follow-up to my original post on<em> <a title="Wrangling the X-Forwarded-For Header" href="http://rod.vagg.org/2011/07/wrangling-the-x-forwarded-for-header/">Wrangling the X-Forwarded-For Header</a></em> where I promised that one of the things I would follow up with was how to get MaxMind&#39;s mod_geoip2 to handle the X-Forwarded-For according to the rule:</p>
-<p><p style="text-align: center;"><strong><em>Always use the leftmost non-private address</em></strong>.</p>
-Well, since it&#39;s turning out to be such a popular post I thought I&#39;d better get it done to help anyone else out that&#39;s searching around for solutions. So, I&#39;ve put up the code on my GitHub account here:<strong></strong></p>
-<p><p style="text-align: center;"><strong><a href="https://github.com/rvagg/mod_geoip2_xff">https://github.com/rvagg/mod_geoip2_xff</a></strong></p>
-I&#39;m maintaining a <em>maxmind</em> branch that contains the original code from MaxMind and the <em>master</em> contains my changes, so you can see a nice <a href="https://github.com/rvagg/mod_geoip2_xff/compare/maxmind...master">diff</a> of what I&#39;ve done.</p>
-<p>I have to warn that I haven&#39;t done any serious C programming for more than 15 years or so, my code probably isn&#39;t fantastic, and I&#39;m open to outside contributions from anyone with suggestions. The approach I&#39;ve taken is to embed the regexes of my previous post into the module and walk through the IP addresses looking for a non-private match.</p>
-<p>Since my initial release, based on MaxMind&#39;s 1.2.5, they&#39;ve put out a 1.2.7 which includes the addition of a <em>GeoIPUseLastXForwardedForIP</em> flag. I can imagine what prompted this addition but as I said in my previous post this isn&#39;t the way to get the best IP address. As of writing, my current master branch is based on 1.2.7 and has this new flag but because the <em>first_public_ip_in_list</em> is done first it&#39;s mostly useless.</p>
-<p>If anyone wants to hassle MaxMind on my behalf then feel free, I sent them an email a couple of months ago about this but received no answer.</p>
-<p><strong><strong>Update 6-July-2012</strong></strong>: A new release with some changes, details <a href="http://rod.vagg.org/2012/07/mod_geoip2_xff-update/">here</a>.</p>
 
       </section>
 
