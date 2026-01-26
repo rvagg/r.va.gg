@@ -4,13 +4,95 @@
   <title>r.va.gg</title>
  
   <link href="https://r.va.gg" />
-  <updated>2026-01-26T00:39:16.129Z</updated>
+  <updated>2026-01-26T02:59:19.061Z</updated>
   <id>https://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
   </author>
   <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/atom+xml" href="https://r.va.gg/feed.xml" />
 
+  
+    <entry>
+      <title>Git &quot;fixup!&quot; commits</title>
+      <link href="https://r.va.gg/2026/01/git-fixup-commits.html" />
+      <updated>2026-01-26T00:00:00.000Z</updated>
+      <id>https://r.va.gg/2026/01/git-fixup-commits.html</id>
+      <content type="html">&lt;pre&gt;&lt;code&gt;$ git log --oneline
+17baa3 feat: expose bare delete API
+a1a790 fixup! feat: expose bare delete API
+788c9c fixup! feat: expose bare delete API
+83388b fixup! feat: expose bare delete API&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;em&gt;&amp;quot;OK, weird convention, but sure, I can get on board with that.&amp;quot;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s not hard to see what the intention of the commit author is here, is it? They intend to squash these commits into one and these are just intermediate commits to show their progress&amp;mdash;which is very helpful in a pull request.&lt;/p&gt;
+&lt;p&gt;This is a memory of mine from when I was still a relatively new Git user, watching a pro. My introduction to &amp;quot;fixup&amp;quot; commits.&lt;/p&gt;
+&lt;p&gt;But, it&amp;#39;s not just one of those conventions arrived at by years of nerd cultural evolution (like &lt;code&gt;TODO&lt;/code&gt;), it&amp;#39;s a textual convention built into Git itself. It&amp;#39;s a sideband signal used between &lt;code&gt;git commit&lt;/code&gt; and &lt;code&gt;git rebase&lt;/code&gt; for cleanly drafting commits and finally squashing them into one (or more) final commit.&lt;/p&gt;
+&lt;p&gt;As a programmer you have a choice: you can (a) make each commit an informative unit that helps with historical analysis, including bisecting to find bugs, or (b) treat it as an append-only log of your stream of consciousness. I tend to view these questions with an eye for maintenance. What would my future self find useful here? What would future maintainers or spelunkers of this code find useful for understanding how it evolved?&lt;/p&gt;
+&lt;p&gt;If you&amp;#39;re comfortable with crufty history, this article probably isn&amp;#39;t for you. But if you&amp;#39;d rather your commits tell a coherent story, &lt;code&gt;fixup!&lt;/code&gt; is a useful tool for getting there without losing your work-in-progress trail during review.&lt;/p&gt;
+&lt;h3 id=&quot;rebase-and-squash-basics&quot;&gt;Rebase and squash basics&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;git rebase -i&lt;/code&gt; is how we rewrite Git history. Run it with a range like &lt;code&gt;git rebase -i HEAD~5&lt;/code&gt; and you&amp;#39;ll get an editor with your commits listed, each prefixed with &lt;code&gt;pick&lt;/code&gt;. The help text at the bottom is a wall of options, but only a few matter here:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# p, pick &amp;lt;commit&amp;gt; = use commit
+# s, squash &amp;lt;commit&amp;gt; = use commit, but meld into previous commit
+# f, fixup &amp;lt;commit&amp;gt; = like &quot;squash&quot;, but discard this commit&#39;s log message&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Change &lt;code&gt;pick&lt;/code&gt; to &lt;code&gt;s&lt;/code&gt; and that commit gets folded into the one above it, with both messages concatenated for you to edit. Change it to &lt;code&gt;f&lt;/code&gt; and the commit is folded in but its message is thrown away—just what you want for throwaway commits like &lt;code&gt;bork&lt;/code&gt;, &lt;code&gt;whoops&lt;/code&gt;, or &lt;code&gt;make CI pass, attempt 4 🤞&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;--autosquash&quot;&gt;&lt;code&gt;--autosquash&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;Here&amp;#39;s where the &lt;code&gt;fixup!&lt;/code&gt; magic comes in. &lt;code&gt;git rebase&lt;/code&gt; comes with an &lt;code&gt;--autosquash&lt;/code&gt; argument. Instead of all of your commits defaulting to the &lt;code&gt;pick&lt;/code&gt; command, &lt;code&gt;--autosquash&lt;/code&gt; will look through the commit &lt;strong&gt;subjects&lt;/strong&gt; to find commits that you identified as needing to be squashed when you created them. Instead of &lt;code&gt;TODO: squash this&lt;/code&gt;, your commit message can indicate to Git that you intend to squash it.&lt;/p&gt;
+&lt;p&gt;A commit subject that starts with the special string &lt;code&gt;fixup!&lt;/code&gt; is what &lt;code&gt;--autosquash&lt;/code&gt; is looking for. When it finds one, it looks at the rest of the subject to figure out what commit you want to squash it in to. Git will look back in the list of commits you&amp;#39;re rebasing and if one matches the text following &lt;code&gt;fixup! &lt;/code&gt;, it will mark it as a &lt;code&gt;fixup&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s one of the few places in Git where commit subject text is a programmatic concern—they&amp;#39;re not just for humans. You might wonder why Git doesn&amp;#39;t use the commit hash instead, but since you&amp;#39;re clearly planning to rebase (and hashes change when you rebase), text matching is the only thing that survives the rewrite.&lt;/p&gt;
+&lt;p&gt;The commit sequence:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;17baa3 feat: expose bare delete API
+a1a790 fixup! feat: expose bare delete API
+788c9c fixup! feat: expose bare delete API
+83388b fixup! feat: expose bare delete API&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Running &lt;code&gt;git rebase -i --autosquash HEAD~4&lt;/code&gt; will give you a rebase command file like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;pick 17baa3 feat: expose bare delete API
+fixup a1a790 fixup! feat: expose bare delete API
+fixup 788c9c fixup! feat: expose bare delete API
+fixup 83388b fixup! feat: expose bare delete API&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Simply saving and exiting and letting &lt;code&gt;git rebase&lt;/code&gt; do its thing will result in a single commit as a combination of the four in the list, with no additional commit message editor step (like with &lt;code&gt;squash&lt;/code&gt;) and no evidence of the intermediate commits in the commit message.&lt;/p&gt;
+&lt;h3 id=&quot;making---autosquash-the-default&quot;&gt;Making &lt;code&gt;--autosquash&lt;/code&gt; the default&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;--autosquash&lt;/code&gt; is a lot to type for something you&amp;#39;ll want every time. Set it once and forget about it:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ git config --global rebase.autoSquash true&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now &lt;code&gt;git rebase -i&lt;/code&gt; automatically reorders and marks your &lt;code&gt;fixup!&lt;/code&gt; commits. I set this years ago and haven&amp;#39;t thought about it since.&lt;/p&gt;
+&lt;h3 id=&quot;reordering&quot;&gt;Reordering&lt;/h3&gt;
+&lt;p&gt;When using &lt;code&gt;git rebase -i&lt;/code&gt; you can reorder commits in your git history just by moving the list around and not even changing &lt;code&gt;pick&lt;/code&gt;. You can do the same when you squash commits. But &lt;code&gt;fixup!&lt;/code&gt; commits can also reorder for you automatically in &lt;code&gt;--autosquash&lt;/code&gt; mode. After matching the commit subject after &lt;code&gt;fixup! &lt;/code&gt; to another commit in the list, &lt;code&gt;git rebase -i&lt;/code&gt; will move your fixup commit up to the appropriate commit, again letting you save and exit and having &lt;code&gt;git rebase&lt;/code&gt; take care of the rest.&lt;/p&gt;
+&lt;p&gt;If our Git history looked like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;17baa3 feat: expose bare delete API
+a1a790 fixup! feat: expose bare delete API
+dd81a1 doc: document public delete API
+88a910 fixup! feat: expose bare delete API
+000fc1 fixup! feat: expose bare delete API&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Then our &lt;code&gt;git rebase -i --autosquash HEAD~5&lt;/code&gt; will result in a rebase command file:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;pick 17baa3 feat: expose bare delete API
+fixup a1a790 fixup! feat: expose bare delete API
+fixup 88a910 fixup! feat: expose bare delete API
+fixup 000fc1 fixup! feat: expose bare delete API
+pick dd81a1 doc: document public delete API&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Whether or not the squash will happen without conflicts is another matter, so make sure you&amp;#39;re not tripping over yourself with reordering or are prepared for the inevitable conflict resolution.&lt;/p&gt;
+&lt;h3 id=&quot;dont-fixup-by-hand&quot;&gt;Don&amp;#39;t &lt;code&gt;fixup!&lt;/code&gt; by hand&lt;/h3&gt;
+&lt;p&gt;You don&amp;#39;t (normally) create fixup commit subjects manually. &lt;code&gt;git commit&lt;/code&gt; comes equipped with a &lt;code&gt;--fixup&lt;/code&gt; argument that will do it for you. &lt;code&gt;fixup&lt;/code&gt;, &lt;code&gt;fix up&lt;/code&gt;, &lt;code&gt;FIX ME UP&lt;/code&gt; won&amp;#39;t cut it (although these are common on GitHub when people are newly encountering this &amp;quot;convention&amp;quot;, I may have even been guilty of this), it has to be &lt;code&gt;fixup! &lt;/code&gt; followed by the original commit subject.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;--fixup&lt;/code&gt; requires an argument, the commit hash that you&amp;#39;re wanting to squash in to. You may need to look at your commit log to find the base commit, but once you have it, you can keep on running &lt;code&gt;git commit --fixup &amp;lt;commit&amp;gt; ...&lt;/code&gt; and append as many &lt;code&gt;fixup!&lt;/code&gt; commits as you want.&lt;/p&gt;
+&lt;p&gt;The first fixup commit has an easy shortcut, however. &lt;code&gt;HEAD&lt;/code&gt; in Git-speak refers to the latest commit on the branch you&amp;#39;re on, and Git uses this in most places it would otherwise accept a hash. So, if you forgot to add that newline character at the end of the file that you know Bruce is going to complain about, add it and run &lt;code&gt;git commit -a --fixup HEAD&lt;/code&gt; and you have your fixup commit.&lt;/p&gt;
+&lt;p&gt;Someone with a more sloppy mind might be more comfortable pushing &lt;code&gt;HEAD&lt;/code&gt; further than you, however. Repeated subsequent uses of &lt;code&gt;--fixup HEAD&lt;/code&gt; does work, but your commits are going to get out of control:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;17baa3 feat: expose bare delete API
+a1a790 fixup! feat: expose bare delete API
+13accc fixup! fixup! feat: expose bare delete API
+6446df fixup! fixup! fixup! feat: expose bare delete API
+787715 fixup! fixup! fixup! fixup! feat: expose bare delete API&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Since &lt;code&gt;--autosquash&lt;/code&gt; is matching commit subject trailing &lt;code&gt;fixup! &lt;/code&gt;, all it will do is match the previous commit for each of these and give you a series of &lt;code&gt;fixup&lt;/code&gt; commands which will essentially be what you want. This can get very messy when you have a more complicated sequence of &lt;code&gt;pick&lt;/code&gt; and &lt;code&gt;fixup&lt;/code&gt; commits, however.&lt;/p&gt;
+&lt;h3 id=&quot;squash-too&quot;&gt;&lt;code&gt;squash!&lt;/code&gt; too?&lt;/h3&gt;
+&lt;p&gt;Yes, there&amp;#39;s also &lt;code&gt;squash!&lt;/code&gt;. It works the same way as &lt;code&gt;fixup!&lt;/code&gt; but instead of discarding the commit message, it keeps it for editing during the rebase. When &lt;code&gt;--autosquash&lt;/code&gt; encounters a &lt;code&gt;squash!&lt;/code&gt; commit, it marks it with &lt;code&gt;s&lt;/code&gt; (squash) instead of &lt;code&gt;f&lt;/code&gt; (fixup), so you&amp;#39;ll get the commit message editor with both messages concatenated.&lt;/p&gt;
+&lt;p&gt;Use &lt;code&gt;git commit --squash &amp;lt;commit&amp;gt;&lt;/code&gt; to create these. It&amp;#39;s useful when you want to amend both the content &lt;em&gt;and&lt;/em&gt; the commit message of an earlier commit.&lt;/p&gt;
+&lt;h3 id=&quot;clean-pull-request-history&quot;&gt;Clean pull request history&lt;/h3&gt;
+&lt;p&gt;Where &lt;code&gt;fixup!&lt;/code&gt; commits really shine is in pull request workflows. Instead of amending commits and force-pushing every time you address review feedback, you can push &lt;code&gt;fixup!&lt;/code&gt; commits that show exactly what changed since the last review. Reviewers can see incremental changes without having to re-read the entire diff.&lt;/p&gt;
+&lt;p&gt;Before merge, you run &lt;code&gt;git rebase -i --autosquash&lt;/code&gt; locally to collapse everything into clean commits, then force-push one final time.&lt;/p&gt;
+&lt;p&gt;Some teams use GitHub Actions like &lt;a href=&quot;https://github.com/marketplace/actions/block-fixup-commit-merge&quot;&gt;Block Fixup Commit Merge&lt;/a&gt; to prevent merging PRs that still contain &lt;code&gt;fixup!&lt;/code&gt; commits—a handy reminder if you forget to squash.&lt;/p&gt;
+&lt;h3 id=&quot;githubs-merge-options&quot;&gt;GitHub&amp;#39;s merge options&lt;/h3&gt;
+&lt;p&gt;If you&amp;#39;re hoping GitHub will auto-squash your &lt;code&gt;fixup!&lt;/code&gt; commits when you hit that merge button, I have bad news: it doesn&amp;#39;t. The &amp;quot;Rebase and merge&amp;quot; option does a plain rebase without &lt;code&gt;--autosquash&lt;/code&gt;. There&amp;#39;s a &lt;a href=&quot;https://github.com/orgs/community/discussions/40804&quot;&gt;long-standing feature request&lt;/a&gt; for this, but GitHub hasn&amp;#39;t acted on it.&lt;/p&gt;
+&lt;p&gt;Your options:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Rebase locally before merge&lt;/strong&gt;: Run &lt;code&gt;git rebase -i --autosquash&lt;/code&gt;, force-push, then use &amp;quot;Rebase and merge&amp;quot; or a regular merge.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Use &amp;quot;Squash and merge&amp;quot;&lt;/strong&gt;: If you&amp;#39;re happy collapsing the entire PR into a single commit, this works fine. Just remember to clean up the commit message in the GitHub UI before confirming—otherwise it&amp;#39;ll include all those &lt;code&gt;fixup!&lt;/code&gt; subjects in the message body, which looks a bit untidy.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I prefer keeping a linear commit history, so I use either &amp;quot;Rebase and merge&amp;quot; or &amp;quot;Squash and merge&amp;quot; depending on the PR. For small PRs or those where the intermediate commits aren&amp;#39;t meaningful, &amp;quot;Squash and merge&amp;quot; is convenient enough if you remember to tidy the message.&lt;/p&gt;
+&lt;h3 id=&quot;rebase-pain&quot;&gt;Rebase pain&lt;/h3&gt;
+&lt;p&gt;One more thing: if you&amp;#39;re rebasing a branch against an updated base (say, pulling in recent changes from &lt;code&gt;main&lt;/code&gt;), do yourself a favour and squash your &lt;code&gt;fixup!&lt;/code&gt; commits &lt;em&gt;first&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Rebasing a branch with lots of &lt;code&gt;fixup!&lt;/code&gt; commits can be extremely painful. Each commit in the sequence might conflict with the new base, and you&amp;#39;ll be resolving essentially the same conflicts multiple times—once for the original commit and again for each &lt;code&gt;fixup!&lt;/code&gt; that touches the same lines. Squash them down into coherent commits before attempting the rebase and you&amp;#39;ll only deal with each conflict once.&lt;/p&gt;
+</content>
+    </entry>
   
     <entry>
       <title>The perils of private politics in open source</title>

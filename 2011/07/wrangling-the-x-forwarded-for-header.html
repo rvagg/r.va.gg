@@ -29,7 +29,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the "HashWick" vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
+            <li><a href="/2026/01/git-fixup-commits.html">Git "fixup!" commits</a></li><li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the "HashWick" vulnerability</a></li>
           </ul>
         </section>
       </section>
@@ -136,11 +136,21 @@ May be useful for testing and debugging your web application.</p>
 
 
       <section class="footer">
-        &copy; Rod Vagg 2013, powered by <a href="https://github.com/rvagg/blorg">Blorg</a>
+        &copy; Rod Vagg, powered by <a href="https://github.com/rvagg/blorg">Blorg</a>
         <br><a href="https://r.va.gg/atom.xml">Atom / RSS feed</a>
       </section>
 
     </section>
 
+    <script>
+    document.querySelectorAll('.post-content h2[id], .post-content h3[id], .post-content h4[id]').forEach(function(h) {
+      var a = document.createElement('a');
+      a.className = 'heading-anchor';
+      a.href = '#' + h.id;
+      a.textContent = '#';
+      a.onclick = function() { history.replaceState(null, '', this.href); };
+      h.insertBefore(a, h.firstChild);
+    });
+    </script>
   </body>
 </html>

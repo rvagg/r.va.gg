@@ -27,7 +27,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the "HashWick" vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
+            <li><a href="/2026/01/git-fixup-commits.html">Git "fixup!" commits</a></li><li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the "HashWick" vulnerability</a></li>
           </ul>
         </section>
       </section>
@@ -36,6 +36,98 @@
       
 
 <div id="for">
+  
+
+    <section class="post-content">
+
+      <h2 id="git-fixup-commits"><a href="/2026/01/git-fixup-commits.html">Git "fixup!" commits</a></h2>
+
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on January 26, 2026</p>
+        <p class="link"><a href="/2026/01/git-fixup-commits.html">Permalink &amp; Comments</a></p>
+        <!-- <p class="commentcount"><a href="/2026/01/git-fixup-commits.html#disqus_thread">Comments</a></p> -->
+      </div>
+
+      <section class="post-body">
+        <pre><code>$ git log --oneline
+17baa3 feat: expose bare delete API
+a1a790 fixup! feat: expose bare delete API
+788c9c fixup! feat: expose bare delete API
+83388b fixup! feat: expose bare delete API</code></pre><p><em>&quot;OK, weird convention, but sure, I can get on board with that.&quot;</em></p>
+<p>It&#39;s not hard to see what the intention of the commit author is here, is it? They intend to squash these commits into one and these are just intermediate commits to show their progress&mdash;which is very helpful in a pull request.</p>
+<p>This is a memory of mine from when I was still a relatively new Git user, watching a pro. My introduction to &quot;fixup&quot; commits.</p>
+<p>But, it&#39;s not just one of those conventions arrived at by years of nerd cultural evolution (like <code>TODO</code>), it&#39;s a textual convention built into Git itself. It&#39;s a sideband signal used between <code>git commit</code> and <code>git rebase</code> for cleanly drafting commits and finally squashing them into one (or more) final commit.</p>
+<p>As a programmer you have a choice: you can (a) make each commit an informative unit that helps with historical analysis, including bisecting to find bugs, or (b) treat it as an append-only log of your stream of consciousness. I tend to view these questions with an eye for maintenance. What would my future self find useful here? What would future maintainers or spelunkers of this code find useful for understanding how it evolved?</p>
+<p>If you&#39;re comfortable with crufty history, this article probably isn&#39;t for you. But if you&#39;d rather your commits tell a coherent story, <code>fixup!</code> is a useful tool for getting there without losing your work-in-progress trail during review.</p>
+<h3 id="rebase-and-squash-basics">Rebase and squash basics</h3>
+<p><code>git rebase -i</code> is how we rewrite Git history. Run it with a range like <code>git rebase -i HEAD~5</code> and you&#39;ll get an editor with your commits listed, each prefixed with <code>pick</code>. The help text at the bottom is a wall of options, but only a few matter here:</p>
+<pre><code># p, pick &lt;commit&gt; = use commit
+# s, squash &lt;commit&gt; = use commit, but meld into previous commit
+# f, fixup &lt;commit&gt; = like "squash", but discard this commit's log message</code></pre><p>Change <code>pick</code> to <code>s</code> and that commit gets folded into the one above it, with both messages concatenated for you to edit. Change it to <code>f</code> and the commit is folded in but its message is thrown away—just what you want for throwaway commits like <code>bork</code>, <code>whoops</code>, or <code>make CI pass, attempt 4 🤞</code>.</p>
+<h3 id="--autosquash"><code>--autosquash</code></h3>
+<p>Here&#39;s where the <code>fixup!</code> magic comes in. <code>git rebase</code> comes with an <code>--autosquash</code> argument. Instead of all of your commits defaulting to the <code>pick</code> command, <code>--autosquash</code> will look through the commit <strong>subjects</strong> to find commits that you identified as needing to be squashed when you created them. Instead of <code>TODO: squash this</code>, your commit message can indicate to Git that you intend to squash it.</p>
+<p>A commit subject that starts with the special string <code>fixup!</code> is what <code>--autosquash</code> is looking for. When it finds one, it looks at the rest of the subject to figure out what commit you want to squash it in to. Git will look back in the list of commits you&#39;re rebasing and if one matches the text following <code>fixup! </code>, it will mark it as a <code>fixup</code>.</p>
+<p>It&#39;s one of the few places in Git where commit subject text is a programmatic concern—they&#39;re not just for humans. You might wonder why Git doesn&#39;t use the commit hash instead, but since you&#39;re clearly planning to rebase (and hashes change when you rebase), text matching is the only thing that survives the rewrite.</p>
+<p>The commit sequence:</p>
+<pre><code>17baa3 feat: expose bare delete API
+a1a790 fixup! feat: expose bare delete API
+788c9c fixup! feat: expose bare delete API
+83388b fixup! feat: expose bare delete API</code></pre><p>Running <code>git rebase -i --autosquash HEAD~4</code> will give you a rebase command file like this:</p>
+<pre><code>pick 17baa3 feat: expose bare delete API
+fixup a1a790 fixup! feat: expose bare delete API
+fixup 788c9c fixup! feat: expose bare delete API
+fixup 83388b fixup! feat: expose bare delete API</code></pre><p>Simply saving and exiting and letting <code>git rebase</code> do its thing will result in a single commit as a combination of the four in the list, with no additional commit message editor step (like with <code>squash</code>) and no evidence of the intermediate commits in the commit message.</p>
+<h3 id="making---autosquash-the-default">Making <code>--autosquash</code> the default</h3>
+<p><code>--autosquash</code> is a lot to type for something you&#39;ll want every time. Set it once and forget about it:</p>
+<pre><code>$ git config --global rebase.autoSquash true</code></pre><p>Now <code>git rebase -i</code> automatically reorders and marks your <code>fixup!</code> commits. I set this years ago and haven&#39;t thought about it since.</p>
+<h3 id="reordering">Reordering</h3>
+<p>When using <code>git rebase -i</code> you can reorder commits in your git history just by moving the list around and not even changing <code>pick</code>. You can do the same when you squash commits. But <code>fixup!</code> commits can also reorder for you automatically in <code>--autosquash</code> mode. After matching the commit subject after <code>fixup! </code> to another commit in the list, <code>git rebase -i</code> will move your fixup commit up to the appropriate commit, again letting you save and exit and having <code>git rebase</code> take care of the rest.</p>
+<p>If our Git history looked like this:</p>
+<pre><code>17baa3 feat: expose bare delete API
+a1a790 fixup! feat: expose bare delete API
+dd81a1 doc: document public delete API
+88a910 fixup! feat: expose bare delete API
+000fc1 fixup! feat: expose bare delete API</code></pre><p>Then our <code>git rebase -i --autosquash HEAD~5</code> will result in a rebase command file:</p>
+<pre><code>pick 17baa3 feat: expose bare delete API
+fixup a1a790 fixup! feat: expose bare delete API
+fixup 88a910 fixup! feat: expose bare delete API
+fixup 000fc1 fixup! feat: expose bare delete API
+pick dd81a1 doc: document public delete API</code></pre><p>Whether or not the squash will happen without conflicts is another matter, so make sure you&#39;re not tripping over yourself with reordering or are prepared for the inevitable conflict resolution.</p>
+<h3 id="dont-fixup-by-hand">Don&#39;t <code>fixup!</code> by hand</h3>
+<p>You don&#39;t (normally) create fixup commit subjects manually. <code>git commit</code> comes equipped with a <code>--fixup</code> argument that will do it for you. <code>fixup</code>, <code>fix up</code>, <code>FIX ME UP</code> won&#39;t cut it (although these are common on GitHub when people are newly encountering this &quot;convention&quot;, I may have even been guilty of this), it has to be <code>fixup! </code> followed by the original commit subject.</p>
+<p><code>--fixup</code> requires an argument, the commit hash that you&#39;re wanting to squash in to. You may need to look at your commit log to find the base commit, but once you have it, you can keep on running <code>git commit --fixup &lt;commit&gt; ...</code> and append as many <code>fixup!</code> commits as you want.</p>
+<p>The first fixup commit has an easy shortcut, however. <code>HEAD</code> in Git-speak refers to the latest commit on the branch you&#39;re on, and Git uses this in most places it would otherwise accept a hash. So, if you forgot to add that newline character at the end of the file that you know Bruce is going to complain about, add it and run <code>git commit -a --fixup HEAD</code> and you have your fixup commit.</p>
+<p>Someone with a more sloppy mind might be more comfortable pushing <code>HEAD</code> further than you, however. Repeated subsequent uses of <code>--fixup HEAD</code> does work, but your commits are going to get out of control:</p>
+<pre><code>17baa3 feat: expose bare delete API
+a1a790 fixup! feat: expose bare delete API
+13accc fixup! fixup! feat: expose bare delete API
+6446df fixup! fixup! fixup! feat: expose bare delete API
+787715 fixup! fixup! fixup! fixup! feat: expose bare delete API</code></pre><p>Since <code>--autosquash</code> is matching commit subject trailing <code>fixup! </code>, all it will do is match the previous commit for each of these and give you a series of <code>fixup</code> commands which will essentially be what you want. This can get very messy when you have a more complicated sequence of <code>pick</code> and <code>fixup</code> commits, however.</p>
+<h3 id="squash-too"><code>squash!</code> too?</h3>
+<p>Yes, there&#39;s also <code>squash!</code>. It works the same way as <code>fixup!</code> but instead of discarding the commit message, it keeps it for editing during the rebase. When <code>--autosquash</code> encounters a <code>squash!</code> commit, it marks it with <code>s</code> (squash) instead of <code>f</code> (fixup), so you&#39;ll get the commit message editor with both messages concatenated.</p>
+<p>Use <code>git commit --squash &lt;commit&gt;</code> to create these. It&#39;s useful when you want to amend both the content <em>and</em> the commit message of an earlier commit.</p>
+<h3 id="clean-pull-request-history">Clean pull request history</h3>
+<p>Where <code>fixup!</code> commits really shine is in pull request workflows. Instead of amending commits and force-pushing every time you address review feedback, you can push <code>fixup!</code> commits that show exactly what changed since the last review. Reviewers can see incremental changes without having to re-read the entire diff.</p>
+<p>Before merge, you run <code>git rebase -i --autosquash</code> locally to collapse everything into clean commits, then force-push one final time.</p>
+<p>Some teams use GitHub Actions like <a href="https://github.com/marketplace/actions/block-fixup-commit-merge">Block Fixup Commit Merge</a> to prevent merging PRs that still contain <code>fixup!</code> commits—a handy reminder if you forget to squash.</p>
+<h3 id="githubs-merge-options">GitHub&#39;s merge options</h3>
+<p>If you&#39;re hoping GitHub will auto-squash your <code>fixup!</code> commits when you hit that merge button, I have bad news: it doesn&#39;t. The &quot;Rebase and merge&quot; option does a plain rebase without <code>--autosquash</code>. There&#39;s a <a href="https://github.com/orgs/community/discussions/40804">long-standing feature request</a> for this, but GitHub hasn&#39;t acted on it.</p>
+<p>Your options:</p>
+<ol>
+<li><p><strong>Rebase locally before merge</strong>: Run <code>git rebase -i --autosquash</code>, force-push, then use &quot;Rebase and merge&quot; or a regular merge.</p>
+</li>
+<li><p><strong>Use &quot;Squash and merge&quot;</strong>: If you&#39;re happy collapsing the entire PR into a single commit, this works fine. Just remember to clean up the commit message in the GitHub UI before confirming—otherwise it&#39;ll include all those <code>fixup!</code> subjects in the message body, which looks a bit untidy.</p>
+</li>
+</ol>
+<p>I prefer keeping a linear commit history, so I use either &quot;Rebase and merge&quot; or &quot;Squash and merge&quot; depending on the PR. For small PRs or those where the intermediate commits aren&#39;t meaningful, &quot;Squash and merge&quot; is convenient enough if you remember to tidy the message.</p>
+<h3 id="rebase-pain">Rebase pain</h3>
+<p>One more thing: if you&#39;re rebasing a branch against an updated base (say, pulling in recent changes from <code>main</code>), do yourself a favour and squash your <code>fixup!</code> commits <em>first</em>.</p>
+<p>Rebasing a branch with lots of <code>fixup!</code> commits can be extremely painful. Each commit in the sequence might conflict with the new base, and you&#39;ll be resolving essentially the same conflicts multiple times—once for the original commit and again for each <code>fixup!</code> that touches the same lines. Squash them down into coherent commits before attempting the rebase and you&#39;ll only deal with each conflict once.</p>
+
+      </section>
+
+    </section>
+
   
 
     <section class="post-content">
@@ -372,151 +464,6 @@
     </section>
 
   
-
-    <section class="post-content">
-
-      <h2 id="why-i-dont-use-nodes-core-stream-module"><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Why I don't use Node's core 'stream' module</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on June 14, 2014</p>
-        <p class="link"><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2014/06/why-i-dont-use-nodes-core-stream-module.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p><em>This article was originally offered to nearForm for publishing and appeared for some time on their blog from early 2014 (at this URL: <a href="http://www.nearform.com/nodecrunch/dont-use-nodes-core-stream-module">http://www.nearform.com/nodecrunch/dont-use-nodes-core-stream-module</a>). It has since been deleted. I&#39;d rather not speculate about the reasons for the deletion but I believe the article contains a very important core message so I&#39;m now republishing it here.</em></p>
-<h2 id="tldr">TL;DR</h2>
-<p>The &quot;readable-stream&quot; package available in npm is a mirror of the Streams2 and Streams3 implementations in Node-core. You can guarantee a stable streams base, regardless of what version of Node you are using, if you only use &quot;readable-stream&quot;.</p>
-<h2 id="the-good-ol-days">The good &#39;ol days</h2>
-<p>Prior to Node 0.10, implementing a stream meant extending the core <code>Stream</code> object. This object was simply an <code>EventEmitter</code> that added a special <code>pipe()</code> method to do the streaming magic.</p>
-<p>Implementing a stream usually started with something like this:</p>
-<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#D73A49">var</span><span style="color:#24292E"> Stream </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'stream'</span><span style="color:#24292E">).Stream</span></span>
-<span class="line"><span style="color:#D73A49">var</span><span style="color:#24292E"> util </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'util'</span><span style="color:#24292E">)</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#D73A49">function</span><span style="color:#6F42C1"> MyStream</span><span style="color:#24292E"> () {</span></span>
-<span class="line"><span style="color:#24292E">  Stream.</span><span style="color:#6F42C1">call</span><span style="color:#24292E">(</span><span style="color:#005CC5">this</span><span style="color:#24292E">)</span></span>
-<span class="line"><span style="color:#24292E">}</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#24292E">util.</span><span style="color:#6F42C1">inherits</span><span style="color:#24292E">(MyStream, Stream)</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#6A737D">// stream logic, implemented however you want</span></span></code></pre><p>If you ever had to write a non-trivial stream implementation for pre-Node 0.10 without using a helper library (such as <a href="https://github.com/dominictarr/through">through</a>), you know what a nightmare the state-management it can be. The actual implementation of a custom stream is a lot more than just the above code.</p>
-<h2 id="welcome-to-node-010">Welcome to Node 0.10</h2>
-<p>Thankfully, Streams2 came along with a brand new set of base Stream implementations that do a whole lot more than <code>pipe()</code>. The biggest win for stream implementers comes from the fact that state-management is almost entirely taken care of for you. You simply need to provide concrete implementations of some abstract methods to make a fully functional stream, even for non-trivial workloads.</p>
-<p>Implementing a stream now looks something like this:</p>
-<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#D73A49">var</span><span style="color:#24292E"> Readable </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'stream'</span><span style="color:#24292E">).Readable</span></span>
-<span class="line"><span style="color:#6A737D">// `Stream` is still provided for backward-compatibility</span></span>
-<span class="line"><span style="color:#6A737D">// Use `Writable`, `Duplex` and `Transform` where required</span></span>
-<span class="line"><span style="color:#D73A49">var</span><span style="color:#24292E"> util </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'util'</span><span style="color:#24292E">)</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#D73A49">function</span><span style="color:#6F42C1"> MyStream</span><span style="color:#24292E"> () {</span></span>
-<span class="line"><span style="color:#24292E">  Readable.</span><span style="color:#6F42C1">call</span><span style="color:#24292E">(</span><span style="color:#005CC5">this</span><span style="color:#24292E">, { </span><span style="color:#6A737D">/* options, maybe `objectMode:true` */</span><span style="color:#24292E"> })</span></span>
-<span class="line"><span style="color:#24292E">}</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#24292E">util.</span><span style="color:#6F42C1">inherits</span><span style="color:#24292E">(MyStream, Readable)</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#6A737D">// stream logic, implemented mainly by providing concrete method implementations:</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#005CC5">MyStream</span><span style="color:#24292E">.</span><span style="color:#005CC5">prototype</span><span style="color:#24292E">.</span><span style="color:#6F42C1">_read</span><span style="color:#D73A49"> =</span><span style="color:#D73A49"> function</span><span style="color:#24292E"> (</span><span style="color:#E36209">size</span><span style="color:#24292E">) {</span></span>
-<span class="line"><span style="color:#6A737D">  // ... </span></span>
-<span class="line"><span style="color:#24292E">}</span></span></code></pre><p>State-management is handled by the base-object and you interact with internal methods, such as <code>this.push(chunk)</code> in the case of a <code>Readable</code> stream.</p>
-<p>While the internal streams implementations are an order-of-magnitude more complex than the previous core-streams implementation, most of it is there to make life an order-of-magnitude easier for those of us implementing custom streams. Yay!</p>
-<h2 id="backward-compatibility">Backward-compatibility</h2>
-<p>When every new major stable release of Node occurs, anyone releasing public packages in npm has to make a decision about which versions of Node they support. As a general rule, the authors of the most popular packages in npm will support the current stable version of Node and the previous stable release.</p>
-<p>Streams2 was designed with backwards-compatibility in mind. Streams using <code>require(&#39;stream&#39;).Stream</code> as a base will still mostly work as you&#39;d expect and they will also work when piped to streams that extend the other classes. Streams2 streams won&#39;t work like classic EventEmitter objects when you pipe them together, as old-style streams do. But when you pipe a Streams2 stream and an old-style EventEmitter-based stream together, Streams2 will fall-back to &quot;compatibility-mode&quot; and operate in a backward-compatible way.</p>
-<p>So Streams2 are great and mostly backward-compatible (aside from some tricky edge cases). But what about when you want to implement Streams2 and run on Node 0.8? And what about open source packages in npm that want to still offer Node 0.8 compatibility while embracing the new Streams2-goodness?</p>
-<h3 id="readable-stream-to-the-rescue">&quot;readable-stream&quot; to the rescue</h3>
-<p>During the 0.9 development phase, prior to the 0.10 release, Isaac developed the new Streams2 implementation in a package that was released in npm and usable on older versions of Node. The <a href="https://github.com/isaacs/readable-stream">readable-stream</a> package is essentially a mirror of the streams implementation of Node-core but is available in npm. This is a pattern we will hopefully be seeing more of as we march towards Node 1.0. Already there is a <a href="https://github.com/isaacs/core-util-is">core-util-is</a> package that makes available the shiny new <code>is</code> type-checking functions in the 0.11 core &#39;util&#39; package.</p>
-<p><strong>readable-stream</strong> gives us the ability to use Streams2 on versions of Node that don&#39;t even have Streams2 in core. So a common pattern for supporting older versions of Node while still being able to hop on the Streams2-bandwagon starts off something like this, assuming you have &quot;readable-stream&quot; as a dependency:</p>
-<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#D73A49">var</span><span style="color:#24292E"> Readable </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'stream'</span><span style="color:#24292E">).Readable </span><span style="color:#D73A49">||</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'readable-stream'</span><span style="color:#24292E">).Readable</span></span></code></pre><p>This works because there is no <code>Readable</code> object on the core &#39;stream&#39; package in 0.8 and prior, so if you are running on an older version of Node it skips straight to the &quot;readable-stream&quot; package to get the required implementation.</p>
-<h2 id="streams3-a-new-flavour">Streams3: a new flavour</h2>
-<p>The <strong>readable-stream</strong> package is still being used to track the changes to streams coming in 0.12. The upcoming Streams3 implementation is more of a tweak than a major change. It contains an attempt to make &quot;compatibility mode&quot; more of a first-class citizen of the API and also some improvements to pause/resume behaviour.</p>
-<p>Like Streams2, the aim with Streams3 is for backward (and forward) compatibility but there are limits to what can be achieved on this front.</p>
-<p>While this new streams implementation will likely be an improvement over the current Streams2 implementation, it is part of the <em>unstable</em> development branch of Node and is so far not 
-without its edge cases which can break code designed against the pure 0.10 versions of Streams2.</p>
-<h2 id="what-is-your-base-implementation">What is your base implementation?</h2>
-<p>Looking back at the code used to fetch the base Streams2 implementation for building custom streams, let&#39;s consider what we&#39;re actually getting with different versions of Node:</p>
-<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#D73A49">var</span><span style="color:#24292E"> Readable </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'stream'</span><span style="color:#24292E">).Readable </span><span style="color:#D73A49">||</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'readable-stream'</span><span style="color:#24292E">).Readable</span></span></code></pre><ul>
-<li><em>Node 0.8 and prior:</em> we get whatever is provided by the readable-stream package in our dependencies.</li>
-<li><em>Node 0.10:</em> we get the particular version of Streams2 that comes with the version of Node we&#39;re using.</li>
-<li><em>Node 0.11:</em> we get the particular version of Streams3 that comes with the version of Node we&#39;re using.</li>
-</ul>
-<p>This may not be interesting if you have full control over all deployments of your custom stream implementations and which version(s) of Node they will be used on. But it can cause some problems in the case of open source libraries distributed via npm with users still stuck on 0.8 (for some, the upgrade path is not an easy one for various reasons), 0.10 and even people trying out some of the new Node and V8 features available in 0.11.</p>
-<p>What you end up with is a very unstable base upon which to build your streams implementation. This is particularly acute since the vast bulk of the code used to construct the stream logic is coming from either Node-core or the readable-stream package. Any <em>bugs</em> fixed in later Node 0.10 releases will obviously still be present for people still stuck on earlier 0.10 releases even if the readable-stream dependency has the <em>fixed</em> version.</p>
-<p>Then, when your streams code is run on Node 0.11, suddenly it&#39;s a Streams3 stream which has slightly different behaviour to what most of your users are experiencing.</p>
-<p>One of the ways these subtle differences are exposed is in bug reports. Users may report a bug that only occurs on their particular combination of core-streams and readable-stream and it may not be obvious that the problem is related to base-stream implementation edge-cases they are stumbling upon; wasting time for everyone.</p>
-<p>And what about stability? The fragmentation introduced by all of the possible combinations means that your otherwise stable library is having instability foisted upon it from the outside. This is one of the costs of relying on a featureful standard-library (core) within a rapidly developing, pre-v1 platform. But we can do something about it by taking control of the exact version of the base streams objects we want to extend regardless of what is bundled in the version of Node being used. <strong>readable-stream</strong> to the rescue!</p>
-<h2 id="taking-control">Taking control</h2>
-<p>To control exactly what code your streams implementation is building on, simply pin the version of readable-stream and use only it, avoiding <code>require(&#39;stream&#39;)</code> completely. Then you get to make the choice when to upgrade to Streams3, even if that&#39;s some time <em>after</em> Node 0.12.</p>
-<p><strong>readable-stream</strong> comes in two major versions, <strong>v1.0.x</strong> and <strong>v1.1.x</strong>. The former tracks the Streams2 implementation in Node 0.10, including bug-fixes and minor improvements as they are added. The latter tracks Streams3 as it develops in Node 0.11; we may see a v1.2.x branch for Node 0.12.</p>
-<p>Any library worth using should be following the basics of semver minor and patch versions (the merits and finer points of major versioning are still something worth debating). readable-stream gives you proper patch-level versioning so if you pin to <code>&quot;~1.0.0&quot;</code> you&#39;ll get the latest Node 0.10 Streams2 implementation, including any fixes and minor non-breaking improvements. The patch-level version of 1.0.x and 1.1.x should mirror the patch-level versions of Node core releases as we proceed.</p>
-<p>When you&#39;re ready to start using Streams3 you can pin to <code>&quot;~1.1.0&quot;</code>, but you should hold off until much closer to Node 0.12, if not after its formal release.</p>
-<h2 id="small-core-ftw">Small core FTW!</h2>
-<p>Being able to control precisely the versions of dependencies your code uses reduces the scope for bugs introduced by version incompatibilities or new and unproven implementations.</p>
-<p>When we rely on a bulky standard-library to build our libraries and applications, we&#39;re relying on a shifting sand that we have little control over. This is particularly a problem for open source libraries whose users have legitimate (and sometimes not-so-legitimate) reasons for using versions that you&#39;d rather not have to support.</p>
-<p>Streams2 is a powerful abstraction, but the implementation is far from simple. The Streams2 code is some of the most complex JavaScript you&#39;ll find in Node core. Unless you want to have a detailed understanding of how they work and be able to track the changes as they develop, you should pin your Streams2 dependency in the same way as you pin all your other dependencies. Opt for <strong>readable-stream</strong> over what Node-core offers:</p>
-<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#24292E">{</span></span>
-<span class="line"><span style="color:#005CC5">  "name"</span><span style="color:#24292E">: </span><span style="color:#032F62">"mystream"</span><span style="color:#24292E">,</span></span>
-<span class="line"><span style="color:#B31D28;font-style:italic">  ...</span></span>
-<span class="line"><span style="color:#005CC5">  "dependencies"</span><span style="color:#24292E">: {</span></span>
-<span class="line"><span style="color:#005CC5">    "readable-stream"</span><span style="color:#24292E">: </span><span style="color:#032F62">"~1.0.0"</span></span>
-<span class="line"><span style="color:#24292E">  }</span></span>
-<span class="line"><span style="color:#24292E">}</span></span></code></pre><pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#D73A49">var</span><span style="color:#24292E"> Readable </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'readable-stream'</span><span style="color:#24292E">).Readable</span></span>
-<span class="line"><span style="color:#D73A49">var</span><span style="color:#24292E"> util </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'util'</span><span style="color:#24292E">)</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#D73A49">function</span><span style="color:#6F42C1"> MyStream</span><span style="color:#24292E"> () {</span></span>
-<span class="line"><span style="color:#24292E">  Readable.</span><span style="color:#6F42C1">call</span><span style="color:#24292E">(</span><span style="color:#005CC5">this</span><span style="color:#24292E">)</span></span>
-<span class="line"><span style="color:#24292E">}</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#24292E">util.</span><span style="color:#6F42C1">inherits</span><span style="color:#24292E">(MyStream, Readable)</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#005CC5">MyStream</span><span style="color:#24292E">.</span><span style="color:#005CC5">prototype</span><span style="color:#24292E">.</span><span style="color:#6F42C1">_read</span><span style="color:#D73A49"> =</span><span style="color:#D73A49"> function</span><span style="color:#24292E"> (</span><span style="color:#E36209">size</span><span style="color:#24292E">) {</span></span>
-<span class="line"><span style="color:#6A737D">  // ... </span></span>
-<span class="line"><span style="color:#24292E">}</span></span></code></pre><h2 id="addendum-through2">Addendum: &quot;through2&quot;</h2>
-<p>If the boilerplate of the Streams2 base objects (&quot;classes&quot;) is too much for you or triggers some past-life Java PTSD, you can just opt for the &quot;through2&quot; package in npm to get the job done.</p>
-<p><a href="https://github.com/rvagg/through2">through2</a> is based on Dominic Tarr&#39;s <a href="https://github.com/dominictarr/through">through</a> but is built for Streams2, whereas &quot;through&quot; is a pure Streams1 style. The API isn&#39;t quite the same but the flexibility and simplicity is.</p>
-<p>through2 gives you a <code>DuplexStream</code> as a base to implement any kind of stream you like, be it as purely readable, purely writable or a fully duplex stream. In fact, you can even use through2 to implement a <code>PassThrough</code> stream by not providing an implementation!</p>
-<p>From the examples:</p>
-<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#D73A49">var</span><span style="color:#24292E"> through2 </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'through2'</span><span style="color:#24292E">)</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#24292E">fs.</span><span style="color:#6F42C1">createReadStream</span><span style="color:#24292E">(</span><span style="color:#032F62">'ex.txt'</span><span style="color:#24292E">)</span></span>
-<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">pipe</span><span style="color:#24292E">(</span><span style="color:#6F42C1">through2</span><span style="color:#24292E">(</span><span style="color:#D73A49">function</span><span style="color:#24292E"> (</span><span style="color:#E36209">chunk</span><span style="color:#24292E">, </span><span style="color:#E36209">enc</span><span style="color:#24292E">, </span><span style="color:#E36209">callback</span><span style="color:#24292E">) {</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#D73A49">    for</span><span style="color:#24292E"> (</span><span style="color:#D73A49">var</span><span style="color:#24292E"> i </span><span style="color:#D73A49">=</span><span style="color:#005CC5"> 0</span><span style="color:#24292E">; i </span><span style="color:#D73A49">&#x3C;</span><span style="color:#24292E"> chunk.</span><span style="color:#005CC5">length</span><span style="color:#24292E">; i</span><span style="color:#D73A49">++</span><span style="color:#24292E">)</span></span>
-<span class="line"><span style="color:#D73A49">      if</span><span style="color:#24292E"> (chunk[i] </span><span style="color:#D73A49">==</span><span style="color:#005CC5"> 97</span><span style="color:#24292E">)</span></span>
-<span class="line"><span style="color:#24292E">        chunk[i] </span><span style="color:#D73A49">=</span><span style="color:#005CC5"> 122</span><span style="color:#6A737D"> // swap 'a' for 'z'</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#005CC5">    this</span><span style="color:#24292E">.</span><span style="color:#6F42C1">push</span><span style="color:#24292E">(chunk)</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#6F42C1">    callback</span><span style="color:#24292E">()</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#24292E">   }))</span></span>
-<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">pipe</span><span style="color:#24292E">(fs.</span><span style="color:#6F42C1">createWriteStream</span><span style="color:#24292E">(</span><span style="color:#032F62">'out.txt'</span><span style="color:#24292E">))</span></span></code></pre><p>Or an object stream:</p>
-<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#24292E">fs.</span><span style="color:#6F42C1">createReadStream</span><span style="color:#24292E">(</span><span style="color:#032F62">'data.csv'</span><span style="color:#24292E">)</span></span>
-<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">pipe</span><span style="color:#24292E">(</span><span style="color:#6F42C1">csv2</span><span style="color:#24292E">())</span></span>
-<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">pipe</span><span style="color:#24292E">(through2.</span><span style="color:#6F42C1">obj</span><span style="color:#24292E">(</span><span style="color:#D73A49">function</span><span style="color:#24292E"> (</span><span style="color:#E36209">chunk</span><span style="color:#24292E">, </span><span style="color:#E36209">enc</span><span style="color:#24292E">, </span><span style="color:#E36209">callback</span><span style="color:#24292E">) {</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#D73A49">    var</span><span style="color:#24292E"> data </span><span style="color:#D73A49">=</span><span style="color:#24292E"> {</span></span>
-<span class="line"><span style="color:#24292E">        name    : chunk[</span><span style="color:#005CC5">0</span><span style="color:#24292E">]</span></span>
-<span class="line"><span style="color:#24292E">      , address : chunk[</span><span style="color:#005CC5">3</span><span style="color:#24292E">]</span></span>
-<span class="line"><span style="color:#24292E">      , phone   : chunk[</span><span style="color:#005CC5">10</span><span style="color:#24292E">]</span></span>
-<span class="line"><span style="color:#24292E">    }</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#005CC5">    this</span><span style="color:#24292E">.</span><span style="color:#6F42C1">push</span><span style="color:#24292E">(data)</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#6F42C1">    callback</span><span style="color:#24292E">()</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#24292E">  }))</span></span>
-<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">on</span><span style="color:#24292E">(</span><span style="color:#032F62">'data'</span><span style="color:#24292E">, </span><span style="color:#D73A49">function</span><span style="color:#24292E"> (</span><span style="color:#E36209">data</span><span style="color:#24292E">) {</span></span>
-<span class="line"><span style="color:#24292E">    all.</span><span style="color:#6F42C1">push</span><span style="color:#24292E">(data)</span></span>
-<span class="line"><span style="color:#24292E">  })</span></span>
-<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">on</span><span style="color:#24292E">(</span><span style="color:#032F62">'end'</span><span style="color:#24292E">, </span><span style="color:#D73A49">function</span><span style="color:#24292E"> () {</span></span>
-<span class="line"><span style="color:#6F42C1">    doSomethingSpecial</span><span style="color:#24292E">(all)</span></span>
-<span class="line"><span style="color:#24292E">  })</span></span></code></pre>
-      </section>
-
-    </section>
-
-  
 </div>
 
   <section class="pager">
@@ -549,11 +496,21 @@ without its edge cases which can break code designed against the pure 0.10 versi
 
 
       <section class="footer">
-        &copy; Rod Vagg 2013, powered by <a href="https://github.com/rvagg/blorg">Blorg</a>
+        &copy; Rod Vagg, powered by <a href="https://github.com/rvagg/blorg">Blorg</a>
         <br><a href="https://r.va.gg/atom.xml">Atom / RSS feed</a>
       </section>
 
     </section>
 
+    <script>
+    document.querySelectorAll('.post-content h2[id], .post-content h3[id], .post-content h4[id]').forEach(function(h) {
+      var a = document.createElement('a');
+      a.className = 'heading-anchor';
+      a.href = '#' + h.id;
+      a.textContent = '#';
+      a.onclick = function() { history.replaceState(null, '', this.href); };
+      h.insertBefore(a, h.firstChild);
+    });
+    </script>
   </body>
 </html>

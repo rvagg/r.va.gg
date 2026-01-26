@@ -127,6 +127,39 @@ pre tt {
   border: none;
   background-color: transparent;
   font-size: 16px;
+  white-space: inherit;
+}
+
+/* Heading anchor links */
+.post-content h2,
+.post-content h3,
+.post-content h4 {
+  position: relative;
+}
+
+.post-content h2 > a.heading-anchor,
+.post-content h3 > a.heading-anchor,
+.post-content h4 > a.heading-anchor {
+  position: absolute;
+  left: -1.5em;
+  padding-right: 1.5em;
+  opacity: 0;
+  text-decoration: none;
+  border: none;
+  color: #999;
+  font-weight: normal;
+}
+
+.post-content h2:hover > a.heading-anchor,
+.post-content h3:hover > a.heading-anchor,
+.post-content h4:hover > a.heading-anchor {
+  opacity: 1;
+}
+
+.post-content h2 > a.heading-anchor:hover,
+.post-content h3 > a.heading-anchor:hover,
+.post-content h4 > a.heading-anchor:hover {
+  color: #21759B;
 }
 
 .pager .prev {
@@ -147,8 +180,3 @@ pre tt {
   font-size: 0.8em;
 }
 
-/* Shiki syntax highlighting */
-.shiki .line {
-  display: block;
-  white-space: pre;
-}

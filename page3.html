@@ -27,7 +27,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the "HashWick" vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
+            <li><a href="/2026/01/git-fixup-commits.html">Git "fixup!" commits</a></li><li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the "HashWick" vulnerability</a></li>
           </ul>
         </section>
       </section>
@@ -36,6 +36,77 @@
       
 
 <div id="for">
+  
+
+    <section class="post-content">
+
+      <h2 id="levelup-v0.9-released"><a href="/2013/05/levelup-v0.9-released.html">LevelUP v0.9 Released</a></h2>
+
+      <div class="post-meta">
+        <p class="byline">by Rod Vagg on May 21, 2013</p>
+        <p class="link"><a href="/2013/05/levelup-v0.9-released.html">Permalink &amp; Comments</a></p>
+        <!-- <p class="commentcount"><a href="/2013/05/levelup-v0.9-released.html#disqus_thread">Comments</a></p> -->
+      </div>
+
+      <section class="post-body">
+        <p><img src="https://twimg0-a.akamaihd.net/profile_images/3360574989/92fc472928b444980408147e5e5db2fa_bigger.png" alt="LevelDB"></p>
+<p>As per my <a href="https://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html">previous post</a>, <strong><a href="https://github.com/rvagg/node-levelup">LevelUP</a> v0.9 has been released</strong>!</p>
+<p>I&#39;m doing a quick post about this release because it&#39;s got more changes in it than we normally see, including some things worth explaining.</p>
+<h3 id="relationship-to-leveldown">Relationship to LevelDOWN</h3>
+<p>The biggest change is the removal of <a href="https://github.com/rvagg/node-leveldown/">LevelDOWN</a> as a dependency, you should <a href="https://r.va.gg/2013/05/levelup-v0.9-some-major-changes.html">review what I&#39;ve already said about this</a> as this will impact you if you&#39;re currently using LevelUP. In short, you&#39;ll either need to explicitly <code>npm install leveldown</code> or switch to using the new <a href="https://github.com/level/level">Level</a> package which bundles them both.</p>
+<p>Along with this change, we also get better <a href="http://browserify.org/">Browserify</a> support. See <a href="https://github.com/maxogden/level.js">level.js</a> for more information on this.</p>
+<h3 id="chained-batch">Chained batch</h3>
+<p>The other major change is the introduction of a new <strong>chained batch</strong> syntax, additional to the existing batch syntax. This method of creating and writing batch operations is much closer to the way LevelDB does batches and under certain circumstances you may find improved performance from using this method.</p>
+<p>If you call <code>db.batch()</code> with no arguments, you&#39;ll get a <code>Batch</code> object back which has the following operations: <code>put()</code>, <code>del()</code>, <code>clear()</code> and <code>write()</code>. The first three are chainable so you can call them one after the other to build your batch. <code>write()</code> is the only method that takes a callback because it submits the batch. Until you call <code>write()</code>, the batch is transient and can be discarded.</p>
+<p>Example from the <a href="https://github.com/rvagg/node-levelup#readme">README</a>:</p>
+<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#24292E">db.</span><span style="color:#6F42C1">batch</span><span style="color:#24292E">()</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">del</span><span style="color:#24292E">(</span><span style="color:#032F62">'father'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">put</span><span style="color:#24292E">(</span><span style="color:#032F62">'name'</span><span style="color:#24292E">, </span><span style="color:#032F62">'Yuri Irsenovich Kim'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">put</span><span style="color:#24292E">(</span><span style="color:#032F62">'dob'</span><span style="color:#24292E">, </span><span style="color:#032F62">'16 February 1941'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">put</span><span style="color:#24292E">(</span><span style="color:#032F62">'spouse'</span><span style="color:#24292E">, </span><span style="color:#032F62">'Kim Young-sook'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">put</span><span style="color:#24292E">(</span><span style="color:#032F62">'occupation'</span><span style="color:#24292E">, </span><span style="color:#032F62">'Clown'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">write</span><span style="color:#24292E">(</span><span style="color:#D73A49">function</span><span style="color:#24292E"> () { console.</span><span style="color:#6F42C1">log</span><span style="color:#24292E">(</span><span style="color:#032F62">'Done!'</span><span style="color:#24292E">) })</span></span></code></pre><h3 id="some-love-for-writestream">Some love for WriteStream</h3>
+<p>WriteStream got some attention in this release. On the main <code>createWriteStream()</code> method and on individual <code>write()</code> calls, you can now pass some new options:</p>
+<ul>
+<li><code>&#39;type&#39;</code> can switch from the default <code>&#39;put&#39;</code> to <code>&#39;del&#39;</code> so you can make a WriteStream that only deletes when you <code>write({ key: &#39;foo&#39; })</code>, or you can make individual writes delete: <code>write({ type: &#39;del&#39;, key: &#39;foo&#39; })</code>.</li>
+<li><code>&#39;keyEncoding&#39;</code> and <code>&#39;valueEncoding&#39;</code> will switch from default encodings for the current LevelUP instance. Again, you can specify them on the main <code>createWriteStream()</code> or on individual <code>write()</code> calls.</li>
+</ul>
+<h3 id="other-changes">Other changes</h3>
+<ul>
+<li>A <a href="https://github.com/rvagg/node-levelup/pull/128">race condition</a> was fixed that allowed a <code>put()</code> to write to the store before an iterator was obtained when calling `createReadStream().</li>
+<li>ReadStream no longer emits a <code>&#39;ready&#39;</code> event.</li>
+<li>The <code>db</code> property on LevelUP instances can be used to get access to LevelDOWN or whatever LevelDOWN-substitute you are using (this was <code>_db</code>).</li>
+<li>Some very LevelDB-specific methods have been deprecated on LevelUP and the documentation now recommends either directly using LevelDOWN or calling via the <code>db</code> property. Specifically:<ul>
+<li><code>db.db.approximateSize()</code></li>
+<li><code>leveldown.repair()</code></li>
+<li><code>leveldown.destroy()</code></li>
+</ul>
+</li>
+<li>LevelDOWN got a new LevelDB method: <code>getProperty()</code> that currently understands 3 properties:<ul>
+<li><code>db.db.getProperty(&#39;leveldb.num-files-at-levelN&#39;)</code>: returns the number of files at level <em>N</em>, where N is an integer representing a valid level (e.g. &quot;0&quot;)&#39;).</li>
+<li><code>db.db.getProperty(&#39;leveldb.stats&#39;)</code>: returns a multi-line string describing statistics about LevelDB&#39;s internal operation.</li>
+<li><code>db.db.getProperty(&#39;leveldb.sstables&#39;)</code>: returns a multi-line string describing all of the <em>sstables</em> that make up contents of the current database.</li>
+</ul>
+</li>
+<li>Significantly improved ReadStream performance improvements (up to 50% faster).</li>
+<li>Some LevelDOWN memory leaks discovered and fixed.</li>
+<li>LevelDOWN upgraded to LevelDB@1.10.0, <a href="https://groups.google.com/forum/#!topic/node-levelup/bly-MiUzrZw">details here</a>.</li>
+</ul>
+<h3 id="who-you-should-thank">Who you should thank</h3>
+<p>A lot of people put in work to this release. There&#39;s a <a href="https://github.com/rvagg/node-levelup#contributors">team of people</a> that can claim ownership of LevelUP, LevelDOWN and related projects and most of them have been involved in this release. You should follow these people on Twitter and GitHub!</p>
+<ul>
+<li><strong>Dominic Tarr</strong> (<a href="https://github.com/dominictarr">GitHub/dominictarr</a> / <a href="http://twitter.com/dominictarr">Twitter/@dominictarr</a>) contributed to the ReadStream fixes and is just a generally valuable &amp; awesome sage in the LevelDB + Node community.</li>
+<li><strong>Julian Gruber</strong> (<a href="https://github.com/juliangruber">GitHub/juliangruber</a> / <a href="http://twitter.com/juliangruber">Twitter/@juliangruber</a>) contributed the encoding options for WriteStreams and most of the work on the new chained <code>batch()</code>.</li>
+<li><strong>Matteo Collina</strong> (<a href="https://github.com/mcollina">GitHub/mcollina</a> / <a href="https://twitter.com/matteocollina">Twitter/@matteocollina</a>) contributed the <code>&#39;type&#39;</code> options for WriteStreams and most of the work on performance improvements to ReadStreams.</li>
+<li><strong>David Björklund</strong> (<a href="https://github.com/kesla">GitHub/kesla</a> / <a href="http://twitter.com/david_bjorklund">Twitter/@david_bjorklund</a>) also contributed work on ReadStream performance.</li>
+<li><strong>Max Ogden</strong> (<a href="https://github.com/maxogden">GitHub/maxogden</a> / <a href="http://twitter.com/maxogden">Twitter/@maxogden</a>) and <strong>Anton Whalley</strong> (<a href="https://github.com/No9">GitHub/No9</a> / <a href="https://twitter.com/antonwhalley">Twitter/@antonwhalley</a>) both worked on extracting most of the LevelDOWN test suite into <a href="https://github.com/rvagg/node-abstract-leveldown">AbstractLevelDOWN</a> to form a LevelDOWN-spec that&#39;s also runnable in browser environments.</li>
+</ul>
+<p>And others, who you can find in <a href="https://github.com/rvagg/node-levelup/pull/129">this 0.9 WIP thread</a>, plus additional users who reported &amp; found issues.</p>
+
+      </section>
+
+    </section>
+
   
 
     <section class="post-content">
@@ -186,27 +257,6 @@
     </section>
 
   
-
-    <section class="post-content">
-
-      <h2 id="node.js-dublin-presentation-leveldb"><a href="/2013/05/node.js-dublin-presentation-leveldb.html">Node.js Dublin Presentation - LevelDB</a></h2>
-
-      <div class="post-meta">
-        <p class="byline">by Rod Vagg on May 1, 2013</p>
-        <p class="link"><a href="/2013/05/node.js-dublin-presentation-leveldb.html">Permalink &amp; Comments</a></p>
-        <!-- <p class="commentcount"><a href="/2013/05/node.js-dublin-presentation-leveldb.html#disqus_thread">Comments</a></p> -->
-      </div>
-
-      <section class="post-body">
-        <p>I visited lovely Dublin last month to attend <a href="http://peerconf.com/">PeerConf</a>. While there I got to meet a great bunch of Irish programmers at <a href="http://www.nodejsdublin.com/">Node.js Dublin</a>, a semi-regular Node.js meet-up that happens in the <a href="https://www.engineyard.com/">Engine Yard</a> office in Dublin.</p>
-<p>I was invited to give a presentation on LevelDB and the work that I&#39;ve been doing on it in Node.js. I was followed by <a href="https://github.com/dominictarr">Dominic Tarr</a> who&#39;s doing some amazing work on top of LevelDB.</p>
-<p>You can view my slides <a href="https://r.va.gg/presentations/nodejsdub/">here</a> but a written version is currently being spread over 3 parts on <a href="http://dailyjs.com">DailyJS</a>. More about that soon!</p>
-
-      </section>
-
-    </section>
-
-  
 </div>
 
   <section class="pager">
@@ -245,11 +295,21 @@
 
 
       <section class="footer">
-        &copy; Rod Vagg 2013, powered by <a href="https://github.com/rvagg/blorg">Blorg</a>
+        &copy; Rod Vagg, powered by <a href="https://github.com/rvagg/blorg">Blorg</a>
         <br><a href="https://r.va.gg/atom.xml">Atom / RSS feed</a>
       </section>
 
     </section>
 
+    <script>
+    document.querySelectorAll('.post-content h2[id], .post-content h3[id], .post-content h4[id]').forEach(function(h) {
+      var a = document.createElement('a');
+      a.className = 'heading-anchor';
+      a.href = '#' + h.id;
+      a.textContent = '#';
+      a.onclick = function() { history.replaceState(null, '', this.href); };
+      h.insertBefore(a, h.firstChild);
+    });
+    </script>
   </body>
 </html>

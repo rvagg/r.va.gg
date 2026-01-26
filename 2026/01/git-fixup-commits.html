@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html lang="en-us">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>
+  [r.va.gg] Git "fixup!" commits
+</title>
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="https://r.va.gg/atom.xml" />
+    <script type="text/javascript" src="https://use.typekit.com/swo4snt.js"></script>
+    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>
+  </head>
+  <body>
+
+    <section class="content">
+      <h1>
+        <a href="/">r.va.gg</a>
+      </h1>
+
+      <section class="nav">
+        <section class="me">
+          <span>Find me</span>
+          <ul>
+            <li>on <a href="https://github.com/rvagg">GitHub</a></li>
+            <li>on <a href="https://www.linkedin.com/in/rvagg/">LinkedIn</a></li>
+            <li>at <a href="mailto:r@va.gg">r@va.gg</a></li>
+          </ul>
+        </section>
+        <section class="recent">
+          <span>Recent posts</span>
+          <ul>
+            <li><a href="/2026/01/git-fixup-commits.html">Git "fixup!" commits</a></li><li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the "HashWick" vulnerability</a></li>
+          </ul>
+        </section>
+      </section>
+      <div style="clear: both;"></div>
+
+      
+
+  <section class="post-content">
+
+    <h2><a href="/2026/01/git-fixup-commits.html">Git "fixup!" commits</a></h2>
+
+    <div class="post-meta">
+      <p class="byline">by Rod Vagg on January 26, 2026</p>
+    </div>
+
+    <section class="post-body">
+      <pre><code>$ git log --oneline
+17baa3 feat: expose bare delete API
+a1a790 fixup! feat: expose bare delete API
+788c9c fixup! feat: expose bare delete API
+83388b fixup! feat: expose bare delete API</code></pre><p><em>&quot;OK, weird convention, but sure, I can get on board with that.&quot;</em></p>
+<p>It&#39;s not hard to see what the intention of the commit author is here, is it? They intend to squash these commits into one and these are just intermediate commits to show their progress&mdash;which is very helpful in a pull request.</p>
+<p>This is a memory of mine from when I was still a relatively new Git user, watching a pro. My introduction to &quot;fixup&quot; commits.</p>
+<p>But, it&#39;s not just one of those conventions arrived at by years of nerd cultural evolution (like <code>TODO</code>), it&#39;s a textual convention built into Git itself. It&#39;s a sideband signal used between <code>git commit</code> and <code>git rebase</code> for cleanly drafting commits and finally squashing them into one (or more) final commit.</p>
+<p>As a programmer you have a choice: you can (a) make each commit an informative unit that helps with historical analysis, including bisecting to find bugs, or (b) treat it as an append-only log of your stream of consciousness. I tend to view these questions with an eye for maintenance. What would my future self find useful here? What would future maintainers or spelunkers of this code find useful for understanding how it evolved?</p>
+<p>If you&#39;re comfortable with crufty history, this article probably isn&#39;t for you. But if you&#39;d rather your commits tell a coherent story, <code>fixup!</code> is a useful tool for getting there without losing your work-in-progress trail during review.</p>
+<h3 id="rebase-and-squash-basics">Rebase and squash basics</h3>
+<p><code>git rebase -i</code> is how we rewrite Git history. Run it with a range like <code>git rebase -i HEAD~5</code> and you&#39;ll get an editor with your commits listed, each prefixed with <code>pick</code>. The help text at the bottom is a wall of options, but only a few matter here:</p>
+<pre><code># p, pick &lt;commit&gt; = use commit
+# s, squash &lt;commit&gt; = use commit, but meld into previous commit
+# f, fixup &lt;commit&gt; = like "squash", but discard this commit's log message</code></pre><p>Change <code>pick</code> to <code>s</code> and that commit gets folded into the one above it, with both messages concatenated for you to edit. Change it to <code>f</code> and the commit is folded in but its message is thrown away—just what you want for throwaway commits like <code>bork</code>, <code>whoops</code>, or <code>make CI pass, attempt 4 🤞</code>.</p>
+<h3 id="--autosquash"><code>--autosquash</code></h3>
+<p>Here&#39;s where the <code>fixup!</code> magic comes in. <code>git rebase</code> comes with an <code>--autosquash</code> argument. Instead of all of your commits defaulting to the <code>pick</code> command, <code>--autosquash</code> will look through the commit <strong>subjects</strong> to find commits that you identified as needing to be squashed when you created them. Instead of <code>TODO: squash this</code>, your commit message can indicate to Git that you intend to squash it.</p>
+<p>A commit subject that starts with the special string <code>fixup!</code> is what <code>--autosquash</code> is looking for. When it finds one, it looks at the rest of the subject to figure out what commit you want to squash it in to. Git will look back in the list of commits you&#39;re rebasing and if one matches the text following <code>fixup! </code>, it will mark it as a <code>fixup</code>.</p>
+<p>It&#39;s one of the few places in Git where commit subject text is a programmatic concern—they&#39;re not just for humans. You might wonder why Git doesn&#39;t use the commit hash instead, but since you&#39;re clearly planning to rebase (and hashes change when you rebase), text matching is the only thing that survives the rewrite.</p>
+<p>The commit sequence:</p>
+<pre><code>17baa3 feat: expose bare delete API
+a1a790 fixup! feat: expose bare delete API
+788c9c fixup! feat: expose bare delete API
+83388b fixup! feat: expose bare delete API</code></pre><p>Running <code>git rebase -i --autosquash HEAD~4</code> will give you a rebase command file like this:</p>
+<pre><code>pick 17baa3 feat: expose bare delete API
+fixup a1a790 fixup! feat: expose bare delete API
+fixup 788c9c fixup! feat: expose bare delete API
+fixup 83388b fixup! feat: expose bare delete API</code></pre><p>Simply saving and exiting and letting <code>git rebase</code> do its thing will result in a single commit as a combination of the four in the list, with no additional commit message editor step (like with <code>squash</code>) and no evidence of the intermediate commits in the commit message.</p>
+<h3 id="making---autosquash-the-default">Making <code>--autosquash</code> the default</h3>
+<p><code>--autosquash</code> is a lot to type for something you&#39;ll want every time. Set it once and forget about it:</p>
+<pre><code>$ git config --global rebase.autoSquash true</code></pre><p>Now <code>git rebase -i</code> automatically reorders and marks your <code>fixup!</code> commits. I set this years ago and haven&#39;t thought about it since.</p>
+<h3 id="reordering">Reordering</h3>
+<p>When using <code>git rebase -i</code> you can reorder commits in your git history just by moving the list around and not even changing <code>pick</code>. You can do the same when you squash commits. But <code>fixup!</code> commits can also reorder for you automatically in <code>--autosquash</code> mode. After matching the commit subject after <code>fixup! </code> to another commit in the list, <code>git rebase -i</code> will move your fixup commit up to the appropriate commit, again letting you save and exit and having <code>git rebase</code> take care of the rest.</p>
+<p>If our Git history looked like this:</p>
+<pre><code>17baa3 feat: expose bare delete API
+a1a790 fixup! feat: expose bare delete API
+dd81a1 doc: document public delete API
+88a910 fixup! feat: expose bare delete API
+000fc1 fixup! feat: expose bare delete API</code></pre><p>Then our <code>git rebase -i --autosquash HEAD~5</code> will result in a rebase command file:</p>
+<pre><code>pick 17baa3 feat: expose bare delete API
+fixup a1a790 fixup! feat: expose bare delete API
+fixup 88a910 fixup! feat: expose bare delete API
+fixup 000fc1 fixup! feat: expose bare delete API
+pick dd81a1 doc: document public delete API</code></pre><p>Whether or not the squash will happen without conflicts is another matter, so make sure you&#39;re not tripping over yourself with reordering or are prepared for the inevitable conflict resolution.</p>
+<h3 id="dont-fixup-by-hand">Don&#39;t <code>fixup!</code> by hand</h3>
+<p>You don&#39;t (normally) create fixup commit subjects manually. <code>git commit</code> comes equipped with a <code>--fixup</code> argument that will do it for you. <code>fixup</code>, <code>fix up</code>, <code>FIX ME UP</code> won&#39;t cut it (although these are common on GitHub when people are newly encountering this &quot;convention&quot;, I may have even been guilty of this), it has to be <code>fixup! </code> followed by the original commit subject.</p>
+<p><code>--fixup</code> requires an argument, the commit hash that you&#39;re wanting to squash in to. You may need to look at your commit log to find the base commit, but once you have it, you can keep on running <code>git commit --fixup &lt;commit&gt; ...</code> and append as many <code>fixup!</code> commits as you want.</p>
+<p>The first fixup commit has an easy shortcut, however. <code>HEAD</code> in Git-speak refers to the latest commit on the branch you&#39;re on, and Git uses this in most places it would otherwise accept a hash. So, if you forgot to add that newline character at the end of the file that you know Bruce is going to complain about, add it and run <code>git commit -a --fixup HEAD</code> and you have your fixup commit.</p>
+<p>Someone with a more sloppy mind might be more comfortable pushing <code>HEAD</code> further than you, however. Repeated subsequent uses of <code>--fixup HEAD</code> does work, but your commits are going to get out of control:</p>
+<pre><code>17baa3 feat: expose bare delete API
+a1a790 fixup! feat: expose bare delete API
+13accc fixup! fixup! feat: expose bare delete API
+6446df fixup! fixup! fixup! feat: expose bare delete API
+787715 fixup! fixup! fixup! fixup! feat: expose bare delete API</code></pre><p>Since <code>--autosquash</code> is matching commit subject trailing <code>fixup! </code>, all it will do is match the previous commit for each of these and give you a series of <code>fixup</code> commands which will essentially be what you want. This can get very messy when you have a more complicated sequence of <code>pick</code> and <code>fixup</code> commits, however.</p>
+<h3 id="squash-too"><code>squash!</code> too?</h3>
+<p>Yes, there&#39;s also <code>squash!</code>. It works the same way as <code>fixup!</code> but instead of discarding the commit message, it keeps it for editing during the rebase. When <code>--autosquash</code> encounters a <code>squash!</code> commit, it marks it with <code>s</code> (squash) instead of <code>f</code> (fixup), so you&#39;ll get the commit message editor with both messages concatenated.</p>
+<p>Use <code>git commit --squash &lt;commit&gt;</code> to create these. It&#39;s useful when you want to amend both the content <em>and</em> the commit message of an earlier commit.</p>
+<h3 id="clean-pull-request-history">Clean pull request history</h3>
+<p>Where <code>fixup!</code> commits really shine is in pull request workflows. Instead of amending commits and force-pushing every time you address review feedback, you can push <code>fixup!</code> commits that show exactly what changed since the last review. Reviewers can see incremental changes without having to re-read the entire diff.</p>
+<p>Before merge, you run <code>git rebase -i --autosquash</code> locally to collapse everything into clean commits, then force-push one final time.</p>
+<p>Some teams use GitHub Actions like <a href="https://github.com/marketplace/actions/block-fixup-commit-merge">Block Fixup Commit Merge</a> to prevent merging PRs that still contain <code>fixup!</code> commits—a handy reminder if you forget to squash.</p>
+<h3 id="githubs-merge-options">GitHub&#39;s merge options</h3>
+<p>If you&#39;re hoping GitHub will auto-squash your <code>fixup!</code> commits when you hit that merge button, I have bad news: it doesn&#39;t. The &quot;Rebase and merge&quot; option does a plain rebase without <code>--autosquash</code>. There&#39;s a <a href="https://github.com/orgs/community/discussions/40804">long-standing feature request</a> for this, but GitHub hasn&#39;t acted on it.</p>
+<p>Your options:</p>
+<ol>
+<li><p><strong>Rebase locally before merge</strong>: Run <code>git rebase -i --autosquash</code>, force-push, then use &quot;Rebase and merge&quot; or a regular merge.</p>
+</li>
+<li><p><strong>Use &quot;Squash and merge&quot;</strong>: If you&#39;re happy collapsing the entire PR into a single commit, this works fine. Just remember to clean up the commit message in the GitHub UI before confirming—otherwise it&#39;ll include all those <code>fixup!</code> subjects in the message body, which looks a bit untidy.</p>
+</li>
+</ol>
+<p>I prefer keeping a linear commit history, so I use either &quot;Rebase and merge&quot; or &quot;Squash and merge&quot; depending on the PR. For small PRs or those where the intermediate commits aren&#39;t meaningful, &quot;Squash and merge&quot; is convenient enough if you remember to tidy the message.</p>
+<h3 id="rebase-pain">Rebase pain</h3>
+<p>One more thing: if you&#39;re rebasing a branch against an updated base (say, pulling in recent changes from <code>main</code>), do yourself a favour and squash your <code>fixup!</code> commits <em>first</em>.</p>
+<p>Rebasing a branch with lots of <code>fixup!</code> commits can be extremely painful. Each commit in the sequence might conflict with the new base, and you&#39;ll be resolving essentially the same conflicts multiple times—once for the original commit and again for each <code>fixup!</code> that touches the same lines. Squash them down into coherent commits before attempting the rebase and you&#39;ll only deal with each conflict once.</p>
+
+    </section>
+
+    <section class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname  = 'rvagg'
+          , disqus_identifier = '/2026/01/git-fixup-commits.html'
+          , disqus_title      = 'Git "fixup!" commits'
+          , disqus_url        = 'https://r.va.gg/2026/01/git-fixup-commits.html'
+
+        !(function() {
+          var dsq = document.createElement('script')
+          dsq.type = 'text/javascript'
+          dsq.async = true
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js'
+          !(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+        })()
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments.</a></noscript>
+    </section>
+
+  </section>
+
+
+
+      <section class="footer">
+        &copy; Rod Vagg, powered by <a href="https://github.com/rvagg/blorg">Blorg</a>
+        <br><a href="https://r.va.gg/atom.xml">Atom / RSS feed</a>
+      </section>
+
+    </section>
+
+    <script>
+    document.querySelectorAll('.post-content h2[id], .post-content h3[id], .post-content h4[id]').forEach(function(h) {
+      var a = document.createElement('a');
+      a.className = 'heading-anchor';
+      a.href = '#' + h.id;
+      a.textContent = '#';
+      a.onclick = function() { history.replaceState(null, '', this.href); };
+      h.insertBefore(a, h.firstChild);
+    });
+    </script>
+  </body>
+</html>
