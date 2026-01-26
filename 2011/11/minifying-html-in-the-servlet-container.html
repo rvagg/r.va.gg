@@ -8,21 +8,7 @@
     <link rel="stylesheet" href="/style.css" type="text/css">
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="https://r.va.gg/atom.xml" />
     <script type="text/javascript" src="https://use.typekit.com/swo4snt.js"></script>
-    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>  
-    <script type="text/javascript">
-      var _gaq = _gaq || []
-      _gaq.push(['_setAccount', 'UA-21373682-1'])
-      _gaq.push(['_trackPageview'])
-      setTimeout('_gaq.push(["_trackEvent", "15_seconds", "read"])', 15000)
-      !(function () {
-        var ga = document.createElement('script')
-        ga.type = 'text/javascript'
-        ga.async = true
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'
-        var s = document.getElementsByTagName('script')[0]
-        s.parentNode.insertBefore(ga, s)
-      }())
-    </script>
+    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>
   </head>
   <body>
 
@@ -42,7 +28,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the &quot;HashWick&quot; vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
+            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the "HashWick" vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
           </ul>
         </section>
       </section>
@@ -59,119 +45,110 @@
     </div>
 
     <section class="post-body">
-      <p>Google&#39;s <a title="mod_pagespeed" href="http://code.google.com/speed/page-speed/docs/module.html">mod_pagespeed</a> is great. I&#39;ve been using it for a while now on <a title="FeedXL Horse Nutrition" href="http://feedxl.com">feedxl.com</a> but the only filter that I actually find really useful is <a href="http://code.google.com/speed/page-speed/docs/filter-whitespace-collapse.html">Collapse Whitespace</a>; the rest of the filters I either already do myself as part of the site build process or I don&#39;t want applied. But, I imagine that there are a lot of admins out there that would really benefit from all of the clever things it can do.</p>
+      <p>Google&#39;s <a title="mod_pagespeed" href="http://code.google.com/speed/page-speed/docs/module.html">mod_pagespeed</a> is great. I&#39;ve been using it for a while now on <a title="FeedXL Horse Nutrition" href="http://feedxl.com">feedxl.com</a> but the only filter that I actually find really useful is <a href="http://code.google.com/speed/page-speed/docs/filter-whitespace-collapse.html">Collapse Whitespace</a>; the rest of the filters I either already do myself as part of the site build process or I don&#39;t want applied. But, I imagine that there are a lot of admins out there that would really benefit from all of the clever things it can do.</p>
 <p>Unfortunately it&#39;s just an Apache2 module so it&#39;s a bit difficult to use the cleverness elsewhere. I recently launched a new service that serves content directly from Apache Tomcat without passing through an Apache2 web server like I would normally do (because there was just no need!). Having got used to the nice whitespace optimisations you can get from mod_pagespeed I decided to implement a simple version of my own for Tomcat. Dynamic content is somewhere that you&#39;re better off trying not to optimise your whitespace during generation, leave it for post-processing so your logic can be clear.</p>
 <p>So, enter <strong>HTMLMinifyFilter</strong>. It&#39;s nowhere near as clever as mod_pagespeed but it&#39;ll do for basic needs. The core of it is a regular expression that will remove certain patterns and it&#39;s configurable so you decide which patterns to include.</p>
-<div class="highlight"><pre><span class="kn">package</span> <span class="n">au</span><span class="o">.</span><span class="na">com</span><span class="o">.</span><span class="na">xprime</span><span class="o">.</span><span class="na">misc</span><span class="o">.</span><span class="na">webapp</span><span class="o">.</span><span class="na">filter</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.regex.*</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.servlet.*</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HTMLMinifyFilter</span> <span class="kd">implements</span> <span class="n">Filter</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="n">Pattern</span> <span class="n">regex</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doFilter</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">res</span><span class="o">,</span> <span class="n">FilterChain</span> <span class="n">chain</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ServletException</span> <span class="o">{</span>
-        <span class="n">HttpServletResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="o">(</span><span class="n">HttpServletResponse</span><span class="o">)</span> <span class="n">res</span><span class="o">;</span>
-        <span class="n">ResponseWrapper</span> <span class="n">wrapper</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ResponseWrapper</span><span class="o">(</span><span class="n">response</span><span class="o">);</span>
-        <span class="n">chain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">req</span><span class="o">,</span> <span class="n">wrapper</span><span class="o">);</span>
-        <span class="n">String</span> <span class="n">html</span> <span class="o">=</span> <span class="n">wrapper</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">regex</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">response</span><span class="o">.</span><span class="na">getContentType</span><span class="o">()</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">response</span><span class="o">.</span><span class="na">getContentType</span><span class="o">().</span><span class="na">startsWith</span><span class="o">(</span><span class="s">&quot;text/html&quot;</span><span class="o">))</span>
-            <span class="n">html</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="na">matcher</span><span class="o">(</span><span class="n">html</span><span class="o">).</span><span class="na">replaceAll</span><span class="o">(</span><span class="s">&quot;&quot;</span><span class="o">);</span>
-        <span class="n">response</span><span class="o">.</span><span class="na">setContentLength</span><span class="o">(</span><span class="n">html</span><span class="o">.</span><span class="na">getBytes</span><span class="o">().</span><span class="na">length</span><span class="o">);</span>
-        <span class="n">PrintWriter</span> <span class="n">out</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">getWriter</span><span class="o">();</span>
-        <span class="n">out</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">html</span><span class="o">);</span>
-        <span class="n">out</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">destroy</span><span class="o">()</span> <span class="o">{</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">(</span><span class="n">FilterConfig</span> <span class="n">config</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span> <span class="o">{</span>
-        <span class="n">StringBuffer</span> <span class="n">pattern</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">StringBuffer</span><span class="o">();</span>
-        <span class="n">appendIf</span><span class="o">(</span><span class="n">config</span><span class="o">,</span> <span class="s">&quot;strip-linestart-whitespace&quot;</span><span class="o">,</span> <span class="n">pattern</span><span class="o">,</span> <span class="s">&quot;(?&lt;=^)[ \\t]+&quot;</span><span class="o">);</span>
-        <span class="n">appendIf</span><span class="o">(</span><span class="n">config</span><span class="o">,</span> <span class="s">&quot;strip-lineend-whitespace&quot;</span><span class="o">,</span> <span class="n">pattern</span><span class="o">,</span> <span class="s">&quot;[ \\t]+(?:$)&quot;</span><span class="o">);</span>
-        <span class="n">appendIf</span><span class="o">(</span><span class="n">config</span><span class="o">,</span> <span class="s">&quot;strip-multiple-whitespace&quot;</span><span class="o">,</span> <span class="n">pattern</span><span class="o">,</span> <span class="s">&quot;([ \\t](?:[ \\t]))+&quot;</span><span class="o">);</span>
-        <span class="n">appendIf</span><span class="o">(</span><span class="n">config</span><span class="o">,</span> <span class="s">&quot;strip-blank-lines&quot;</span><span class="o">,</span> <span class="n">pattern</span><span class="o">,</span> <span class="s">&quot;(\\n[ \\t]*(?:\\n))+&quot;</span><span class="o">);</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">pattern</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span>
-            <span class="n">regex</span> <span class="o">=</span> <span class="n">Pattern</span><span class="o">.</span><span class="na">compile</span><span class="o">(</span><span class="n">pattern</span><span class="o">.</span><span class="na">toString</span><span class="o">(),</span> <span class="n">Pattern</span><span class="o">.</span><span class="na">MULTILINE</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">appendIf</span><span class="o">(</span><span class="n">FilterConfig</span> <span class="n">config</span><span class="o">,</span> <span class="n">String</span> <span class="n">configKey</span><span class="o">,</span> <span class="n">StringBuffer</span> <span class="n">pattern</span><span class="o">,</span> <span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="n">configKey</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">config</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="n">configKey</span><span class="o">).</span><span class="na">equals</span><span class="o">(</span><span class="s">&quot;true&quot;</span><span class="o">))</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">pattern</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span>
-                <span class="n">pattern</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="sc">&#39;|&#39;</span><span class="o">);</span>
-            <span class="n">pattern</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ResponseWrapper</span> <span class="kd">extends</span> <span class="n">HttpServletResponseWrapper</span> <span class="o">{</span>
-        <span class="kd">private</span> <span class="n">CharArrayWriter</span> <span class="n">output</span><span class="o">;</span>
-
-        <span class="kd">public</span> <span class="nf">ResponseWrapper</span><span class="o">(</span><span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
-            <span class="kd">super</span><span class="o">(</span><span class="n">response</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">output</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">CharArrayWriter</span><span class="o">();</span>
-        <span class="o">}</span>
-
-        <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
-        <span class="o">}</span>
-
-        <span class="kd">public</span> <span class="n">PrintWriter</span> <span class="nf">getWriter</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="nf">PrintWriter</span><span class="o">(</span><span class="n">output</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
-
-<p><h3>How does it work?</h3>
-We start off by wrapping our response in an object that will supply a CharArrayWriter so we can capture and process whatever the rest of the stack is doing (credit for this idea goes <a href="http://stackoverflow.com/questions/5009650/where-can-i-find-a-java-servlet-filter-that-applies-regex-to-the-output">here</a>). We can then process the output with our regular expression(s) and pass it to the real response.</p>
+<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#D73A49">package</span><span style="color:#24292E"> au.com.xprime.misc.webapp.filter;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> java.io.</span><span style="color:#005CC5">*</span><span style="color:#24292E">;</span></span>
+<span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> java.util.regex.</span><span style="color:#005CC5">*</span><span style="color:#24292E">;</span></span>
+<span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> javax.servlet.</span><span style="color:#005CC5">*</span><span style="color:#24292E">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">public</span><span style="color:#D73A49"> class</span><span style="color:#6F42C1"> HTMLMinifyFilter</span><span style="color:#D73A49"> implements</span><span style="color:#6F42C1"> Filter</span><span style="color:#24292E"> {</span></span>
+<span class="line"><span style="color:#D73A49">	private</span><span style="color:#24292E"> Pattern regex </span><span style="color:#D73A49">=</span><span style="color:#005CC5"> null</span><span style="color:#24292E">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">	public</span><span style="color:#D73A49"> void</span><span style="color:#6F42C1"> doFilter</span><span style="color:#24292E">(ServletRequest </span><span style="color:#E36209">req</span><span style="color:#24292E">, ServletResponse </span><span style="color:#E36209">res</span><span style="color:#24292E">, FilterChain </span><span style="color:#E36209">chain</span><span style="color:#24292E">) </span><span style="color:#D73A49">throws</span><span style="color:#24292E"> IOException, ServletException {</span></span>
+<span class="line"><span style="color:#24292E">		HttpServletResponse response </span><span style="color:#D73A49">=</span><span style="color:#24292E"> (HttpServletResponse) res;</span></span>
+<span class="line"><span style="color:#24292E">		ResponseWrapper wrapper </span><span style="color:#D73A49">=</span><span style="color:#D73A49"> new</span><span style="color:#6F42C1"> ResponseWrapper</span><span style="color:#24292E">(response);</span></span>
+<span class="line"><span style="color:#24292E">		chain.</span><span style="color:#6F42C1">doFilter</span><span style="color:#24292E">(req, wrapper);</span></span>
+<span class="line"><span style="color:#24292E">		String html </span><span style="color:#D73A49">=</span><span style="color:#24292E"> wrapper.</span><span style="color:#6F42C1">toString</span><span style="color:#24292E">();</span></span>
+<span class="line"><span style="color:#D73A49">		if</span><span style="color:#24292E"> (regex </span><span style="color:#D73A49">!=</span><span style="color:#005CC5"> null</span><span style="color:#D73A49"> &#x26;&#x26;</span><span style="color:#24292E"> response.</span><span style="color:#6F42C1">getContentType</span><span style="color:#24292E">() </span><span style="color:#D73A49">!=</span><span style="color:#005CC5"> null</span><span style="color:#D73A49"> &#x26;&#x26;</span><span style="color:#24292E"> response.</span><span style="color:#6F42C1">getContentType</span><span style="color:#24292E">().</span><span style="color:#6F42C1">startsWith</span><span style="color:#24292E">(</span><span style="color:#032F62">"text/html"</span><span style="color:#24292E">))</span></span>
+<span class="line"><span style="color:#24292E">			html </span><span style="color:#D73A49">=</span><span style="color:#24292E"> regex.</span><span style="color:#6F42C1">matcher</span><span style="color:#24292E">(html).</span><span style="color:#6F42C1">replaceAll</span><span style="color:#24292E">(</span><span style="color:#032F62">""</span><span style="color:#24292E">);</span></span>
+<span class="line"><span style="color:#24292E">		response.</span><span style="color:#6F42C1">setContentLength</span><span style="color:#24292E">(html.</span><span style="color:#6F42C1">getBytes</span><span style="color:#24292E">().length);</span></span>
+<span class="line"><span style="color:#24292E">		PrintWriter out </span><span style="color:#D73A49">=</span><span style="color:#24292E"> response.</span><span style="color:#6F42C1">getWriter</span><span style="color:#24292E">();</span></span>
+<span class="line"><span style="color:#24292E">		out.</span><span style="color:#6F42C1">write</span><span style="color:#24292E">(html);</span></span>
+<span class="line"><span style="color:#24292E">		out.</span><span style="color:#6F42C1">close</span><span style="color:#24292E">();</span></span>
+<span class="line"><span style="color:#24292E">	}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">	public</span><span style="color:#D73A49"> void</span><span style="color:#6F42C1"> destroy</span><span style="color:#24292E">() {</span></span>
+<span class="line"><span style="color:#24292E">	}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">	public</span><span style="color:#D73A49"> void</span><span style="color:#6F42C1"> init</span><span style="color:#24292E">(FilterConfig </span><span style="color:#E36209">config</span><span style="color:#24292E">) </span><span style="color:#D73A49">throws</span><span style="color:#24292E"> ServletException {</span></span>
+<span class="line"><span style="color:#24292E">		StringBuffer pattern </span><span style="color:#D73A49">=</span><span style="color:#D73A49"> new</span><span style="color:#6F42C1"> StringBuffer</span><span style="color:#24292E">();</span></span>
+<span class="line"><span style="color:#6F42C1">		appendIf</span><span style="color:#24292E">(config, </span><span style="color:#032F62">"strip-linestart-whitespace"</span><span style="color:#24292E">, pattern, </span><span style="color:#032F62">"(?&#x3C;=^)[ </span><span style="color:#005CC5">\\</span><span style="color:#032F62">t]+"</span><span style="color:#24292E">);</span></span>
+<span class="line"><span style="color:#6F42C1">		appendIf</span><span style="color:#24292E">(config, </span><span style="color:#032F62">"strip-lineend-whitespace"</span><span style="color:#24292E">, pattern, </span><span style="color:#032F62">"[ </span><span style="color:#005CC5">\\</span><span style="color:#032F62">t]+(?:$)"</span><span style="color:#24292E">);</span></span>
+<span class="line"><span style="color:#6F42C1">		appendIf</span><span style="color:#24292E">(config, </span><span style="color:#032F62">"strip-multiple-whitespace"</span><span style="color:#24292E">, pattern, </span><span style="color:#032F62">"([ </span><span style="color:#005CC5">\\</span><span style="color:#032F62">t](?:[ </span><span style="color:#005CC5">\\</span><span style="color:#032F62">t]))+"</span><span style="color:#24292E">);</span></span>
+<span class="line"><span style="color:#6F42C1">		appendIf</span><span style="color:#24292E">(config, </span><span style="color:#032F62">"strip-blank-lines"</span><span style="color:#24292E">, pattern, </span><span style="color:#032F62">"(</span><span style="color:#005CC5">\\</span><span style="color:#032F62">n[ </span><span style="color:#005CC5">\\</span><span style="color:#032F62">t]*(?:</span><span style="color:#005CC5">\\</span><span style="color:#032F62">n))+"</span><span style="color:#24292E">);</span></span>
+<span class="line"><span style="color:#D73A49">		if</span><span style="color:#24292E"> (pattern.</span><span style="color:#6F42C1">length</span><span style="color:#24292E">() </span><span style="color:#D73A49">!=</span><span style="color:#005CC5"> 0</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">			regex </span><span style="color:#D73A49">=</span><span style="color:#24292E"> Pattern.</span><span style="color:#6F42C1">compile</span><span style="color:#24292E">(pattern.</span><span style="color:#6F42C1">toString</span><span style="color:#24292E">(), Pattern.MULTILINE);</span></span>
+<span class="line"><span style="color:#24292E">	}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">	private</span><span style="color:#D73A49"> void</span><span style="color:#6F42C1"> appendIf</span><span style="color:#24292E">(FilterConfig </span><span style="color:#E36209">config</span><span style="color:#24292E">, String </span><span style="color:#E36209">configKey</span><span style="color:#24292E">, StringBuffer </span><span style="color:#E36209">pattern</span><span style="color:#24292E">, String </span><span style="color:#E36209">s</span><span style="color:#24292E">) {</span></span>
+<span class="line"><span style="color:#D73A49">		if</span><span style="color:#24292E"> (config.</span><span style="color:#6F42C1">getInitParameter</span><span style="color:#24292E">(configKey) </span><span style="color:#D73A49">!=</span><span style="color:#005CC5"> null</span><span style="color:#D73A49"> &#x26;&#x26;</span><span style="color:#24292E"> config.</span><span style="color:#6F42C1">getInitParameter</span><span style="color:#24292E">(configKey).</span><span style="color:#6F42C1">equals</span><span style="color:#24292E">(</span><span style="color:#032F62">"true"</span><span style="color:#24292E">)) {</span></span>
+<span class="line"><span style="color:#D73A49">			if</span><span style="color:#24292E"> (pattern.</span><span style="color:#6F42C1">length</span><span style="color:#24292E">() </span><span style="color:#D73A49">!=</span><span style="color:#005CC5"> 0</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">				pattern.</span><span style="color:#6F42C1">append</span><span style="color:#24292E">(</span><span style="color:#032F62">'|'</span><span style="color:#24292E">);</span></span>
+<span class="line"><span style="color:#24292E">			pattern.</span><span style="color:#6F42C1">append</span><span style="color:#24292E">(s);</span></span>
+<span class="line"><span style="color:#24292E">		}</span></span>
+<span class="line"><span style="color:#24292E">	}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">	static</span><span style="color:#D73A49"> class</span><span style="color:#6F42C1"> ResponseWrapper</span><span style="color:#D73A49"> extends</span><span style="color:#6F42C1"> HttpServletResponseWrapper</span><span style="color:#24292E"> {</span></span>
+<span class="line"><span style="color:#D73A49">		private</span><span style="color:#24292E"> CharArrayWriter output;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">		public</span><span style="color:#6F42C1"> ResponseWrapper</span><span style="color:#24292E">(HttpServletResponse </span><span style="color:#E36209">response</span><span style="color:#24292E">) {</span></span>
+<span class="line"><span style="color:#005CC5">			super</span><span style="color:#24292E">(response);</span></span>
+<span class="line"><span style="color:#005CC5">			this</span><span style="color:#24292E">.output </span><span style="color:#D73A49">=</span><span style="color:#D73A49"> new</span><span style="color:#6F42C1"> CharArrayWriter</span><span style="color:#24292E">();</span></span>
+<span class="line"><span style="color:#24292E">		}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">		public</span><span style="color:#24292E"> String </span><span style="color:#6F42C1">toString</span><span style="color:#24292E">() {</span></span>
+<span class="line"><span style="color:#D73A49">			return</span><span style="color:#24292E"> output.</span><span style="color:#6F42C1">toString</span><span style="color:#24292E">();</span></span>
+<span class="line"><span style="color:#24292E">		}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">		public</span><span style="color:#24292E"> PrintWriter </span><span style="color:#6F42C1">getWriter</span><span style="color:#24292E">() {</span></span>
+<span class="line"><span style="color:#D73A49">			return</span><span style="color:#D73A49"> new</span><span style="color:#6F42C1"> PrintWriter</span><span style="color:#24292E">(output);</span></span>
+<span class="line"><span style="color:#24292E">		}</span></span>
+<span class="line"><span style="color:#24292E">	}</span></span>
+<span class="line"><span style="color:#24292E">}</span></span></code></pre><h3 id="how-does-it-work">How does it work?</h3>
+<p>We start off by wrapping our response in an object that will supply a CharArrayWriter so we can capture and process whatever the rest of the stack is doing (credit for this idea goes <a href="http://stackoverflow.com/questions/5009650/where-can-i-find-a-java-servlet-filter-that-applies-regex-to-the-output">here</a>). We can then process the output with our regular expression(s) and pass it to the real response.</p>
 <p>Before I explain what the regular expressions do I want to caution that this won&#39;t be satisfactory in certain situations. It&#39;s not aware of &lt;script&gt;, &lt;pre&gt; or any other content where whitespace may be important, so unless you&#39;re sure stripping whitespace doesn&#39;t matter you may want to find a more intelligent solution.</p>
 <p>I&#39;ve split the regex up into 4 optional parts, you turn them on with init-parameters (explained later), matches of each of these are replaced with an empty string:</p>
-<p><h4><strong>strip-linestart-whitespace - (?&lt;=^)[ \t]+</strong></h4>
-This regex will match whitespace at the beginning of any line. You&#39;ll notice that I&#39;m not using \s for my whitespace match, this is because with multi-line pattern matching it&#39;ll also match \n and \r which we want to handle separately. The (?&lt;=^) at the beginning is a non-capturing positive look-behind for <em>line-start</em>; so it&#39;ll match the start of the line but won&#39;t include it in our returned match-group so we only strip out the whitespace.</p>
+<h4 id="strip-linestart-whitespace----t"><strong>strip-linestart-whitespace - (?&lt;=^)[ \t]+</strong></h4>
+<p>This regex will match whitespace at the beginning of any line. You&#39;ll notice that I&#39;m not using \s for my whitespace match, this is because with multi-line pattern matching it&#39;ll also match \n and \r which we want to handle separately. The (?&lt;=^) at the beginning is a non-capturing positive look-behind for <em>line-start</em>; so it&#39;ll match the start of the line but won&#39;t include it in our returned match-group so we only strip out the whitespace.</p>
 <p>This option is likely to make the biggest impact on HTML minification on dynamic content because we love to use indentation to define structure.</p>
-<p><h4><strong></strong>strip-lineend-whitespace - [ \t]+(?:$)</h4>
-Same deal as the linestart regex but this time we have (?:$), a non-capturing positive look-ahead for <em>line end</em>.</p>
+<h4 id="strip-lineend-whitespace----t"><strong></strong>strip-lineend-whitespace - [ \t]+(?:$)</h4>
+<p>Same deal as the linestart regex but this time we have (?:$), a non-capturing positive look-ahead for <em>line end</em>.</p>
 <p>This will pick up any sloppyness in your HTML (I wish I could do this in Microsoft Word when I have to edit other people&#39;s documents, you can&#39;t see it, <strong>but it&#39;s still there</strong>!).</p>
-<p><h4>strip-multiple-whitespace - (<a href="?:[ \\t]"> \t</a>)+</h4>
-Here we have a group of one or more whitespace characters followed by another whitespace character, non-captured, so we don&#39;t strip out all whitespace, remember that we are replacing matches with an empty string so we need the non-capturing second space to leave one intact.</p>
+<h4 id="strip-multiple-whitespace----t-t">strip-multiple-whitespace - ([ \t](?:[ \t]))+</h4>
+<p>Here we have a group of one or more whitespace characters followed by another whitespace character, non-captured, so we don&#39;t strip out all whitespace, remember that we are replacing matches with an empty string so we need the non-capturing second space to leave one intact.</p>
 <p>This is probably going to be the most dangerous if you might have content where whitespace is important, e.g. &lt;script&gt;, &lt;pre&gt;.l</p>
-<p><h4>strip-blank-lines - (\n[ \t]*(?:\n))+</h4>
-This is very similar to the multiple-whitespace regex but we match a newline, followed by zero or more whitespace characters, followed by a non-captured newline, all repeated one or more times. So we&#39;ll get rid of any lines that don&#39;t contain content.</p>
-<p><h3>Configuration</h3>
-You simply put the filter into your classpath somewhere and wire it up in web.xml. You first define the filter reference and any parameters:</p>
-<div class="highlight"><pre><span class="nt">&lt;filter&gt;</span>
-    <span class="nt">&lt;filter-name&gt;</span>htmlMinifyFilter<span class="nt">&lt;/filter-name&gt;</span>
-    <span class="nt">&lt;filter-class&gt;</span>au.com.xprime.misc.webapp.filter.HTMLMinifyFilter<span class="nt">&lt;/filter-class&gt;</span>
-    <span class="nt">&lt;init-param&gt;</span>
-        <span class="nt">&lt;param-name&gt;</span>strip-linestart-whitespace<span class="nt">&lt;/param-name&gt;</span>
-        <span class="nt">&lt;param-value&gt;</span>true<span class="nt">&lt;/param-value&gt;</span>
-    <span class="nt">&lt;/init-param&gt;</span>
-    <span class="nt">&lt;init-param&gt;</span>
-        <span class="nt">&lt;param-name&gt;</span>strip-lineend-whitespace<span class="nt">&lt;/param-name&gt;</span>
-        <span class="nt">&lt;param-value&gt;</span>true<span class="nt">&lt;/param-value&gt;</span>
-    <span class="nt">&lt;/init-param&gt;</span>
-    <span class="nt">&lt;init-param&gt;</span>
-        <span class="nt">&lt;param-name&gt;</span>strip-multiple-whitespace<span class="nt">&lt;/param-name&gt;</span>
-        <span class="nt">&lt;param-value&gt;</span>true<span class="nt">&lt;/param-value&gt;</span>
-    <span class="nt">&lt;/init-param&gt;</span>
-    <span class="nt">&lt;init-param&gt;</span>
-        <span class="nt">&lt;param-name&gt;</span>strip-blank-lines<span class="nt">&lt;/param-name&gt;</span>
-        <span class="nt">&lt;param-value&gt;</span>true<span class="nt">&lt;/param-value&gt;</span>
-    <span class="nt">&lt;/init-param&gt;</span>
-<span class="nt">&lt;/filter&gt;</span>
-</pre></div>
-
-<p>Any of the parameters can be set to <i>false</i> or omitted all together to turn it off.</p>
+<h4 id="strip-blank-lines---n-tn">strip-blank-lines - (\n[ \t]*(?:\n))+</h4>
+<p>This is very similar to the multiple-whitespace regex but we match a newline, followed by zero or more whitespace characters, followed by a non-captured newline, all repeated one or more times. So we&#39;ll get rid of any lines that don&#39;t contain content.</p>
+<h3 id="configuration">Configuration</h3>
+<p>You simply put the filter into your classpath somewhere and wire it up in web.xml. You first define the filter reference and any parameters:</p>
+<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#24292E">&#x3C;</span><span style="color:#22863A">filter</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">	&#x3C;</span><span style="color:#22863A">filter-name</span><span style="color:#24292E">>htmlMinifyFilter&#x3C;/</span><span style="color:#22863A">filter-name</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">	&#x3C;</span><span style="color:#22863A">filter-class</span><span style="color:#24292E">>au.com.xprime.misc.webapp.filter.HTMLMinifyFilter&#x3C;/</span><span style="color:#22863A">filter-class</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">	&#x3C;</span><span style="color:#22863A">init-param</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">		&#x3C;</span><span style="color:#22863A">param-name</span><span style="color:#24292E">>strip-linestart-whitespace&#x3C;/</span><span style="color:#22863A">param-name</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">		&#x3C;</span><span style="color:#22863A">param-value</span><span style="color:#24292E">>true&#x3C;/</span><span style="color:#22863A">param-value</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">	&#x3C;/</span><span style="color:#22863A">init-param</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">	&#x3C;</span><span style="color:#22863A">init-param</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">		&#x3C;</span><span style="color:#22863A">param-name</span><span style="color:#24292E">>strip-lineend-whitespace&#x3C;/</span><span style="color:#22863A">param-name</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">		&#x3C;</span><span style="color:#22863A">param-value</span><span style="color:#24292E">>true&#x3C;/</span><span style="color:#22863A">param-value</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">	&#x3C;/</span><span style="color:#22863A">init-param</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">	&#x3C;</span><span style="color:#22863A">init-param</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">		&#x3C;</span><span style="color:#22863A">param-name</span><span style="color:#24292E">>strip-multiple-whitespace&#x3C;/</span><span style="color:#22863A">param-name</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">		&#x3C;</span><span style="color:#22863A">param-value</span><span style="color:#24292E">>true&#x3C;/</span><span style="color:#22863A">param-value</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">	&#x3C;/</span><span style="color:#22863A">init-param</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">	&#x3C;</span><span style="color:#22863A">init-param</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">		&#x3C;</span><span style="color:#22863A">param-name</span><span style="color:#24292E">>strip-blank-lines&#x3C;/</span><span style="color:#22863A">param-name</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">		&#x3C;</span><span style="color:#22863A">param-value</span><span style="color:#24292E">>true&#x3C;/</span><span style="color:#22863A">param-value</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">	&#x3C;/</span><span style="color:#22863A">init-param</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">&#x3C;/</span><span style="color:#22863A">filter</span><span style="color:#24292E">></span></span></code></pre><p>Any of the parameters can be set to <i>false</i> or omitted all together to turn it off.</p>
 <p>Then you need to wire up the filter to any incoming URIs which is done just like servlet-mapping (but still hopelessly unhelpful, why can&#39;t we have proper regular expressions for these??). You&#39;ll notice that I&#39;m only using a Writer so even though it checks for a text/html response before it does any rewriting you won&#39;t want it touching any binary data because we don&#39;t wrap getOutputStream(). So, either make sure the filter only gets applied to text/html URIs or modify the filter to be binary-safe. I only have a few URIs that I want to apply this to so I&#39;ve put them in manually with one of these per URI:</p>
-<div class="highlight"><pre><span class="nt">&lt;filter-mapping&gt;</span>
-    <span class="nt">&lt;filter-name&gt;</span>htmlMinifyFilter<span class="nt">&lt;/filter-name&gt;</span>
-    <span class="nt">&lt;url-pattern&gt;</span>/myuri<span class="nt">&lt;/url-pattern&gt;</span>
-<span class="nt">&lt;/filter-mapping&gt;</span>
-</pre></div>
-
-<p>But you can also do the simple url-pattern matching with <em>.ext or /</em>, etc.</p>
+<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#24292E">&#x3C;</span><span style="color:#22863A">filter-mapping</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">	&#x3C;</span><span style="color:#22863A">filter-name</span><span style="color:#24292E">>htmlMinifyFilter&#x3C;/</span><span style="color:#22863A">filter-name</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">	&#x3C;</span><span style="color:#22863A">url-pattern</span><span style="color:#24292E">>/myuri&#x3C;/</span><span style="color:#22863A">url-pattern</span><span style="color:#24292E">></span></span>
+<span class="line"><span style="color:#24292E">&#x3C;/</span><span style="color:#22863A">filter-mapping</span><span style="color:#24292E">></span></span></code></pre><p>But you can also do the simple url-pattern matching with <em>.ext or /</em>, etc.</p>
 <p>And there you go! Cheap and easy HTML minification from within the Servlet container.</p>
 
     </section>

@@ -8,21 +8,7 @@
     <link rel="stylesheet" href="/style.css" type="text/css">
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="https://r.va.gg/atom.xml" />
     <script type="text/javascript" src="https://use.typekit.com/swo4snt.js"></script>
-    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>  
-    <script type="text/javascript">
-      var _gaq = _gaq || []
-      _gaq.push(['_setAccount', 'UA-21373682-1'])
-      _gaq.push(['_trackPageview'])
-      setTimeout('_gaq.push(["_trackEvent", "15_seconds", "read"])', 15000)
-      !(function () {
-        var ga = document.createElement('script')
-        ga.type = 'text/javascript'
-        ga.async = true
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'
-        var s = document.getElementsByTagName('script')[0]
-        s.parentNode.insertBefore(ga, s)
-      }())
-    </script>
+    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>
   </head>
   <body>
 
@@ -42,7 +28,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the &quot;HashWick&quot; vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
+            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the "HashWick" vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
           </ul>
         </section>
       </section>
@@ -60,16 +46,17 @@
 
     <section class="post-body">
       <p>In syntax terms, JavaScript is in the broad C-family of languages. The C-family is diverse and includes languages such as C (obviously), C++, Objective-C, Perl, Java, C# and the newer Go from Google and Rust from Mozilla. Common themes in these languages include:</p>
-<p><ul>
-    <li>The use of curly braces to surround blocks.</li>
-    <li>The general insignificance of white space (spaces, tabs, new lines) except in very limited cases. Indentation is optional and is therefore a matter of style and preference, plus programs can be written on as few or as many lines as you want.</li>
-    <li>The use of semicolons to end statements, expressions and other constructs. Semicolons become the delimiter that the new line character is in white-space-significant languages.</li>
+<ul>
+	<li>The use of curly braces to surround blocks.</li>
+	<li>The general insignificance of white space (spaces, tabs, new lines) except in very limited cases. Indentation is optional and is therefore a matter of style and preference, plus programs can be written on as few or as many lines as you want.</li>
+	<li>The use of semicolons to end statements, expressions and other constructs. Semicolons become the delimiter that the new line character is in white-space-significant languages.</li>
 </ul>
-JavaScript’s rules for curly braces, white space and semicolons are consistent with the C-family and its formal specification, known as the ECMAScript Language Specification makes this clear:</p>
-<p><blockquote>Certain ECMAScript statements (empty statement, variable statement, expression statement, do-while statement, continue statement, break statement, return statement, and throw statement) must be terminated with semicolons.</blockquote>
-But it doesn’t end there–JavaScript introduces what’s known as <strong>Automatic Semicolon Insertion (ASI)</strong>. The specification continues:</p>
-<p><blockquote>Such semicolons may always appear explicitly in the source text. For convenience, however, such semicolons may be omitted from the source text in certain situations. These situations are described by saying that semicolons are automatically inserted into the source code token stream in those situations.</blockquote>
-The general C-family rules for semicolons can be found in most teaching material for JavaScript and has been advocated by most of the prominent JavaScript personalities since 1995. In a <a href="https://brendaneich.com/2012/04/the-infernal-semicolon/">recent post</a>, JavaScript’s inventor, Brendan Eich, described ASI as “a syntactic error correction procedure”, (as in “<a href="https://brendaneich.com/2012/04/the-infernal-semicolon/#comment-12268">parsing error</a>”, rather than “user error”).</p>
+JavaScript’s rules for curly braces, white space and semicolons are consistent with the C-family and its formal specification, known as the ECMAScript Language Specification makes this clear:
+<blockquote>Certain ECMAScript statements (empty statement, variable statement, expression statement, do-while statement, continue statement, break statement, return statement, and throw statement) must be terminated with semicolons.</blockquote>
+But it doesn’t end there–JavaScript introduces what’s known as <strong>Automatic Semicolon Insertion (ASI)</strong>. The specification continues:
+<blockquote>Such semicolons may always appear explicitly in the source text. For convenience, however, such semicolons may be omitted from the source text in certain situations. These situations are described by saying that semicolons are automatically inserted into the source code token stream in those situations.</blockquote>
+The general C-family rules for semicolons can be found in most teaching material for JavaScript and has been advocated by most of the prominent JavaScript personalities since 1995. In a <a href="https://brendaneich.com/2012/04/the-infernal-semicolon/">recent post</a>, JavaScript’s inventor, Brendan Eich, described ASI as “a syntactic error correction procedure”, (as in “<a href="https://brendaneich.com/2012/04/the-infernal-semicolon/#comment-12268">parsing error</a>”, rather than “user error”).
+
 <p><strong><em>The rest of this article about semicolons in JavaScript can be found on <a title="JavaScript and Semicolons" href="http://dailyjs.com/2012/04/19/semicolons/">DailyJS</a>.</em></strong></p>
 
     </section>

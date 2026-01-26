@@ -6,21 +6,7 @@
     <link rel="stylesheet" href="/style.css" type="text/css">
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="https://r.va.gg/atom.xml" />
     <script type="text/javascript" src="https://use.typekit.com/swo4snt.js"></script>
-    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>  
-    <script type="text/javascript">
-      var _gaq = _gaq || []
-      _gaq.push(['_setAccount', 'UA-21373682-1'])
-      _gaq.push(['_trackPageview'])
-      setTimeout('_gaq.push(["_trackEvent", "15_seconds", "read"])', 15000)
-      !(function () {
-        var ga = document.createElement('script')
-        ga.type = 'text/javascript'
-        ga.async = true
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'
-        var s = document.getElementsByTagName('script')[0]
-        s.parentNode.insertBefore(ga, s)
-      }())
-    </script>
+    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>
   </head>
   <body>
 
@@ -40,7 +26,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the &quot;HashWick&quot; vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
+            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the "HashWick" vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
           </ul>
         </section>
       </section>
@@ -80,36 +66,24 @@
 <p>Plus some other efforts to adapt other embedded and non-embedded data stores to the LevelDOWN interface. Additionally, there are other versions of LevelDB that can be used, including the fork that <a href="http://basho.com/">Basho</a> maintains for use in <a href="http://basho.com/riak/">Riak</a>. (I have a branch of LevelDOWN that uses this version of LevelDB that I&#39;ll release as soon as I can explain and demonstrate the performance differences to vanilla LevelDB for Node users).</p>
 <p>In short, LevelUP doesn&#39;t <em>need</em> LevelDOWN in the way it once did and LevelUP is turning into a more generic interface to sorted key/value storage systems, albeit with a distinct LevelDB-flavour.</p>
 <p>Since version 0.8 we&#39;ve supported a <code>&#39;db&#39;</code> option when you create a LevelUP instance. This option can be used to provide an alternative LevelDOWN-compatible back-end. Unfortunately, LevelDOWN being defined as a strict dependency of LevelUP means that each time you install it you have to compile LevelDOWN, even if you don&#39;t want it. So, we&#39;ve removed it as a dependency but it&#39;s still <em>wired up</em> so that that the only thing you need to do is actually install LevelDOWN alongside LevelUP and it&#39;ll take care of the rest.</p>
-<div class="highlight"><pre><span class="nv">$ </span>npm install levelup leveldown
-</pre></div>
-
-<p>From version 0.9 onwards, you&#39;ll need to do this, or you&#39;ll see an (informative) error.</p>
-<h3 id="introducing-level-">Introducing &quot;Level&quot;</h3>
+<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> npm</span><span style="color:#032F62"> install</span><span style="color:#032F62"> levelup</span><span style="color:#032F62"> leveldown</span></span></code></pre><p>From version 0.9 onwards, you&#39;ll need to do this, or you&#39;ll see an (informative) error.</p>
+<h3 id="introducing-level">Introducing &quot;Level&quot;</h3>
 <p>To make life easier, we&#39;re publishing an additional package in npm that will make this easier by bundling both LevelUP and LevelDOWN as dependencies and exposing LevelUP directly. The <strong><a href="https://github.com/level/level">Level</a></strong> package is a very simple wrapper that exists purely as a convenience. It&#39;ll track the same versioning as LevelUP so it&#39;s a straight substitution.</p>
-<div class="highlight"><pre><span class="nv">$ </span>npm install level
-</pre></div>
-
-<p>You can simply change your <code>&quot;dependencies&quot;</code> from <strong>&quot;levelup&quot;</strong> to <strong>&quot;level&quot;</strong>, plus you can use it just like LevelUP:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">levelup</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;level&#39;</span><span class="p">)</span>
-<span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">levelup</span><span class="p">(</span><span class="s1">&#39;./my.db&#39;</span><span class="p">)</span>
-<span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;yay!&#39;</span><span class="p">,</span> <span class="s1">&#39;it works!&#39;</span><span class="p">)</span>
-</pre></div>
-
-<h3 id="switching-things-up">Switching things up</h3>
+<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> npm</span><span style="color:#032F62"> install</span><span style="color:#032F62"> level</span></span></code></pre><p>You can simply change your <code>&quot;dependencies&quot;</code> from <strong>&quot;levelup&quot;</strong> to <strong>&quot;level&quot;</strong>, plus you can use it just like LevelUP:</p>
+<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#D73A49">var</span><span style="color:#24292E"> levelup </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'level'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#D73A49">var</span><span style="color:#24292E"> db </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> levelup</span><span style="color:#24292E">(</span><span style="color:#032F62">'./my.db'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">db.</span><span style="color:#6F42C1">put</span><span style="color:#24292E">(</span><span style="color:#032F62">'yay!'</span><span style="color:#24292E">, </span><span style="color:#032F62">'it works!'</span><span style="color:#24292E">)</span></span></code></pre><h3 id="switching-things-up">Switching things up</h3>
 <p>Now we have a properly pluggable back-end, expect to see a growing array of choice and innovation. The most exciting space at the moment is browser-land. Consider <strong>level.js</strong>:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">levelup</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;levelup&#39;</span><span class="p">)</span>
-  <span class="p">,</span> <span class="nx">leveljs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;level-js&#39;</span><span class="p">)</span>
-
-<span class="nb">window</span><span class="p">.</span><span class="nx">db</span> <span class="o">=</span> <span class="nx">levelup</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">db</span><span class="o">:</span> <span class="nx">leveljs</span> <span class="p">})</span>
-
-<span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;LevelUP string&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">db</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;name=&#39;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">)</span>
-  <span class="p">})</span>
-<span class="p">})</span>
-</pre></div>
-
-<p>Yep, that&#39;s browser code. Simply <code>npm install levelup level-js</code> and run the module through <a href="http://browserify.org/">Browserify</a> and you get the full LevelUP API in your browser!</p>
+<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#D73A49">var</span><span style="color:#24292E"> levelup </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'levelup'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  , leveljs </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'level-js'</span><span style="color:#24292E">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E">window.db </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> levelup</span><span style="color:#24292E">(</span><span style="color:#032F62">'foo'</span><span style="color:#24292E">, { db: leveljs })</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E">db.</span><span style="color:#6F42C1">put</span><span style="color:#24292E">(</span><span style="color:#032F62">'name'</span><span style="color:#24292E">, </span><span style="color:#032F62">'LevelUP string'</span><span style="color:#24292E">, </span><span style="color:#D73A49">function</span><span style="color:#24292E"> (</span><span style="color:#E36209">err</span><span style="color:#24292E">) {</span></span>
+<span class="line"><span style="color:#24292E">  db.</span><span style="color:#6F42C1">get</span><span style="color:#24292E">(</span><span style="color:#032F62">'name'</span><span style="color:#24292E">, </span><span style="color:#D73A49">function</span><span style="color:#24292E"> (</span><span style="color:#E36209">err</span><span style="color:#24292E">, </span><span style="color:#E36209">value</span><span style="color:#24292E">) {</span></span>
+<span class="line"><span style="color:#24292E">    console.</span><span style="color:#6F42C1">log</span><span style="color:#24292E">(</span><span style="color:#032F62">'name='</span><span style="color:#D73A49"> +</span><span style="color:#24292E"> value)</span></span>
+<span class="line"><span style="color:#24292E">  })</span></span>
+<span class="line"><span style="color:#24292E">})</span></span></code></pre><p>Yep, that&#39;s browser code. Simply <code>npm install levelup level-js</code> and run the module through <a href="http://browserify.org/">Browserify</a> and you get the full LevelUP API in your browser!</p>
 <hr>
 <p>Stay tuned! This is just one step in the quest for a truly modular database system that lets you build a database that suits your applications and not the other way around.</p>
 
@@ -200,7 +174,7 @@
         <p>This is the first article in a three-part series on LevelDB and how it can be used in Node.</p>
 <p>This article will cover the LevelDB basics and internals to provide a foundation for the next two articles. The second and third articles will cover the core LevelDB Node libraries: <a href="https://github.com/rvagg/node-levelup">LevelUP</a>, <a href="https://github.com/rvagg/node-leveldown">LevelDOWN</a> and the rest of the LevelDB ecosystem that&#39;s appearing in Node-land.</p>
 <p><img src="http://dailyjs.com/images/posts/leveldb.png" alt="LevelDB"></p>
-<h3 id="what-is-leveldb-">What is LevelDB?</h3>
+<h3 id="what-is-leveldb">What is LevelDB?</h3>
 <p>LevelDB is an <em>open-source</em>, <em>dependency-free</em>, <em>embedded key/value data store</em>. It was developed in 2011 by Jeff Dean and Sanjay Ghemawat, researchers from Google. It&#39;s written in C++ although it has third-party bindings for most common programming languages. Including JavaScript / Node.js of course.</p>
 <p>LevelDB is based on ideas in Google&#39;s BigTable but does not share code with BigTable, this allows it to be licensed for open source release. Dean and Ghemawat developed LevelDB as a replacement for SQLite as the backing-store for Chrome&#39;s IndexedDB implementation.</p>
 <p>It has since seen very wide adoption across the industry and serves as the back-end to a number of new databases and is now the recommended storage back-end for Riak.</p>

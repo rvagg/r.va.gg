@@ -8,21 +8,7 @@
     <link rel="stylesheet" href="/style.css" type="text/css">
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="https://r.va.gg/atom.xml" />
     <script type="text/javascript" src="https://use.typekit.com/swo4snt.js"></script>
-    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>  
-    <script type="text/javascript">
-      var _gaq = _gaq || []
-      _gaq.push(['_setAccount', 'UA-21373682-1'])
-      _gaq.push(['_trackPageview'])
-      setTimeout('_gaq.push(["_trackEvent", "15_seconds", "read"])', 15000)
-      !(function () {
-        var ga = document.createElement('script')
-        ga.type = 'text/javascript'
-        ga.async = true
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'
-        var s = document.getElementsByTagName('script')[0]
-        s.parentNode.insertBefore(ga, s)
-      }())
-    </script>
+    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>
   </head>
   <body>
 
@@ -42,7 +28,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the &quot;HashWick&quot; vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
+            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the "HashWick" vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
           </ul>
         </section>
       </section>
@@ -69,16 +55,13 @@
 <p>The other major change is the introduction of a new <strong>chained batch</strong> syntax, additional to the existing batch syntax. This method of creating and writing batch operations is much closer to the way LevelDB does batches and under certain circumstances you may find improved performance from using this method.</p>
 <p>If you call <code>db.batch()</code> with no arguments, you&#39;ll get a <code>Batch</code> object back which has the following operations: <code>put()</code>, <code>del()</code>, <code>clear()</code> and <code>write()</code>. The first three are chainable so you can call them one after the other to build your batch. <code>write()</code> is the only method that takes a callback because it submits the batch. Until you call <code>write()</code>, the batch is transient and can be discarded.</p>
 <p>Example from the <a href="https://github.com/rvagg/node-levelup#readme">README</a>:</p>
-<div class="highlight"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">batch</span><span class="p">()</span>
-  <span class="p">.</span><span class="nx">del</span><span class="p">(</span><span class="s1">&#39;father&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;Yuri Irsenovich Kim&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;dob&#39;</span><span class="p">,</span> <span class="s1">&#39;16 February 1941&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;spouse&#39;</span><span class="p">,</span> <span class="s1">&#39;Kim Young-sook&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;Clown&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Done!&#39;</span><span class="p">)</span> <span class="p">})</span>
-</pre></div>
-
-<h3 id="some-love-for-writestream">Some love for WriteStream</h3>
+<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#24292E">db.</span><span style="color:#6F42C1">batch</span><span style="color:#24292E">()</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">del</span><span style="color:#24292E">(</span><span style="color:#032F62">'father'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">put</span><span style="color:#24292E">(</span><span style="color:#032F62">'name'</span><span style="color:#24292E">, </span><span style="color:#032F62">'Yuri Irsenovich Kim'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">put</span><span style="color:#24292E">(</span><span style="color:#032F62">'dob'</span><span style="color:#24292E">, </span><span style="color:#032F62">'16 February 1941'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">put</span><span style="color:#24292E">(</span><span style="color:#032F62">'spouse'</span><span style="color:#24292E">, </span><span style="color:#032F62">'Kim Young-sook'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">put</span><span style="color:#24292E">(</span><span style="color:#032F62">'occupation'</span><span style="color:#24292E">, </span><span style="color:#032F62">'Clown'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">write</span><span style="color:#24292E">(</span><span style="color:#D73A49">function</span><span style="color:#24292E"> () { console.</span><span style="color:#6F42C1">log</span><span style="color:#24292E">(</span><span style="color:#032F62">'Done!'</span><span style="color:#24292E">) })</span></span></code></pre><h3 id="some-love-for-writestream">Some love for WriteStream</h3>
 <p>WriteStream got some attention in this release. On the main <code>createWriteStream()</code> method and on individual <code>write()</code> calls, you can now pass some new options:</p>
 <ul>
 <li><code>&#39;type&#39;</code> can switch from the default <code>&#39;put&#39;</code> to <code>&#39;del&#39;</code> so you can make a WriteStream that only deletes when you <code>write({ key: &#39;foo&#39; })</code>, or you can make individual writes delete: <code>write({ type: &#39;del&#39;, key: &#39;foo&#39; })</code>.</li>

@@ -6,21 +6,7 @@
     <link rel="stylesheet" href="/style.css" type="text/css">
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="https://r.va.gg/atom.xml" />
     <script type="text/javascript" src="https://use.typekit.com/swo4snt.js"></script>
-    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>  
-    <script type="text/javascript">
-      var _gaq = _gaq || []
-      _gaq.push(['_setAccount', 'UA-21373682-1'])
-      _gaq.push(['_trackPageview'])
-      setTimeout('_gaq.push(["_trackEvent", "15_seconds", "read"])', 15000)
-      !(function () {
-        var ga = document.createElement('script')
-        ga.type = 'text/javascript'
-        ga.async = true
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'
-        var s = document.getElementsByTagName('script')[0]
-        s.parentNode.insertBefore(ga, s)
-      }())
-    </script>
+    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>
   </head>
   <body>
 
@@ -40,7 +26,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the &quot;HashWick&quot; vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
+            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the "HashWick" vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
           </ul>
         </section>
       </section>
@@ -64,7 +50,7 @@
       <section class="post-body">
         <p>I gave a talk yesterday at <strong><a href="http://2013.lxjs.org">LXJS</a></strong> yesterday in the <em>&quot;Infrastructure.js&quot;</em> block and tried to talk about JavaScript Database Primitives; i.e. the basic building blocks we have landed on for building more complex database solutions in JavaScript.</p>
 <p>The talk certainly wasn&#39;t as good or clear as I wanted it to be, it worked much better in my head! A huge venue with over 300 talented JavaScripters, an absolutely massive screen, bright lights and loud amplification got the better of me and I wasn&#39;t able to pull the material together how I wanted to. The introvert within me is telling me to become a recluse for a little while just to recover! My <em>hope</em> is that at least one or two people are inspired to give <em>database hacking</em> a go because it&#39;s really not that difficult once you get your head around the primitives.</p>
-<p><strong><em>Edit:</em></strong> <em>I wasn&#39;t trying to elicit sympathy here, I genuinely think that I wasn&#39;t clear on what I was trying to communicate. It went so well in my head, as it usually does, but I fell far short of what I wanted to express. I&#39;ll attempt to rectify some of that with a writeup (see next para).</em></p>
+<p><em><strong>Edit:</strong></em> <em>I wasn&#39;t trying to elicit sympathy here, I genuinely think that I wasn&#39;t clear on what I was trying to communicate. It went so well in my head, as it usually does, but I fell far short of what I wanted to express. I&#39;ll attempt to rectify some of that with a writeup (see next para).</em></p>
 <p>Thankfully though, a portion of the material will be able to serve as the basis for the, long overdue, third part in my <a href="http://dailyjs.com/2013/04/19/leveldb-and-node-1/">three</a> <a href="http://dailyjs.com/2013/05/03/leveldb-and-node-2/">part</a> <a href="http://dailyjs.com">DailyJS</a> series on LevelDB &amp; Node.</p>
 <p>In summary, inspired by LevelDB, we&#39;ve ended up with a core set of primitives in <a href="https://github.com/rvagg/node-levelup">LevelUP</a> that can be used to build feature-rich and advanced database functionality. <strong>Atomic batch</strong> and <strong>ReadStream</strong> are the two non-trivial primitives, open, close, get, put, del are all pretty easy to understand as primitives, although <em>del</em> is perhaps redundant but we&#39;re opting for explicitness.</p>
 <p>My <a href="https://r.va.gg/presentations/lxjs2013">slides are online</a> but hopefully I&#39;ll be able to get my DailyJS article sorted out soon and I&#39;ll be able to explain what I was trying to get at.</p>
@@ -94,19 +80,19 @@
       <section class="post-body">
         <p>Wow, <strong><a href="http://nodeconf.eu/">NodeConf.eu</a></strong> was certainly a once-in-a-lifetime event ... although there&#39;s talk of a repeat performance next year (don&#39;t miss the chance when it comes around!).</p>
 <div style="text-align: center;">
-<img src="https://r.va.gg/images/2013/09/nodeconfeu_raiseflag.jpg" alt="Raise that flag">
+![Raise that flag](https://r.va.gg/images/2013/09/nodeconfeu_raiseflag.jpg)
 <p style="text-align: center;">Dominic Tarr, @substack and Julian Gruber raising the NodeConf.eu flag</p>
 </div>
 
 
 <p>NodeConf.eu was held in Waterford, Ireland, on an <strong>Island</strong>, in a <strong>Castle</strong> and was organised by the Node lovin&#39; company, <a href="http://nearform.com/">nearForm</a>, in particular <a href="http://cianomaidin.com/">Cian O&#39;Maidin</a> and his amazing assistant Catherine Bradley. Of course <a href="http://futurealoof.com/">Mikeal Rogers</a> had a significant role in organising the event too.</p>
 <div style="text-align: center;">
-<img src="https://r.va.gg/images/2013/09/nodeconfeu_castle.jpg" alt="Waterford Castle">
-<p style="text-align: center;"><a href="http://waterfordcastle.com/">Waterford Castle</a></p>
+![Waterford Castle](https://r.va.gg/images/2013/09/nodeconfeu_castle.jpg)
+<p style="text-align: center;">[Waterford Castle](http://waterfordcastle.com/)</p>
 </div>
 
 <div style="text-align: center;">
-<img src="https://r.va.gg/images/2013/09/nodeconfeu_pig.jpg" alt="Pig">
+![Pig](https://r.va.gg/images/2013/09/nodeconfeu_pig.jpg)
 <p style="text-align: center;">The welcome banquet ... yep</p>
 </div>
 
@@ -129,13 +115,13 @@
 </blockquote>
 <p>But even that&#39;s pretty rough.</p>
 <p>Taking that definition, we can apply Node philosophy of small-core and vibrant user-land, along with the culture of extreme modularity afforded us by npm, and build a new kind of database; or at least apply new thinking to the &quot;database&quot;.</p>
-<p>The bulk of my talk was taken up with talking about LevelUP and the basics of the Level<em> ecosystem. There&#39;s a table on slide #7 that I&#39;m going to try and refine over time to help describe what the Level</em> / NodeBase world is all about.</p>
-<h3 id="level-me-up-scotty-">Level Me Up Scotty!</h3>
+<p>The bulk of my talk was taken up with talking about LevelUP and the basics of the Level* ecosystem. There&#39;s a table on slide #7 that I&#39;m going to try and refine over time to help describe what the Level* / NodeBase world is all about.</p>
+<h3 id="level-me-up-scotty">Level Me Up Scotty!</h3>
 <p>One of the three workshops available at NodeConf.eu was all about Node Databases. I took the same approach as at <a href="http://campjs.com/">CampJS</a> recently where I built <a href="https://r.va.gg/2013/08/learn-you-the-node.js.html">Learn You The Node.js For Much Win!</a>, a tool that owes a debt to <a href="https://github.com/substack/stream-adventure">stream-adventure</a>, a self-guided workshop-in-your-terminal application by <a href="https://twitter.com/substack">@substack</a> and <a href="https://twitter.com/maxogden">Max Ogden</a> written for NodeConf (US).</p>
 <p>This time around, I received some great help from both @substack and Julian Gruber who helped write some exercises, I also received help from <a href="http://twitter.com/eugeneware">Eugene Ware</a> who wasn&#39;t even at the conference but was assisting with development from Australia. <a href="http://twitter.com/raynos2">Raynos</a> was also a great help in getting the application working well.</p>
-<p>We ended up with <strong><em>Level Me Up Scotty!</em></strong>, or just <strong>levelmeup</strong>.</p>
+<p>We ended up with <em><strong>Level Me Up Scotty!</strong></em>, or just <strong>levelmeup</strong>.</p>
 <div style="text-align: center;">
-<img src="https://raw.github.com/rvagg/levelmeup/master/levelmeup.png" alt="levelmeup">
+![levelmeup](https://raw.github.com/rvagg/levelmeup/master/levelmeup.png)
 </div>
 
 <p>Dominic Tarr, <a href="https://twitter.com/thlorenz">Thorsten Lorenz</a>, <a href="https://twitter.com/hij1nx">Paolo Fragomeni</a>, <a href="http://www.matteocollina.com/">Matteo Collina</a>, <a href="https://twitter.com/ralphtheninja">Magnus Skog</a>, Max Ogden and other experienced <em>Levelers</em> helped on and off while the workshops were happening; so we had plenty of expertise at hand whenever there were questions.</p>
@@ -152,21 +138,21 @@
 <p>There&#39;s more planned for the future of this workshop application too, Matteo even has an a <a href="https://github.com/rvagg/levelmeup/pull/19">work-in-progress exercise</a> that should be merged fairly soon.</p>
 <p><strong><a href="http://nodeschool.io/">nodeschool.io</a></strong> was hatched from NodeConf.eu and pulls together the three workshop applications currently available in npm. I believe this was an initiative of <a href="https://twitter.com/brianloveswords">Brian J. Brennan</a> and other Mozillans on the <a href="http://openbadges.org/">Open Badges</a> project. <strong><a href="https://github.com/rvagg/workshopper">workshopper</a></strong> is the engine that runs both learnyounode and levelmeup and we&#39;re trying to make it even easier for others to author their own workshop applications. There is already a <a href="https://github.com/timoxley/functional-javascript-workshop/">Functional Javacript Workshop</a> by <a href="https://twitter.com/secoif">Tim Oxley</a> and there are more in development. Exciting times!</p>
 <div style="text-align: center;">
-<img src="https://r.va.gg/images/2013/09/nodeconfeu_levelmeup.jpg" alt="Level Me Up Workshoppers">
-<p style="text-align: center;">Workshoppers stretching their brains with <strong>levelmeup</strong></p>
+![Level Me Up Workshoppers](https://r.va.gg/images/2013/09/nodeconfeu_levelmeup.jpg)
+<p style="text-align: center;">Workshoppers stretching their brains with **levelmeup**</p>
 </div>
 
 <p>My experience with <strong>stream-adventure</strong> and <strong>learnyounode</strong> suggested that this format should prove to be relatively successful but ultimately I think we had most of the attendees come through at some point and sit down to have a crack at the workshop. This is particularly impressive given that <a href="http://nexxylove.tumblr.com/">Emily Rose</a>, <a href="http://tmpvar.com/">Elijah Insua</a> and Matteo were running a NodeBots workshop which included Arduino and NodeCopter hacking (always popular!). And <a href="https://twitter.com/mrbruning">Max Bruning</a> and <a href="https://twitter.com/tjfontaine">TJ Fontaine</a> were running a Manta / MDB / DTrace / SmartOS-magic workshop and their material was some of my favourite from NodeConf (US) so I&#39;m sure people really enjoyed what they had to present.</p>
 <p>Unfortunately I didn&#39;t get to attend these other workshops, I also missed out on some skeet!</p>
 <div style="text-align: center;">
-<img src="https://farm6.staticflickr.com/5338/9726258926_e3ea4a656f_z.jpg" alt="Skeet">
-<p style="text-align: center;">Karolina <em>&quot;don&#39;t mess with me&quot;</em> Szczur, photo by <a href="http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/">Matthew Bergman</a></p>
+![Skeet](https://farm6.staticflickr.com/5338/9726258926_e3ea4a656f_z.jpg)
+<p style="text-align: center;">Karolina *"don't mess with me"* Szczur, photo by [Matthew Bergman](http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/)</p>
 </div>
 
 <p>But there was plenty of other <em>experience</em> to be had. It was also fantastic to meet so many people I only knew from IRC / Twitter / GitHub. For someone who lives in regional Australia and doesn&#39;t get a chance to socialise much with other nerds, this was a particularly special opportunity.</p>
 <div style="text-align: center;">
-<img src="https://farm8.staticflickr.com/7392/9783982165_43ca4edef2_z.jpg" alt="Shenanigans">
-<p style="text-align: center;">Final night banquet shenanigans with <a href="https://twitter.com/Av1anFlu">Charlie McConnell</a> and @substack ... the napkin hat thing is a story in itself, blame <a href="https://twitter.com/jllord">Jessica Lord</a>, photo by <a href="http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/">Matthew Bergman</a></p>
+![Shenanigans](https://farm8.staticflickr.com/7392/9783982165_43ca4edef2_z.jpg)
+<p style="text-align: center;">Final night banquet shenanigans with [Charlie McConnell](https://twitter.com/Av1anFlu) and @substack ... the napkin hat thing is a story in itself, blame [Jessica Lord](https://twitter.com/jllord), photo by [Matthew Bergman](http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/)</p>
 </div>
 
 <h3 id="the-level-gang">The Level* Gang</h3>
@@ -174,8 +160,8 @@
 <p>There has been a long-standing plan to make a Level* / NodeBase website but being the disorganised rabble we are, it hasn&#39;t got off the ground. Karolina (and Jessica too I believe) are keen to help out on the design end but just need the content. So that&#39;s what we planned. There&#39;s a bunch of issues that form a TODO in the <a href="https://github.com/karolinaszczur/leveldb.org/issues">repo</a> for this project. Hopefully we can all get on top of it sooner rather than later. We&#39;re also open to assistance from anyone else that would like to contribute.</p>
 <p>Besides getting stuff done, it was just a pleasure to hang out with these people and talk <em>shop</em>.</p>
 <div style="text-align: center;">
-<img src="https://r.va.gg/images/2013/09/nodeconfeu_levelgang.jpg" alt="A momentus event">
-<p style="text-align: center;"><strong>The Level* Gang</strong>: Paolo, Dominic, @substack, Karolina, Magnus, Mikeal, Julian, Max, Matteo and <a href="https://twitter.com/paulfryzel">Paul Fryzel</a>. Raynos was around but missed this particular <em>event</em>, Thorsten was inside demoing his guitar-typing software.</p>
+![A momentus event](https://r.va.gg/images/2013/09/nodeconfeu_levelgang.jpg)
+<p style="text-align: center;">**The Level* Gang**: Paolo, Dominic, @substack, Karolina, Magnus, Mikeal, Julian, Max, Matteo and [Paul Fryzel](https://twitter.com/paulfryzel). Raynos was around but missed this particular *event*, Thorsten was inside demoing his guitar-typing software.</p>
 </div>
 
 
@@ -197,15 +183,16 @@
 
       <section class="post-body">
         <p><strong><a href="http://campjs.com/">CampJS</a></strong> has just finished, with a bigger crowd than last time around. It was lots of fun, and as usual, these events are more about meeting the people I collaborate, and socialise with online than anything else. There was a particularly large turn-out of the hackers on #polyhack, our Australian programmers channel on Freenode. Even <a href="https://twitter.com/mwotton">@mwotton</a>, our resident Haskell-troll was there! Lots of photos and news can be found on <a href="http://storify.com/campjs/campjs-ii">Storify</a>. The next one will likely be near Melbourne in February some time and I highly recommend it if you can get there.</p>
-<h3 id="learn-you-the-node-js-for-much-win-presentation-">Learn You The Node.js For Much Win (presentation)</h3>
+<h3 id="learn-you-the-nodejs-for-much-win-presentation">Learn You The Node.js For Much Win (presentation)</h3>
 <p>I was struck last CampJS how many JavaScript newbies were there, or at least people who deal with JavaScript as a secondary language and therefore only have a cursory understanding of it. And by extension, there were not many people who had much understanding of Node. So I wanted to present some intro-to-Node material this time.</p>
 <p>I gave a 30 minute talk covering the very basics of <em>what Node <strong>is</strong></em>, called <strong>Learn You The Node.js For Much Win</strong>. Obviously the title is inspired by <em><a href="http://learnyouahaskell.com/">Learn You a Haskell For Great Good</a></em> and <em><a href="http://learnyousomeerlang.com/">Learn You Some Erlang For Great Good</a></em>. You can find my slides <a href="https://r.va.gg/presentations/campjs-learn-you-node/">here</a> (feel free to rip them off if you need to give a similar talk somewhere!). The video may be online at some point in the future.</p>
-<h3 id="learn-you-the-node-js-for-much-win-workshop-">Learn You The Node.js For Much Win (workshop)</h3>
-<p><img src="https://pbs.twimg.com/media/BRWaBeeCcAA9R7v.jpg" style="border-radius:4px; border: solid 2px white; box-shadow: 1px 1px 15px rgba(0,0,0,0.4);"></p>
+<h3 id="learn-you-the-nodejs-for-much-win-workshop">Learn You The Node.js For Much Win (workshop)</h3>
+<img src="https://pbs.twimg.com/media/BRWaBeeCcAA9R7v.jpg" style="border-radius:4px; border: solid 2px white; box-shadow: 1px 1px 15px rgba(0,0,0,0.4);">
+
 <p>The next morning, I gave a workshop on the same topic but it was much more hands-on. The inspiration for my workshop came from <a href="http://www.nodeconf.com/">NodeConf</a>, a couple of months earlier. <a href="https://twitter.com/substack">@substack</a> and <a href="https://twitter.com/maxogden">@maxogden</a> presented a workshop titled <strong>stream adventure</strong> which was a self-guided, interactive workshop for the terminal, built with Node. You can find it <a href="https://github.com/substack/stream-adventure">here</a> and install it from npm with <code>npm install stream-adventure -g</code>, I highly recommend it.</p>
-<p><a href="https://nodei.co/npm/stream-adventure/"><img src="https://nodei.co/npm/stream-adventure.png?downloads=true&amp;stars=true" alt="NPM"></a></p>
+<p><a href="https://nodei.co/npm/stream-adventure/"><img src="https://nodei.co/npm/stream-adventure.png?downloads=true&stars=true" alt="NPM"></a></p>
 <p>I was so inspired that I stole their code and made my own workshop application! <strong><a href="https://github.com/rvagg/learnyounode/">learnyounode</a></strong>. You can download and install it with <code>npm install learnyounode -g</code>.</p>
-<p><a href="https://nodei.co/npm/learnyounode/"><img src="https://nodei.co/npm/learnyounode.png?downloads=true&amp;stars=true" alt="NPM"></a></p>
+<p><a href="https://nodei.co/npm/learnyounode/"><img src="https://nodei.co/npm/learnyounode.png?downloads=true&stars=true" alt="NPM"></a></p>
 <p>The application itself is/was a series of 13 separate workshops. Starting off with a simple <em>HELLO WORLD</em> and ending with a JSON API HTTP server (contributed by the very clever <a href="https://twitter.com/sidorares">@sidorares</a>).</p>
 <p><img src="https://raw.github.com/rvagg/learnyounode/master/learnyounode.png" alt="learnyounode"></p>
 <p>Nobody actually managed to finish the workshops in the allotted 60 minutes, although <a href="http://twitter.com/alexdickson">@alexdickson</a>, an expert JavaScripter but Node-n00b was the first one I heard of finishing it not long after.</p>
@@ -222,11 +209,12 @@
 <li><a href="https://twitter.com/EugeneWare">Eugene Ware</a> (who was also brilliant all weekend, running the local <a href="http://en.wikipedia.org/wiki/Sneakernet">sneakernet</a> because the network was so flakey)</li>
 </ul>
 <p><em>(I really hope I haven&#39;t missed anyone out there; so many quality nerds at CampJS!)</em></p>
-<p><img src="https://lh5.googleusercontent.com/-tKp0U1N7XNw/UgngKk01qqI/AAAAAAAAAoc/xxAOCTqMCZ0/w600-h800-no/campJS+%252870+of+118%2529.jpg" style="border-radius:4px; border: solid 2px white; box-shadow: 1px 1px 15px rgba(0,0,0,0.4);"></p>
+<img src="https://lh5.googleusercontent.com/-tKp0U1N7XNw/UgngKk01qqI/AAAAAAAAAoc/xxAOCTqMCZ0/w600-h800-no/campJS+%252870+of+118%2529.jpg" style="border-radius:4px; border: solid 2px white; box-shadow: 1px 1px 15px rgba(0,0,0,0.4);">
+
 <p><em>Tim Oxley making a contribution during the workshop, along with Christopher Giffard (left) and Eugene Ware (right)</em></p>
 <p>I had the <a href="https://r.va.gg/presentations/campjs-learn-you-node/workshop.html">solutions</a> to the workshop ready on the big-screen and walked through some of the early solutions and talked through what was going on. I didn&#39;t expect many people to listen to those bits and the workshop was designed so you could totally zone-out and do it at your own pace if that suited.</p>
 <p>If anyone wants to run a similar style workshop for their local meet-up, using the same content, I&#39;d love to receive contributions to <strong>learnyounode</strong>. Alternatively, make your own! I extracted the core framework from <strong>learnyounode</strong> and it now lives separately as <strong><a href="https://github.com/rvagg/workshopper">workshopper</a></strong>.</p>
-<p><a href="https://nodei.co/npm/workshopper/"><img src="https://nodei.co/npm/workshopper.png?downloads=true&amp;stars=true" alt="NPM"></a></p>
+<p><a href="https://nodei.co/npm/workshopper/"><img src="https://nodei.co/npm/workshopper.png?downloads=true&stars=true" alt="NPM"></a></p>
 <p>I would love feedback from anyone in attendance or anyone that uses this tool to run their own workshops! <strong>learnyounode</strong> is already listed in Max Ogden&#39;s excellent <strong><a href="https://github.com/maxogden/art-of-node">The Art of Node</a></strong>, so I&#39;m looking forward to contributions to help turn this into a really useful teaching tool.</p>
 
       </section>
@@ -254,28 +242,16 @@
 <h2 id="basho">Basho</h2>
 <p>First of all we have <strong>leveldown-basho</strong> which bundles the <a href="https://github.com/basho/leveldb">Basho LevelDB fork</a> into LevelDOWN. See Matthew Von-Maszewski&#39;s <a href="https://speakerdeck.com/basho/optimizing-leveldb-for-performance-and-scale-ricon-east-2013">slides</a> from the recent Ricon East 2013 for more information on what they&#39;ve tried to do with LevelDB.</p>
 <p>In summary, Basho&#39;s aim is to optimise LevelDB &quot;for the server&quot;, particularly for high write throughput. They use &gt;1 compaction threads and relax the rules a little on overlapping keys for the lower levels. Plus a few other things that I won&#39;t get in to here.</p>
-<div class="highlight"><pre><span class="nv">$ </span>npm install levelup leveldown-basho
-</pre></div>
-
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">levelup</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;levelup&#39;</span><span class="p">)</span>
-  <span class="p">,</span> <span class="nx">leveldown</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;leveldown-basho&#39;</span><span class="p">)</span>
-  <span class="p">,</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">levelup</span><span class="p">(</span><span class="s1">&#39;/path/to/db&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">db</span><span class="o">:</span> <span class="nx">leveldown</span> <span class="p">})</span>  
-<span class="c1">// go to work on `db`</span>
-</pre></div>
-
-<p><em>Disclaimer: some of the LevelDOWN and LevelUP tests are failing on the current build for this release, although I don&#39;t believe they should impact on standard usage but your mileage may vary...</em></p>
+<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> npm</span><span style="color:#032F62"> install</span><span style="color:#032F62"> levelup</span><span style="color:#032F62"> leveldown-basho</span></span></code></pre><pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#D73A49">var</span><span style="color:#24292E"> levelup </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'levelup'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  , leveldown </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'leveldown-basho'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  , db </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> levelup</span><span style="color:#24292E">(</span><span style="color:#032F62">'/path/to/db'</span><span style="color:#24292E">, { db: leveldown })  </span></span>
+<span class="line"><span style="color:#6A737D">// go to work on `db`</span></span></code></pre><p><em>Disclaimer: some of the LevelDOWN and LevelUP tests are failing on the current build for this release, although I don&#39;t believe they should impact on standard usage but your mileage may vary...</em></p>
 <h2 id="hyperdex">HyperDex</h2>
 <p>Next, we have <strong>leveldown-hyper</strong>, which bundles a fork by the people behind <a href="http://hyperdex.org/">HyperDex</a>, a key-value store. Again their aim is to optimise LevelDB for a server environment. You can see some of their claims about performance <a href="http://hyperdex.org/performance/leveldb/">here</a>. I don&#39;t know as much about this fork, I&#39;ll investigate further when I have time, but they are also using multiple compaction threads to do the background work.</p>
-<div class="highlight"><pre><span class="nv">$ </span>npm install levelup leveldown-hyper
-</pre></div>
-
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">levelup</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;levelup&#39;</span><span class="p">)</span>
-  <span class="p">,</span> <span class="nx">leveldown</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;leveldown-hyper&#39;</span><span class="p">)</span>
-  <span class="p">,</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">levelup</span><span class="p">(</span><span class="s1">&#39;/path/to/db&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">db</span><span class="o">:</span> <span class="nx">leveldown</span> <span class="p">})</span>  
-<span class="c1">// go to work on `db`</span>
-</pre></div>
-
-<h2 id="-i-strike-lies-strike-i-benchmarks-"><i><strike>Lies!</strike></i> Benchmarks!</h2>
+<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> npm</span><span style="color:#032F62"> install</span><span style="color:#032F62"> levelup</span><span style="color:#032F62"> leveldown-hyper</span></span></code></pre><pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#D73A49">var</span><span style="color:#24292E"> levelup </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'levelup'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  , leveldown </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> require</span><span style="color:#24292E">(</span><span style="color:#032F62">'leveldown-hyper'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  , db </span><span style="color:#D73A49">=</span><span style="color:#6F42C1"> levelup</span><span style="color:#24292E">(</span><span style="color:#032F62">'/path/to/db'</span><span style="color:#24292E">, { db: leveldown })  </span></span>
+<span class="line"><span style="color:#6A737D">// go to work on `db`</span></span></code></pre><h2 id="lies-benchmarks"><i><strike>Lies!</strike></i> Benchmarks!</h2>
 <p>OK, benchmarks kind of suck, particularly microbenchmarks. It&#39;s really hard to test something that&#39;s meaningful for everyone&#39;s use-case. But you can make pretty pictures with them and they can tell something of a story, even if it&#39;s just the first page of a novel.</p>
 <p>So here we go. I&#39;ve put together a simplistic benchmark that tries to test the kind of situation that these two forks are aiming to optimise for. In particular, high-throughput writes. There&#39;s a common claim that LevelDB has problems with writes because the compaction thread can hold up levels 0 and 1 while it&#39;s working on higher levels; and you really want to be flushing the new data as soon as possible so you can get more in. (Again, I have more to say on this &amp; the claims about &quot;fixing&quot; the problem in a later post).</p>
 <p>I have a sorted-write benchmark in the <a href="https://github.com/rvagg/node-leveldown/tree/master/bench">LevelDOWN repo</a> that tries to push in 10M pre-sorted entries as fast as possible, fully utilising Node&#39;s worker-threads for the job. So this isn&#39;t your typical browser scenario. An important point here is that <strong>Node is a unique environment when looking at LevelDB performance</strong>. It&#39;s not going to be a straightforward mapping of benchmark results obtained with other LevelDB bindings onto what we can achieve in Node.</p>
@@ -283,17 +259,20 @@
 <p><strong>It is important to note that I&#39;m using the default options</strong> here and this is where I&#39;ll probably cop some flak. Basho in particular advocate a healthy amount of &quot;tuning&quot; to achieve appropriate performance. In particular the write-buffer defaults to only 4M and you can push data in faster (at the cost of compactions later on) by increasing this. I think the forks may even have additional tunables of their own that you can fiddle with. But, this whole tuning thing is a rabbit hole I don&#39;t dare go down right now!</p>
 <p>I&#39;m running this on an i7-2630QM CPU, plenty of RAM and an SSD.</p>
 <p>You can see that we managed to push in the 10M entries in just over 95 seconds with the plain <strong>Google LevelDB (v1.10.0)</strong>.</p>
-<p><img src="https://r.va.gg/images/2013/06/write_sorted_times_g.png" height=500 width=800 align="center" /></p>
+<img src="https://r.va.gg/images/2013/06/write_sorted_times_g.png" height=500 width=800 align="center" />
+
 <hr>
 <p>Next up we have the HyperDex fork. The main difference here is that we have it working slightly faster in total and the write-times have been trimmed down a bit to be more consistent. Not a bad effort with default settings, quite a nice picture.</p>
-<p><img src="https://r.va.gg/images/2013/06/write_sorted_times_h.png" height=500 width=800 align="center" /></p>
+<img src="https://r.va.gg/images/2013/06/write_sorted_times_h.png" height=500 width=800 align="center" />
+
 <hr>
 <p>Lastly we can see what Basho have done. They&#39;ve been on this case for a lot longer than HyperDex have and their fork, internally at least, diverges quite a bit from Google&#39;s LevelDB.</p>
 <p>We can see that the write-time has been considerably flattened; which is in line with what Basho claim and are aiming for, the consistency here is <strong>very</strong> impressive. Unfortunately we&#39;ve ended up with a total time that is <strong>double</strong> what it took Google&#39;s LevelDB to get the 10M entries in!</p>
 <p>No doubt this is probably something to do with the tunables, or perhaps I&#39;ve messed something up, anything&#39;s possible!</p>
-<p><img src="https://r.va.gg/images/2013/06/write_sorted_times_b.png" height=500 width=800 align="center" /></p>
+<img src="https://r.va.gg/images/2013/06/write_sorted_times_b.png" height=500 width=800 align="center" />
+
 <hr>
-<h2 id="so-">So?</h2>
+<h2 id="so">So?</h2>
 <p>If you take anything away from this, here&#39;s what I think it should be: <strong>Do your own benchmarks if performance <em>really</em> is an issue for you</strong>. You&#39;re going to need some kind of benchmark suite that is tailored to your particular application. This will not only let you choose the appropriate storage system but it will give you something to work with when you start to get in to the mire that is &quot;tunables&quot;.</p>
 <p>It&#39;s likely I won&#39;t be able to leave this alone and will be posting more benchmarks with some tweaking and tuning. I&#39;d love to have input from others on this too of course! The code for this is all in the LevelDOWN repo with both of these forks under appropriately named branches.</p>
 
@@ -324,16 +303,13 @@
 <p>The other major change is the introduction of a new <strong>chained batch</strong> syntax, additional to the existing batch syntax. This method of creating and writing batch operations is much closer to the way LevelDB does batches and under certain circumstances you may find improved performance from using this method.</p>
 <p>If you call <code>db.batch()</code> with no arguments, you&#39;ll get a <code>Batch</code> object back which has the following operations: <code>put()</code>, <code>del()</code>, <code>clear()</code> and <code>write()</code>. The first three are chainable so you can call them one after the other to build your batch. <code>write()</code> is the only method that takes a callback because it submits the batch. Until you call <code>write()</code>, the batch is transient and can be discarded.</p>
 <p>Example from the <a href="https://github.com/rvagg/node-levelup#readme">README</a>:</p>
-<div class="highlight"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">batch</span><span class="p">()</span>
-  <span class="p">.</span><span class="nx">del</span><span class="p">(</span><span class="s1">&#39;father&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;Yuri Irsenovich Kim&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;dob&#39;</span><span class="p">,</span> <span class="s1">&#39;16 February 1941&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;spouse&#39;</span><span class="p">,</span> <span class="s1">&#39;Kim Young-sook&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;Clown&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Done!&#39;</span><span class="p">)</span> <span class="p">})</span>
-</pre></div>
-
-<h3 id="some-love-for-writestream">Some love for WriteStream</h3>
+<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#24292E">db.</span><span style="color:#6F42C1">batch</span><span style="color:#24292E">()</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">del</span><span style="color:#24292E">(</span><span style="color:#032F62">'father'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">put</span><span style="color:#24292E">(</span><span style="color:#032F62">'name'</span><span style="color:#24292E">, </span><span style="color:#032F62">'Yuri Irsenovich Kim'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">put</span><span style="color:#24292E">(</span><span style="color:#032F62">'dob'</span><span style="color:#24292E">, </span><span style="color:#032F62">'16 February 1941'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">put</span><span style="color:#24292E">(</span><span style="color:#032F62">'spouse'</span><span style="color:#24292E">, </span><span style="color:#032F62">'Kim Young-sook'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">put</span><span style="color:#24292E">(</span><span style="color:#032F62">'occupation'</span><span style="color:#24292E">, </span><span style="color:#032F62">'Clown'</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">  .</span><span style="color:#6F42C1">write</span><span style="color:#24292E">(</span><span style="color:#D73A49">function</span><span style="color:#24292E"> () { console.</span><span style="color:#6F42C1">log</span><span style="color:#24292E">(</span><span style="color:#032F62">'Done!'</span><span style="color:#24292E">) })</span></span></code></pre><h3 id="some-love-for-writestream">Some love for WriteStream</h3>
 <p>WriteStream got some attention in this release. On the main <code>createWriteStream()</code> method and on individual <code>write()</code> calls, you can now pass some new options:</p>
 <ul>
 <li><code>&#39;type&#39;</code> can switch from the default <code>&#39;put&#39;</code> to <code>&#39;del&#39;</code> so you can make a WriteStream that only deletes when you <code>write({ key: &#39;foo&#39; })</code>, or you can make individual writes delete: <code>write({ type: &#39;del&#39;, key: &#39;foo&#39; })</code>.</li>

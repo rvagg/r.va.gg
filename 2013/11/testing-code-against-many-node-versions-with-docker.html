@@ -8,21 +8,7 @@
     <link rel="stylesheet" href="/style.css" type="text/css">
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="https://r.va.gg/atom.xml" />
     <script type="text/javascript" src="https://use.typekit.com/swo4snt.js"></script>
-    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>  
-    <script type="text/javascript">
-      var _gaq = _gaq || []
-      _gaq.push(['_setAccount', 'UA-21373682-1'])
-      _gaq.push(['_trackPageview'])
-      setTimeout('_gaq.push(["_trackEvent", "15_seconds", "read"])', 15000)
-      !(function () {
-        var ga = document.createElement('script')
-        ga.type = 'text/javascript'
-        ga.async = true
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'
-        var s = document.getElementsByTagName('script')[0]
-        s.parentNode.insertBefore(ga, s)
-      }())
-    </script>
+    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>
   </head>
   <body>
 
@@ -42,7 +28,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the &quot;HashWick&quot; vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
+            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the "HashWick" vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
           </ul>
         </section>
       </section>
@@ -82,89 +68,77 @@
 <p>Setting up a project is a matter of creating a <em>.dntrc</em> file in the root directory of the project. This configuration file involves setting a <code>NODE_VERSIONS</code> variable with a list of all of the versions of Node you want to test against, and this can include &quot;master&quot; to test the latest code from the Node repository. You also set a <code>TEST_CMD</code> variable with a series of commands required to set up, compile and execute your tests. The <code>setup-dnt</code> command can be run against a <em>.dntrc</em> file to make sure that the appropriate Docker images are ready. The <code>dnt</code> command can then be used to execute the tests against all of the Node versions you specified.</p>
 <p>Since Docker containers are completely isolated, <strong>DNT</strong> can run tests in parallel as long as the machine has the resources. The default is to use the number of cores on the computer as the concurrency level but this can be configured if not appropriate.</p>
 <p>Currently <strong>DNT</strong> is designed to parse TAP test output by reading the final line as either &quot;ok&quot; or &quot;not ok&quot; to report test status back on the command-line. It is configurable but you need to supply a command that will transform test output to either an &quot;ok&quot; or &quot;not ok&quot; (<code>sed</code> to the rescue?).</p>
-<h3 id="how-i-m-using-it">How I&#39;m using it</h3>
+<h3 id="how-im-using-it">How I&#39;m using it</h3>
 <p>My primary use-case is for testing <strong>NAN</strong>. The test suite needs a lot of work so being able to test against all the different V8 and Node APIs while coding is super helpful; particularly when tests run so quickly! My NAN <em>.dntrc</em> file tests against master, all of the 0.11 releases since 0.11.4 (0.11.0 to 0.11.3 are explicitly not supported by NAN) and the last 5 releases of the 0.10 and 0.8 series. At the moment that&#39;s 17 versions of Node in all and on my computer the test suite takes approximately 20 seconds to complete across all of these releases.</p>
 <p><strong>The NAN <a href="https://raw.github.com/rvagg/nan/master/.dntrc">.dntrc</a></strong></p>
-<div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;\</span>
-<span class="s2">  master   \</span>
-<span class="s2">  v0.11.9  \</span>
-<span class="s2">  v0.11.8  \</span>
-<span class="s2">  v0.11.7  \</span>
-<span class="s2">  v0.11.6  \</span>
-<span class="s2">  v0.11.5  \</span>
-<span class="s2">  v0.11.4  \</span>
-<span class="s2">  v0.10.22 \</span>
-<span class="s2">  v0.10.21 \</span>
-<span class="s2">  v0.10.20 \</span>
-<span class="s2">  v0.10.19 \</span>
-<span class="s2">  v0.10.18 \</span>
-<span class="s2">  v0.8.26  \</span>
-<span class="s2">  v0.8.25  \</span>
-<span class="s2">  v0.8.24  \</span>
-<span class="s2">  v0.8.23  \</span>
-<span class="s2">  v0.8.22  \</span>
-<span class="s2">&quot;</span>
-<span class="nv">OUTPUT_PREFIX</span><span class="o">=</span><span class="s2">&quot;nan-&quot;</span>
-<span class="nv">TEST_CMD</span><span class="o">=</span><span class="s2">&quot;\</span>
-<span class="s2">  cd /dnt/test/ &amp;&amp;                                               \</span>
-<span class="s2">  npm install &amp;&amp;                                                 \</span>
-<span class="s2">  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild &amp;&amp; \</span>
-<span class="s2">  node_modules/.bin/tap js/*-test.js;                            \</span>
-<span class="s2">&quot;</span>
-</pre></div>
-
-<p>Next I configured <strong><a href="https://github.com/rvagg/node-leveldown">LevelDOWN</a></strong> for <strong>DNT</strong>. The needs are much simpler, the tests need to do a compile and run a lot of node-tap tests.</p>
+<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#24292E">NODE_VERSIONS</span><span style="color:#D73A49">=</span><span style="color:#032F62">"</span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  master   </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.11.9  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.11.8  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.11.7  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.11.6  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.11.5  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.11.4  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.10.22 </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.10.21 </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.10.20 </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.10.19 </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.10.18 </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.8.26  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.8.25  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.8.24  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.8.23  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.8.22  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">"</span></span>
+<span class="line"><span style="color:#24292E">OUTPUT_PREFIX</span><span style="color:#D73A49">=</span><span style="color:#032F62">"nan-"</span></span>
+<span class="line"><span style="color:#24292E">TEST_CMD</span><span style="color:#D73A49">=</span><span style="color:#032F62">"</span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  cd /dnt/test/ &#x26;&#x26;                                               </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  npm install &#x26;&#x26;                                                 </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild &#x26;&#x26; </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  node_modules/.bin/tap js/*-test.js;                            </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">"</span></span></code></pre><p>Next I configured <strong><a href="https://github.com/rvagg/node-leveldown">LevelDOWN</a></strong> for <strong>DNT</strong>. The needs are much simpler, the tests need to do a compile and run a lot of node-tap tests.</p>
 <p><strong>The LevelDOWN <a href="https://raw.github.com/rvagg/node-leveldown/master/.dntrc">.dntrc</a></strong></p>
-<div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;\</span>
-<span class="s2">  master   \</span>
-<span class="s2">  v0.11.9  \</span>
-<span class="s2">  v0.11.8  \</span>
-<span class="s2">  v0.10.22 \</span>
-<span class="s2">  v0.10.21 \</span>
-<span class="s2">  v0.8.26  \</span>
-<span class="s2">&quot;</span>
-<span class="nv">OUTPUT_PREFIX</span><span class="o">=</span><span class="s2">&quot;leveldown-&quot;</span>
-<span class="nv">TEST_CMD</span><span class="o">=</span><span class="s2">&quot;\</span>
-<span class="s2">  cd /dnt/ &amp;&amp;                                                    \</span>
-<span class="s2">  npm install &amp;&amp;                                                 \</span>
-<span class="s2">  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild &amp;&amp; \</span>
-<span class="s2">  node_modules/.bin/tap test/*-test.js;                          \</span>
-<span class="s2">&quot;</span>
-</pre></div>
-
-<p>Another native Node add-on that I&#39;ve set up with <strong>DNT</strong> is my <a href="https://github.com/rvagg/node-libssh">libssh bindings</a>. This one is a little more complicated because you need to have some non-standard libraries installed before compile. My <em>.dntrc</em> adds some extra <code>apt-get</code> sauce to fetch and install those packages. It means the tests take a little longer but it&#39;s not prohibitive. An alternative would be to configure the <em>node_dev</em> base-image to have these packages to all of my versioned images have them too.</p>
+<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#24292E">NODE_VERSIONS</span><span style="color:#D73A49">=</span><span style="color:#032F62">"</span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  master   </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.11.9  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.11.8  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.10.22 </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.10.21 </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.8.26  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">"</span></span>
+<span class="line"><span style="color:#24292E">OUTPUT_PREFIX</span><span style="color:#D73A49">=</span><span style="color:#032F62">"leveldown-"</span></span>
+<span class="line"><span style="color:#24292E">TEST_CMD</span><span style="color:#D73A49">=</span><span style="color:#032F62">"</span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  cd /dnt/ &#x26;&#x26;                                                    </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  npm install &#x26;&#x26;                                                 </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild &#x26;&#x26; </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  node_modules/.bin/tap test/*-test.js;                          </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">"</span></span></code></pre><p>Another native Node add-on that I&#39;ve set up with <strong>DNT</strong> is my <a href="https://github.com/rvagg/node-libssh">libssh bindings</a>. This one is a little more complicated because you need to have some non-standard libraries installed before compile. My <em>.dntrc</em> adds some extra <code>apt-get</code> sauce to fetch and install those packages. It means the tests take a little longer but it&#39;s not prohibitive. An alternative would be to configure the <em>node_dev</em> base-image to have these packages to all of my versioned images have them too.</p>
 <p><strong>The node-libssh <a href="https://raw.github.com/rvagg/node-libssh/master/.dntrc">.dntrc</a></strong></p>
-<div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;master v0.11.9 v0.10.22&quot;</span>
-<span class="nv">OUTPUT_PREFIX</span><span class="o">=</span><span class="s2">&quot;libssh-&quot;</span>
-<span class="nv">TEST_CMD</span><span class="o">=</span><span class="s2">&quot;\</span>
-<span class="s2">  apt-get install -y libkrb5-dev libssl-dev &amp;&amp;                           \</span>
-<span class="s2">  cd /dnt/ &amp;&amp;                                                            \</span>
-<span class="s2">  npm install &amp;&amp;                                                         \</span>
-<span class="s2">  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild --debug &amp;&amp; \</span>
-<span class="s2">  node_modules/.bin/tap test/*-test.js --stderr;                         \</span>
-<span class="s2">&quot;</span>
-</pre></div>
-
-<p><a href="https://github.com/rvagg/node-levelup">LevelUP</a> isn&#39;t a native add-on but it does use LevelDOWN which requires compiling. For the DNT config I&#39;m removing <em>node_modules/leveldown/</em> prior to <code>npm install</code> so it gets rebuilt each time for each new version of Node.</p>
+<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#24292E">NODE_VERSIONS</span><span style="color:#D73A49">=</span><span style="color:#032F62">"master v0.11.9 v0.10.22"</span></span>
+<span class="line"><span style="color:#24292E">OUTPUT_PREFIX</span><span style="color:#D73A49">=</span><span style="color:#032F62">"libssh-"</span></span>
+<span class="line"><span style="color:#24292E">TEST_CMD</span><span style="color:#D73A49">=</span><span style="color:#032F62">"</span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  apt-get install -y libkrb5-dev libssl-dev &#x26;&#x26;                           </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  cd /dnt/ &#x26;&#x26;                                                            </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  npm install &#x26;&#x26;                                                         </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  node_modules/.bin/node-gyp --nodedir /usr/src/node/ rebuild --debug &#x26;&#x26; </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  node_modules/.bin/tap test/*-test.js --stderr;                         </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">"</span></span></code></pre><p><a href="https://github.com/rvagg/node-levelup">LevelUP</a> isn&#39;t a native add-on but it does use LevelDOWN which requires compiling. For the DNT config I&#39;m removing <em>node_modules/leveldown/</em> prior to <code>npm install</code> so it gets rebuilt each time for each new version of Node.</p>
 <p><strong>The <a href="https://raw.github.com/rvagg/node-levelup/master/.dntrc">LevelUP .dntrc</a></strong></p>
-<div class="highlight"><pre><span class="nv">NODE_VERSIONS</span><span class="o">=</span><span class="s2">&quot;\</span>
-<span class="s2">  master   \</span>
-<span class="s2">  v0.11.9  \</span>
-<span class="s2">  v0.11.8  \</span>
-<span class="s2">  v0.10.22 \</span>
-<span class="s2">  v0.10.21 \</span>
-<span class="s2">  v0.8.26  \</span>
-<span class="s2">&quot;</span>
-<span class="nv">OUTPUT_PREFIX</span><span class="o">=</span><span class="s2">&quot;levelup-&quot;</span>
-<span class="nv">TEST_CMD</span><span class="o">=</span><span class="s2">&quot;\</span>
-<span class="s2">  cd /dnt/ &amp;&amp;                                                    \</span>
-<span class="s2">  rm -rf node_modules/leveldown/ &amp;&amp;                              \</span>
-<span class="s2">  npm install --nodedir=/usr/src/node &amp;&amp;                         \</span>
-<span class="s2">  node_modules/.bin/tap test/*-test.js --stderr;                 \</span>
-<span class="s2">#&quot;</span>
-</pre></div>
-
-<h3 id="what-s-next-">What&#39;s next?</h3>
+<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#24292E">NODE_VERSIONS</span><span style="color:#D73A49">=</span><span style="color:#032F62">"</span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  master   </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.11.9  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.11.8  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.10.22 </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.10.21 </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  v0.8.26  </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">"</span></span>
+<span class="line"><span style="color:#24292E">OUTPUT_PREFIX</span><span style="color:#D73A49">=</span><span style="color:#032F62">"levelup-"</span></span>
+<span class="line"><span style="color:#24292E">TEST_CMD</span><span style="color:#D73A49">=</span><span style="color:#032F62">"</span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  cd /dnt/ &#x26;&#x26;                                                    </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  rm -rf node_modules/leveldown/ &#x26;&#x26;                              </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  npm install --nodedir=/usr/src/node &#x26;&#x26;                         </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">  node_modules/.bin/tap test/*-test.js --stderr;                 </span><span style="color:#005CC5">\</span></span>
+<span class="line"><span style="color:#032F62">#"</span></span></code></pre><h3 id="whats-next">What&#39;s next?</h3>
 <p>I have no idea but I&#39;d love to have helpers flesh this out a little more. It&#39;s not hard to imagine this forming the basis of a local CI system as well as a general testing tool. The speed even makes it tempting to run the tests on every git commit, or perhaps on every save.</p>
 <p>If you&#39;d like to contribute to development then please submit a pull request, I&#39;d be happy to discuss anything you might think would improve this project. I&#39;m keen to share ownership with anyone making significant contributions; as I do with most of my open source projects.</p>
 <p>See the <strong><a href="https://github.com/rvagg/dnt">DNT</a></strong> GitHub repo for installation and detailed usage instructions.</p>

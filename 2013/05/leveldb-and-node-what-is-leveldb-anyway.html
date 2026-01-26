@@ -8,21 +8,7 @@
     <link rel="stylesheet" href="/style.css" type="text/css">
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="https://r.va.gg/atom.xml" />
     <script type="text/javascript" src="https://use.typekit.com/swo4snt.js"></script>
-    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>  
-    <script type="text/javascript">
-      var _gaq = _gaq || []
-      _gaq.push(['_setAccount', 'UA-21373682-1'])
-      _gaq.push(['_trackPageview'])
-      setTimeout('_gaq.push(["_trackEvent", "15_seconds", "read"])', 15000)
-      !(function () {
-        var ga = document.createElement('script')
-        ga.type = 'text/javascript'
-        ga.async = true
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'
-        var s = document.getElementsByTagName('script')[0]
-        s.parentNode.insertBefore(ga, s)
-      }())
-    </script>
+    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>
   </head>
   <body>
 
@@ -42,7 +28,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the &quot;HashWick&quot; vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
+            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the "HashWick" vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
           </ul>
         </section>
       </section>
@@ -62,7 +48,7 @@
       <p>This is the first article in a three-part series on LevelDB and how it can be used in Node.</p>
 <p>This article will cover the LevelDB basics and internals to provide a foundation for the next two articles. The second and third articles will cover the core LevelDB Node libraries: <a href="https://github.com/rvagg/node-levelup">LevelUP</a>, <a href="https://github.com/rvagg/node-leveldown">LevelDOWN</a> and the rest of the LevelDB ecosystem that&#39;s appearing in Node-land.</p>
 <p><img src="http://dailyjs.com/images/posts/leveldb.png" alt="LevelDB"></p>
-<h3 id="what-is-leveldb-">What is LevelDB?</h3>
+<h3 id="what-is-leveldb">What is LevelDB?</h3>
 <p>LevelDB is an <em>open-source</em>, <em>dependency-free</em>, <em>embedded key/value data store</em>. It was developed in 2011 by Jeff Dean and Sanjay Ghemawat, researchers from Google. It&#39;s written in C++ although it has third-party bindings for most common programming languages. Including JavaScript / Node.js of course.</p>
 <p>LevelDB is based on ideas in Google&#39;s BigTable but does not share code with BigTable, this allows it to be licensed for open source release. Dean and Ghemawat developed LevelDB as a replacement for SQLite as the backing-store for Chrome&#39;s IndexedDB implementation.</p>
 <p>It has since seen very wide adoption across the industry and serves as the back-end to a number of new databases and is now the recommended storage back-end for Riak.</p>

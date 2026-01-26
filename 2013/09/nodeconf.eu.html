@@ -8,21 +8,7 @@
     <link rel="stylesheet" href="/style.css" type="text/css">
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="https://r.va.gg/atom.xml" />
     <script type="text/javascript" src="https://use.typekit.com/swo4snt.js"></script>
-    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>  
-    <script type="text/javascript">
-      var _gaq = _gaq || []
-      _gaq.push(['_setAccount', 'UA-21373682-1'])
-      _gaq.push(['_trackPageview'])
-      setTimeout('_gaq.push(["_trackEvent", "15_seconds", "read"])', 15000)
-      !(function () {
-        var ga = document.createElement('script')
-        ga.type = 'text/javascript'
-        ga.async = true
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'
-        var s = document.getElementsByTagName('script')[0]
-        s.parentNode.insertBefore(ga, s)
-      }())
-    </script>
+    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>
   </head>
   <body>
 
@@ -42,7 +28,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the &quot;HashWick&quot; vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
+            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the "HashWick" vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
           </ul>
         </section>
       </section>
@@ -61,19 +47,19 @@
     <section class="post-body">
       <p>Wow, <strong><a href="http://nodeconf.eu/">NodeConf.eu</a></strong> was certainly a once-in-a-lifetime event ... although there&#39;s talk of a repeat performance next year (don&#39;t miss the chance when it comes around!).</p>
 <div style="text-align: center;">
-<img src="https://r.va.gg/images/2013/09/nodeconfeu_raiseflag.jpg" alt="Raise that flag">
+![Raise that flag](https://r.va.gg/images/2013/09/nodeconfeu_raiseflag.jpg)
 <p style="text-align: center;">Dominic Tarr, @substack and Julian Gruber raising the NodeConf.eu flag</p>
 </div>
 
 
 <p>NodeConf.eu was held in Waterford, Ireland, on an <strong>Island</strong>, in a <strong>Castle</strong> and was organised by the Node lovin&#39; company, <a href="http://nearform.com/">nearForm</a>, in particular <a href="http://cianomaidin.com/">Cian O&#39;Maidin</a> and his amazing assistant Catherine Bradley. Of course <a href="http://futurealoof.com/">Mikeal Rogers</a> had a significant role in organising the event too.</p>
 <div style="text-align: center;">
-<img src="https://r.va.gg/images/2013/09/nodeconfeu_castle.jpg" alt="Waterford Castle">
-<p style="text-align: center;"><a href="http://waterfordcastle.com/">Waterford Castle</a></p>
+![Waterford Castle](https://r.va.gg/images/2013/09/nodeconfeu_castle.jpg)
+<p style="text-align: center;">[Waterford Castle](http://waterfordcastle.com/)</p>
 </div>
 
 <div style="text-align: center;">
-<img src="https://r.va.gg/images/2013/09/nodeconfeu_pig.jpg" alt="Pig">
+![Pig](https://r.va.gg/images/2013/09/nodeconfeu_pig.jpg)
 <p style="text-align: center;">The welcome banquet ... yep</p>
 </div>
 
@@ -96,13 +82,13 @@
 </blockquote>
 <p>But even that&#39;s pretty rough.</p>
 <p>Taking that definition, we can apply Node philosophy of small-core and vibrant user-land, along with the culture of extreme modularity afforded us by npm, and build a new kind of database; or at least apply new thinking to the &quot;database&quot;.</p>
-<p>The bulk of my talk was taken up with talking about LevelUP and the basics of the Level<em> ecosystem. There&#39;s a table on slide #7 that I&#39;m going to try and refine over time to help describe what the Level</em> / NodeBase world is all about.</p>
-<h3 id="level-me-up-scotty-">Level Me Up Scotty!</h3>
+<p>The bulk of my talk was taken up with talking about LevelUP and the basics of the Level* ecosystem. There&#39;s a table on slide #7 that I&#39;m going to try and refine over time to help describe what the Level* / NodeBase world is all about.</p>
+<h3 id="level-me-up-scotty">Level Me Up Scotty!</h3>
 <p>One of the three workshops available at NodeConf.eu was all about Node Databases. I took the same approach as at <a href="http://campjs.com/">CampJS</a> recently where I built <a href="https://r.va.gg/2013/08/learn-you-the-node.js.html">Learn You The Node.js For Much Win!</a>, a tool that owes a debt to <a href="https://github.com/substack/stream-adventure">stream-adventure</a>, a self-guided workshop-in-your-terminal application by <a href="https://twitter.com/substack">@substack</a> and <a href="https://twitter.com/maxogden">Max Ogden</a> written for NodeConf (US).</p>
 <p>This time around, I received some great help from both @substack and Julian Gruber who helped write some exercises, I also received help from <a href="http://twitter.com/eugeneware">Eugene Ware</a> who wasn&#39;t even at the conference but was assisting with development from Australia. <a href="http://twitter.com/raynos2">Raynos</a> was also a great help in getting the application working well.</p>
-<p>We ended up with <strong><em>Level Me Up Scotty!</em></strong>, or just <strong>levelmeup</strong>.</p>
+<p>We ended up with <em><strong>Level Me Up Scotty!</strong></em>, or just <strong>levelmeup</strong>.</p>
 <div style="text-align: center;">
-<img src="https://raw.github.com/rvagg/levelmeup/master/levelmeup.png" alt="levelmeup">
+![levelmeup](https://raw.github.com/rvagg/levelmeup/master/levelmeup.png)
 </div>
 
 <p>Dominic Tarr, <a href="https://twitter.com/thlorenz">Thorsten Lorenz</a>, <a href="https://twitter.com/hij1nx">Paolo Fragomeni</a>, <a href="http://www.matteocollina.com/">Matteo Collina</a>, <a href="https://twitter.com/ralphtheninja">Magnus Skog</a>, Max Ogden and other experienced <em>Levelers</em> helped on and off while the workshops were happening; so we had plenty of expertise at hand whenever there were questions.</p>
@@ -119,21 +105,21 @@
 <p>There&#39;s more planned for the future of this workshop application too, Matteo even has an a <a href="https://github.com/rvagg/levelmeup/pull/19">work-in-progress exercise</a> that should be merged fairly soon.</p>
 <p><strong><a href="http://nodeschool.io/">nodeschool.io</a></strong> was hatched from NodeConf.eu and pulls together the three workshop applications currently available in npm. I believe this was an initiative of <a href="https://twitter.com/brianloveswords">Brian J. Brennan</a> and other Mozillans on the <a href="http://openbadges.org/">Open Badges</a> project. <strong><a href="https://github.com/rvagg/workshopper">workshopper</a></strong> is the engine that runs both learnyounode and levelmeup and we&#39;re trying to make it even easier for others to author their own workshop applications. There is already a <a href="https://github.com/timoxley/functional-javascript-workshop/">Functional Javacript Workshop</a> by <a href="https://twitter.com/secoif">Tim Oxley</a> and there are more in development. Exciting times!</p>
 <div style="text-align: center;">
-<img src="https://r.va.gg/images/2013/09/nodeconfeu_levelmeup.jpg" alt="Level Me Up Workshoppers">
-<p style="text-align: center;">Workshoppers stretching their brains with <strong>levelmeup</strong></p>
+![Level Me Up Workshoppers](https://r.va.gg/images/2013/09/nodeconfeu_levelmeup.jpg)
+<p style="text-align: center;">Workshoppers stretching their brains with **levelmeup**</p>
 </div>
 
 <p>My experience with <strong>stream-adventure</strong> and <strong>learnyounode</strong> suggested that this format should prove to be relatively successful but ultimately I think we had most of the attendees come through at some point and sit down to have a crack at the workshop. This is particularly impressive given that <a href="http://nexxylove.tumblr.com/">Emily Rose</a>, <a href="http://tmpvar.com/">Elijah Insua</a> and Matteo were running a NodeBots workshop which included Arduino and NodeCopter hacking (always popular!). And <a href="https://twitter.com/mrbruning">Max Bruning</a> and <a href="https://twitter.com/tjfontaine">TJ Fontaine</a> were running a Manta / MDB / DTrace / SmartOS-magic workshop and their material was some of my favourite from NodeConf (US) so I&#39;m sure people really enjoyed what they had to present.</p>
 <p>Unfortunately I didn&#39;t get to attend these other workshops, I also missed out on some skeet!</p>
 <div style="text-align: center;">
-<img src="https://farm6.staticflickr.com/5338/9726258926_e3ea4a656f_z.jpg" alt="Skeet">
-<p style="text-align: center;">Karolina <em>&quot;don&#39;t mess with me&quot;</em> Szczur, photo by <a href="http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/">Matthew Bergman</a></p>
+![Skeet](https://farm6.staticflickr.com/5338/9726258926_e3ea4a656f_z.jpg)
+<p style="text-align: center;">Karolina *"don't mess with me"* Szczur, photo by [Matthew Bergman](http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/)</p>
 </div>
 
 <p>But there was plenty of other <em>experience</em> to be had. It was also fantastic to meet so many people I only knew from IRC / Twitter / GitHub. For someone who lives in regional Australia and doesn&#39;t get a chance to socialise much with other nerds, this was a particularly special opportunity.</p>
 <div style="text-align: center;">
-<img src="https://farm8.staticflickr.com/7392/9783982165_43ca4edef2_z.jpg" alt="Shenanigans">
-<p style="text-align: center;">Final night banquet shenanigans with <a href="https://twitter.com/Av1anFlu">Charlie McConnell</a> and @substack ... the napkin hat thing is a story in itself, blame <a href="https://twitter.com/jllord">Jessica Lord</a>, photo by <a href="http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/">Matthew Bergman</a></p>
+![Shenanigans](https://farm8.staticflickr.com/7392/9783982165_43ca4edef2_z.jpg)
+<p style="text-align: center;">Final night banquet shenanigans with [Charlie McConnell](https://twitter.com/Av1anFlu) and @substack ... the napkin hat thing is a story in itself, blame [Jessica Lord](https://twitter.com/jllord), photo by [Matthew Bergman](http://www.flickr.com/photos/matthewbergman/sets/72157635446400980/)</p>
 </div>
 
 <h3 id="the-level-gang">The Level* Gang</h3>
@@ -141,8 +127,8 @@
 <p>There has been a long-standing plan to make a Level* / NodeBase website but being the disorganised rabble we are, it hasn&#39;t got off the ground. Karolina (and Jessica too I believe) are keen to help out on the design end but just need the content. So that&#39;s what we planned. There&#39;s a bunch of issues that form a TODO in the <a href="https://github.com/karolinaszczur/leveldb.org/issues">repo</a> for this project. Hopefully we can all get on top of it sooner rather than later. We&#39;re also open to assistance from anyone else that would like to contribute.</p>
 <p>Besides getting stuff done, it was just a pleasure to hang out with these people and talk <em>shop</em>.</p>
 <div style="text-align: center;">
-<img src="https://r.va.gg/images/2013/09/nodeconfeu_levelgang.jpg" alt="A momentus event">
-<p style="text-align: center;"><strong>The Level* Gang</strong>: Paolo, Dominic, @substack, Karolina, Magnus, Mikeal, Julian, Max, Matteo and <a href="https://twitter.com/paulfryzel">Paul Fryzel</a>. Raynos was around but missed this particular <em>event</em>, Thorsten was inside demoing his guitar-typing software.</p>
+![A momentus event](https://r.va.gg/images/2013/09/nodeconfeu_levelgang.jpg)
+<p style="text-align: center;">**The Level* Gang**: Paolo, Dominic, @substack, Karolina, Magnus, Mikeal, Julian, Max, Matteo and [Paul Fryzel](https://twitter.com/paulfryzel). Raynos was around but missed this particular *event*, Thorsten was inside demoing his guitar-typing software.</p>
 </div>
 
 

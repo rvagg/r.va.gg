@@ -8,21 +8,7 @@
     <link rel="stylesheet" href="/style.css" type="text/css">
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="https://r.va.gg/atom.xml" />
     <script type="text/javascript" src="https://use.typekit.com/swo4snt.js"></script>
-    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>  
-    <script type="text/javascript">
-      var _gaq = _gaq || []
-      _gaq.push(['_setAccount', 'UA-21373682-1'])
-      _gaq.push(['_trackPageview'])
-      setTimeout('_gaq.push(["_trackEvent", "15_seconds", "read"])', 15000)
-      !(function () {
-        var ga = document.createElement('script')
-        ga.type = 'text/javascript'
-        ga.async = true
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'
-        var s = document.getElementsByTagName('script')[0]
-        s.parentNode.insertBefore(ga, s)
-      }())
-    </script>
+    <script type="text/javascript">try{Typekit.load()}catch(e){}</script>
   </head>
   <body>
 
@@ -42,7 +28,7 @@
         <section class="recent">
           <span>Recent posts</span>
           <ul>
-            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the &quot;HashWick&quot; vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
+            <li><a href="/2018/09/the-perils-of-private-politics-in-open-source.html">The perils of private politics in open source</a></li><li><a href="/2018/08/node.js-and-the-hashwick-vulnerability.html">Node.js and the "HashWick" vulnerability</a></li><li><a href="/2018/08/background-briefing-august-node.js-security-releases.html">Background Briefing: August Node.js Security Releases</a></li>
           </ul>
         </section>
       </section>
@@ -60,9 +46,9 @@
 
     <section class="post-body">
       <p>This is a long overdue post, so long in fact that I can&#39;t remember who I promised to do this for! Regardless, I keep on having discussions around this topic so I thought it worthwhile putting down some notes on what I believe to be the factors you should consider when making this decision.</p>
-<h3 id="what-s-the-question-">What&#39;s the question?</h3>
+<h3 id="whats-the-question">What&#39;s the question?</h3>
 <p>It goes like this: You have an application that uses LevelDB, in particular I&#39;m talking about Node.js applications here but the same would apply if you&#39;re using LevelUP in the browser and also most of the other back-ends for LevelUP. And you invariably end up with different kinds of data, sometimes the kinds of data you&#39;re storing is so different that it feels strange putting them into the same storage blob. Often though, you just have sets of not-very-related data that you need to store and you end up having to make a decision: <strong>do I put everything into a single LevelDB store or do I put things into their own, separate, LevelDB store?</strong></p>
-<h3 id="this-stuff-doesn-t-belong-together-">This stuff doesn&#39;t <em>belong</em> together!</h3>
+<h3 id="this-stuff-doesnt-belong-together">This stuff doesn&#39;t <em>belong</em> together!</h3>
 <p>Coming from an relational database background, it took me a little while to displace the concept of discrete <em>tables</em> with the notion of <em>namespacing</em> within the same store. I can understand the temptation to want to keep things separate, not wanting to end up with a huge blob of data that just <em>shouldn&#39;t be together</em>. But this isn&#39;t the relational database world and you need to move on!</p>
 <p>We have a set of LevelUP addons, such as <a href="https://github.com/dominictarr/level-sublevel">sublevel</a>, that exist mainly to provide you with the comfort of being able to separate your data by whatever criteria makes sense. <a href="https://github.com/deanlandolt/bytewise">bytewise</a> is another tool that can serve a similar purpose and some people even use sublevel and bytewise together to achieve more complex organisation.</p>
 <p><strong>We have the tools at our disposal in Node.js to turn a one-dimensional storage array into a very complex, multidimensional storage <em>system</em> where unrelated, and semi-related data can coexist.</strong> So, if the only reason you want to store things in separate stores is because it just <em>feels</em> right to do so, you should probably be looking at what&#39;s making you think that way. You may need to update your assumptions.</p>
