@@ -4,7 +4,7 @@
   <title>r.va.gg</title>
  
   <link href="https://r.va.gg" />
-  <updated>2026-01-26T02:59:19.061Z</updated>
+  <updated>2026-01-26T03:07:06.731Z</updated>
   <id>https://r.va.gg/</id>
   <author>
     <name>Rod Vagg</name>
@@ -14,9 +14,9 @@
   
     <entry>
       <title>Git &quot;fixup!&quot; commits</title>
-      <link href="https://r.va.gg/2026/01/git-fixup-commits.html" />
+      <link href="https://r.va.gg/git-fixup-commits.html" />
       <updated>2026-01-26T00:00:00.000Z</updated>
-      <id>https://r.va.gg/2026/01/git-fixup-commits.html</id>
+      <id>https://r.va.gg/git-fixup-commits.html</id>
       <content type="html">&lt;pre&gt;&lt;code&gt;$ git log --oneline
 17baa3 feat: expose bare delete API
 a1a790 fixup! feat: expose bare delete API
