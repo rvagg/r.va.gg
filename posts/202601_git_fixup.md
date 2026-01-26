@@ -3,6 +3,7 @@
     "date"   : "2026-01-26"
   , "title"  : "Git \"fixup!\" commits"
   , "author" : "Rod Vagg"
+  , "path"   : "{title}.html"
 }
 ```
 
