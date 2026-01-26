@@ -4,6 +4,20 @@
   [r.va.gg] {{ spec.title }}
 {% endblock %}
 
+{%- block meta %}
+    <meta property="og:site_name" content="r.va.gg">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{ spec.title }}">
+    <meta property="og:url" content="https://r.va.gg{{ spec.path }}">
+    <meta property="article:published_time" content="{{ spec.date|date("Y-m-d") }}">
+    {%- if spec.description %}
+    <meta property="og:description" content="{{ spec.description }}">
+    <meta name="twitter:description" content="{{ spec.description }}">
+    {%- endif %}
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ spec.title }}">
+{%- endblock %}
+
 {% block content %}
 
   <section class="post-content">

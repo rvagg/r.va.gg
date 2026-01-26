@@ -4,6 +4,7 @@
   , "title"  : "Git \"fixup!\" commits"
   , "author" : "Rod Vagg"
   , "path"   : "{title}.html"
+  , "description" : "How to use Git's fixup! commits and --autosquash for clean pull request workflows"
 }
 ```
 
