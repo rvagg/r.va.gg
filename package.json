@@ -1,10 +1,9 @@
 {
   "name": "rvagg.github.com",
   "version": "0.0.0",
+  "type": "module",
   "main": "build.js",
   "dependencies": {
-    "blorg": "~1.0.0",
-    "swig": "^1.4.2",
-    "swig-templates": "^2.0.2"
+    "blorg": "^2.0.0"
   }
 }

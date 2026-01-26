@@ -76,27 +76,27 @@ public class HTMLMinifyFilter implements Filter {
 }
 ```
 
-<h3>How does it work?</h3>
+### How does it work?
 We start off by wrapping our response in an object that will supply a CharArrayWriter so we can capture and process whatever the rest of the stack is doing (credit for this idea goes <a href="http://stackoverflow.com/questions/5009650/where-can-i-find-a-java-servlet-filter-that-applies-regex-to-the-output">here</a>). We can then process the output with our regular expression(s) and pass it to the real response.
 
 Before I explain what the regular expressions do I want to caution that this won't be satisfactory in certain situations. It's not aware of &lt;script&gt;, &lt;pre&gt; or any other content where whitespace may be important, so unless you're sure stripping whitespace doesn't matter you may want to find a more intelligent solution.
 
 I've split the regex up into 4 optional parts, you turn them on with init-parameters (explained later), matches of each of these are replaced with an empty string:
-<h4><strong>strip-linestart-whitespace - (?&lt;=^)[ \\t]+</strong></h4>
+#### <strong>strip-linestart-whitespace - (?&lt;=^)[ \\t]+</strong>
 This regex will match whitespace at the beginning of any line. You'll notice that I'm not using \s for my whitespace match, this is because with multi-line pattern matching it'll also match \n and \r which we want to handle separately. The (?&lt;=^) at the beginning is a non-capturing positive look-behind for <em>line-start</em>; so it'll match the start of the line but won't include it in our returned match-group so we only strip out the whitespace.
 
 This option is likely to make the biggest impact on HTML minification on dynamic content because we love to use indentation to define structure.
-<h4><strong></strong>strip-lineend-whitespace - [ \\t]+(?:$)</h4>
+#### <strong></strong>strip-lineend-whitespace - [ \\t]+(?:$)
 Same deal as the linestart regex but this time we have (?:$), a non-capturing positive look-ahead for <em>line end</em>.
 
 This will pick up any sloppyness in your HTML (I wish I could do this in Microsoft Word when I have to edit other people's documents, you can't see it, <strong>but it's still there</strong>!).
-<h4>strip-multiple-whitespace - ([ \\t](?:[ \\t]))+</h4>
+#### strip-multiple-whitespace - ([ \\t](?:[ \\t]))+
 Here we have a group of one or more whitespace characters followed by another whitespace character, non-captured, so we don't strip out all whitespace, remember that we are replacing matches with an empty string so we need the non-capturing second space to leave one intact.
 
 This is probably going to be the most dangerous if you might have content where whitespace is important, e.g. &lt;script&gt;, &lt;pre&gt;.l
-<h4>strip-blank-lines - (\\n[ \\t]*(?:\\n))+</h4>
+#### strip-blank-lines - (\\n[ \\t]*(?:\\n))+
 This is very similar to the multiple-whitespace regex but we match a newline, followed by zero or more whitespace characters, followed by a non-captured newline, all repeated one or more times. So we'll get rid of any lines that don't contain content.
-<h3>Configuration</h3>
+### Configuration
 You simply put the filter into your classpath somewhere and wire it up in web.xml. You first define the filter reference and any parameters:
 
 ```xml

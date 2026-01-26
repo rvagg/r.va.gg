@@ -13,13 +13,11 @@
 
   {% for post in blogPosts %}
     <entry>
-      <title>{{ post.spec.title }}</title>
+      <title>{{ post.spec.title | escape }}</title>
       <link href="https://r.va.gg{{ post.spec.path }}" />
       <updated>{{ post.spec.date|date("c") }}</updated>
       <id>https://r.va.gg{{ post.spec.path }}</id>
-      <content type="html">
-        {{ post.page }}
-      </content>
+      <content type="html">{{ post.page | escape }}</content>
     </entry>
   {% endfor %}
 

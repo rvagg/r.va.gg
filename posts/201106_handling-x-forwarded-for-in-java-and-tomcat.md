@@ -8,24 +8,24 @@
 ```
 
 This is the first follow-up to my <a title="Wrangling the X-Forwarded-For Header" href="http://rod.vagg.org/2011/07/wrangling-the-x-forwarded-for-header/">post on X-Forwarded-For</a>, I'll assume you've at least scanned that article.
-<h3>Revision of the security issues</h3>
+### Revision of the security issues
 It's important to recap the security message of my previous post. <strong>Don't assume that the content of the X-Forwarded-For header is either correct or syntactically valid</strong>. The header is not hard to spoof and there are only certain situations where you may be able to trust parts of the content of the header.
 
 So, my simple advice is not to use this header for anything <em>important</em>. Don't use it for authentication purposes or anything else that has security implications. It really should only be used for your own information purposes or to provide customised content for the user where it's OK to be basing that customisation on false information, because this will be a possibility.
 
 We use it on <a href="http://feedxl.com/">FeedXL</a> for IP address geolocation using <a href="http://www.maxmind.com/app/country">GeoIP</a> to serve country specific information to visitors. Ultimately it doesn't really matter a whole lot if we get it wrong; while there are differences in the content the differences aren't major. It may cause some confusion but that confusion can be resolved if the customer wants to contact us. You sign up to FeedXL based on your country but we still let you select your country from a list even though we pre-select the one we guess from your IP address. And if you sign up to the wrong country then you won't get access to the correct database for your country; hardly a major security issue, more of an inconvenience. If you're spoofing X-Forwarded-For then you're probably not the kind of person who's going to get confused at the content, you're probably just poking around and are not really interested in our product anyway!
-<h3>Extracting a useful IP address</h3>
+### Extracting a useful IP address
 I ended my last post with a generalised rule for extracting the most likely useful IP address from the X-Forwarded-For header:
 <blockquote><strong><em>Always use the leftmost non-private address</em></strong>.</blockquote>
 And I gave a couple of regular expressions to help with this process: <code>([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})</code> or<code> (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})</code> to match an IP address. And <code>(^127\.0\.0\.1)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^192\.168\.)</code>. To match a private IP address.
-<h3>Java use cases</h3>
+### Java use cases
 In my Java code I have 2 uses for the IP address from X-Forwarded-For, both of these come up because we're working behind a load balancer (Amazon's <a href="http://aws.amazon.com/elasticloadbalancing/">Elastic Load Balancing</a>) and don't have direct access to the remote host information:
 <ul>
 	<li>Looking up the country information in the GeoIP database using their Java API. Most of our use of GeoIP is with <a href="http://geolite.maxmind.com/download/geoip/api/mod_geoip2/">mod_geoip</a> in <a href="http://httpd.apache.org/">Apache </a>but we also want to occasionally use it from within a <a href="http://www.oracle.com/technetwork/java/javaee/servlet/index.html">servlet</a>. For example, on our sign-up page we pre-select the country at the top of the page based on your IP address, this is done within Java.</li>
 	<li>More interesting logging from <a href="http://tomcat.apache.org/">Tomcat</a>: if I want to have <a href="http://tomcat.apache.org/tomcat-6.0-doc/config/valve.html#Access_Log_Valve">AccessLogValve</a> turned on, the host information isn't very interesting behind a load balancer.</li>
 </ul>
 A generic parser would serve both of these purposes!
-<h3>Parsing X-Forwarded-For</h3>
+### Parsing X-Forwarded-For
 I have created a simple utility class to do the parsing, called from wherever I need either an <strong>IP address</strong> or a <strong>hostname</strong>.
 
 ```java
@@ -90,7 +90,7 @@ We first use the general IP address regular expression and on line 23 we loop th
 Our hostname resolution is also prepared for failure and will return the original IP address if it can't get you a hostname.
 
 Instead of just calling <code>request.getRemoteAddr()</code> and <code>request.getRemoteHost()</code> from our own code, you'd simply wrap them in <code>InetAddressUtil.getAddressFromRequest(request)</code> and <code>InetAddressUtil.getHostnameFromRequest(request)</code>.
-<h3>Extending Tomcat logging</h3>
+### Extending Tomcat logging
 You enable request logging in Tomcat by attaching an AccessLogValve to your context or host. It mirrors the custom formatting options that you'll find in <a href="http://httpd.apache.org/docs/2.0/mod/mod_log_config.html">Apache's CustomLog</a>. So, you can print out a <strong>%h</strong> for the request hostname but behind a load balancer you'll just get the name or address of the load balancer that's forwarding the request. You could also just use <strong>%{X-Forwarded-For}i</strong> to get access to the raw header value, but this will either just be an IP address or a comma separated string of IP addresses. This may be useful for your purposes but not mine, I want a hostname!
 
 Unfortunately, AccessLogValve doesn't lend itself to easy extension, there are two <code>createAccessLogElement()</code> methods that you'd ideally be able to overwrite in your own subclass and return a new custom <code>AccessLogElement</code> for the character you've chosen to represent your log element.
