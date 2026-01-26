@@ -42,11 +42,21 @@
       {% block content %}{% endblock %}
 
       <section class="footer">
-        &copy; Rod Vagg 2013, powered by <a href="https://github.com/rvagg/blorg">Blorg</a>
+        &copy; Rod Vagg, powered by <a href="https://github.com/rvagg/blorg">Blorg</a>
         <br><a href="https://r.va.gg/atom.xml">Atom / RSS feed</a>
       </section>
 
     </section>
 
+    <script>
+    document.querySelectorAll('.post-content h2[id], .post-content h3[id], .post-content h4[id]').forEach(function(h) {
+      var a = document.createElement('a');
+      a.className = 'heading-anchor';
+      a.href = '#' + h.id;
+      a.textContent = '#';
+      a.onclick = function() { history.replaceState(null, '', this.href); };
+      h.insertBefore(a, h.firstChild);
+    });
+    </script>
   </body>
 </html>
